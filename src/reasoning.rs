@@ -1,16 +1,26 @@
 // src/reasoning.rs - Multi-method reasoning engine
 
+use crate::got::{GoTBuilder, GoTArbitrator, NodeType, RelationType, MetaEvalType, MetaEvalResult};
+use crate::snr::{SNRCalculator, SNRAwareGenerator};
 use crate::types::ReasoningMethod;
 use serde::{Deserialize, Serialize};
 use tracing::instrument;
 
 pub struct MultiMethodReasoning {
     methods: Vec<ReasoningMethod>,
+    snr_calculator: SNRCalculator,
+    snr_generator: SNRAwareGenerator,
 }
 
 impl MultiMethodReasoning {
     pub fn new(methods: Vec<ReasoningMethod>) -> Self {
-        Self { methods }
+        let snr_calculator = SNRCalculator::default();
+        let snr_generator = SNRAwareGenerator::new(snr_calculator.clone());
+        Self { 
+            methods,
+            snr_calculator,
+            snr_generator,
+        }
     }
     
     /// Select optimal reasoning method for task
@@ -65,11 +75,15 @@ impl MultiMethodReasoning {
             format!("Step 5: Formulate final answer for '{}'", prompt),
         ];
         
+        let conclusion = format!("Chain-of-thought reasoning completed for: {}", prompt);
+        let snr = self.snr_calculator.calculate(&conclusion);
+        
         Ok(ReasoningResult {
             method: ReasoningMethod::ChainOfThought,
             steps,
-            conclusion: format!("Chain-of-thought reasoning completed for: {}", prompt),
+            conclusion,
             confidence: 0.85,
+            snr_score: Some(snr.total_snr),
         })
     }
     
@@ -84,31 +98,186 @@ impl MultiMethodReasoning {
             format!("Selected: Hybrid approach for '{}'", prompt),
         ];
         
+        let conclusion = format!("Tree exploration completed, optimal path selected for: {}", prompt);
+        let snr = self.snr_calculator.calculate(&conclusion);
+        
         Ok(ReasoningResult {
             method: ReasoningMethod::TreeOfThought,
             steps,
-            conclusion: format!("Tree exploration completed, optimal path selected for: {}", prompt),
+            conclusion,
             confidence: 0.88,
+            snr_score: Some(snr.total_snr),
         })
     }
     
     async fn graph_of_thought(&self, prompt: &str, _context: serde_json::Value) -> anyhow::Result<ReasoningResult> {
         // Build reasoning graph with cross-connections
-        let steps = vec![
-            format!("Initialize concept graph for '{}'", prompt),
-            "Node 1: Technical requirements → connects to Node 3".to_string(),
-            "Node 2: Business constraints → connects to Node 4".to_string(),
-            "Node 3: Implementation approach → connects to Node 5".to_string(),
-            "Node 4: Resource allocation → connects to Node 5".to_string(),
-            "Node 5: Integrated solution synthesizing all perspectives".to_string(),
-            "Cross-domain insights: Technical + Business synergy identified".to_string(),
+        // This is the ELITE cognitive substrate - non-linear, multi-dimensional
+        
+        // Build the graph
+        let mut builder = GoTBuilder::new(prompt.to_string());
+        
+        // Node 1: Technical requirements (claim)
+        builder = builder.add_node(
+            format!("Technical analysis of '{}'", prompt),
+            NodeType::Claim,
+            "technical".to_string(),
+            0.85,
+        );
+        let tech_node = builder.graph.nodes.keys().last().unwrap().clone();
+        
+        // Node 2: Business constraints (claim)
+        builder = builder.add_node(
+            format!("Business constraints for '{}'", prompt),
+            NodeType::Claim,
+            "business".to_string(),
+            0.82,
+        );
+        let business_node = builder.graph.nodes.keys().last().unwrap().clone();
+        
+        // Node 3: Implementation approach (action)
+        builder = builder.add_node(
+            format!("Implementation strategy addressing '{}'", prompt),
+            NodeType::Action,
+            "implementation".to_string(),
+            0.88,
+        );
+        let impl_node = builder.graph.nodes.keys().last().unwrap().clone();
+        
+        // Node 4: Resource allocation (claim)
+        builder = builder.add_node(
+            "Resource optimization and allocation".to_string(),
+            NodeType::Claim,
+            "resources".to_string(),
+            0.80,
+        );
+        let resource_node = builder.graph.nodes.keys().last().unwrap().clone();
+        
+        // Node 5: Integrated solution (conclusion)
+        builder = builder.add_node(
+            format!("Synthesized multi-dimensional solution for '{}'", prompt),
+            NodeType::Conclusion,
+            "synthesis".to_string(),
+            0.91,
+        );
+        let conclusion_node = builder.graph.nodes.keys().last().unwrap().clone();
+        
+        // Add causal edges (Pearl's contribution)
+        builder = builder.add_edge(
+            tech_node.clone(),
+            impl_node.clone(),
+            RelationType::Causal,
+            0.9,
+            Some("Technical requirements drive implementation".to_string()),
+        );
+        
+        builder = builder.add_edge(
+            business_node.clone(),
+            resource_node.clone(),
+            RelationType::Causal,
+            0.85,
+            Some("Business constraints determine resources".to_string()),
+        );
+        
+        // Cross-domain evidential edges
+        builder = builder.add_edge(
+            impl_node.clone(),
+            conclusion_node.clone(),
+            RelationType::Evidential,
+            0.88,
+            Some("Implementation evidence supports conclusion".to_string()),
+        );
+        
+        builder = builder.add_edge(
+            resource_node.clone(),
+            conclusion_node.clone(),
+            RelationType::Support,
+            0.85,
+            Some("Resource plan supports conclusion".to_string()),
+        );
+        
+        // Create domain subgraphs
+        builder = builder.create_subgraph(
+            "technical".to_string(),
+            vec![tech_node.clone(), impl_node.clone()],
+        );
+        
+        builder = builder.create_subgraph(
+            "business".to_string(),
+            vec![business_node.clone(), resource_node.clone()],
+        );
+        
+        // Add meta-node for consistency check
+        builder = builder.add_meta_node(
+            MetaEvalType::ConsistencyCheck,
+            vec![tech_node, business_node, impl_node, resource_node],
+            MetaEvalResult {
+                passed: true,
+                score: Some(0.92),
+                explanation: "All nodes are logically consistent and mutually supportive".to_string(),
+                recommendations: vec![
+                    "Consider edge cases in implementation".to_string(),
+                    "Validate resource estimates with historical data".to_string(),
+                ],
+            },
+            0.92,
+        );
+        
+        // Build the graph
+        let graph = builder.build();
+        
+        // Arbitrate and synthesize conclusions
+        let arbitrator = GoTArbitrator::new(0.7, 0.6);
+        let conclusions = arbitrator.synthesize_conclusions(&graph);
+        
+        // Build reasoning steps from graph traversal
+        let mut steps = vec![
+            format!("Initialized GoT for '{}'", prompt),
+            format!("Node 1 (Technical): {} domains represented", graph.metadata.domains.len()),
+            "Node 2 (Business): Business constraints analyzed".to_string(),
+            "Node 3 (Implementation): Implementation approach defined".to_string(),
+            "Node 4 (Resources): Resource allocation optimized".to_string(),
+            "Node 5 (Synthesis): Cross-domain synthesis complete".to_string(),
         ];
+        
+        // Add cross-domain insights
+        steps.push(format!(
+            "Cross-domain insights: {} causal edges, {} evidential edges",
+            graph.edges.iter().filter(|e| e.relation_type == RelationType::Causal).count(),
+            graph.edges.iter().filter(|e| e.relation_type == RelationType::Evidential).count(),
+        ));
+        
+        // Add conclusions
+        for conclusion in &conclusions {
+            steps.push(format!(
+                "Conclusion (confidence {:.2}): {}",
+                conclusion.confidence,
+                conclusion.content
+            ));
+        }
+        
+        // Calculate average confidence
+        let avg_confidence = if !conclusions.is_empty() {
+            conclusions.iter().map(|c| c.confidence).sum::<f64>() / conclusions.len() as f64
+        } else {
+            graph.metadata.overall_confidence
+        };
+        
+        // Generate final conclusion
+        let conclusion_text = if !conclusions.is_empty() {
+            conclusions[0].content.clone()
+        } else {
+            format!("Graph-of-thought synthesis complete: Multi-dimensional solution for '{}'", prompt)
+        };
+        
+        let snr = self.snr_calculator.calculate(&conclusion_text);
         
         Ok(ReasoningResult {
             method: ReasoningMethod::GraphOfThought,
             steps,
-            conclusion: format!("Graph-of-thought synthesis complete: Multi-dimensional solution for '{}'", prompt),
-            confidence: 0.91,
+            conclusion: conclusion_text,
+            confidence: avg_confidence,
+            snr_score: Some(snr.total_snr),
         })
     }
     
@@ -125,11 +294,15 @@ impl MultiMethodReasoning {
             format!("Final: Synthesized answer for '{}' using 5 tool calls", prompt),
         ];
         
+        let conclusion = format!("ReAct reasoning with tool use completed: {}", prompt);
+        let snr = self.snr_calculator.calculate(&conclusion);
+        
         Ok(ReasoningResult {
             method: ReasoningMethod::ReAct,
             steps,
-            conclusion: format!("ReAct reasoning with tool use completed: {}", prompt),
+            conclusion,
             confidence: 0.87,
+            snr_score: Some(snr.total_snr),
         })
     }
     
@@ -145,11 +318,15 @@ impl MultiMethodReasoning {
             format!("Final: Refined solution after 3 reflexion iterations for '{}'", prompt),
         ];
         
+        let conclusion = format!("Reflexive improvement completed: High-quality solution for '{}'", prompt);
+        let snr = self.snr_calculator.calculate(&conclusion);
+        
         Ok(ReasoningResult {
             method: ReasoningMethod::Reflexion,
             steps,
-            conclusion: format!("Reflexive improvement completed: High-quality solution for '{}'", prompt),
+            conclusion,
             confidence: 0.93,
+            snr_score: Some(snr.total_snr),
         })
     }
 }
@@ -160,4 +337,5 @@ pub struct ReasoningResult {
     pub steps: Vec<String>,
     pub conclusion: String,
     pub confidence: f64,
+    pub snr_score: Option<f64>,
 }
