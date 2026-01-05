@@ -517,8 +517,12 @@ impl GoTArbitrator {
         }
         
         // Harmonic mean (more conservative than arithmetic mean)
+        // Use minimum of 0.001 to prevent division by zero
+        const MIN_CONFIDENCE: f64 = 0.001;
         let n = supporting_confidences.len() as f64;
-        let sum_reciprocals: f64 = supporting_confidences.iter().map(|c| 1.0 / c.max(0.01)).sum();
+        let sum_reciprocals: f64 = supporting_confidences.iter()
+            .map(|c| 1.0 / c.max(MIN_CONFIDENCE))
+            .sum();
         (n / sum_reciprocals).min(1.0)
     }
 }
