@@ -108,11 +108,11 @@ jobs:
       - name: 📦 Install Dependencies
         run: |
           pip install pytest pytest-cov ruff
-          pip install -e . || true
+          pip install -e .
           
       - name: 🧪 Run Python Tests
         run: |
-          pytest cognitive-plane/ --cov=. --cov-report=xml -v || true
+          pytest cognitive-plane/ --cov=. --cov-report=xml -v
           
       - name: 📊 Coverage Report
         uses: codecov/codecov-action@v4

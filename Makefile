@@ -104,7 +104,7 @@ test:
 @$(CARGO) test --quiet 2>/dev/null || echo "  Cargo tests: N/A (optional)"
 @echo "  Testing Python components..."
 @$(PYTHON) -c "from apex_engine import orchestrator; print('  ✅ Orchestrator: OK')" 2>/dev/null || \
-) -c "import sys; sys.path.insert(0, 'apex-engine'); from orchestrator import ApexOrchestrator; print('  ✅ Orchestrator: OK')"
+@$(PYTHON) -c "import sys; sys.path.insert(0, 'apex-engine'); from orchestrator import ApexOrchestrator; print('  ✅ Orchestrator: OK')"
 @echo "$(GREEN)✅ All tests passed$(NC)"
 
 build:
