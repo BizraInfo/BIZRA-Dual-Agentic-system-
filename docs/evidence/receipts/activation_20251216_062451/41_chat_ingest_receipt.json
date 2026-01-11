@@ -1,0 +1,41 @@
+﻿{
+    "out_dir":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453",
+    "input_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\chat data sample",
+    "type":  "chat_ingest",
+    "run_id":  "20251216_062453",
+    "artifacts":  [
+                      {
+                          "sha256":  "a850e41a40435fb9315b79649cd9e34eb85d7918d5224c732780ab34ac6ddcbb",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\summary.json"
+                      },
+                      {
+                          "sha256":  "1a8e4e612b54c0e62ee784093e1f302c89beebadd0fe200c94f90b2831e63c8a",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\sources.json"
+                      },
+                      {
+                          "sha256":  "ce787b1dd3698912edd8bf43197d1477f4d9de6e245c06c181d7bcf12bacb5c0",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\topics.json"
+                      },
+                      {
+                          "sha256":  "9b9fc26a5bb94f2ed82851bdb0406868048f94db64b884217cced70fbc7df074",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\graph.json"
+                      },
+                      {
+                          "sha256":  "6b1119a504b502816a531820607ed6cc9fb437e894571ae0feac56e73aaf5110",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\conversations.jsonl"
+                      },
+                      {
+                          "sha256":  "7f0c2197029a2efc5d02a13556d59cf0b600b0ce6732d5fe2d80df6318f51b32",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\messages_index.jsonl"
+                      }
+                  ],
+    "receipt_version":  1,
+    "generated_at":  "2025-12-16T06:25:01.3514240+04:00",
+    "truth_label":  "MEASURED",
+    "counts":  {
+                   "zip_files":  5,
+                   "messages_index":  24746,
+                   "messages_full":  0,
+                   "conversations":  1241
+               }
+}

@@ -1,0 +1,58 @@
+{
+  "bundle_id": "BIZRA-GEN-0-V-20260106",
+  "version": "1.2.0-INSTITUTION",
+  "timestamp": "2026-01-06T07:30:00Z",
+  "generated_by": "verification/generate_manifest.sh",
+  "attestation_level": "Hash Inventory (Signature Pending)",
+  "verification_scope": [
+    "Z3 SMT Formal Consistency (ActionBudgetLimit: current <= limit)",
+    "Byzantine Fault Tolerance (4/6 threshold + VETO)",
+    "Semantic Data Integrity (SHA-256 Content-Addressing)",
+    "Mathematics Verification (Sigmoid Growth Model)"
+  ],
+  "agent_allowlist": {
+    "security_guardian": {
+      "agent_id": "SAT-SEC-001",
+      "role": "security_guardian",
+      "veto_privilege": true
+    },
+    "ethics_guardian": {
+      "agent_id": "SAT-ETH-002",
+      "role": "ethics_guardian",
+      "veto_privilege": true
+    },
+    "compliance_validator": {
+      "agent_id": "SAT-CMP-003",
+      "role": "compliance_validator",
+      "veto_privilege": false
+    },
+    "performance_auditor": {
+      "agent_id": "SAT-PRF-004",
+      "role": "performance_auditor",
+      "veto_privilege": false
+    },
+    "logic_verifier": {
+      "agent_id": "SAT-LOG-005",
+      "role": "logic_verifier",
+      "veto_privilege": false
+    },
+    "integration_checker": {
+      "agent_id": "SAT-INT-006",
+      "role": "integration_checker",
+      "veto_privilege": false
+    }
+  },
+  "checksums": {
+    "src/fate.rs": "c0a638a0b428901c0af78cb1029de3ca38025ca3b9126c9205921da5bb18d666",
+    "src/sat.rs": "027a5c34581a0ab95d0a4a4edd32d9ca34a26d2357f1b54238e807c7316a54e5",
+    "src/sape.rs": "2d2817a76718760f20480fa9bd1f673e98ec3c5131a2fb0d7c03b7ddc87fe48c",
+    "src/wisdom.rs": "a116cba1179ef9b0a2f0ca6552ed541c1551d164fe6f707c2b70cbe7efc0ff24",
+    "src/synapse.rs": "cc406f2feeabe17cc51deca13b7ac8fde7144098c813fe507fe9023d81e1c800"
+  },
+  "properties": {
+    "P-ALPHA": "e724f6d403fab406b0fb38de6f36ca3a2b25295ef2ee6c877bc3fc41fd2b7ee1",
+    "P-BETA": "8ab81fa370d4cadf77a3e854482298fa0146c0e78fa5bd28331a2579714f12a4"
+  },
+  "verification_report": "SYSTEM_VERIFICATION_REPORT.md",
+  "adversarial_evidence": "adversarial_output.txt"
+}

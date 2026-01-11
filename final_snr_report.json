@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-01-10T16:57:06Z",
+  "snr_score": 1.0,
+  "gates": {
+    "constitutional": 1.0,
+    "bridge": 1.0,
+    "linguistic": 1.0,
+    "kernel": 1.0
+  }
+}

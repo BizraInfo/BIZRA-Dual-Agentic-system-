@@ -1,0 +1,290 @@
+nohup: ignoring input
+warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
+package:   /root/bizra-genesis/bizra-genesis-node/backend/Cargo.toml
+workspace: /root/bizra-genesis/Cargo.toml
+    Blocking waiting for file lock on build directory
+   Compiling bizra-node0 v1.0.0 (/root/bizra-genesis/bizra-genesis-node/backend)
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:115:21
+    |
+115 |           let event = sqlx::query_as!(
+    |  _____________________^
+116 | |             PoiEvent,
+117 | |             r#"
+118 | |             INSERT INTO poi_ledger (
+...   |
+147 | |             imp_reward,
+148 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query_as` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:158:21
+    |
+158 |           let event = sqlx::query!(
+    |  _____________________^
+159 | |             r#"
+160 | |             SELECT ihsan_score::float8 as "ihsan_score!", impact_score::float8 as "impact_score!"
+161 | |             FROM poi_ledger WHERE id = $1
+162 | |             "#,
+163 | |             event_id
+164 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:174:13
+    |
+174 | /             sqlx::query!(
+175 | |                 r#"
+176 | |                 UPDATE poi_ledger 
+177 | |                 SET verified = true, verified_at = NOW(),
+...   |
+181 | |                 event_id
+182 | |             )
+    | |_____________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:188:13
+    |
+188 | /             sqlx::query!(
+189 | |                 r#"
+190 | |                 UPDATE poi_ledger 
+191 | |                 SET verified = false,
+...   |
+199 | |                 event_id
+200 | |             )
+    | |_____________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:210:21
+    |
+210 |           let stats = sqlx::query!(
+    |  _____________________^
+211 | |             r#"
+212 | |             SELECT 
+213 | |                 COUNT(*)::bigint as "total_events!",
+...   |
+223 | |             user_id
+224 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:246:22
+    |
+246 |           let events = sqlx::query_as!(
+    |  ______________________^
+247 | |             PoiEvent,
+248 | |             r#"
+249 | |             SELECT 
+...   |
+269 | |             offset
+270 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query_as` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/poi_ledger.rs:304:26
+    |
+304 |           let unverified = sqlx::query!(
+    |  __________________________^
+305 | |             r#"
+306 | |             SELECT id FROM poi_ledger 
+307 | |             WHERE verified IS NULL OR verified = false
+308 | |             AND rejection_reason IS NULL
+309 | |             "#
+310 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/asset_registry.rs:199:21
+    |
+199 |           let asset = sqlx::query_as!(
+    |  _____________________^
+200 | |             Asset,
+201 | |             r#"
+202 | |             INSERT INTO asset_registry (
+...   |
+226 | |             content_hash,
+227 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query_as` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/asset_registry.rs:242:22
+    |
+242 |           let assets = sqlx::query_as!(
+    |  ______________________^
+243 | |             Asset,
+244 | |             r#"
+245 | |             SELECT 
+...   |
+255 | |             limit,
+256 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query_as` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/asset_registry.rs:265:27
+    |
+265 |           let basic_stats = sqlx::query!(
+    |  ___________________________^
+266 | |             r#"
+267 | |             SELECT 
+268 | |                 COUNT(*)::bigint as "total_assets!",
+...   |
+272 | |             "#
+273 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/asset_registry.rs:278:29
+    |
+278 |           let domain_counts = sqlx::query!(
+    |  _____________________________^
+279 | |             r#"
+280 | |             SELECT domain, COUNT(*)::bigint as "count!"
+281 | |             FROM asset_registry
+282 | |             GROUP BY domain
+283 | |             "#
+284 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/asset_registry.rs:294:27
+    |
+294 |           let type_counts = sqlx::query!(
+    |  ___________________________^
+295 | |             r#"
+296 | |             SELECT file_type, COUNT(*)::bigint as "count!"
+297 | |             FROM asset_registry
+298 | |             GROUP BY file_type
+299 | |             "#
+300 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/asset_registry.rs:320:21
+    |
+320 |           let asset = sqlx::query_as!(
+    |  _____________________^
+321 | |             Asset,
+322 | |             r#"
+323 | |             SELECT 
+...   |
+330 | |             path,
+331 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query_as` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/resource_pool.rs:90:22
+    |
+ 90 |           let result = sqlx::query!(
+    |  ______________________^
+ 91 | |             r#"
+ 92 | |             SELECT 
+ 93 | |                 id, node_id, cpu_cores_total, cpu_cores_allocated,
+...   |
+106 | |             self.node_id
+107 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/resource_pool.rs:141:9
+    |
+141 | /         sqlx::query!(
+142 | |             r#"
+143 | |             UPDATE resource_pool SET
+144 | |                 cpu_cores_allocated = $1,
+...   |
+155 | |             self.node_id
+156 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/resource_pool.rs:165:9
+    |
+165 | /         sqlx::query!(
+166 | |             "UPDATE resource_pool SET status = $1, updated_at = NOW() WHERE node_id = $2",
+167 | |             status.to_string(),
+168 | |             self.node_id
+169 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: error returned from database: password authentication failed for user "postgres"
+   --> bizra-genesis-node/backend/src/services/resource_pool.rs:213:9
+    |
+213 | /         sqlx::query!(
+214 | |             r#"
+215 | |             UPDATE resource_pool SET
+216 | |                 total_tasks_processed = total_tasks_processed + 1,
+...   |
+224 | |             self.node_id
+225 | |         )
+    | |_________^
+    |
+    = note: this error originates in the macro `$crate::sqlx_macros::expand_query` which comes from the expansion of the macro `sqlx::query` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unused import: `Message`
+ --> bizra-genesis-node/backend/src/sovereign_bridge.rs:2:54
+  |
+2 | use axum::extract::ws::{WebSocket, WebSocketUpgrade, Message};
+  |                                                      ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::sync::Arc`
+ --> bizra-genesis-node/backend/src/sovereign_bridge.rs:5:5
+  |
+5 | use std::sync::Arc;
+  |     ^^^^^^^^^^^^^^
+
+warning: unused import: `tokio::sync::Mutex`
+ --> bizra-genesis-node/backend/src/sovereign_bridge.rs:6:5
+  |
+6 | use tokio::sync::Mutex;
+  |     ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `error`
+ --> bizra-genesis-node/backend/src/sovereign_bridge.rs:7:21
+  |
+7 | use tracing::{info, error};
+  |                     ^^^^^
+
+warning: unused variable: `msg`
+  --> bizra-genesis-node/backend/src/sovereign_bridge.rs:69:19
+   |
+69 |         if let Ok(msg) = msg {
+   |                   ^^^ help: if this is intentional, prefix it with an underscore: `_msg`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `bizra-node0` (lib) generated 5 warnings
+error: could not compile `bizra-node0` (lib) due to 17 previous errors; 5 warnings emitted

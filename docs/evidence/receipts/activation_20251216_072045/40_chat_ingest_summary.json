@@ -1,0 +1,11 @@
+﻿{
+  "run_id": "20251216_072047",
+  "generated_at": "2025-12-16T03:20:54.416454+00:00",
+  "input_dir": "C:\\BIZRA-Dual-Agentic-system--main\\chat data sample",
+  "out_dir": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072047",
+  "zip_files": 5,
+  "conversations": 1241,
+  "messages_index": 24746,
+  "messages_full": 0,
+  "truth_label": "MEASURED"
+}

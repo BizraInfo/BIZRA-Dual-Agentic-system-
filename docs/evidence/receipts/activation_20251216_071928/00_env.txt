@@ -1,0 +1,37 @@
+﻿BIZRA activation run (no secrets)
+Timestamp: 2025-12-16 07:19:28 +04:00
+
+
+Name                          Value                                                    
+----                          -----                                                    
+BIZRA_DATA_LAKE_ROOT          C:\BIZRA-DATA-LAKE                                       
+BIZRA_DATALAKE_GOLD           C:\BIZRA-DATA-LAKE\04_GOLD                               
+BIZRA_DATALAKE_INDEXED        C:\BIZRA-DATA-LAKE\03_INDEXED                            
+BIZRA_DATALAKE_INTAKE         C:\BIZRA-DATA-LAKE\00_INTAKE                             
+BIZRA_DATALAKE_PROCESSED      C:\BIZRA-DATA-LAKE\02_PROCESSED                          
+BIZRA_DATALAKE_QUARANTINE     C:\BIZRA-DATA-LAKE\99_QUARANTINE                         
+BIZRA_DATALAKE_RAW            C:\BIZRA-DATA-LAKE\01_RAW                                
+BIZRA_NODE_ID                 node_0000_genesis_momo_dubai                             
+BIZRA_REPO_ROOT               C:\BIZRA-Dual-Agentic-system--main                       
+BIZRA_ROOT                    C:\BIZRA-TaskMaster                                      
+BIZRA_VAULT_CRASH_TEMP        C:\temp                                                  
+BIZRA_VAULT_CRASH_TMP         C:\tmp                                                   
+BIZRA_VAULT_DRIVER_CACHE      C:\DRIVER                                                
+BIZRA_VAULT_DUAL_AGENTIC_REPO C:\BIZRA-Dual-Agentic-system--main                       
+BIZRA_VAULT_FILE              C:\BIZRA-Dual-Agentic-system--main\.bizra\\vault.yaml    
+BIZRA_VAULT_GENESIS_NODE_REPO C:\bizra-genesis-node                                    
+BIZRA_VAULT_NODE0_REPO        C:\BIZRA-NODE0                                           
+BIZRA_VAULT_PROJECTS_ROOT     C:\BIZRA-PROJECTS                                        
+BIZRA_VAULT_SECURE_VAULT      C:\BIZRA-SECURE-VAULT                                    
+BIZRA_VAULT_TASKMASTER_REPO   C:\BIZRA-TaskMaster                                      
+BIZRA_WORKSPACE_FILE          C:\BIZRA-Dual-Agentic-system--main\.bizra\\workspace.yaml
+EVIDENCE_DIR                  C:\bizra-genesis-node\evidence                           
+EVIDENCE_ROOT                 C:\bizra-genesis-node\evidence                           
+KERNEL_ROOT                   C:\bizra-genesis-node\.bizra-kernel                      
+OLLAMA_HOST                   http://127.0.0.1:11434                                   
+POSTGRES_DSN                  postgresql://postgres@localhost:5432/bizra               
+REDIS_HOST                    localhost                                                
+REDIS_PORT                    6379                                                     
+
+
+

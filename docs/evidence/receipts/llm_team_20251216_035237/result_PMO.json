@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:53:03.794Z",
+  "role": "PMO",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": true,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "PMO",
+    "summary": "Action plan derived from high-SNR insights to prioritize execution and map evidence.",
+    "insights": [
+      {
+        "claim": "System performance optimization is critical for high throughput operations.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "system: total=15522, convs=542",
+          "performance: total=3564, convs=141"
+        ],
+        "risk": "critical",
+        "action": "Implement performance profiling tools and optimize codebase."
+      },
+      {
+        "claim": "Agent architecture needs to be reviewed for scalability.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "architecture: total=2680, convs=136",
+          "agents: total=2674, convs=107"
+        ],
+        "risk": "high",
+        "action": "Conduct a thorough review and update of agent architecture."
+      },
+      {
+        "claim": "Data management practices need improvement for better governance.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "data: total=3409, convs=114",
+          "file: total=2046, convs=69"
+        ],
+        "risk": "medium",
+        "action": "Implement data governance best practices and streamline file management."
+      },
+      {
+        "claim": "Integration of external systems should be prioritized for enhanced functionality.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "integration: total=1995, convs=79",
+          "dll: total=2034, convs=68"
+        ],
+        "risk": "low",
+        "action": "Evaluate and prioritize integration projects with external systems."
+      },
+      {
+        "claim": "User experience needs to be enhanced for better user engagement.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "user: total=2745, convs=124",
+          "device: total=3083, convs=104"
+        ],
+        "risk": "medium",
+        "action": "Conduct user experience assessments and implement necessary enhancements."
+      }
+    ],
+    "next_7_days": [
+      "Finalize performance profiling tools implementation.",
+      "Begin initial architecture review session.",
+      "Kick off data governance best practices training."
+    ],
+    "blocked_by": [
+      "Pending approval of budget for new tools and training programs."
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

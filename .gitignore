@@ -1,0 +1,42 @@
+# Build artifacts
+target/
+*/target/
+**/target/
+
+# Node
+node_modules/
+*/node_modules/
+**/node_modules/
+*.node
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Large binaries
+*.so
+*.rlib
+*.rmeta
+*.bin
+*.pack
+*.idx
+*.pdb
+*.exe
+*.dll
+
+# Large data
+chat data sample/
+PROJECT_STRUCTURE.md
+**/20_secret_scan_rg.txt
+
+# IDE
+.idea/
+.vscode/
+
+# Secrets
+.env.local
+*.key
+*.pem
+!*.pub

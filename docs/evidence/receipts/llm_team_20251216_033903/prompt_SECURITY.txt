@@ -1,0 +1,95 @@
+You are a specialized sub-agent operating under Ihsan (excellence, benevolence, trust).
+Hard rules:
+- Do not hallucinate. If you cannot verify a claim from the provided context, label it ASSUMED or UNKNOWN.
+- Output MUST be valid JSON only (no markdown).
+- Use truth labels: MEASURED, VERIFIED, DERIVED, PLANNED, ASSUMED, UNKNOWN.
+
+ROLE: SECURITY
+FOCUS: Identify likely security risks and hardening priorities; align with evidence-first and safe defaults.
+
+EVIDENCE_CONTEXT (DERIVED, SNR-focused):
+generated_at: 2025-12-16T03:39:01.427696+00:00
+inputs: [{"path":"C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_073854\\topics.json","sha256":"895b305c3f78eb843d350aaa952d2706ab60561daed93922782a7d723099e51b"}]
+
+Top terms:
+- system: total=15522, convs=542
+- self: total=12935, convs=185
+- bizra: total=8999, convs=307
+- agent: total=4376, convs=163
+- performance: total=3564, convs=141
+- block: total=3531, convs=128
+- data: total=3409, convs=114
+- device: total=3083, convs=104
+- user: total=2745, convs=124
+- architecture: total=2680, convs=136
+- agents: total=2674, convs=107
+- def: total=2665, convs=96
+- code: total=2604, convs=105
+- analysis: total=2596, convs=161
+- address: total=2428, convs=45
+- all: total=2294, convs=134
+- echo: total=2284, convs=13
+- knowledge: total=2076, convs=97
+- const: total=2072, convs=38
+- context: total=2051, convs=100
+- file: total=2046, convs=69
+- security: total=2034, convs=68
+- implementation: total=2010, convs=98
+- integration: total=1995, convs=79
+- cite: total=1970, convs=53
+
+Top paths:
+- C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey64.exe (convs=2)
+- C:\\\\...\\\\OUTLOOK.EXE (convs=2)
+- C:\\bizra-genesis-node (convs=2)
+- C:\\ (convs=2)
+- C:\\Users\\BIZRA-OS\\.ollama\\models (convs=1)
+- C:\\Users\\BIZRA-OS\\AppData\\Local\\Programs\\Ollama\\ollama.exe (convs=1)
+- C:\\bizra-genesis-node\\docker-compose.database.yml (convs=1)
+- C:\\Users\\bizra\\BIZRA-2024-11-15-16-41-09.log (convs=1)
+- C:\\bizra-genesis-node\\src\\rewards\\mod.rs (convs=1)
+- C:\\bizra-genesis-node\\src\\rewards\\service.rs (convs=1)
+- C:\\bizra-genesis-node\\sape_engine (convs=1)
+- C:\\BIZRA-PROJECTS\\bizra-frontend-mvp (convs=1)
+- C:\\BIZRA-PROJECTS\\synthesis_orchestrator (convs=1)
+- C:\\BIZRA-PROJECTS (convs=1)
+- C:\\Users\\bizra\\Desktop\ (convs=1)
+- C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-30.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-31.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\status.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\control-panel-summary.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\flask-server-implementation.js (convs=1)
+
+Top commands:
+- docker (convs=164)
+- git (convs=140)
+- npm (convs=121)
+- powershell (convs=99)
+- cargo (convs=76)
+- cmd (convs=53)
+- ollama (convs=45)
+- robocopy (convs=1)
+
+---
+
+EXTRA_CONTEXT_1 (MEASURED):
+﻿{"run_id": "20251216_033901", "out_dir": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_033901", "summary_json": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_033901\\summary.json", "files_indexed": 187, "members_extracted": 19, "truth_label": "MEASURED"}
+
+
+Task: Produce a high-SNR action plan with evidence mapping.
+JSON schema:
+{
+  "role": "string",
+  "summary": "string",
+  "insights": [
+    {
+      "claim": "string",
+      "truth_label": "MEASURED|VERIFIED|DERIVED|PLANNED|ASSUMED|UNKNOWN",
+      "evidence": ["string"],
+      "risk": "low|medium|high|critical",
+      "action": "string"
+    }
+  ],
+  "next_7_days": ["string"],
+  "blocked_by": ["string"]
+}

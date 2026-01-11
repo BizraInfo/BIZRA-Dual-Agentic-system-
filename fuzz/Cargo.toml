@@ -1,0 +1,36 @@
+[package]
+name = "bizra-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.meta_alpha_dual_agentic]
+path = ".."
+
+[[bin]]
+name = "fuzz_ihsan"
+path = "fuzz_targets/fuzz_ihsan.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_sat_security"
+path = "fuzz_targets/fuzz_sat_security.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "fuzz_fixed64"
+path = "fuzz_targets/fuzz_fixed64.rs"
+test = false
+doc = false
+bench = false
+

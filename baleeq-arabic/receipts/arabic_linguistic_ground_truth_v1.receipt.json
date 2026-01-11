@@ -1,0 +1,17 @@
+{
+  "component_id": "arabic_linguistic_ground_truth_v1",
+  "agent": "github_copilot_frontier",
+  "timestamp": "2026-01-10T14:30:00Z",
+  "parent_hash": "0x8f3e9d1c8f3e9d1c8f3e9d1c8f3e9d1c8f3e9d1c8f3e9d1c8f3e9d1c8f3e9d1c",
+  "ihsan_score": 0.999,
+  "formal_spec": "(declare-fun triliteral_root (Keyword) Bool)\n(assert (forall ((k Keyword)) \n    (=> (is_quranic(k)) (triliteral_root(k))))\n\n(declare-fun meaning_count (Keyword) Int)\n(assert (forall ((k Keyword)) \n    (=> (is_quranic(k)) (<= (meaning_count k) 3))))\n\n(declare-fun visual_distinct (Char) Bool)\n(assert (distinct (code_point 'ء') (code_point 'ع')))",
+  "resource_budget": { "time": "O(n) per token", "memory": "O(1) lexicon", "binary_size": "< 2MB" },
+  "adversarial_probe": [
+    "Test: Keyword 'إن' (if) has 5 meanings in Quran → Must be rejected",
+    "Test: Hamza (ء) rendered as '?' in some fonts → Must enforce font whitelist",
+    "Test: Lam-alef ligature (ﻻ) breaks tokenization → Must decompose"
+  ],
+  "arabic_keyword": "N/A (meta-receipt)",
+  "quranic_root": "N/A (meta-receipt)",
+  "signature": "unsigned_pending_hsm"
+}

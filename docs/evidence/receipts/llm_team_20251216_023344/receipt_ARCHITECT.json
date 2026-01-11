@@ -1,0 +1,27 @@
+{
+  "receipt_version": 1,
+  "type": "llm_task",
+  "generated_at": "2025-12-16T02:37:54.482Z",
+  "truth_label": "MEASURED",
+  "role": "ARCHITECT",
+  "model_target": "deepseek-r1:8b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "prompt_sha256": "14eff482c2a7de4b6748d0f55d04a63d1e6e15cb86f4f45a1c841e551bace946",
+  "response_sha256": "3018e439cd401ea92e46a16f42443754f082a1c495ef26413ce77e27bbdc9ec2",
+  "files": {
+    "prompt": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_023344\\prompt_ARCHITECT.txt",
+      "sha256": "14eff482c2a7de4b6748d0f55d04a63d1e6e15cb86f4f45a1c841e551bace946"
+    },
+    "response": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_023344\\response_ARCHITECT.json",
+      "sha256": "3018e439cd401ea92e46a16f42443754f082a1c495ef26413ce77e27bbdc9ec2"
+    }
+  },
+  "inputs": [
+    {
+      "path": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\aggregate.json",
+      "sha256": "20efc60e23fefabfc81b74ce899ed13a4380921419aa72b3d8f6ff07d2d8a4b4"
+    }
+  ]
+}

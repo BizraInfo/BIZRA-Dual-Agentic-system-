@@ -1,0 +1,16 @@
+{
+  "apex_version": "7.0.0",
+  "timestamp": "2026-01-09T03:07:17.395942+00:00",
+  "layers": [
+    "L1_KNOWLEDGE",
+    "L2_RESOURCE",
+    "L3_EXECUTION",
+    "L4_COGNITIVE",
+    "L5_ECONOMIC",
+    "L6_GOVERNANCE",
+    "L7_PHILOSOPHY"
+  ],
+  "covenant": "Ihs\u0101n",
+  "architecture": "DDAGI",
+  "seal_hash": "7e52ed44741ca536c49379fe355b461d0ed1bd0f74bb305b0b1ca8fa34252c8b"
+}

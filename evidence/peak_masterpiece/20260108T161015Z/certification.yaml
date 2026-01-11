@@ -1,0 +1,7 @@
+certification:
+  version: "7.0.0"
+  level: "ELITE"
+  resonance_mesh:
+    final_snr: 0.94
+  validity:
+    issued: "20260108T155536Z"

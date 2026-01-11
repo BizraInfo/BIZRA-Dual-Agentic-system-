@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:42:25.515Z",
+  "role": "PMO",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": true,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "PMO",
+    "summary": "This action plan is derived from the analysis of chat history and system commands, focusing on high Signal-to-Noise Ratio (SNR) insights for prioritization.",
+    "insights": [
+      {
+        "claim": "system performance optimization is critical based on frequent mentions in conversations.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "performance"
+        ],
+        "risk": "high",
+        "action": "Identify and optimize system bottlenecks using performance analysis tools."
+      },
+      {
+        "claim": "code quality improvement initiatives are necessary due to the high number of code-related conversations.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "agent",
+          "code"
+        ],
+        "risk": "medium",
+        "action": "Review and refactor existing codebase, implement coding standards."
+      },
+      {
+        "claim": "data management needs attention for both storage and access optimization.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "data"
+        ],
+        "risk": "high",
+        "action": "Implement data indexing and caching strategies to improve performance."
+      },
+      {
+        "claim": "integration of different systems is a priority as indicated by multiple integration commands in the system logs.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "docker",
+          "git",
+          "npm"
+        ],
+        "risk": "medium",
+        "action": "Plan and execute integration projects to ensure seamless interaction between systems."
+      },
+      {
+        "claim": "user experience enhancement is required based on frequent user-related discussions.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "user",
+          "device"
+        ],
+        "risk": "medium",
+        "action": "Conduct user experience surveys and implement feedback in the product."
+      }
+    ],
+    "next_7_days": [
+      "Complete initial performance analysis report",
+      "Begin code review process",
+      "Start data indexing project planning"
+    ],
+    "blocked_by": [
+      "Insufficient resources for immediate system performance optimization"
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

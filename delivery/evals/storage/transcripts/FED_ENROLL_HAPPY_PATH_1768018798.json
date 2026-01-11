@@ -1,0 +1,21 @@
+{
+  "task_id": "FED_ENROLL_HAPPY_PATH",
+  "iterations": 3,
+  "results": [
+    {
+      "iteration": 0,
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "iteration": 1,
+      "passed": true,
+      "exit_code": 0
+    },
+    {
+      "iteration": 2,
+      "passed": true,
+      "exit_code": 0
+    }
+  ]
+}

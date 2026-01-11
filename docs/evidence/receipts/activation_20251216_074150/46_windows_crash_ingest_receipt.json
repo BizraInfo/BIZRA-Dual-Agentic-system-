@@ -1,0 +1,19 @@
+﻿{
+    "artifacts":  [
+                      {
+                          "sha256":  "4675616ad935ff497d115d235da79f1504bbd47069cb940a03c687e1be5310e5",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_034159\\summary.json"
+                      },
+                      {
+                          "sha256":  "b62cfe0b26c3f4afa5bdbbc5fde1d42c21e93c6625569ba763fb9031e2beb7b6",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_034159\\index.json"
+                      }
+                  ],
+    "truth_label":  "MEASURED",
+    "members_extracted":  19,
+    "files_indexed":  187,
+    "type":  "windows_crash_ingest",
+    "generated_at":  "2025-12-16T07:42:00.8292698+04:00",
+    "receipt_version":  1,
+    "out_dir":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_034159"
+}

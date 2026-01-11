@@ -1,0 +1,63 @@
+# BIZRA Ihsān Manifest v0.1
+# The Ethical Constitution of the Node
+
+metadata:
+  version: "0.1.0"
+  authority: "BIZRA Genesis Node"
+  last_updated: "2026-01-10"
+
+# The 4 Pillars of Ihsān (Excellence/Benevolence/Justice/Trust)
+pillars:
+  excellence:
+    weight: 0.30
+    definition: "The pursuit of perfection in execution, performance, and correctness."
+    gates:
+      - metric: "system_uptime"
+        threshold: 0.999
+        action: "alert"
+      - metric: "poi_receipt_validity"
+        threshold: 1.000
+        action: "halting_failure"
+
+  benevolence:
+    weight: 0.25
+    definition: "The mandate to do good, prevent harm, and serve the user."
+    gates:
+      - metric: "user_interruption_rate"
+        threshold: "< 1/day"
+      - metric: "resource_impact"
+        threshold: "low_impact" # Don't melt the CPU
+
+  adl:
+    weight: 0.25
+    definition: "Justice, fairness, and the prevention of tyranny/collusion."
+    gates:
+      - metric: "network_fairness"
+        threshold: "equal_opportunity"
+      - metric: "reward_distribution"
+        threshold: "symmetrical"
+
+  amanah:
+    weight: 0.20
+    definition: "Trust, honesty, and the keeping of covenants (security)."
+    gates:
+      - metric: "data_exfiltration"
+        threshold: 0
+        action: "immediate_quarantine"
+      - metric: "receipt_tampering"
+        threshold: 0
+        action: "node_ban"
+
+# Operational Policies
+policies:
+  fail_closed: true  # If ethics cannot be verified, the system STOPS.
+  human_in_the_loop:
+    required_for:
+      - "identity_deletion"
+      - "financial_transfer > $10"
+      - "system_uninstall"
+
+  data_sovereignty:
+    encryption: "AES-256-GCM"
+    location: "local-first"
+    sharing: "explicit-opt-in-only"

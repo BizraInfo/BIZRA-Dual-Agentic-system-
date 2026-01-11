@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:39:36.114Z",
+  "role": "PMO",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": true,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "PMO",
+    "summary": "This action plan focuses on prioritizing insights based on the provided evidence context, ensuring high Signal-to-Noise Ratio (SNR) by aligning tasks with key terms and paths. The plan includes measurable gates and owner roles.",
+    "insights": [
+      {
+        "claim": "Increase focus on 'performance' optimization tasks to enhance overall system efficiency.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "system: total=15522, convs=542",
+          "performance: total=3564, convs=141"
+        ],
+        "risk": "low",
+        "action": "Assign 'performance' tasks to the system optimization team and set measurable KPIs for performance improvements."
+      },
+      {
+        "claim": "Develop a strategy for managing and integrating 'data' resources effectively.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "data: total=3409, convs=114",
+          "docker (convs=164)"
+        ],
+        "risk": "medium",
+        "action": "Form a data management team to oversee the integration of 'data' resources using Docker containers. Set up quarterly performance reviews."
+      },
+      {
+        "claim": "Secure 'security' measures by addressing identified security paths and commands.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey64.exe (convs=2)",
+          "docker (convs=164)",
+          "git (convs=140)"
+        ],
+        "risk": "high",
+        "action": "Assign a security team to review and secure identified paths. Implement regular security audits using the 'docker' command."
+      },
+      {
+        "claim": "Optimize 'code' development processes by leveraging existing tools like 'cargo'.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "code: total=2604, convs=105",
+          "cargo (convs=76)"
+        ],
+        "risk": "low",
+        "action": "Establish a coding best practices guideline and assign the 'cargo' command to all development teams. Schedule code reviews monthly."
+      }
+    ],
+    "next_7_days": [
+      "Finalize performance optimization tasks.",
+      "Begin development of data management strategy.",
+      "Review initial security measures.",
+      "Implement new coding guidelines."
+    ],
+    "blocked_by": [
+      "Pending approval from the system optimization team.",
+      "Insufficient resources for immediate implementation of all strategies."
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "run_type": "llm_team_runner",
+  "generated_at": "2025-12-16T03:39:03.378Z",
+  "aggregate": {
+    "path": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_073854\\aggregate.json",
+    "sha256": "fb4b723f12955214a1517c28b592f695fae3259fd9623e7d9d2bc267edebab8b"
+  },
+  "outputs": [
+    {
+      "file": "00_context.txt",
+      "sha256": "caecc7338ae60463c0ff8dbe682a591d23c9761c84085964b4776bd6a6541f95"
+    },
+    {
+      "file": "prompt_ARCHIVIST.txt",
+      "sha256": "dbea42f1af34bcff5e5ea7a6d12c05c7b12b4389948e0005ddf738081f3ca970"
+    },
+    {
+      "file": "response_ARCHIVIST.json",
+      "sha256": "d3ba8a24c133cefa9ee957f07e24e59133e9e8b3f51319330cc4228f0bfea882"
+    },
+    {
+      "file": "result_ARCHIVIST.json",
+      "sha256": "d27d6ce9e7e19290a3d09f3778ce15b503dc48704dcfd42431e11d062723d907"
+    },
+    {
+      "file": "receipt_ARCHIVIST.json",
+      "sha256": "018c55360cea404d6816f78d09cda760475cd5200c3608abcdd5d2a1cedb7b1a"
+    },
+    {
+      "file": "prompt_SECURITY.txt",
+      "sha256": "15b3e133223a29e63fa19ba7bbfa9c7cbc618e7538b3f6365d5a82bdd3c53186"
+    },
+    {
+      "file": "response_SECURITY.json",
+      "sha256": "89bd28cf785ee591b6ab0665c29fb3a5b58488c2105f442aa87eba602c85d115"
+    },
+    {
+      "file": "result_SECURITY.json",
+      "sha256": "1b81a3f45f7f215770c023da6a842d8247dbd3c506290a064f21e85e3c440ae8"
+    },
+    {
+      "file": "receipt_SECURITY.json",
+      "sha256": "d8a89efc1c91ad7c1f79fc79af17565df25044ff5e0fdeeeb16b2982e9a54f17"
+    },
+    {
+      "file": "prompt_ARCHITECT.txt",
+      "sha256": "9f5e32f3a032a74bc5de0f26b1fb7187dfda2ba123e939e5f77bf151af65c306"
+    },
+    {
+      "file": "response_ARCHITECT.json",
+      "sha256": "c3954ee4ef1fb1e2d893d15a3349c096bf8c4c2063ab4bf6934020757a79de26"
+    },
+    {
+      "file": "result_ARCHITECT.json",
+      "sha256": "78b428fc3e0590df0d5a884d2d7a9c018d0cef3a7082d32896d7a1a26187800d"
+    },
+    {
+      "file": "receipt_ARCHITECT.json",
+      "sha256": "4843d0aec5b51589062ace2912f411636aa1160df951c297cccb462119e29f12"
+    },
+    {
+      "file": "prompt_PMO.txt",
+      "sha256": "8bd1fb76d40ed7a176af1be1ff0f13a79905e0303e0583f690e5aae45b47f795"
+    },
+    {
+      "file": "response_PMO.json",
+      "sha256": "2538ea661e6373acabb0ff8554806e658706552b944e37ef85fe9565a2bd4fd6"
+    },
+    {
+      "file": "result_PMO.json",
+      "sha256": "ab5000efe93e1b673564cdf19fe6827117b6de9637306099535c471705b7dd1d"
+    },
+    {
+      "file": "receipt_PMO.json",
+      "sha256": "b3448e4b24d3c4de2a2fce982b42975fd8ca0acfa8e83eb9316ac335edf0d4f5"
+    },
+    {
+      "file": "prompt_IHSAN_AUDITOR.txt",
+      "sha256": "f77d4b2e1135c253d4de12cb03c0ec929dc705bd211591d227d1abaef317c373"
+    },
+    {
+      "file": "response_IHSAN_AUDITOR.json",
+      "sha256": "49a495cec1dcd9f6fc6e1fca5294195e4e59fb16983320479f5dd6d55f901d6d"
+    },
+    {
+      "file": "result_IHSAN_AUDITOR.json",
+      "sha256": "e1f758835e667a358733f7b3d2e709816bb7b083669440781989b027add61501"
+    },
+    {
+      "file": "receipt_IHSAN_AUDITOR.json",
+      "sha256": "7d07dbd62788405ba3cb6acd20b0374e4d4470ee89650daa63f8287efce10e6b"
+    }
+  ],
+  "truth_label": "MEASURED"
+}

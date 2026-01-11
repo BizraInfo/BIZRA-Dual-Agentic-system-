@@ -1,0 +1,107 @@
+# BIZRA Constitutional Probe Configuration v1
+# Defines liveness, safety, and ethical probes for continuous verification
+# SEALED - Changes require constitutional amendment process
+
+version: "1.0.0"
+schema: "probes_v1"
+
+probes:
+  # === LIVENESS PROBES ===
+  heartbeat:
+    type: liveness
+    interval_ms: 1000
+    timeout_ms: 5000
+    failure_threshold: 3
+    action: escalate
+    description: "Agent heartbeat verification"
+    
+  sense_loop:
+    type: liveness
+    max_wait_ms: 5000
+    failure_action: fail_closed
+    description: "Bounded wait on sense() - prevents infinite spin"
+    
+  consensus_quorum:
+    type: liveness
+    min_participants: 3
+    timeout_ms: 10000
+    failure_action: escalate
+    description: "Weighted BFT consensus liveness"
+
+  # === SAFETY PROBES ===
+  snr_gate:
+    type: safety
+    min_threshold: 1.5
+    evaluation: shannon_entropy
+    failure_action: reject
+    description: "Signal-to-Noise ratio quality gate"
+    
+  thermal_limit:
+    type: safety
+    max_utilization: 0.85
+    failure_action: veto
+    description: "Resource thermal/utilization limit"
+    
+  memory_bound:
+    type: safety
+    max_heap_mb: 512
+    max_stack_kb: 8192
+    failure_action: escalate
+    description: "Memory bounds for no_std safety"
+    
+  recursion_depth:
+    type: safety
+    max_depth: 100
+    failure_action: reject
+    description: "Maximum recursion depth guard"
+
+  # === ETHICAL PROBES ===
+  ihsan_composite:
+    type: ethical
+    min_score: 0.99
+    dimensions: 8
+    failure_action: veto
+    description: "8-dimensional Ihsan compliance check"
+    
+  intent_alignment:
+    type: ethical
+    verification: smt_z3
+    timeout_ms: 5000
+    failure_action: escalate
+    description: "Symbolic intent alignment verification"
+    
+  harm_assessment:
+    type: ethical
+    evaluation: fate_model
+    failure_action: veto
+    description: "FATE harm potential assessment"
+
+  # === AUDIT PROBES ===
+  merkle_integrity:
+    type: audit
+    algorithm: sha256
+    verification: incremental
+    failure_action: halt
+    description: "Merkle state root integrity"
+    
+  receipt_completeness:
+    type: audit
+    required_fields: ["receipt_id", "timestamp", "evidence_hash", "ihsan_score"]
+    failure_action: reject
+    description: "Receipt schema compliance"
+
+escalation:
+  levels:
+    - name: automatic_retry
+      max_attempts: 3
+      delay_ms: 100
+    - name: supervisor_alert
+      notification: true
+      timeout_ms: 30000
+    - name: human_escalation
+      requires_acknowledgment: true
+      
+fail_closed:
+  default_action: reject
+  log_all: true
+  receipt_required: true

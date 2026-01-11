@@ -1,0 +1,18 @@
+{
+  "index": 1,
+  "timestamp": "2026-01-10T10:00:00Z",
+  "previous_hash": "7253d9f015bcac66e0f996d3cc3ebac021151ec8c75aa8890e4a902447218e8e",
+  "miner": "Refinery Node 0 (Pat-Mag7)",
+  "proof_of_impact": {
+    "total_bzr_g": 26776.94,
+    "artifact_count": 5407,
+    "knowledge_ledger_hash": "460276490a180eb52d23bb3b29f1af18432cfe71952867edf71e22a797a638bd"
+  },
+  "asset_classes": {
+    "sovereign_knowledge": 10000,
+    "rust_core": 300,
+    "sovereign_data": 5000,
+    "inference_power": "Undervalued"
+  },
+  "state": "VALUE_REALIZED"
+}

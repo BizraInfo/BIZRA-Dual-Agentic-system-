@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sovereign
+---
+# kubernetes/bizra-v7-resonance-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bizra-resonance-mesh
+  namespace: sovereign
+  labels:
+    app: bizra-resonance
+    version: "7.0.0"
+    component: "resonance-mesh"
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: bizra-resonance
+      version: "7.0.0"
+  template:
+    metadata:
+      labels:
+        app: bizra-resonance
+        version: "7.0.0"
+        component: "resonance-mesh"
+      annotations:
+        sidecar.istio.io/inject: "true"
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/resonance-metrics"
+    spec:
+      serviceAccountName: bizra-resonance-sa
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - bizra-resonance
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: resonance-mesh
+          image: bizra/sovereign-resonance:v7.0.0
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "16Gi"
+              cpu: "8"
+              nvidia.com/gpu: "1"
+            requests:
+              memory: "8Gi"
+              cpu: "4"
+          env:
+            - name: RESONANCE_PRUNING_THRESHOLD
+              value: "0.3"
+            - name: RESONANCE_AMPLIFICATION_FACTOR
+              value: "1.2"
+            - name: RESONANCE_AUTONOMOUS_MODE
+              value: "true"
+          ports:
+            - containerPort: 9090
+              name: resonance-metrics
+            - containerPort: 8081
+              name: resonance-api
+          livenessProbe:
+            httpGet:
+              path: /resonance-health
+              port: 8081
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          volumeMounts:
+            - name: resonance-state
+              mountPath: /var/run/resonance
+      volumes:
+        - name: resonance-state
+          emptyDir:
+            medium: Memory
+            sizeLimit: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bizra-resonance
+  namespace: sovereign
+spec:
+  selector:
+    app: bizra-resonance
+  ports:
+    - name: api
+      port: 8081
+      targetPort: 8081
+    - name: metrics
+      port: 9090
+      targetPort: 9090
+  type: LoadBalancer

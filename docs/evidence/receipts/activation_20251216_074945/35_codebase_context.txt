@@ -1,0 +1,63 @@
+CODEBASE_CONTEXT (MEASURED/DERIVED, high-SNR)
+generated_at: 2025-12-16T03:49:47.154282+00:00
+repo_root: C:\BIZRA-Dual-Agentic-system--main
+
+Git:
+- head: 24d743681be2141fe4b73a31159a47e2863a3b55
+- branch: main
+- dirty: True
+
+Files:
+- total_files: 471
+- total_bytes: 4043739144
+- top_extensions:
+  - .txt: files=193 bytes=3874904336
+  - .zip: files=7 bytes=158481427
+  - .json: files=154 bytes=6808036
+  - .pdf: files=3 bytes=2663372
+  - .md: files=45 bytes=503275
+  - .rs: files=16 bytes=88438
+  - .yaml: files=14 bytes=63755
+  - .ps1: files=9 bytes=54953
+  - .py: files=12 bytes=53438
+  - .html: files=1 bytes=36733
+
+LOC (heuristic):
+- scanned_files: 449
+  - .json: loc=137620 files=154
+  - .txt: loc=19766 files=185
+  - .md: loc=13773 files=45
+  - .rs: loc=2808 files=16
+  - .yaml: loc=2232 files=14
+  - .py: loc=1617 files=12
+  - .ps1: loc=1391 files=9
+  - .lock: loc=1089 files=1
+  - .html: loc=1039 files=1
+  - .ts: loc=668 files=5
+
+Rust/Cargo:
+- crate: meta_alpha_dual_agentic 2.0.0 (edition 2021)
+- deps: 13
+
+Node packages:
+- ace-framework 1.0.0 @ ace-framework\package.json
+
+Security signals (heuristic):
+- node_child_exec: 0
+- node_eval: 0
+- node_spawn: 0
+- ps_invoke_expression: 1
+- rust_expect: 1
+- rust_unsafe: 0
+- rust_unwrap: 3
+
+Docs:
+- markdown_files: 45
+- .bizra-kernel\QUICK-REFERENCE.md
+- .bizra-kernel\README.md
+- .bizra-kernel\SYSTEM-OVERVIEW.md
+- .bizra-kernel\context\agent_manifest.md
+- ARCHITECTURE.md
+- BIZRA-Elite-Implementation-Blueprint-v4.0.md
+- BIZRA-Lexicon-Ledger-v0.1 (1).md
+- BIZRA-Lexicon-Ledger-v0.1 (2).md

@@ -1,0 +1,59 @@
+﻿{
+    "repo_root":  "C:\\BIZRA-Dual-Agentic-system--main",
+    "generated_at":  "2025-12-16T07:20:55.0042725+04:00",
+    "files":  [
+                  {
+                      "sha256":  "ddcb31a6585bcb24882099ced7a113ae6ffa63ddc5aec55b539583fedc5203f3",
+                      "name":  "00_env.txt",
+                      "bytes":  2757
+                  },
+                  {
+                      "sha256":  "c511f307d5b460865b2cbff706140f8bfecabb8717ba55dc26d7258778314d87",
+                      "name":  "10_git_status.txt",
+                      "bytes":  1051
+                  },
+                  {
+                      "sha256":  "73b2e4099cfef2c1686ed722b3ad9085c45761fe2e8996a4a3168649958e6a31",
+                      "name":  "11_git_branch.txt",
+                      "bytes":  9
+                  },
+                  {
+                      "sha256":  "50d38dfbf253b2a8222238c043681830a4e1be70376f23e3a5821278a5d702ae",
+                      "name":  "12_git_head.txt",
+                      "bytes":  45
+                  },
+                  {
+                      "sha256":  "877425e53a8477be469ddecda7436278193b35123144c1aadfdb908d1c92a443",
+                      "name":  "20_secret_scan_rg.txt",
+                      "bytes":  31231603
+                  },
+                  {
+                      "sha256":  "b634c8550f2e511aae300c4e2b58d269d109695b29532f550fe40fe27de53616",
+                      "name":  "30_cargo_test.txt",
+                      "bytes":  3719
+                  },
+                  {
+                      "sha256":  "c789ca37a6f5f5749ca4de52a08ed0594ee921d6a12afa96d08c7b99540cc021",
+                      "name":  "35_codebase_inventory_run.txt",
+                      "bytes":  2092
+                  },
+                  {
+                      "sha256":  "76866c0ac581c0ee3dcda52e2abae04e7cfcf6a0e1b0fa712c60ae17ccc52bbd",
+                      "name":  "40_chat_aggregate_path.txt",
+                      "bytes":  78
+                  },
+                  {
+                      "sha256":  "6e39323565d51353b5b869c160f13190811d3c3f12b00bedefab5aeaabb73e02",
+                      "name":  "40_chat_ingest_summary.json",
+                      "bytes":  374
+                  },
+                  {
+                      "sha256":  "dede90cb59962f7c9a79c76677337935dc7ba0b1432368452635c44c9928023a",
+                      "name":  "41_chat_ingest_receipt.json",
+                      "bytes":  2477
+                  }
+              ],
+    "truth_label":  "MEASURED",
+    "run_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\docs\\\\evidence\\\\receipts\\\\activation_20251216_072045",
+    "run_type":  "activate_team"
+}

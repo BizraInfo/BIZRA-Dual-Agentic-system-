@@ -1,0 +1,267 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* BIZRA Unified Color Tokens */
+  --bizra-gold: #c9a962;
+  --bizra-gold-light: #d4b976;
+  --bizra-gold-dark: #b89647;
+
+  --bizra-navy: #050b14;
+  --bizra-navy-mid: #0a1628;
+  --bizra-navy-light: #1a2b42;
+
+  --bizra-cream: #f8f6f1;
+  --bizra-teal: #2a9d8f;
+
+  /* Tailwind Design Tokens - Mapped to BIZRA Colors */
+  --background: 222 47% 5%; /* #050B14 */
+  --foreground: 40 20% 96%; /* #F8F6F1 */
+
+  --card: 222 47% 8%;
+  --card-foreground: 40 20% 96%;
+
+  --popover: 222 47% 5%;
+  --popover-foreground: 40 20% 96%;
+
+  --primary: 41 48% 59%; /* #C9A962 Gold */
+  --primary-foreground: 222 47% 5%;
+
+  --secondary: 220 14% 10%;
+  --secondary-foreground: 40 20% 96%;
+
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 174 57% 39%; /* #2A9D8F Teal */
+  --accent-foreground: 40 20% 96%;
+
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 40 20% 96%;
+
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --ring: 41 48% 59%;
+
+  --radius: 0.5rem;
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@theme inline {
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Unified font utilities */
+  .font-arabic {
+    font-family: var(--font-amiri), serif;
+  }
+  .font-serif {
+    font-family: var(--font-playfair), serif;
+  }
+
+  /* BIZRA brand utilities */
+  .bizra-text-gold {
+    color: var(--bizra-gold);
+  }
+
+  .bizra-bg-gold {
+    background-color: var(--bizra-gold);
+  }
+
+  .bizra-gradient-gold {
+    background: linear-gradient(135deg, var(--bizra-gold) 0%, var(--bizra-gold-light) 100%);
+  }
+
+  .bizra-text-gradient {
+    background: linear-gradient(135deg, var(--bizra-gold) 0%, var(--bizra-gold-light) 50%, var(--bizra-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bizra-glow-gold {
+    box-shadow: 0 0 30px rgba(201, 169, 98, 0.2);
+  }
+
+  .bizra-text-glow-gold {
+    text-shadow: 0 0 20px rgba(201, 169, 98, 0.5);
+  }
+
+  .bizra-glass {
+    background: rgba(10, 22, 40, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(201, 169, 98, 0.2);
+  }
+
+  .bizra-sacred-grid {
+    background-image: linear-gradient(rgba(201, 169, 98, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201, 169, 98, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+}
+
+/* Custom scrollbar with BIZRA colors */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bizra-navy);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bizra-gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--bizra-gold-light);
+}
+
+/* Unified noise overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  z-index: 50;
+  mix-blend-mode: overlay;
+}
+
+/* Unified animation keyframes */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(201, 169, 98, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(201, 169, 98, 0.4);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}

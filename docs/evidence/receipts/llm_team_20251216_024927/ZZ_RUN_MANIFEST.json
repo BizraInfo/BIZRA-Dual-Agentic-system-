@@ -1,0 +1,75 @@
+{
+  "run_type": "llm_team_runner",
+  "generated_at": "2025-12-16T02:49:27.351Z",
+  "aggregate": {
+    "path": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_064834\\aggregate.json",
+    "sha256": "fe43ffb39e68f55373b92b7efb4198845135ffc04df70afc8f0481130868ba9b"
+  },
+  "outputs": [
+    {
+      "file": "00_context.txt",
+      "sha256": "2862b36672489368bc9d33dcb23dbd9354640d470a7ef66cef61d55aaad8cdbe"
+    },
+    {
+      "file": "prompt_ARCHIVIST.txt",
+      "sha256": "5b312c9a2fe00091a59a7fc1f3973ccb959dc4cbec929573c7b89b7c5665f41d"
+    },
+    {
+      "file": "response_ARCHIVIST.json",
+      "sha256": "f27a6569327ce147a52b9b3380208e675a175fb90f078dfde76ddc1186c43ecd"
+    },
+    {
+      "file": "receipt_ARCHIVIST.json",
+      "sha256": "9027f5e5946b1f90d2ca81d8458a06f4aeb34c60c6d61efadac18294e3ff0bd3"
+    },
+    {
+      "file": "prompt_SECURITY.txt",
+      "sha256": "dd6ec95fc8ae6605d9dd4cab39e9b5c5f8b5cde65b0d3436ff8b9a6880fd30db"
+    },
+    {
+      "file": "response_SECURITY.json",
+      "sha256": "67d6c5b520de55ce6811269b42487efe4d3fc185e3511a9fe3a4a5631258a2a1"
+    },
+    {
+      "file": "receipt_SECURITY.json",
+      "sha256": "b4d73c529e9afe3cfb54cefe670c5ae99783bfe9300161fdc63158bd82ac8912"
+    },
+    {
+      "file": "prompt_ARCHITECT.txt",
+      "sha256": "9ce58b04768eaa37e908c7915673c996a2a7536a2567ef53c471340b7ef0f27d"
+    },
+    {
+      "file": "response_ARCHITECT.json",
+      "sha256": "94bf0de3b7c0bb9922da0e247cf93aef6808c6d3cf56c5b9ac725fc1165e0b67"
+    },
+    {
+      "file": "receipt_ARCHITECT.json",
+      "sha256": "d2d9f2c2475a5ebef361a369cf6397740abc4150151a58b45dea401ee559f3e8"
+    },
+    {
+      "file": "prompt_PMO.txt",
+      "sha256": "62daabb00f15653ae32b9ca595fb17f575e7664fa3347d703e242d1fe49a55eb"
+    },
+    {
+      "file": "response_PMO.json",
+      "sha256": "2aef2cfb2f008f0d7a9941770f78ace1bb31ddd37c4eb5f63d06c540ffc5994b"
+    },
+    {
+      "file": "receipt_PMO.json",
+      "sha256": "f3f96763954af4da1bd4e409d7c0a7e712f41ed81a9475f1aa4f83056848ccab"
+    },
+    {
+      "file": "prompt_IHSAN_AUDITOR.txt",
+      "sha256": "c212281636fecd1fa9c32eb080d712f314ccd29f05dddc43a2b218d8c3551640"
+    },
+    {
+      "file": "response_IHSAN_AUDITOR.json",
+      "sha256": "577393f06e5e399aa8612707209f438e6feaa714919e88ba2831e66c6a032a46"
+    },
+    {
+      "file": "receipt_IHSAN_AUDITOR.json",
+      "sha256": "f7ce7374168b13f5c535f9af51cef318587ffe4b5e3dc77f7767bc4e4571eca0"
+    }
+  ],
+  "truth_label": "MEASURED"
+}

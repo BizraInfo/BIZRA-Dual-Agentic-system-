@@ -1,0 +1,7 @@
+{
+    "id": "SAT_REFLEX_CHECK",
+    "description": "Verifies that the SAT Reflex Engine detects unsafe patterns.",
+    "command": "python3 /root/bizra-genesis/cognitive-plane/sat/reflex_engine.py /root/bizra-genesis/control-plane/ignition/ignition_sequence.py",
+    "expected_exit_code": 0,
+    "timeout": 10
+}

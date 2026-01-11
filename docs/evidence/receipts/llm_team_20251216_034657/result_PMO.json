@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:47:24.011Z",
+  "role": "PMO",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "PMO",
+    "summary": "This action plan is designed to prioritize execution based on the insights derived from the provided evidence context, focusing on high Signal-to-Noise Ratio (SNR) actions.",
+    "insights": [
+      {
+        "claim": "System performance issues are prevalent in the conversation history.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "system",
+          "performance"
+        ],
+        "risk": "medium",
+        "action": "Analyze system performance logs and identify bottlenecks."
+      },
+      {
+        "claim": "Outlook is frequently accessed, indicating potential security or data management issues.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "OUTLOOK.EXE"
+        ],
+        "risk": "medium",
+        "action": "Review Outlook access patterns and implement necessary security measures."
+      },
+      {
+        "claim": "There are critical issues related to agent deployment and management within the system.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "agents",
+          "agent"
+        ],
+        "risk": "high",
+        "action": "Conduct a thorough audit of agent deployment processes and address any identified vulnerabilities."
+      },
+      {
+        "claim": "The codebase for the BIZRA-PROJECTS is not well-structured, as indicated by multiple file accesses.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\BIZRA-PROJECTS\\*"
+        ],
+        "risk": "medium",
+        "action": "Reorganize and optimize the codebase structure to improve maintainability."
+      },
+      {
+        "claim": "There is a need for better integration between the BIZRA-GENESIS-NODE components.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\bizra-genesis-node\\*"
+        ],
+        "risk": "medium",
+        "action": "Evaluate and improve the current integration processes to ensure seamless operation."
+      }
+    ],
+    "next_7_days": [
+      "Finalize the system performance analysis report.",
+      "Implement initial security measures for Outlook access patterns.",
+      "Initiate codebase reorganization project.",
+      "Review BIZRA-GENESIS-NODE component integration processes."
+    ],
+    "blocked_by": [
+      "Pending resolution of critical agent deployment issues."
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

@@ -1,0 +1,70 @@
+ M bizra-genesis-node/backend/benches/core_benchmarks.rs
+ M bizra-genesis-node/backend/rustfmt.toml
+ M bizra-genesis-node/backend/src/agents/mod.rs
+ M bizra-genesis-node/backend/src/agents/pat.rs
+ M bizra-genesis-node/backend/src/agents/sat.rs
+ M bizra-genesis-node/backend/src/api/knowledge.rs
+ M bizra-genesis-node/backend/src/api/mod.rs
+ M bizra-genesis-node/backend/src/core/cache.rs
+ M bizra-genesis-node/backend/src/core/circuit_breaker.rs
+ M bizra-genesis-node/backend/src/core/genesis.rs
+ M bizra-genesis-node/backend/src/core/metrics.rs
+ M bizra-genesis-node/backend/src/core/mod.rs
+ M bizra-genesis-node/backend/src/core/rate_limiter.rs
+ M bizra-genesis-node/backend/src/core/sape/mod.rs
+ M bizra-genesis-node/backend/src/core/sape/prove.rs
+ M bizra-genesis-node/backend/src/core/sape/symbolic.rs
+ M bizra-genesis-node/backend/src/core/sare/graph.rs
+ M bizra-genesis-node/backend/src/core/sare/mod.rs
+ M bizra-genesis-node/backend/src/core/scheduler.rs
+ M bizra-genesis-node/backend/src/lib.rs
+ M bizra-genesis-node/backend/src/main.rs
+ M bizra-genesis-node/backend/src/services/asset_registry.rs
+ M bizra-genesis-node/backend/src/services/env_snapshot.rs
+ M bizra-genesis-node/backend/src/services/knowledge.rs
+ M bizra-genesis-node/backend/src/services/mod.rs
+ M bizra-genesis-node/backend/src/services/poi_ledger.rs
+ M bizra-genesis-node/backend/src/services/resource_pool.rs
+ M bizra-genesis-node/backend/src/sovereign_bridge.rs
+ M bizra-genesis-node/backend/tests/core_integration_tests.rs
+ M bizra-genesis-node/backend/tests/integration_tests.rs
+ M bizra-genesis-node/backend/tests/unit_tests.rs
+ M bizra_data_vault/roots/kais_dukes/quranic-corpus-api
+ M src/a2a.rs
+ M src/bin/benchmark.rs
+ M src/bizra_integration.rs
+ M src/fate.rs
+ M src/fixed.rs
+ M src/giants.rs
+ M src/hot_path.rs
+ M src/http.rs
+ M src/ledger.rs
+ M src/mcp.rs
+ M src/metrics.rs
+ M src/ollama.rs
+ M src/pat_enhanced.rs
+ M src/poi.rs
+ M src/primordial.rs
+ M src/reasoning.rs
+ M src/resonance.rs
+ D src/sape.rs
+ M src/snr.rs
+ M src/sovereign.rs
+ M src/synapse.rs
+ M src/tpm.rs
+ M src/utils.rs
+ M src/vectors.rs
+ M src/wisdom.rs
+ M src/zk.rs
+ M tests/adversarial_tests.rs
+ M tests/elite_integration_test.rs
+ M tests/sape_integration_tests.rs
+ M tests/sat_rejection_tests.rs
+?? EVIDENCE_PACK/
+?? attestations/peak_masterpiece_20260108T202302Z.json
+?? docs/evidence/receipts/REJ-20260108202259-000001.json
+?? docs/evidence/receipts/REJ-20260108213157-000001.json
+?? scripts/verify_and_pack.sh
+?? src/sape/
+?? tests/sape_stress_test.rs
+?? tests/verification_load_tests.rs

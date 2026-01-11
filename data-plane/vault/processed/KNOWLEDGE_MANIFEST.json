@@ -1,0 +1,507 @@
+{
+    "architect": "Node0",
+    "asset_ledger_chain_sha256": "460276490a180eb52d23bb3b29f1af18432cfe71952867edf71e22a797a638bd",
+    "asset_ledger_file": "BIZRA_KNOWLEDGE_LEDGER.jsonl",
+    "asset_ledger_format": "jsonl",
+    "by_extension": {
+        "": {
+            "files": 79,
+            "total_mb": 59.6705,
+            "total_value": 63.7909
+        },
+        ".$applicationtest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$corpusclient$intercepted$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$documentloader$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$documentloader$load0$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$graphcoverage$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$graphvalidator$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$irabapitest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$irabcontroller$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$irabloader$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$irabloader$load0$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$irabtest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$legacycorpusgraphmapper$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$lemmaservice$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$locationservice$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$locationservicetest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$metadatacontroller$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$metadatatest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$morphologyapitest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$morphologycontroller$definition$intercepted$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$morphologycontroller$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$morphologyloader$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$morphologyloader$load0$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$morphologytest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$pausemarktest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$phonetictest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$segmenttest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$syntaxapitest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$syntaxcontroller$definition$intercepted$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$syntaxcontroller$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$syntaxservice$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$syntaxtest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$tokentransformer$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$translationservice$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".$translationtest$definition$reference": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".12": {
+            "files": 2,
+            "total_mb": 7.6457,
+            "total_value": 7.6456
+        },
+        ".15": {
+            "files": 1,
+            "total_mb": 21.5509,
+            "total_value": 21.5509
+        },
+        ".apache": {
+            "files": 2,
+            "total_mb": 0.0194,
+            "total_value": 0.0194
+        },
+        ".bat": {
+            "files": 1,
+            "total_mb": 0.0031,
+            "total_value": 0.0031
+        },
+        ".bin": {
+            "files": 3,
+            "total_mb": 0.1222,
+            "total_value": 12.2232
+        },
+        ".bsd": {
+            "files": 2,
+            "total_mb": 0.0026,
+            "total_value": 0.0026
+        },
+        ".cfg": {
+            "files": 1,
+            "total_mb": 0.0002,
+            "total_value": 0.0002
+        },
+        ".class": {
+            "files": 231,
+            "total_mb": 0.7904,
+            "total_value": 79.0353
+        },
+        ".conf": {
+            "files": 1,
+            "total_mb": 0.0016,
+            "total_value": 0.0016
+        },
+        ".csh": {
+            "files": 1,
+            "total_mb": 0.0009,
+            "total_value": 0.0009
+        },
+        ".css": {
+            "files": 5,
+            "total_mb": 0.0293,
+            "total_value": 0.0293
+        },
+        ".db": {
+            "files": 1,
+            "total_mb": 0.0273,
+            "total_value": 0.0273
+        },
+        ".exe": {
+            "files": 7,
+            "total_mb": 22.3545,
+            "total_value": 22.3545
+        },
+        ".fish": {
+            "files": 1,
+            "total_mb": 0.0021,
+            "total_value": 0.0021
+        },
+        ".gradle": {
+            "files": 2,
+            "total_mb": 0.0016,
+            "total_value": 0.1591
+        },
+        ".h": {
+            "files": 27,
+            "total_mb": 0.5786,
+            "total_value": 0.5786
+        },
+        ".hash": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".html": {
+            "files": 16,
+            "total_mb": 5.6272,
+            "total_value": 11.343
+        },
+        ".ico": {
+            "files": 1,
+            "total_mb": 0.0207,
+            "total_value": 2.0742
+        },
+        ".jar": {
+            "files": 1,
+            "total_mb": 0.0587,
+            "total_value": 5.8722
+        },
+        ".java": {
+            "files": 140,
+            "total_mb": 0.3176,
+            "total_value": 31.7649
+        },
+        ".jpg": {
+            "files": 6,
+            "total_mb": 0.3361,
+            "total_value": 0.3361
+        },
+        ".js": {
+            "files": 25,
+            "total_mb": 0.1423,
+            "total_value": 219.8788
+        },
+        ".json": {
+            "files": 1424,
+            "total_mb": 494.1607,
+            "total_value": 5770.1982
+        },
+        ".jsonl": {
+            "files": 10,
+            "total_mb": 13.6643,
+            "total_value": 13.6642
+        },
+        ".ld": {
+            "files": 1,
+            "total_mb": 0.0003,
+            "total_value": 0.0003
+        },
+        ".lock": {
+            "files": 8,
+            "total_mb": 0.2007,
+            "total_value": 0.2086
+        },
+        ".log": {
+            "files": 20,
+            "total_mb": 0.0754,
+            "total_value": 0.0754
+        },
+        ".md": {
+            "files": 892,
+            "total_mb": 125.8566,
+            "total_value": 1919.8187
+        },
+        ".mjs": {
+            "files": 5,
+            "total_mb": 0.0007,
+            "total_value": 0.0007
+        },
+        ".onnx": {
+            "files": 1,
+            "total_mb": 0.0,
+            "total_value": 0.0
+        },
+        ".pdf": {
+            "files": 6,
+            "total_mb": 10.0621,
+            "total_value": 251.5536
+        },
+        ".pem": {
+            "files": 3,
+            "total_mb": 0.2781,
+            "total_value": 0.2781
+        },
+        ".png": {
+            "files": 50,
+            "total_mb": 19.7523,
+            "total_value": 19.7524
+        },
+        ".properties": {
+            "files": 6,
+            "total_mb": 0.0003,
+            "total_value": 0.0283
+        },
+        ".ps1": {
+            "files": 28,
+            "total_mb": 0.1184,
+            "total_value": 0.1185
+        },
+        ".py": {
+            "files": 601,
+            "total_mb": 7.3349,
+            "total_value": 354.9387
+        },
+        ".refinery": {
+            "files": 1,
+            "total_mb": 0.0021,
+            "total_value": 0.0021
+        },
+        ".rs": {
+            "files": 115,
+            "total_mb": 1.0951,
+            "total_value": 94.4871
+        },
+        ".rst": {
+            "files": 1,
+            "total_mb": 0.009,
+            "total_value": 0.009
+        },
+        ".rust": {
+            "files": 1,
+            "total_mb": 0.0023,
+            "total_value": 0.0023
+        },
+        ".scss": {
+            "files": 39,
+            "total_mb": 0.0161,
+            "total_value": 1.6147
+        },
+        ".sh": {
+            "files": 35,
+            "total_mb": 0.0946,
+            "total_value": 0.1364
+        },
+        ".sha256": {
+            "files": 10,
+            "total_mb": 0.0008,
+            "total_value": 0.001
+        },
+        ".smt2": {
+            "files": 2,
+            "total_mb": 0.0013,
+            "total_value": 0.0013
+        },
+        ".so": {
+            "files": 2,
+            "total_mb": 309.5618,
+            "total_value": 309.5618
+        },
+        ".sql": {
+            "files": 6,
+            "total_mb": 0.0559,
+            "total_value": 0.056
+        },
+        ".svg": {
+            "files": 22,
+            "total_mb": 0.1144,
+            "total_value": 7.8648
+        },
+        ".tf": {
+            "files": 1,
+            "total_mb": 0.0116,
+            "total_value": 0.0116
+        },
+        ".toml": {
+            "files": 14,
+            "total_mb": 0.0169,
+            "total_value": 0.0168
+        },
+        ".ts": {
+            "files": 103,
+            "total_mb": 0.3549,
+            "total_value": 166.4819
+        },
+        ".tsv": {
+            "files": 4,
+            "total_mb": 23.4037,
+            "total_value": 2340.3714
+        },
+        ".tsx": {
+            "files": 285,
+            "total_mb": 1.5363,
+            "total_value": 9.1491
+        },
+        ".txt": {
+            "files": 890,
+            "total_mb": 3782.9915,
+            "total_value": 12080.8861
+        },
+        ".typed": {
+            "files": 14,
+            "total_mb": 0.0003,
+            "total_value": 0.0003
+        },
+        ".webm": {
+            "files": 64,
+            "total_mb": 24.6892,
+            "total_value": 24.6888
+        },
+        ".woff2": {
+            "files": 2,
+            "total_mb": 0.1473,
+            "total_value": 14.7335
+        },
+        ".xlsx": {
+            "files": 2,
+            "total_mb": 0.3652,
+            "total_value": 0.3652
+        },
+        ".xml": {
+            "files": 6,
+            "total_mb": 2.9885,
+            "total_value": 2905.7636
+        },
+        ".yaml": {
+            "files": 108,
+            "total_mb": 0.6955,
+            "total_value": 1.1355
+        },
+        ".yml": {
+            "files": 31,
+            "total_mb": 0.1365,
+            "total_value": 0.176
+        },
+        ".zip": {
+            "files": 3,
+            "total_mb": 10.0984,
+            "total_value": 10.0984
+        }
+    },
+    "errors": 0,
+    "filters": {
+        "exclude_extensions": [],
+        "include_extensions": null
+    },
+    "genesis_link": "7253d9f015bcac66e0f996d3cc3ebac021151ec8c75aa8890e4a902447218e8e",
+    "hash_mode": "metadata",
+    "ledger_format": "jsonl",
+    "processing_time_sec": 0.67,
+    "scan_root": ".",
+    "timestamp": "2026-01-10T00:04:07.937994+00:00",
+    "total_bytes": 5189609909,
+    "total_files": 5407,
+    "total_knowledge_value": 26776.9442
+}

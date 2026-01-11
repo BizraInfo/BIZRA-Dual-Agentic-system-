@@ -1,0 +1,25 @@
+[package]
+name = "bizra-zero-hv"
+version = "0.1.0"
+edition = "2021"
+authors = ["BIZRA Node₀ <node@bizra.ai>"]
+license = "GPL-3.0-or-later"
+
+[workspace]
+
+[dependencies]
+bootloader = "0.9.33"
+uart_16550 = "0.3.0"
+spin = "0.9.8"
+
+[package.metadata.bootimage]
+run-command = [
+    "qemu-system-x86_64",
+    "-drive", "format=raw,file={}",
+    "-serial", "stdio",
+    "-display", "none",
+    "-m", "512M",
+    "-cpu", "qemu64,+svm",
+    "-no-reboot",
+    "-no-shutdown"
+]

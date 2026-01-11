@@ -1,0 +1,1381 @@
+<testsuites id="" name="" tests="44" failures="32" skipped="0" errors="0" time="96.82577899999916">
+<testsuite name="dashboard.spec.ts" timestamp="2025-12-23T02:33:16.555Z" hostname="chromium" tests="27" failures="19" skipped="0" time="722.341" errors="0">
+<testcase name="BIZRA Node0 Dashboard › Navigation &amp; Layout › should display BIZRA branding" classname="dashboard.spec.ts" time="35.845">
+<failure message="dashboard.spec.ts:16:9 should display BIZRA branding" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:16:9 › BIZRA Node0 Dashboard › Navigation & Layout › should display BIZRA branding 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('text=BIZRA').first()
+    Expected: visible
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=BIZRA').first()
+
+
+      16 |     test('should display BIZRA branding', async ({ page }) => {
+      17 |       // Check for BIZRA logo/title
+    > 18 |       await expect(page.locator('text=BIZRA').first()).toBeVisible();
+         |                                                        ^
+      19 |     });
+      20 |
+      21 |     test('should have working navigation', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:18:56
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-48a6f-ould-display-BIZRA-branding-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-48a6f-ould-display-BIZRA-branding-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-48a6f-ould-display-BIZRA-branding-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-48a6f-ould-display-BIZRA-branding-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-48a6f-ould-display-BIZRA-branding-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-48a6f-ould-display-BIZRA-branding-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Navigation &amp; Layout › should have working navigation" classname="dashboard.spec.ts" time="36.262">
+<failure message="dashboard.spec.ts:21:9 should have working navigation" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:21:9 › BIZRA Node0 Dashboard › Navigation & Layout › should have working navigation 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-36a64-uld-have-working-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-36a64-uld-have-working-navigation-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-36a64-uld-have-working-navigation-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-36a64-uld-have-working-navigation-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-36a64-uld-have-working-navigation-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-36a64-uld-have-working-navigation-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Navigation &amp; Layout › should be responsive on mobile" classname="dashboard.spec.ts" time="36.472">
+<failure message="dashboard.spec.ts:31:9 should be responsive on mobile" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:31:9 › BIZRA Node0 Dashboard › Navigation & Layout › should be responsive on mobile 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-75631-uld-be-responsive-on-mobile-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-75631-uld-be-responsive-on-mobile-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-75631-uld-be-responsive-on-mobile-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-75631-uld-be-responsive-on-mobile-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Onboarding Flow › should redirect new users to onboarding" classname="dashboard.spec.ts" time="36.561">
+<failure message="dashboard.spec.ts:38:9 should redirect new users to onboarding" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:38:9 › BIZRA Node0 Dashboard › Onboarding Flow › should redirect new users to onboarding 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-21ee2-ect-new-users-to-onboarding-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-21ee2-ect-new-users-to-onboarding-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-21ee2-ect-new-users-to-onboarding-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-21ee2-ect-new-users-to-onboarding-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Onboarding Flow › should complete onboarding wizard" classname="dashboard.spec.ts" time="36.152">
+<failure message="dashboard.spec.ts:48:9 should complete onboarding wizard" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:48:9 › BIZRA Node0 Dashboard › Onboarding Flow › should complete onboarding wizard 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-7cf16--complete-onboarding-wizard-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-7cf16--complete-onboarding-wizard-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-7cf16--complete-onboarding-wizard-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-7cf16--complete-onboarding-wizard-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › PAT Chat Interface › should load chat page" classname="dashboard.spec.ts" time="36.146">
+<failure message="dashboard.spec.ts:61:9 should load chat page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:61:9 › BIZRA Node0 Dashboard › PAT Chat Interface › should load chat page 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-c3765-rface-should-load-chat-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-c3765-rface-should-load-chat-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-c3765-rface-should-load-chat-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c3765-rface-should-load-chat-page-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c3765-rface-should-load-chat-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c3765-rface-should-load-chat-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › PAT Chat Interface › should display PAT agent selector" classname="dashboard.spec.ts" time="36.813">
+<failure message="dashboard.spec.ts:66:9 should display PAT agent selector" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:66:9 › BIZRA Node0 Dashboard › PAT Chat Interface › should display PAT agent selector 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-f8786--display-PAT-agent-selector-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-f8786--display-PAT-agent-selector-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-f8786--display-PAT-agent-selector-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-f8786--display-PAT-agent-selector-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › PAT Chat Interface › should have message input" classname="dashboard.spec.ts" time="36.223">
+<failure message="dashboard.spec.ts:75:9 should have message input" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:75:9 › BIZRA Node0 Dashboard › PAT Chat Interface › should have message input 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-54fec-e-should-have-message-input-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-54fec-e-should-have-message-input-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-54fec-e-should-have-message-input-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-54fec-e-should-have-message-input-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › 7-Day Plan › should load plan page" classname="dashboard.spec.ts" time="36.156">
+<failure message="dashboard.spec.ts:85:9 should load plan page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:85:9 › BIZRA Node0 Dashboard › 7-Day Plan › should load plan page ─
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-c6ce0--Plan-should-load-plan-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-c6ce0--Plan-should-load-plan-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c6ce0--Plan-should-load-plan-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c6ce0--Plan-should-load-plan-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › 7-Day Plan › should display plan interface" classname="dashboard.spec.ts" time="37.533">
+<failure message="dashboard.spec.ts:90:9 should display plan interface" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:90:9 › BIZRA Node0 Dashboard › 7-Day Plan › should display plan interface 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-25e4f-ould-display-plan-interface-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-25e4f-ould-display-plan-interface-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-25e4f-ould-display-plan-interface-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-25e4f-ould-display-plan-interface-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Resource Pool › should load resources page" classname="dashboard.spec.ts" time="36.892">
+<failure message="dashboard.spec.ts:100:9 should load resources page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:100:9 › BIZRA Node0 Dashboard › Resource Pool › should load resources page 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-6df47--should-load-resources-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-6df47--should-load-resources-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-6df47--should-load-resources-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-6df47--should-load-resources-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Resource Pool › should display resource metrics" classname="dashboard.spec.ts" time="36.089">
+<failure message="dashboard.spec.ts:105:9 should display resource metrics" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:105:9 › BIZRA Node0 Dashboard › Resource Pool › should display resource metrics 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-f6c26-ld-display-resource-metrics-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-f6c26-ld-display-resource-metrics-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-f6c26-ld-display-resource-metrics-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-f6c26-ld-display-resource-metrics-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › PoI Rewards › should load rewards page" classname="dashboard.spec.ts" time="36.703">
+<failure message="dashboard.spec.ts:116:9 should load rewards page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:116:9 › BIZRA Node0 Dashboard › PoI Rewards › should load rewards page 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-ecbe3-ds-should-load-rewards-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-ecbe3-ds-should-load-rewards-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-ecbe3-ds-should-load-rewards-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-ecbe3-ds-should-load-rewards-page-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-ecbe3-ds-should-load-rewards-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-ecbe3-ds-should-load-rewards-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › PoI Rewards › should display PoI ledger" classname="dashboard.spec.ts" time="36.943">
+<failure message="dashboard.spec.ts:121:9 should display PoI ledger" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:121:9 › BIZRA Node0 Dashboard › PoI Rewards › should display PoI ledger 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-c279b-s-should-display-PoI-ledger-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-c279b-s-should-display-PoI-ledger-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c279b-s-should-display-PoI-ledger-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c279b-s-should-display-PoI-ledger-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Node0 Operations › should load ops page" classname="dashboard.spec.ts" time="36.601">
+<failure message="dashboard.spec.ts:131:9 should load ops page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:131:9 › BIZRA Node0 Dashboard › Node0 Operations › should load ops page 
+
+    Test timeout of 30000ms exceeded while running "beforeEach" hook.
+
+       8 |
+       9 | test.describe('BIZRA Node0 Dashboard', () => {
+    > 10 |   test.beforeEach(async ({ page }) => {
+         |        ^
+      11 |     // Navigate to home page before each test
+      12 |     await page.goto('/');
+      13 |   });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:10:8
+
+    Error: page.goto: Test timeout of 30000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:3000/", waiting until "load"
+
+
+      10 |   test.beforeEach(async ({ page }) => {
+      11 |     // Navigate to home page before each test
+    > 12 |     await page.goto('/');
+         |                ^
+      13 |   });
+      14 |
+      15 |   test.describe('Navigation & Layout', () => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:12:16
+
+    attachment #1: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-47768-ations-should-load-ops-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-47768-ations-should-load-ops-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-47768-ations-should-load-ops-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-47768-ations-should-load-ops-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Node0 Operations › should display system health" classname="dashboard.spec.ts" time="36.002">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Knowledge Browser › should load knowledge page" classname="dashboard.spec.ts" time="9.644">
+<failure message="dashboard.spec.ts:146:9 should load knowledge page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:146:9 › BIZRA Node0 Dashboard › Knowledge Browser › should load knowledge page 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/knowledge/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        9 × unexpected value "http://localhost:3000/login"
+
+
+      146 |     test('should load knowledge page', async ({ page }) => {
+      147 |       await page.goto('/knowledge');
+    > 148 |       await expect(page).toHaveURL(/\/knowledge/);
+          |                          ^
+      149 |     });
+      150 |
+      151 |     test('should display knowledge graph', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:148:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-ca7c9--should-load-knowledge-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-ca7c9--should-load-knowledge-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-ca7c9--should-load-knowledge-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-ca7c9--should-load-knowledge-page-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-ca7c9--should-load-knowledge-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-ca7c9--should-load-knowledge-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Knowledge Browser › should display knowledge graph" classname="dashboard.spec.ts" time="10.851">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Settings › should load settings page" classname="dashboard.spec.ts" time="21.885">
+<failure message="dashboard.spec.ts:161:9 should load settings page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:161:9 › BIZRA Node0 Dashboard › Settings › should load settings page 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/settings/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/login"
+
+
+      161 |     test('should load settings page', async ({ page }) => {
+      162 |       await page.goto('/settings');
+    > 163 |       await expect(page).toHaveURL(/\/settings/);
+          |                          ^
+      164 |     });
+      165 |
+      166 |     test('should have theme toggle', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:163:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-c434f-s-should-load-settings-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-c434f-s-should-load-settings-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-c434f-s-should-load-settings-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c434f-s-should-load-settings-page-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c434f-s-should-load-settings-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-c434f-s-should-load-settings-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Settings › should have theme toggle" classname="dashboard.spec.ts" time="16.768">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › BIZRAverse › should load BIZRAverse page" classname="dashboard.spec.ts" time="15.758">
+<failure message="dashboard.spec.ts:176:9 should load BIZRAverse page" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:176:9 › BIZRA Node0 Dashboard › BIZRAverse › should load BIZRAverse page 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/bizraverse/
+    Received string:  "http://localhost:3000/login"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × unexpected value "http://localhost:3000/login"
+
+
+      176 |     test('should load BIZRAverse page', async ({ page }) => {
+      177 |       await page.goto('/bizraverse');
+    > 178 |       await expect(page).toHaveURL(/\/bizraverse/);
+          |                          ^
+      179 |     });
+      180 |
+      181 |     test('should display 6 circles', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:178:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-b0404-should-load-BIZRAverse-page-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-b0404-should-load-BIZRAverse-page-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-b0404-should-load-BIZRAverse-page-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-b0404-should-load-BIZRAverse-page-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-b0404-should-load-BIZRAverse-page-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-b0404-should-load-BIZRAverse-page-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › BIZRAverse › should display 6 circles" classname="dashboard.spec.ts" time="10.533">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › API Integration › should fetch health status" classname="dashboard.spec.ts" time="6.842">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Accessibility › should have no critical accessibility issues" classname="dashboard.spec.ts" time="10.104">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Accessibility › should support keyboard navigation" classname="dashboard.spec.ts" time="17.147">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Performance › should load within acceptable time" classname="dashboard.spec.ts" time="9.937">
+</testcase>
+<testcase name="BIZRA Node0 Dashboard › Performance › should have reasonable bundle size" classname="dashboard.spec.ts" time="9.479">
+<failure message="dashboard.spec.ts:234:9 should have reasonable bundle size" type="FAILURE">
+<![CDATA[  [chromium] › dashboard.spec.ts:234:9 › BIZRA Node0 Dashboard › Performance › should have reasonable bundle size 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 5242880
+    Received:   10218664
+
+      241 |       
+      242 |       // Total JS should be under 5MB (generous for development)
+    > 243 |       expect(metrics.totalJsSize).toBeLessThan(5 * 1024 * 1024);
+          |                                   ^
+      244 |     });
+      245 |   });
+      246 | });
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\dashboard.spec.ts:243:35
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-418d2-have-reasonable-bundle-size-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\dashboard-BIZRA-Node0-Dash-418d2-have-reasonable-bundle-size-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\dashboard-BIZRA-Node0-Dash-418d2-have-reasonable-bundle-size-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-418d2-have-reasonable-bundle-size-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-418d2-have-reasonable-bundle-size-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\dashboard-BIZRA-Node0-Dash-418d2-have-reasonable-bundle-size-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="landing.spec.ts" timestamp="2025-12-23T02:33:16.555Z" hostname="chromium" tests="8" failures="7" skipped="0" time="124.076" errors="0">
+<testcase name="Landing Page › should display hero section with sovereignty message" classname="landing.spec.ts" time="19.672">
+<failure message="landing.spec.ts:19:7 should display hero section with sovereignty message" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:19:7 › Landing Page › should display hero section with sovereignty message 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('heading', { level: 1 })
+    Expected pattern: /reclaim|sovereignty|mind/i
+    Received string:  "Welcome to Grafana"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByRole('heading', { level: 1 })
+        8 × locator resolved to <h1 class="css-1gmqqtf">Welcome to Grafana</h1>
+          - unexpected value "Welcome to Grafana"
+
+
+      19 |   test('should display hero section with sovereignty message', async ({ page }) => {
+      20 |     // Check main headline
+    > 21 |     await expect(page.getByRole('heading', { level: 1 })).toContainText(/reclaim|sovereignty|mind/i);
+         |                                                           ^
+      22 |     
+      23 |     // Check subheadline/manifesto
+      24 |     await expect(page.locator('text=/AI.*sovereign|local.*AI/i')).toBeVisible();
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:21:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-shoul-1a2b2-on-with-sovereignty-message-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-shoul-1a2b2-on-with-sovereignty-message-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-shoul-1a2b2-on-with-sovereignty-message-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-shoul-1a2b2-on-with-sovereignty-message-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-shoul-1a2b2-on-with-sovereignty-message-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-shoul-1a2b2-on-with-sovereignty-message-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Landing Page › should have functional CTA button" classname="landing.spec.ts" time="15.948">
+<failure message="landing.spec.ts:27:7 should have functional CTA button" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:27:7 › Landing Page › should have functional CTA button ─────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /begin|start|genesis|join/i })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('button', { name: /begin|start|genesis|join/i })
+
+
+      27 |   test('should have functional CTA button', async ({ page }) => {
+      28 |     const ctaButton = page.getByRole('button', { name: /begin|start|genesis|join/i });
+    > 29 |     await expect(ctaButton).toBeVisible();
+         |                             ^
+      30 |     await expect(ctaButton).toBeEnabled();
+      31 |     
+      32 |     // Click and verify navigation
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:29:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-have-functional-CTA-button-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-have-functional-CTA-button-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-should-have-functional-CTA-button-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-should-have-functional-CTA-button-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-have-functional-CTA-button-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-have-functional-CTA-button-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Landing Page › should render starfield background" classname="landing.spec.ts" time="21.785">
+<failure message="landing.spec.ts:37:7 should render starfield background" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:37:7 › Landing Page › should render starfield background ────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('canvas')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('canvas')
+
+
+      38 |     // Check for canvas element (Three.js renders to canvas)
+      39 |     const canvas = page.locator('canvas');
+    > 40 |     await expect(canvas).toBeVisible();
+         |                          ^
+      41 |     
+      42 |     // Verify canvas has dimensions
+      43 |     const boundingBox = await canvas.boundingBox();
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:40:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-render-starfield-background-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-render-starfield-background-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-should-render-starfield-background-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-should-render-starfield-background-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-render-starfield-background-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-render-starfield-background-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Landing Page › should display feature grid" classname="landing.spec.ts" time="14.482">
+<failure message="landing.spec.ts:48:7 should display feature grid" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:48:7 › Landing Page › should display feature grid ───────────────────
+
+    Error: locator._expect: expectedNumber: expected float, got object
+
+      51 |     
+      52 |     // Should have multiple features displayed
+    > 53 |     await expect(features).toHaveCount({ min: 3 });
+         |                            ^
+      54 |   });
+      55 |
+      56 |   test('should have accessible navigation', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:53:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-display-feature-grid-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-display-feature-grid-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-should-display-feature-grid-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-should-display-feature-grid-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-display-feature-grid-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-display-feature-grid-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Landing Page › should have accessible navigation" classname="landing.spec.ts" time="18.592">
+<failure message="landing.spec.ts:56:7 should have accessible navigation" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:56:7 › Landing Page › should have accessible navigation ─────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('nav, [role="navigation"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('nav, [role="navigation"]')
+
+
+      57 |     // Check for navigation elements
+      58 |     const nav = page.locator('nav, [role="navigation"]');
+    > 59 |     await expect(nav).toBeVisible();
+         |                       ^
+      60 |     
+      61 |     // Check for logo
+      62 |     const logo = page.locator('a[href="/"], img[alt*="BIZRA"], [data-testid="logo"]');
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:59:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-have-accessible-navigation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-have-accessible-navigation-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-should-have-accessible-navigation-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-should-have-accessible-navigation-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-have-accessible-navigation-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-have-accessible-navigation-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Landing Page › should be responsive on mobile" classname="landing.spec.ts" time="12.609">
+<failure message="landing.spec.ts:66:7 should be responsive on mobile" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:66:7 › Landing Page › should be responsive on mobile ────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /begin|start|genesis|join/i })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('button', { name: /begin|start|genesis|join/i })
+
+
+      72 |     // CTA should be accessible
+      73 |     const ctaButton = page.getByRole('button', { name: /begin|start|genesis|join/i });
+    > 74 |     await expect(ctaButton).toBeVisible();
+         |                             ^
+      75 |   });
+      76 |
+      77 |   test('should pass basic accessibility checks', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:74:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-be-responsive-on-mobile-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-be-responsive-on-mobile-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-should-be-responsive-on-mobile-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-should-be-responsive-on-mobile-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-be-responsive-on-mobile-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-be-responsive-on-mobile-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Landing Page › should pass basic accessibility checks" classname="landing.spec.ts" time="11.387">
+</testcase>
+<testcase name="Landing Page › should load within performance budget" classname="landing.spec.ts" time="9.601">
+<failure message="landing.spec.ts:95:7 should load within performance budget" type="FAILURE">
+<![CDATA[  [chromium] › landing.spec.ts:95:7 › Landing Page › should load within performance budget ─────────
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 2500
+    Received:   8800
+
+      102 |     
+      103 |     // FCP should be under 2.5s (our elite target is 1.8s)
+    > 104 |     expect(timing.fcp).toBeLessThan(2500);
+          |                        ^
+      105 |     
+      106 |     // DOM complete should be under 5s
+      107 |     expect(timing.domComplete).toBeLessThan(5000);
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\landing.spec.ts:104:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-load-within-performance-budget-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\landing-Landing-Page-should-load-within-performance-budget-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\landing-Landing-Page-should-load-within-performance-budget-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\landing-Landing-Page-should-load-within-performance-budget-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-load-within-performance-budget-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\landing-Landing-Page-should-load-within-performance-budget-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="onboarding.spec.ts" timestamp="2025-12-23T02:33:16.555Z" hostname="chromium" tests="9" failures="6" skipped="0" time="113.242" errors="0">
+<testcase name="Onboarding Flow › should display onboarding wizard" classname="onboarding.spec.ts" time="14.633">
+<failure message="onboarding.spec.ts:19:7 should display onboarding wizard" type="FAILURE">
+<![CDATA[  [chromium] › onboarding.spec.ts:19:7 › Onboarding Flow › should display onboarding wizard ────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid="step-indicator"], .step-indicator, [role="progressbar"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="step-indicator"], .step-indicator, [role="progressbar"]')
+
+
+      20 |     // Check for step indicator
+      21 |     const stepIndicator = page.locator('[data-testid="step-indicator"], .step-indicator, [role="progressbar"]');
+    > 22 |     await expect(stepIndicator).toBeVisible();
+         |                                 ^
+      23 |     
+      24 |     // Check for onboarding container
+      25 |     const container = page.locator('[data-testid="onboarding"], .onboarding, main');
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\onboarding.spec.ts:22:33
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-should-display-onboarding-wizard-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-should-display-onboarding-wizard-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\onboarding-Onboarding-Flow-should-display-onboarding-wizard-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-should-display-onboarding-wizard-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-should-display-onboarding-wizard-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-should-display-onboarding-wizard-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Onboarding Flow › should navigate through onboarding steps" classname="onboarding.spec.ts" time="14.731">
+<failure message="onboarding.spec.ts:29:7 should navigate through onboarding steps" type="FAILURE">
+<![CDATA[  [chromium] › onboarding.spec.ts:29:7 › Onboarding Flow › should navigate through onboarding steps 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /next|continue|proceed/i })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('button', { name: /next|continue|proceed/i })
+
+
+      32 |     
+      33 |     const nextButton = page.getByRole('button', { name: /next|continue|proceed/i });
+    > 34 |     await expect(nextButton).toBeVisible();
+         |                              ^
+      35 |     
+      36 |     // Navigate to step 2
+      37 |     await nextButton.click();
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\onboarding.spec.ts:34:30
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-cb8ce-te-through-onboarding-steps-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-cb8ce-te-through-onboarding-steps-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\onboarding-Onboarding-Flow-cb8ce-te-through-onboarding-steps-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-cb8ce-te-through-onboarding-steps-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-cb8ce-te-through-onboarding-steps-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-cb8ce-te-through-onboarding-steps-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Onboarding Flow › should display Genesis Covenant for signing" classname="onboarding.spec.ts" time="10.204">
+<failure message="onboarding.spec.ts:47:7 should display Genesis Covenant for signing" type="FAILURE">
+<![CDATA[  [chromium] › onboarding.spec.ts:47:7 › Onboarding Flow › should display Genesis Covenant for signing 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('text=/axiom|covenant|oath|sovereignty|ihsan/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('text=/axiom|covenant|oath|sovereignty|ihsan/i')
+
+
+      57 |     // Look for covenant content
+      58 |     const covenantText = page.locator('text=/axiom|covenant|oath|sovereignty|ihsan/i');
+    > 59 |     await expect(covenantText).toBeVisible();
+         |                                ^
+      60 |   });
+      61 |
+      62 |   test('should require covenant acceptance before completion', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\onboarding.spec.ts:59:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-78b3f-enesis-Covenant-for-signing-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-78b3f-enesis-Covenant-for-signing-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\onboarding-Onboarding-Flow-78b3f-enesis-Covenant-for-signing-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-78b3f-enesis-Covenant-for-signing-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-78b3f-enesis-Covenant-for-signing-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-78b3f-enesis-Covenant-for-signing-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Onboarding Flow › should require covenant acceptance before completion" classname="onboarding.spec.ts" time="15.03">
+<failure message="onboarding.spec.ts:62:7 should require covenant acceptance before completion" type="FAILURE">
+<![CDATA[  [chromium] › onboarding.spec.ts:62:7 › Onboarding Flow › should require covenant acceptance before completion 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('button', { name: /complete|finish|begin|enter|genesis/i })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByRole('button', { name: /complete|finish|begin|enter|genesis/i })
+
+
+      72 |     // Complete button should exist
+      73 |     const completeButton = page.getByRole('button', { name: /complete|finish|begin|enter|genesis/i });
+    > 74 |     await expect(completeButton).toBeVisible();
+         |                                  ^
+      75 |   });
+      76 |
+      77 |   test('should allow going back to previous steps', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\onboarding.spec.ts:74:34
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-701f4-cceptance-before-completion-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-701f4-cceptance-before-completion-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\onboarding-Onboarding-Flow-701f4-cceptance-before-completion-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-701f4-cceptance-before-completion-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-701f4-cceptance-before-completion-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-701f4-cceptance-before-completion-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Onboarding Flow › should allow going back to previous steps" classname="onboarding.spec.ts" time="30.36">
+<failure message="onboarding.spec.ts:77:7 should allow going back to previous steps" type="FAILURE">
+<![CDATA[  [chromium] › onboarding.spec.ts:77:7 › Onboarding Flow › should allow going back to previous steps 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: /next|continue/i })
+
+
+      78 |     // Go forward first
+      79 |     const nextButton = page.getByRole('button', { name: /next|continue/i });
+    > 80 |     await nextButton.click();
+         |                      ^
+      81 |     await page.waitForTimeout(500);
+      82 |     
+      83 |     // Check for back button
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\onboarding.spec.ts:80:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-1cfe3-oing-back-to-previous-steps-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-1cfe3-oing-back-to-previous-steps-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\onboarding-Onboarding-Flow-1cfe3-oing-back-to-previous-steps-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-1cfe3-oing-back-to-previous-steps-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-1cfe3-oing-back-to-previous-steps-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-1cfe3-oing-back-to-previous-steps-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Onboarding Flow › should validate required fields" classname="onboarding.spec.ts" time="2.836">
+</testcase>
+<testcase name="Onboarding Flow › should redirect to dashboard after completion" classname="onboarding.spec.ts" time="13.114">
+</testcase>
+<testcase name="Onboarding Flow › should have Starfield background animation" classname="onboarding.spec.ts" time="9.987">
+<failure message="onboarding.spec.ts:145:7 should have Starfield background animation" type="FAILURE">
+<![CDATA[  [chromium] › onboarding.spec.ts:145:7 › Onboarding Flow › should have Starfield background animation 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('canvas')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('canvas')
+
+
+      146 |     // Check for Three.js canvas
+      147 |     const canvas = page.locator('canvas');
+    > 148 |     await expect(canvas).toBeVisible();
+          |                          ^
+      149 |   });
+      150 |
+      151 |   test('should be accessible', async ({ page }) => {
+        at C:\BIZRA-Dual-Agentic-system--main\bizra-genesis-node\apps\dashboard\tests\e2e\onboarding.spec.ts:148:26
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-adc9e-rfield-background-animation-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\onboarding-Onboarding-Flow-adc9e-rfield-background-animation-chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\onboarding-Onboarding-Flow-adc9e-rfield-background-animation-chromium\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-adc9e-rfield-background-animation-chromium\test-failed-1.png]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-adc9e-rfield-background-animation-chromium\video.webm]]
+
+[[ATTACHMENT|test-results\onboarding-Onboarding-Flow-adc9e-rfield-background-animation-chromium\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Onboarding Flow › should be accessible" classname="onboarding.spec.ts" time="2.347">
+</testcase>
+</testsuite>
+</testsuites>

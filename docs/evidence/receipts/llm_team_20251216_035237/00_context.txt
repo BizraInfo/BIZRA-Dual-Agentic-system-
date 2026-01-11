@@ -1,0 +1,135 @@
+EVIDENCE_CONTEXT (DERIVED, SNR-focused):
+generated_at: 2025-12-16T03:52:35.496453+00:00
+inputs: [{"path":"C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_075228\\topics.json","sha256":"065e716ee09bf29e10ae2bee387505c86c000db2a1b17103aecd25d9d5af03c7"}]
+
+Top terms:
+- system: total=15522, convs=542
+- self: total=12935, convs=185
+- bizra: total=8999, convs=307
+- agent: total=4376, convs=163
+- performance: total=3564, convs=141
+- block: total=3531, convs=128
+- data: total=3409, convs=114
+- device: total=3083, convs=104
+- user: total=2745, convs=124
+- architecture: total=2680, convs=136
+- agents: total=2674, convs=107
+- def: total=2665, convs=96
+- code: total=2604, convs=105
+- analysis: total=2596, convs=161
+- address: total=2428, convs=45
+- all: total=2294, convs=134
+- echo: total=2284, convs=13
+- knowledge: total=2076, convs=97
+- const: total=2072, convs=38
+- context: total=2051, convs=100
+- file: total=2046, convs=69
+- security: total=2034, convs=68
+- implementation: total=2010, convs=98
+- integration: total=1995, convs=79
+- cite: total=1970, convs=53
+
+Top paths:
+- C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey64.exe (convs=2)
+- C:\\\\...\\\\OUTLOOK.EXE (convs=2)
+- C:\\bizra-genesis-node (convs=2)
+- C:\\ (convs=2)
+- C:\\Users\\BIZRA-OS\\.ollama\\models (convs=1)
+- C:\\Users\\BIZRA-OS\\AppData\\Local\\Programs\\Ollama\\ollama.exe (convs=1)
+- C:\\bizra-genesis-node\\docker-compose.database.yml (convs=1)
+- C:\\Users\\bizra\\BIZRA-2024-11-15-16-41-09.log (convs=1)
+- C:\\bizra-genesis-node\\src\\rewards\\mod.rs (convs=1)
+- C:\\bizra-genesis-node\\src\\rewards\\service.rs (convs=1)
+- C:\\bizra-genesis-node\\sape_engine (convs=1)
+- C:\\BIZRA-PROJECTS\\bizra-frontend-mvp (convs=1)
+- C:\\BIZRA-PROJECTS\\synthesis_orchestrator (convs=1)
+- C:\\BIZRA-PROJECTS (convs=1)
+- C:\\Users\\bizra\\Desktop\ (convs=1)
+- C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-30.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-31.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\status.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\control-panel-summary.md (convs=1)
+- C:\\Users\\bizra\\Desktop\\flask-server-implementation.js (convs=1)
+
+Top commands:
+- docker (convs=164)
+- git (convs=140)
+- npm (convs=121)
+- powershell (convs=99)
+- cargo (convs=76)
+- cmd (convs=53)
+- ollama (convs=45)
+- robocopy (convs=1)
+
+---
+
+EXTRA_CONTEXT_1 (MEASURED):
+CODEBASE_CONTEXT (MEASURED/DERIVED, high-SNR)
+generated_at: 2025-12-16T03:52:27.902721+00:00
+repo_root: C:\BIZRA-Dual-Agentic-system--main
+
+Git:
+- head: 24d743681be2141fe4b73a31159a47e2863a3b55
+- branch: main
+- dirty: True
+
+Files:
+- total_files: 136
+- total_bytes: 9583775
+- top_extensions:
+  - .json: files=15 bytes=6002912
+  - .pdf: files=3 bytes=2663372
+  - .md: files=44 bytes=503165
+  - .rs: files=16 bytes=88438
+  - .yaml: files=14 bytes=63755
+  - .ps1: files=9 bytes=54953
+  - .py: files=12 bytes=53521
+  - .html: files=1 bytes=36733
+  - .lock: files=1 bytes=27665
+  - .ts: files=5 bytes=22946
+
+LOC (heuristic):
+- scanned_files: 127
+  - .json: loc=74354 files=15
+  - .md: loc=13768 files=44
+  - .rs: loc=2808 files=16
+  - .yaml: loc=2232 files=14
+  - .py: loc=1620 files=12
+  - .ps1: loc=1391 files=9
+  - .lock: loc=1089 files=1
+  - .html: loc=1039 files=1
+  - .ts: loc=668 files=5
+  - .js: loc=503 files=4
+
+Rust/Cargo:
+- crate: meta_alpha_dual_agentic 2.0.0 (edition 2021)
+- deps: 13
+
+Node packages:
+- ace-framework 1.0.0 @ ace-framework\package.json
+
+Security signals (heuristic):
+- node_child_exec: 0
+- node_eval: 0
+- node_spawn: 0
+- ps_invoke_expression: 1
+- rust_expect: 1
+- rust_unsafe: 0
+- rust_unwrap: 3
+
+Docs:
+- markdown_files: 44
+- .bizra-kernel\QUICK-REFERENCE.md
+- .bizra-kernel\README.md
+- .bizra-kernel\SYSTEM-OVERVIEW.md
+- .bizra-kernel\context\agent_manifest.md
+- ARCHITECTURE.md
+- BIZRA-Elite-Implementation-Blueprint-v4.0.md
+- BIZRA-Lexicon-Ledger-v0.1 (1).md
+- BIZRA-Lexicon-Ledger-v0.1 (2).md
+
+
+---
+
+EXTRA_CONTEXT_2 (MEASURED):
+﻿{"run_id": "20251216_035236", "out_dir": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_035236", "summary_json": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\windows_crash\\20251216_035236\\summary.json", "files_indexed": 189, "members_extracted": 19, "truth_label": "MEASURED"}

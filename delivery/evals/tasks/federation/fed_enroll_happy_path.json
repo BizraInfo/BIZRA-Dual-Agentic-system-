@@ -1,0 +1,8 @@
+{
+  "id": "FED_ENROLL_HAPPY_PATH",
+  "suite": "federation",
+  "command": "cargo run --quiet -- federation enroll --node-id node-test-1 --tier bronze",
+  "expected_exit_code": 0,
+  "timeout": 60,
+  "description": "Verifies that a node can successfully request enrollment and receive a certificate."
+}

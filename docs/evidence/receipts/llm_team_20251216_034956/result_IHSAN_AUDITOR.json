@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:50:37.754Z",
+  "role": "IHSAN_AUDITOR",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "IHSAN_AUDITOR",
+    "summary": "This JSON provides a high-SNR (Signal-to-Noise Ratio) context for the Bizra dual-agentic system. The context includes key terms, paths, commands, and codebase information. The task is to produce an action plan with evidence mapping.",
+    "insights": [
+      {
+        "claim": "The codebase uses Rust as a primary language.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Rust/Cargo section in CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Verify the Rust usage by inspecting more files or running a language detection tool."
+      },
+      {
+        "claim": "The codebase includes documentation, such as README and quick-reference guides.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Docs section in CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Ensure all documented files are up-to-date and accessible."
+      },
+      {
+        "claim": "There is a potential security risk with `ps_invoke_expression` usage.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Security signals (heuristic) section in CODEBASE_CONTEXT"
+        ],
+        "risk": "medium",
+        "action": "Review and update the code to avoid using `ps_invoke_expression`. Consider replacing it with a safer alternative."
+      },
+      {
+        "claim": "The system's main repository is located at C:\\BIZRA-Dual-Agentic-system--main.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "repo_root in CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Ensure this path is correctly set and accessible."
+      },
+      {
+        "claim": "The system uses Docker for integration testing or deployment.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "docker commands are frequently used in TOP_COMMANDS"
+        ],
+        "risk": "low",
+        "action": "Verify the Docker configurations to ensure they align with security and performance standards."
+      },
+      {
+        "claim": "The system includes a node package `ace-framework`.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Node packages section in CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Review the usage of `ace-framework` and update it if necessary."
+      },
+      {
+        "claim": "There is no evidence of security risks from node operations.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Security signals (heuristic) section in CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Maintain the current security posture and continue monitoring."
+      },
+      {
+        "claim": "The system's main branch is 'main' with a dirty state.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Git section in CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Resolve any uncommitted changes before proceeding with further development."
+      }
+    ],
+    "next_7_days": [
+      "Review and address the identified security risks.",
+      "Update documentation where necessary to ensure completeness and accessibility.",
+      "Perform a code audit focusing on Rust usage and integration tests.",
+      "Ensure all files in the codebase are correctly indexed and accessible."
+    ],
+    "blocked_by": [
+      "Pending resolution of uncommitted changes in the Git repository."
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

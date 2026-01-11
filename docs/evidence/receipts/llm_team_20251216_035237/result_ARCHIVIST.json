@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:52:43.032Z",
+  "role": "ARCHIVIST",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "ARCHIVIST",
+    "summary": "This action plan is based on the provided context, focusing on organizing knowledge assets and proposing durable schemas for retrieval.",
+    "insights": [
+      {
+        "claim": "Organize top terms into a structured schema for efficient data access.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top terms: system, self, bizra, agent, performance, block, data, device, user, architecture, agents, def, code, analysis, address, all, echo, knowledge, const, context, file, security, implementation, integration, cite"
+        ],
+        "risk": "low",
+        "action": "Create a schema for top terms with clear categorizations."
+      },
+      {
+        "claim": "Generate an index of knowledge assets based on paths provided.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top paths: various directories and files"
+        ],
+        "risk": "low",
+        "action": "Automate the creation of an index from top paths."
+      },
+      {
+        "claim": "Ensure the codebase is well-documented according to the provided markdown files.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Docs: .bizra-kernel\\QUICK-REFERENCE.md, .bizra-kernel\\README.md, etc."
+        ],
+        "risk": "low",
+        "action": "Review and update documentation as necessary."
+      },
+      {
+        "claim": "Monitor security signals to prevent potential threats.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Security signals: ps_invoke_expression=1, rust_expect=1"
+        ],
+        "risk": "low",
+        "action": "Implement additional monitoring and logging for suspicious activities."
+      }
+    ],
+    "next_7_days": [
+      "Review and refine the schema for top terms.",
+      "Develop a script to generate the index of knowledge assets.",
+      "Update documentation according to best practices.",
+      "Enhance security monitoring tools based on identified signals."
+    ],
+    "blocked_by": []
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

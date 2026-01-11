@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-01-09T19:22:31.537977Z",
+  "hardware_hash": "349d15175337557726951941f96185c84fdf8d61b0f50365989c8aba5f7ec4bc",
+  "hardware": {
+    "device": "MSI Titan 18 HX (2024)",
+    "cpu": {
+      "model": "Intel Core i9-14900HX",
+      "cores": 24,
+      "threads": 32,
+      "virtualization": "VMX/VT-x",
+      "base_clock_mhz": 2200,
+      "turbo_clock_mhz": 5800
+    },
+    "memory": {
+      "total_gb": 128,
+      "type": "DDR5-3600",
+      "modules": "4\u00d732GB Samsung M425R4GA3BB0-CWM0D",
+      "speed_mt": 3600
+    },
+    "gpu_discrete": {
+      "model": "NVIDIA GeForce RTX 4090 Laptop GPU",
+      "vram_gb": 16,
+      "cuda_cores": 9728,
+      "driver": "572.42",
+      "cuda_versions": [
+        "12.6",
+        "13.0"
+      ]
+    },
+    "gpu_integrated": {
+      "model": "Intel UHD Graphics (Meteor Lake)",
+      "vram_shared_gb": 64
+    },
+    "storage": {
+      "primary": {
+        "model": "Intel RAID 0 Volume",
+        "capacity_tb": 3.8,
+        "type": "NVMe SSD",
+        "configuration": "2\u00d71.9TB RAID 0"
+      }
+    },
+    "network": {
+      "ethernet": "Killer E3100X 2.5GbE",
+      "wifi": "Intel BE200 WiFi 7",
+      "bluetooth": "Intel Bluetooth 5.4"
+    },
+    "security": {
+      "tpm": "2.0 (STMicro)",
+      "secure_boot": true
+    },
+    "os": {
+      "name": "Windows 11 Enterprise",
+      "build": "26H1 (28020.1362)",
+      "insider": "Canary Channel"
+    }
+  }
+}

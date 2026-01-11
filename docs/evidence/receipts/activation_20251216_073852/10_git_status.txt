@@ -1,0 +1,44 @@
+﻿ M .bizra-kernel/kernel-entry.ts
+ M .bizra-kernel/start_genesis_zero.ps1
+ M .bizra/workspace.yaml
+ M .gitignore
+ M README.md
+ M ace-framework/orchestrator-ihsan-wrapper.js
+ M ace-framework/package.json
+ M scripts/resolve-bizra-root.ps1
+ M src/a2a.rs
+ M src/bizra_integration.rs
+ M src/bridge.rs
+ M src/errors.rs
+ M src/http.rs
+ M src/lib.rs
+ M src/main.rs
+ M src/mcp.rs
+ M src/pat.rs
+ M src/pat_enhanced.rs
+ M src/reasoning.rs
+ M src/sat.rs
+ M src/types.rs
+ M tools/phase0_audit.ps1
+?? .bizra/vault.yaml
+?? BIZRA_Ops_Kit_v0.1.zip
+?? ace-framework/team-runner.js
+?? docs/accessibility/
+?? docs/blueprints/
+?? docs/data-migration/
+?? docs/evidence/
+?? docs/finops/
+?? docs/operations/
+?? docs/privacy/
+?? docs/process/
+?? docs/requirements/
+?? docs/retirement/
+?? docs/security/
+?? docs/slo/
+?? scripts/resolve-bizra-vault.ps1
+?? tools/activate_team.ps1
+?? tools/codebase_inventory.py
+?? tools/ingest_chat_sample.py
+?? tools/ingest_crash_reports.py
+?? tools/run_master.ps1
+?? tools/summarize_chat_index.py

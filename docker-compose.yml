@@ -1,0 +1,296 @@
+services:
+  # ══════════════════════════════════════════════════════════════════════════════
+  # KNOWLEDGE SUBSTRATE (P1.11) — Postgres + pgvector
+  # ══════════════════════════════════════════════════════════════════════════════
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-bizra}
+      POSTGRES_USER: ${POSTGRES_USER:-bizra}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-bizra_dev_password}
+    ports:
+      - "127.0.0.1:5433:5432"  # Remapped to 5433 to avoid conflict with bizra-node0-db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bizra -d bizra"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  synapse:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - synapse_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 1s
+      retries: 20
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  wisdom:
+    image: neo4j:5.15-community
+    environment:
+      NEO4J_AUTH: ${NEO4J_AUTH}
+    ports:
+      - "127.0.0.1:7475:7474"  # Remapped to avoid conflict
+      - "127.0.0.1:7688:7687"  # Remapped to avoid conflict
+    volumes:
+      - wisdom_data:/data
+      - wisdom_logs:/logs
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  vectors:
+    image: chromadb/chroma:latest
+    environment:
+      IS_PERSISTENT: "TRUE"
+      ANONYMIZED_TELEMETRY: "FALSE"
+    volumes:
+      - vectors_data:/chroma/chroma
+    restart: unless-stopped
+    ports:
+      - "8002:8000"  # Remapped to avoid conflict with bizra-dual-agentic
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  kernel:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    shm_size: '2gb'
+    env_file:
+      - .env
+    environment:
+      # Readiness / dependency wiring
+      SYNAPSE_URL: ${SYNAPSE_URL:-redis://synapse:6379}
+      WISDOM_URL: ${WISDOM_URL:-bolt://wisdom:7687}
+      NEO4J_AUTH: ${NEO4J_AUTH}
+
+      # Host LLM access (Ollama + LM Studio running on host)
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      LMSTUDIO_BASE_URL: ${LMSTUDIO_BASE_URL:-http://host.docker.internal:1234}
+
+      # Future-proof: vectors service
+      CHROMA_URL: ${CHROMA_URL:-http://vectors:8000}
+
+      # Default: require Neo4j evidence for H-stakes SAPE
+      BIZRA_SAPE_REQUIRE_NEO4J_EVIDENCE_H: ${BIZRA_SAPE_REQUIRE_NEO4J_EVIDENCE_H:-1}
+    ports:
+      - "8012:8000"  # Remapped to avoid conflict
+    volumes:
+      # Persist receipts outside container FS
+      - kernel_receipts:/app/docs/evidence/receipts
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - synapse
+      - wisdom
+      - vectors
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=0.95).read()",
+        ]
+      interval: 10s
+      timeout: 2s
+      retries: 20
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # BIZRA Elite: Rust-based PAT+SAT+SAPE+FATE engine
+  elite:
+    build:
+      context: .
+      dockerfile: Dockerfile.rust
+    shm_size: '2gb'
+    env_file:
+      - .env
+    environment:
+      RUST_LOG: ${RUST_LOG:-info}
+      BIZRA_HTTP_PORT: 8080
+      BIZRA_HTTP_HOST: 0.0.0.0
+      BIZRA_API_TOKEN: ${BIZRA_API_TOKEN:-}
+      OLLAMA_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      NEO4J_URI: ${WISDOM_URL:-bolt://wisdom:7687}
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD:-bizra_wisdom}
+      REDIS_URL: ${SYNAPSE_URL:-redis://synapse:6379}
+      CHROMA_URL: ${CHROMA_URL:-http://vectors:8000}
+      BIZRA_IHSAN_ENV: ${BIZRA_IHSAN_ENV:-staging}
+    ports:
+      - "8082:8080"  # Remapped to avoid conflict
+    volumes:
+      - elite_receipts:/app/docs/evidence/receipts
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      synapse:
+        condition: service_healthy
+      wisdom:
+        condition: service_started
+      vectors:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Refinery Daemon: continuous ingestion service (F-PERF-002)
+  refinery:
+    build:
+      context: .
+      dockerfile: Dockerfile.refinery
+    environment:
+      BIZRA_REFINERY_THROUGHPUT: ${BIZRA_REFINERY_THROUGHPUT:-10}
+      BIZRA_REFINERY_PORT: ${BIZRA_REFINERY_PORT:-8081}
+      BIZRA_REFINERY_BATCH_SIZE: ${BIZRA_REFINERY_BATCH_SIZE:-50}
+    ports:
+      - "8083:8081"  # Remapped to avoid conflict
+    volumes:
+      - ./bizra_data_vault:/app/bizra_data_vault:ro
+      - ./BIZRA_KNOWLEDGE_LEDGER.jsonl:/app/BIZRA_KNOWLEDGE_LEDGER.jsonl
+      - ./BIZRA_GENESIS_BLOCK_0.json:/app/BIZRA_GENESIS_BLOCK_0.json:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8081/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: background auditor (enable via: docker compose --profile optional up -d)
+  fate_auditor:
+    profiles: ["optional"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      SYNAPSE_URL: ${SYNAPSE_URL:-redis://synapse:6379}
+      WISDOM_URL: ${WISDOM_URL:-bolt://wisdom:7687}
+      NEO4J_AUTH: ${NEO4J_AUTH}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      LMSTUDIO_BASE_URL: ${LMSTUDIO_BASE_URL:-http://host.docker.internal:1234}
+    command: ["python", "-m", "core.fate_auditor_worker"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - synapse
+      - wisdom
+      - kernel
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Glass Cockpit: Prometheus metrics collection
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - prometheus_data:/prometheus
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.retention.time=30d'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Glass Cockpit: Grafana dashboards
+  grafana:
+    image: grafana/grafana:10.2.0
+    ports:
+      - "127.0.0.1:3001:3000"  # Remapped to 3001 to avoid conflict with bizra-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-bizra_glass}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/glass-cockpit.json
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./dashboards:/var/lib/grafana/dashboards:ro
+      - ./config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ./config/grafana-dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  pgdata:
+  synapse_data:
+  wisdom_data:
+  wisdom_logs:
+  vectors_data:
+  kernel_receipts:
+  elite_receipts:
+  prometheus_data:
+  grafana_data:

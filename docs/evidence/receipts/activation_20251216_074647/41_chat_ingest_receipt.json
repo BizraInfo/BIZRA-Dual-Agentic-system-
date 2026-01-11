@@ -1,0 +1,45 @@
+﻿{
+    "out_dir":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648",
+    "input_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\chat data sample",
+    "type":  "chat_ingest",
+    "run_id":  "20251216_074648",
+    "artifacts":  [
+                      {
+                          "sha256":  "5b42c76ea8f032fec4e3614af06c0152a62dffdbe6e8e6e44580d4a52a155bf2",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\summary.json"
+                      },
+                      {
+                          "sha256":  "7107bb29c61fb2c905bae7f0ed254e18e4545950c7b088c70622e70cc658a0c7",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\sources.json"
+                      },
+                      {
+                          "sha256":  "0aedf4088e92582f216058a614ef5addd35fe945d0df0cb1c3c051612843ddca",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\topics.json"
+                      },
+                      {
+                          "sha256":  "86c36724893b6d80ede4e71cab19daff3a956c193e5e8a82559b5922e348fe88",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\graph.json"
+                      },
+                      {
+                          "sha256":  "6b1119a504b502816a531820607ed6cc9fb437e894571ae0feac56e73aaf5110",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\conversations.jsonl"
+                      },
+                      {
+                          "sha256":  "7f0c2197029a2efc5d02a13556d59cf0b600b0ce6732d5fe2d80df6318f51b32",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\messages_index.jsonl"
+                      },
+                      {
+                          "sha256":  "1e22d9df278a147ac080178e116104436c2481d7fb1ef8fbdc0fe129eb6a08cc",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\aggregate.json"
+                      }
+                  ],
+    "receipt_version":  1,
+    "generated_at":  "2025-12-16T07:46:55.8143859+04:00",
+    "truth_label":  "MEASURED",
+    "counts":  {
+                   "zip_files":  5,
+                   "messages_index":  24746,
+                   "messages_full":  0,
+                   "conversations":  1241
+               }
+}

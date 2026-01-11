@@ -1,0 +1,293 @@
+{
+  "app": {
+    "name": "BIZRA",
+    "tagline": "IA Soberana para Todos",
+    "description": "Tu Equipo Personal de IA, Funcionando Localmente"
+  },
+  "nav": {
+    "home": "Inicio",
+    "agents": "Agentes",
+    "chat": "Chat",
+    "knowledge": "Conocimiento",
+    "settings": "Configuración",
+    "rewards": "Recompensas",
+    "plan": "Plan",
+    "resources": "Recursos"
+  },
+  "landing": {
+    "hero": {
+      "title": "Tu IA, Tu Control",
+      "subtitle": "La Primera Plataforma de IA Soberana",
+      "description": "Tus datos son tuyos. Tu IA trabaja para ti. Sin nube. Sin compromisos.",
+      "cta": "Comienza Tu Génesis",
+      "secondary": "Saber Más"
+    }
+  },
+  "invitation": {
+    "title": "Ingresa el Código de Invitación",
+    "subtitle": "BIZRA está en beta privada. Ingresa tu código de invitación para unirte.",
+    "placeholder": "Ingresa tu código de invitación",
+    "validate": "Validar Código",
+    "validating": "Validando...",
+    "success": "¡Bienvenido, Pionero!",
+    "successDesc": "Eres el usuario #{{number}} de los primeros 1,000 soberanos.",
+    "tier": {
+      "genesis": "Pionero Génesis",
+      "early": "Adoptador Temprano",
+      "standard": "Miembro Soberano"
+    },
+    "noCode": "¿No tienes código?",
+    "requestAccess": "Solicitar Acceso",
+    "requestHint": "Contacta a @BizraInfo en GitHub o X para acceso anticipado",
+    "publicPhase": "¡Acceso Público Ahora Disponible!",
+    "publicPhaseDesc": "BIZRA está ahora abierto para todos. No se requiere invitación.",
+    "errors": {
+      "invalidCode": "Código de invitación inválido. Por favor verifica e intenta de nuevo.",
+      "codeInactive": "Este código ya no está activo.",
+      "codeExhausted": "Este código ha alcanzado su máximo de usos.",
+      "required": "Por favor ingresa un código de invitación"
+    },
+    "stats": {
+      "remaining": "{{count}} lugares restantes en Fase 1",
+      "pioneers": "{{count}} pioneros se han unido"
+    },
+    "yourPrivileges": "Tus Privilegios Exclusivos",
+    "welcomeTo": "Bienvenido a BIZRA"
+  },
+  "onboarding": {
+    "language": {
+      "title": "Elige Tu Idioma",
+      "titleAr": "اختر لغتك",
+      "subtitle": "Selecciona el idioma para tu experiencia BIZRA",
+      "continue": "Continuar"
+    },
+    "welcome": {
+      "title": "Bienvenido a Tu Génesis",
+      "subtitle": "Estás a punto de convertirte en un Arquitecto de IA soberana.",
+      "description": "Este ritual alineará tu mente con la red.",
+      "cta": "Comenzar el Ritual"
+    },
+    "steps": {
+      "covenant": "El Pacto",
+      "covenantDesc": "Acepta las Leyes del Génesis",
+      "seedTest": "Prueba Inicial",
+      "seedTestDesc": "4 preguntas sobre tu esencia",
+      "patSelection": "Selección PAT",
+      "patSelectionDesc": "Elige tu agente IA principal",
+      "identity": "Identidad",
+      "identityDesc": "Sella tu perfil soberano"
+    },
+    "covenant": {
+      "title": "El Pacto del Génesis",
+      "description": "Estas son las leyes sagradas que gobiernan la Red BIZRA. Léelas cuidadosamente.",
+      "accept": "Acepto el Pacto",
+      "checkbox": "He leído y acepto el Pacto del Génesis."
+    },
+    "seedTest": {
+      "title": "Prueba Inicial",
+      "description": "Responde estas preguntas para personalizar tu experiencia de IA.",
+      "questionOf": "Pregunta {{current}} de {{total}}",
+      "previous": "Anterior",
+      "questions": {
+        "goal": {
+          "question": "¿Cuál es tu objetivo principal con la asistencia de IA?",
+          "productivity": "Aumentar Productividad",
+          "learning": "Aprender Nuevas Habilidades",
+          "creative": "Proyectos Creativos",
+          "analysis": "Análisis de Datos"
+        },
+        "style": {
+          "question": "¿Cómo prefieres recibir información?",
+          "detailed": "Explicaciones Detalladas",
+          "concise": "Breve y Directo",
+          "visual": "Ejemplos Visuales",
+          "interactive": "Diálogo Interactivo"
+        },
+        "pace": {
+          "question": "¿Qué ritmo funciona mejor para ti?",
+          "fast": "Rápido y Eficiente",
+          "thorough": "Completo y Detallado",
+          "adaptive": "Adaptable al Contexto",
+          "patient": "Paciente y Solidario"
+        },
+        "domain": {
+          "question": "¿Qué dominio te interesa más?",
+          "tech": "Tecnología y Código",
+          "business": "Negocios y Estrategia",
+          "creative": "Artes y Diseño",
+          "research": "Investigación y Aprendizaje"
+        }
+      }
+    },
+    "patSelection": {
+      "title": "Selecciona Tu Agente PAT Principal",
+      "description": "Según tus respuestas, recomendamos {{agent}}. Siempre puedes cambiar después.",
+      "recommended": "Recomendado"
+    },
+    "profile": {
+      "title": "Completa Tu Perfil",
+      "description": "Configura tu identidad soberana en la red BIZRA.",
+      "displayName": "Nombre para Mostrar",
+      "displayNamePlaceholder": "Ingresa tu nombre",
+      "ihsanScore": "Puntuación Ihsan Inicial",
+      "ihsanDescription": "Ihsan mide tu excelencia ética y la calidad de tus contribuciones.",
+      "summary": "Resumen de Tus Selecciones",
+      "primaryPat": "PAT Principal",
+      "goals": "Objetivos",
+      "style": "Estilo",
+      "notSet": "No establecido",
+      "completeSetup": "Completar Configuración",
+      "creatingProfile": "Creando Perfil..."
+    },
+    "complete": {
+      "title": "¡Génesis Completado!",
+      "description": "Tu perfil de IA soberano ha sido creado. Preparando la instalación del Nodo..."
+    }
+  },
+  "agents": {
+    "roles": {
+      "MasterReasoner": {
+        "name": "Razonador Maestro",
+        "description": "Pensamiento analítico profundo y resolución de problemas complejos"
+      },
+      "MemoryArchitect": {
+        "name": "Arquitecto de Memoria",
+        "description": "Contexto personal y retención de conocimiento"
+      },
+      "CreativeSynthesizer": {
+        "name": "Sintetizador Creativo",
+        "description": "Ideación creativa y generación de contenido"
+      },
+      "DataAnalyzer": {
+        "name": "Analizador de Datos",
+        "description": "Procesamiento de datos y reconocimiento de patrones"
+      },
+      "Communicator": {
+        "name": "Comunicador",
+        "description": "Conversación natural y escritura"
+      },
+      "ExecutionPlanner": {
+        "name": "Planificador de Ejecución",
+        "description": "Orquestación de tareas y programación"
+      },
+      "EthicsGuardian": {
+        "name": "Guardián Ético",
+        "description": "Alineación ética y consistencia de valores"
+      }
+    }
+  },
+  "installer": {
+    "header": "INSTALADOR DEL SISTEMA SOBERANO",
+    "welcome": {
+      "title": "Bienvenido a la Soberanía",
+      "description": "Transforma tu máquina en un nodo de IA soberano. Tus datos son tuyos. Tu IA te sirve. Tu impacto genera valor.",
+      "features": {
+        "zeroCloud": "Cero Nube",
+        "zeroCloudDesc": "Todo funciona localmente en tu hardware",
+        "agents": "7 Agentes IA",
+        "agentsDesc": "Tu Equipo de Agentes Personales (PAT)",
+        "impact": "Prueba de Impacto",
+        "impactDesc": "Gana tokens SEED por trabajo real"
+      },
+      "scanButton": "Analizar Mi Sistema"
+    },
+    "scanning": {
+      "title": "Analizando Tu Sistema",
+      "description": "Detectando capacidades del hardware...",
+      "progress": "Progreso"
+    },
+    "results": {
+      "title": "Análisis del Sistema Completo",
+      "description": "Tu hardware supera los requisitos para BIZRA Node0",
+      "ready": "Listo para Soberanía Total",
+      "readyDesc": "Tu sistema puede ejecutar los 7 agentes PAT + DeepSeek R1 + HyperGraph RAG completo",
+      "selectModels": "Seleccionar Modelos de IA"
+    },
+    "models": {
+      "title": "Selecciona Tus Modelos de IA",
+      "description": "Hemos recomendado los mejores modelos según la potencia de tu hardware",
+      "recommended": "Recomendado",
+      "optional": "Opcional",
+      "size": "Tamaño",
+      "vram": "VRAM Requerida",
+      "selectedModels": "Modelos Seleccionados",
+      "totalSize": "Tamaño total"
+    },
+    "profile": {
+      "title": "Crea Tu Perfil",
+      "description": "Personaliza tu experiencia de IA soberana",
+      "identity": "Identidad",
+      "yourName": "Tu Nombre",
+      "namePlaceholder": "Ingresa tu nombre",
+      "nameHint": "Tus agentes PAT usarán esto para personalizar las interacciones",
+      "installPath": "Ruta de Instalación",
+      "requiresSpace": "Requiere {{size}} de espacio libre",
+      "privacyLevel": "Nivel de Privacidad",
+      "privacyMaximum": "Máximo — Todo el procesamiento en el dispositivo",
+      "privacyHigh": "Alto — Funciones cloud mínimas",
+      "privacyBalanced": "Equilibrado — Algunas mejoras cloud",
+      "privacyHint": "Los datos nunca salen sin tu consentimiento explícito",
+      "patTeam": "Tu Equipo de Agentes Personales",
+      "generateInstaller": "Generar Instalador"
+    },
+    "installing": {
+      "title": "Generando Instalador Unificado",
+      "description": "Creando tu paquete personalizado de BIZRA Sistema Soberano",
+      "phases": {
+        "scan": "Análisis del Sistema",
+        "scanDesc": "Analizando capacidades del hardware",
+        "core": "Runtime Principal",
+        "coreDesc": "Instalando kernel BIZRA & Node0",
+        "models": "Modelos de IA",
+        "modelsDesc": "Descargando modelos y adaptadores",
+        "tools": "Herramientas MCP",
+        "toolsDesc": "Instalando 87 herramientas soberanas",
+        "agents": "Agentes PAT",
+        "agentsDesc": "Configurando equipo de IA personal",
+        "rag": "Base de Conocimiento",
+        "ragDesc": "Inicializando HyperGraph RAG",
+        "finalize": "Finalización",
+        "finalizeDesc": "Asegurando y optimizando"
+      }
+    },
+    "complete": {
+      "title": "¡Instalador Listo!",
+      "description": "Tu paquete personalizado de BIZRA Sistema Soberano está completo",
+      "details": "Detalles del Instalador",
+      "installerName": "Nombre del Instalador",
+      "fileSize": "Tamaño del Archivo",
+      "version": "Versión",
+      "aiModels": "Modelos de IA",
+      "downloadTime": "Tiempo de Descarga Estimado",
+      "privacyLevel": "Nivel de Privacidad",
+      "modelsIncluded": "Modelos incluidos",
+      "whatsIncluded": "Qué Incluye",
+      "startOver": "Empezar de Nuevo",
+      "downloadInstall": "Descargar e Instalar"
+    },
+    "hardware": {
+      "cpu": "CPU",
+      "gpu": "GPU",
+      "ram": "RAM",
+      "storage": "Almacenamiento",
+      "network": "Red",
+      "os": "SO",
+      "cores": "núcleos",
+      "available": "disponible",
+      "free": "libre"
+    }
+  },
+  "common": {
+    "next": "Siguiente",
+    "back": "Atrás",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "confirm": "Confirmar",
+    "download": "Descargar",
+    "install": "Instalar",
+    "configure": "Configurar"
+  }
+}

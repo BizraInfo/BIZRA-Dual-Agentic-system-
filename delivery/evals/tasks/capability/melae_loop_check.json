@@ -1,0 +1,7 @@
+{
+    "id": "MELAE_WIGGUM_LOOP",
+    "description": "Verifies the MELAE Harness can run a trivial loop.",
+    "command": "python3 /root/bizra-genesis/cognitive-plane/agents/melae_harness.py --task 'Self-Test' --test 'ls -la' --limit 1",
+    "expected_exit_code": 0,
+    "timeout": 5
+}

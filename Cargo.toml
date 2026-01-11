@@ -1,0 +1,115 @@
+[workspace]
+members = ["crates/finance-v1", "crates/bizra-gateway", "bizra-genesis-node/backend", "third_fact_demokit/verifier"]
+exclude = ["fuzz"]
+
+[package]
+name = "meta_alpha_dual_agentic"
+version = "7.0.0"
+edition = "2021"
+default-run = "meta_alpha_dual_agentic"
+authors = ["BIZRA Team"]
+description = "BIZRA Sovereign Kernel v7.0 - Production-Grade Hardware-Rooted AI Agent"
+
+[lib]
+name = "meta_alpha_dual_agentic"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Async runtime
+tokio = { version = "1.41", features = ["full"] }
+async-trait = "0.1"
+futures = "0.3"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+
+# HTTP server
+axum = { version = "0.7", features = ["macros"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["trace", "cors", "fs"] }
+
+# HTTP client (for Ollama)
+reqwest = { version = "0.12", features = ["json"] }
+
+# Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+clap = { version = "4.5", features = ["derive"] }
+ed25519-dalek = "2.1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# UUID generation
+uuid = { version = "1.11", features = ["v4", "serde"] }
+sha2 = "0.10.9"
+hex = "0.4"
+prometheus = "0.14.0"
+lazy_static = "1.5.0"
+neo4rs = "0.8.0"
+
+# Formal Verification
+z3 = "0.12"
+
+# High Performance (APEX-LITE)
+crossbeam = "0.8"
+core_affinity = "0.8"
+parking_lot = "0.12"
+petgraph = "0.6"
+
+# Python FFI Bindings (PyO3)
+pyo3 = { version = "0.21", optional = true, features = ["extension-module", "macros"] }
+
+# WASM Isolation (Production Sandbox)
+wasmtime = "17.0"
+wasmtime-wasi = "17.0"
+wat = "1.0"
+
+# TPM 2.0 Hardware Attestation (Optional)
+tss-esapi = { version = "8.0.0-alpha.1", optional = true }
+
+# Zero-Copy IPC (Optional - Uncomment for 250ns latency)
+iceoryx2 = { version = "0.4", optional = true }
+
+# Redis for state persistence
+redis = { version = "0.27", features = ["tokio-comp", "connection-manager"] }
+# fastembed = "3"  # Temporarily disabled due to ort dependency issues
+
+# ChromaDB HTTP client
+# (uses reqwest already included)
+
+# Build script dependencies
+[build-dependencies]
+sha2 = "0.10"
+hex = "0.4"
+
+[features]
+default = ["http", "observability"]
+http = []
+observability = []
+
+# Production Hardening Features
+python = ["pyo3/extension-module"]
+hardware_tpm = ["tss-esapi"]
+# iceoryx2_ipc = ["iceoryx2"]
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"  # Smaller binary, fail-closed behavior
+
+# Benchmark configuration
+[[bench]]
+name = "sovereign_bench"
+harness = false
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+tokio-test = "0.4"
