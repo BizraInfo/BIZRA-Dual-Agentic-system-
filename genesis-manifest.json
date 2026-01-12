@@ -1,0 +1,28 @@
+{
+  "version": "BIZRA-GENESIS-7.1",
+  "timestamp": "2026-01-12T12:06:07.675121Z",
+  "constitution_hash": "e5fa6b7ca121f75da4f6b05cc32dcb4ad3423796dcdbe1cd64a7ef48bb43c324",
+  "tpm_baseline": "simulated_tpm_baseline",
+  "hsm_wrapping_keys": {
+    "dubai": "sim_pub_dubai_2026-01-12T12:06:07.673986",
+    "zurich": "sim_pub_zurich_2026-01-12T12:06:07.674650",
+    "singapore": "sim_pub_singapore_2026-01-12T12:06:07.674832",
+    "usa": "sim_pub_usa_2026-01-12T12:06:07.674900",
+    "elsalvador": "sim_pub_elsalvador_2026-01-12T12:06:07.674998"
+  },
+  "sape_version": "1.\u221e",
+  "ihsan_floor": 0.99,
+  "adl_max_gini": 0.35,
+  "amanah_requirements": [
+    "3-of-5_threshold_signatures",
+    "deterministic_builds",
+    "formal_verification",
+    "fail_close_architecture"
+  ],
+  "phase_gates": {
+    "phase0_complete": false,
+    "phase1_complete": false,
+    "phase2_complete": false,
+    "phase3_complete": false
+  }
+}

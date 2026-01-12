@@ -1,0 +1,10 @@
+{
+  "type": "constitutional_lock",
+  "manifest_hash": "5705076a42f0948effe7d52c13b7e6987c1ce40966b1a44fe408e1146d44645b",
+  "timestamp": "2026-01-12T12:06:07.675121Z",
+  "evidence": [
+    "constitution_hash: e5fa6b7ca121f75da4f6b05cc32dcb4ad3423796dcdbe1cd64a7ef48bb43c324",
+    "tpm_baseline: simulated_tpm_baseline",
+    "hsm_keys: 5 generated"
+  ]
+}
