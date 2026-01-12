@@ -8,6 +8,7 @@ use crate::ihsan;
 // FATECoordinator: Integrated via BridgeCoordinator
 use crate::sape::elevator::AbstractionElevator;
 use crate::sape::tension::TensionStudio;
+use crate::cognitive::{CognitiveLayer, ThoughtCapsule};
 use lazy_static::lazy_static;
 use prometheus::{
     register_counter_vec, register_gauge_vec, register_histogram, CounterVec, GaugeVec, Histogram,
@@ -388,6 +389,8 @@ impl SemanticCache {
     }
 }
 
+use crate::sape::graph::{ReasoningGraph, NodeType, EdgeType}; // Import Graph types
+
 /// SAPE Engine - Symbolic-Abstraction Probe Elevation
 pub struct SAPEEngine {
     /// Elevated (compiled) patterns
@@ -401,11 +404,25 @@ pub struct SAPEEngine {
     /// Deep SAPE Modules
     pub elevator: Option<AbstractionElevator>,
     pub tension: TensionStudio,
+    /// L4 Cognitive Layer (SAPE-E)
+    pub cognitive: Option<CognitiveLayer>,
+    /// Causal Reasoning Graph (Graph of Thoughts)
+    pub reasoning_graph: ReasoningGraph,
 }
 
 impl SAPEEngine {
     /// Create new SAPE engine with blueprint patterns
     pub fn new() -> Self {
+        // Initialize Cognitive Layer (ignore errors in non-async new, log them)
+        let cognitive = match CognitiveLayer::new() {
+            Ok(layer) => Some(layer),
+            Err(e) => {
+                // In production, this might be fatal, but for resilient init we log warning
+                // tracing::warn!("SAPE: Cognitive Layer init failed: {}", e);
+                None
+            }
+        };
+
         let mut engine = Self {
             patterns: HashMap::new(),
             sequence_counts: HashMap::new(),
@@ -413,10 +430,17 @@ impl SAPEEngine {
             cache: SemanticCache::default(),
             elevator: None,
             tension: TensionStudio::default(),
+            cognitive,
+            reasoning_graph: ReasoningGraph::new(),
         };
 
         engine.register_blueprint_patterns();
         engine
+    }
+
+    /// Verifies Causal Integrity of a thought by checking its graph provenance
+    pub fn verify_thought_causality(&self, thought_id: &str) -> bool {
+        self.reasoning_graph.verify_causality(thought_id)
     }
 
     /// Register patterns from the BIZRA Blueprint
@@ -519,6 +543,33 @@ impl SAPEEngine {
     /// Register a pattern
     pub fn register_pattern(&mut self, pattern: ElevatedPattern) {
         self.patterns.insert(pattern.id.clone(), pattern);
+    }
+
+    /// Execute a Thought Capsule via the L4 Cognitive Layer (SAPE-E)
+    /// This is the "Pinnacle" execution path for High-SNR thoughts.
+    /// It requires the thought to be signed by the Hardware Root of Trust.
+    pub async fn execute_elevated_thought(
+        &mut self,
+        capsule: &ThoughtCapsule,
+        input: &str,
+    ) -> anyhow::Result<String> {
+        if let Some(cognitive) = &mut self.cognitive {
+            let (result, evidence) = cognitive.execute_thought(capsule, input).await?;
+
+            // Log evidence to traceability
+            info!(
+                "🧠 SAPE-E Evidence Chain: TraceID={} Decision={} ResultHash={}",
+                evidence.trace_id, evidence.policy_decision, evidence.result_hash
+            );
+
+            // In a real system, we might feedback the execution metrics into SAPE stats
+            // system metrics calculation...
+
+            Ok(result.contribution)
+        } else {
+            warn!("⚠️ SAPE-E Cognitive Layer called but not available (using fallback)");
+            Err(anyhow::anyhow!("Cognitive Layer not available"))
+        }
     }
 
     /// Execute all 9 probes against content

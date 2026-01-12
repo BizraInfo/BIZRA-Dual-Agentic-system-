@@ -5,7 +5,6 @@
 // 2. Trajectory Augmentation: Observation -> Reflection -> Plan -> Action.
 // 3. Research Retrieval: Autonomous paper ingestion (cv-arxiv-daily).
 
-use crate::types::ReasoningMethod;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

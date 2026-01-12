@@ -26,7 +26,9 @@ pub enum ReceiptType {
     IhsanFailure,
     /// SAPE probe execution receipt
     SapeProbe,
-}
+    /// Verified L4 Thought Execution
+    ThoughtExec,
+} 
 
 /// Rejection receipt - evidence of SAT blocking a request
 #[derive(Debug, Clone, Serialize, Deserialize)]

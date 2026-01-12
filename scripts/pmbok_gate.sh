@@ -20,7 +20,7 @@ echo "✅ Genesis alignment verified."
 
 # PHASE 2: PLANNING (Tadbir)
 echo "2. [PLANNING] Checking Strategy Documents..."
-REQUIRED_DOCS=("BIZRA-Elite-Integrated-Blueprint-v1.0.md" "analysis_report.md")
+REQUIRED_DOCS=("BIZRA_MASTERPIECE_INTEGRATION.md" "analysis_report.md")
 for doc in "${REQUIRED_DOCS[@]}"; do
     if [ ! -f "$doc" ]; then
         echo "❌ ERROR: Strategy document $doc missing."

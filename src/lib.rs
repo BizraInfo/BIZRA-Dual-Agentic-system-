@@ -8,8 +8,11 @@ pub mod errors;
 pub mod evidence;
 pub mod fate;
 pub mod federation;
+#[cfg(feature = "python")]
+pub mod ffi;
 pub mod fixed;
 pub mod giants;
+pub mod hookchain;
 pub mod hot_path;
 pub mod http;
 pub mod ihsan;
@@ -23,6 +26,7 @@ pub mod poi;
 pub mod primordial;
 pub mod reasoning;
 pub mod receipts;
+pub mod storage;
 pub mod resonance;
 pub mod sape;
 pub mod sat;
@@ -39,6 +43,10 @@ pub mod zk;
 
 // Re-exports
 pub use fate::FateEngine;
+pub use hookchain::{
+    CapabilityToken, CapabilityTier, ConsentClass, HookDecision,
+    PostHookResult, SATHookChain, SessionNode, SessionDAG,
+};
 pub use resonance::{OptimizationResult, ResonanceMesh, ResonanceStats};
 pub use sape::SAPEEngine;
 pub use wasm::WasmSandbox;
@@ -102,7 +110,7 @@ impl SovereignKernel {
         resonance_threshold: f64,
     ) -> anyhow::Result<Self> {
         let fate = FateEngine::new();
-        let wasm = WasmSandbox::new();
+        let wasm = WasmSandbox::new()?;
         let sape = SAPEEngine::new();
 
         let (resonance, _rx) = ResonanceMesh::new(
@@ -220,3 +228,6 @@ impl MetaAlphaDualAgentic {
 // Re-export for convenience
 pub use http::create_http_server;
 mod embeddings;
+pub mod omega;
+pub mod cognitive;
+pub mod executor;

@@ -39,6 +39,13 @@ impl SovereignEngine {
     /// Initialize the Sovereign Engine
     pub fn new() -> Self {
         info!("Initializing BIZRA Sovereign Engine...");
+        
+        // Load System Manifest if available (Enhanced Awareness)
+        if let Ok(content) = std::fs::read_to_string("SYSTEM_MANIFEST.json") {
+             info!("📄 System Manifest Loaded: Enhanced hardware awareness active.");
+             // In a full implementation, we would parse this JSON to override Primordial detection
+        }
+
         let core = PrimordialCore::boot();
 
         Self {

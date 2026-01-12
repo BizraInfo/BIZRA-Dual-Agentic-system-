@@ -1,5 +1,5 @@
 // src/sape/harness.rs
-use crate::ihsan::{self, IhsanConstitution};
+use crate::ihsan::{self};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use tracing::{debug, info, instrument};

@@ -80,6 +80,17 @@ pub enum EscalationStatus {
     AutoResolved,
 }
 
+/// Strict Verdict Type for FateEngine
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum FateVerdict {
+    /// Mathematically verified safety
+    Verified,
+    /// Formal logic rejection
+    Rejected(String),
+    /// Escalation required
+    Escalated(String),
+}
+
 /// Verification Handle for async status
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct VerificationHandle {
@@ -312,9 +323,9 @@ impl FateEngine {
     }
 
     /// Verify output against formal properties (Z3 SMT Solver)
-    pub fn verify_formal(&self, output: &str) -> Option<String> {
+    pub fn verify_formal(&self, output: &str) -> FateVerdict {
         if self.properties.is_empty() {
-            return None;
+            return FateVerdict::Verified;
         }
 
         info!("🛡️  Running formal verification probes (Z3 SMT-LIB Solver)");
@@ -379,7 +390,9 @@ impl FateEngine {
                 "IhsanMinimumThreshold" => {
                     // Symbolic verification of Ihsan Score against Constitution
                     // ENVIRONMENT-AWARE: Read threshold from prop.expression (set dynamically)
-                    let current_score = (output.parse::<f64>().unwrap_or(0.0) * 1000.0) as i64;
+                    // GENESIS-PATCH: Parse first numeric value from output (handles "0.9338 IhsanVector[...]" format)
+                    let score_str = output.split_whitespace().next().unwrap_or("0");
+                    let current_score = (score_str.parse::<f64>().unwrap_or(0.0) * 1000.0) as i64;
                     let threshold_value = prop.expression.parse::<f64>().unwrap_or(0.95);
                     let threshold = (threshold_value * 1000.0) as i64;
 
@@ -397,9 +410,24 @@ impl FateEngine {
                 "IhsanVectorBalance" => {
                     // PEAK MASTERPIECE: Multi-dimensional Ihsān Vector Verification (Z3)
                     // Excellence, Benevolence, Justice must satisfy the Golden Ratio balance
-                    let excellence_val = 98; // Mocked from output analysis
-                    let benev_val = 96;
-                    let justice_val = 95;
+                    // GENESIS-PATCH: Strict parsing required. No mocks.
+                    // Expected format: "IhsanVector[E,B,J]" e.g. "IhsanVector[98,96,95]"
+                    let (excellence_val, benev_val, justice_val) = if let Some(start) = output.find("IhsanVector[") {
+                         let rest = &output[start + 12..];
+                         if let Some(end) = rest.find(']') {
+                             let parts: Vec<&str> = rest[..end].split(',').collect();
+                             if parts.len() == 3 {
+                                 (
+                                     parts[0].trim().parse().unwrap_or(0), 
+                                     parts[1].trim().parse().unwrap_or(0), 
+                                     parts[2].trim().parse().unwrap_or(0)
+                                 )
+                             } else { (0,0,0) }
+                         } else { (0,0,0) }
+                    } else {
+                         // Default to failure (0) if vector not found
+                         (0,0,0) 
+                    };
 
                     let excellence = Int::from_i64(&ctx, excellence_val);
                     let benevolence = Int::from_i64(&ctx, benev_val);
@@ -412,26 +440,14 @@ impl FateEngine {
                     solver.assert(&justice.ge(&min_threshold));
 
                     if solver.check() == z3::SatResult::Unsat {
-                        violations.push(format!("Violation of {}: Ihsan vector balance ({}, {}, {}) falls below formal genesis requirements.", prop.name, excellence_val, benev_val, justice_val));
+                        violations.push(format!("Violation of {}: Ihsan vector balance ({}, {}, {}) falls below formal genesis requirements or is missing.", prop.name, excellence_val, benev_val, justice_val));
                     }
                     solver.pop(1);
                 }
                 "ThermalAwareScaling" => {
                     // PEAK MASTERPIECE: Thermal Budget Verification (Z3)
-                    // System load must not exceed thermal envelope (mocked for now)
-                    let current_temp = 65; // Mocked CPU temp
-                    let max_safe_temp = 85;
-
-                    let temp = Int::from_i64(&ctx, current_temp);
-                    let limit = Int::from_i64(&ctx, max_safe_temp);
-
-                    solver.push();
-                    solver.assert(&temp.le(&limit));
-
-                    if solver.check() == z3::SatResult::Unsat {
-                        violations.push(format!("Violation of {}: System thermal state ({}°C) exceeds safety limit ({}°C). Throttling required.", prop.name, current_temp, max_safe_temp));
-                    }
-                    solver.pop(1);
+                    // GENESIS-PATCH: Removed mocked thermal check. 
+                    // Future: Integrate with reading /sys/class/thermal/thermal_zone0/temp
                 }
                 "PatternIntegrity" => {
                     // ELITE UPGRADE: Verification of elevated WASM pattern integrity
@@ -452,11 +468,11 @@ impl FateEngine {
         }
 
         if violations.is_empty() {
-            Some("VERIFIED: All formal properties satisfy SMT constraints.".to_string())
+             FateVerdict::Verified
         } else {
             let error_msg = violations.join("; ");
             error!("❌ Formal verification failure: {}", error_msg);
-            Some(format!("FAILED: {}", error_msg))
+             FateVerdict::Rejected(error_msg)
         }
     }
 

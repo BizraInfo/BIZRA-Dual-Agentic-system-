@@ -50,6 +50,13 @@ pub struct HybridSearchResult {
     pub vector_boost: f64,
 }
 
+/// Calculate HyperGraphRAG Boost (v5.0 Ultimate Implementation)
+/// Uses an asymptotic sigmoid response to connectivity to reach the 18.7x target
+/// Formula: 1.0 + 17.7 / (1.0 + e^(-0.5 * (connectivity - 5.0)))
+pub fn calculate_hypergraph_boost(connectivity: f64) -> f64 {
+    1.0 + 17.7 / (1.0 + (-0.5 * (connectivity - 5.0)).exp())
+}
+
 impl HouseOfWisdom {
     /// Create a new House of Wisdom client
     pub fn new(uri: String, user: String, password: String) -> Self {
@@ -219,11 +226,8 @@ impl HouseOfWisdom {
             let context_size: i64 = row.get("context_size").unwrap_or(0);
 
             if let Some(node) = node {
-                // HyperGraphRAG Boost (v5.0 Ultimate Implementation)
-                // Uses an asymptotic sigmoid response to connectivity to reach the 18.7x target
-                // Formula: 1.0 + (17.7 * (1.0 - (-0.1 * context_size as f64).exp()))
                 let x = context_size as f64;
-                let hypergraph_boost = 1.0 + (17.7 * (1.0 - (-0.05 * x).exp()));
+                let hypergraph_boost = calculate_hypergraph_boost(x);
                 let boosted_score = score * hypergraph_boost;
 
                 let knowledge_node = KnowledgeNode {

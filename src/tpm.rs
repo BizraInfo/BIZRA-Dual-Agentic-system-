@@ -8,6 +8,32 @@
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use tracing::{error, info};
+use std::time::{SystemTime, UNIX_EPOCH};
+
+#[derive(Debug, thiserror::Error)]
+pub enum TpmError {
+    #[error("Clock error: {0}")]
+    ClockSkew(String),
+    #[error("Signing failed: {0}")]
+    SigningFailed(String),
+    #[error("Key loading failed: {0}")]
+    KeyLoadFailed(String),
+}
+
+/// Trait for Hardware Signers (L1 RoT)
+/// Defines the interface for operations backed by the Hardware Root of Trust.
+#[async_trait::async_trait]
+pub trait SignerProvider: Send + Sync {
+    /// Sign a message with the hardware-backed key.
+    /// This operation MUST occur inside the secure element/TPM.
+    async fn sign(&self, message: &[u8]) -> Result<Vec<u8>, TpmError>;
+
+    /// Get the public key (exported from TPM).
+    fn public_key(&self) -> Vec<u8>;
+
+    /// Verify a signature using the public key.
+    fn verify(&self, message: &[u8], signature: &[u8]) -> bool;
+}
 
 // Hardware TPM integration via tss-esapi (optional feature)
 #[cfg(feature = "hardware_tpm")]
@@ -76,10 +102,18 @@ impl TpmContext {
         // Check for actual TPM hardware (Linux: /dev/tpm0)
         let hardware_available = std::path::Path::new("/dev/tpm0").exists();
 
+        // SOVEREIGNTY ENFORCEMENT: Release builds MUST have hardware TPM
+        #[cfg(not(debug_assertions))]
+        if !hardware_available && std::env::var("BIZRA_ALLOW_SOFTWARE_TPM").is_err() {
+            error!("🚨 CRITICAL SOVEREIGNTY FAILURE: TPM 2.0 Hardware Missing in Release Mode");
+            eprintln!("BIZRA GENESIS VIOLATION: Hardware Root of Trust Required for Production");
+            std::process::abort();
+        }
+
         if hardware_available {
             info!("🔐 TPM 2.0 hardware detected at /dev/tpm0");
         } else {
-            info!("⚠️  TPM 2.0 hardware not found - using software emulation");
+            info!("⚠️  TPM 2.0 hardware not found - using software emulation (DEBUG ONLY)");
         }
 
         Self {
@@ -148,7 +182,7 @@ impl TpmContext {
     }
 
     /// Generate TPM Quote (attestation)
-    pub fn generate_quote(&self, nonce: [u8; 16]) -> TpmQuote {
+    pub fn generate_quote(&self, nonce: [u8; 16]) -> Result<TpmQuote, TpmError> {
         // Compute PCR digest (hash of all measured PCRs)
         let mut hasher = Sha256::new();
         for pcr in &self.pcr_state[12..16] {
@@ -157,17 +191,17 @@ impl TpmContext {
         let pcr_digest: [u8; 32] = hasher.finalize().into();
 
         // Sign with attestation key (simulated)
-        let signature = self.sign_quote(&pcr_digest, &nonce);
+        let signature = self.sign_quote(&pcr_digest, &nonce)?;
 
-        TpmQuote {
+        Ok(TpmQuote {
             pcr_digest,
             nonce,
             signature,
-            timestamp_ns: std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
+            timestamp_ns: SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .map_err(|_| TpmError::ClockSkew("Time traveled backwards".into()))?
                 .as_nanos() as u64,
-        }
+        })
     }
 
     /// Verify attestation against expected Merkle root
@@ -236,13 +270,42 @@ impl TpmContext {
         current == proof.root
     }
 
-    /// Sign quote (placeholder - use actual TPM2_Sign in production)
-    fn sign_quote(&self, pcr_digest: &[u8; 32], nonce: &[u8; 16]) -> Vec<u8> {
-        let mut hasher = Sha256::new();
-        hasher.update(pcr_digest);
-        hasher.update(nonce);
-        hasher.update(b"BIZRA_TPM_QUOTE_V1");
-        hasher.finalize().to_vec()
+    /// Sign quote (Real Ed25519 signature)
+    fn sign_quote(&self, pcr_digest: &[u8; 32], nonce: &[u8; 16]) -> Result<Vec<u8>, TpmError> {
+        // In production, this uses TPM2_Sign.
+        // For Verified Software Node, we use a real Ed25519 software key, not a mock hash.
+        
+        let mut msg = Vec::new();
+        msg.extend_from_slice(pcr_digest);
+        msg.extend_from_slice(nonce);
+        msg.extend_from_slice(b"BIZRA_TPM_QUOTE_V1");
+
+        // If hardware is missing, we must have a valid software key initialized.
+        // We do NOT simulate success with a hash. We sign properly.
+        if let Some(key_bytes) = &self.attestation_key {
+             // For this reference implementation, we treat the key_bytes as a seed for Ed25519
+             // This ensures cryptographic consistency even in software mode.
+             // (In a real scenario, this key would be in an HSM or secure enclave).
+             if key_bytes.len() < 32 {
+                 error!("CRITICAL: Attestation key is too short for signing");
+                 return Err(TpmError::SigningFailed(
+                     "Attestation key is too short".into(),
+                 ));
+             }
+
+             use ed25519_dalek::{Signer, SigningKey};
+             let seed: [u8; 32] = key_bytes[..32]
+                 .try_into()
+                 .map_err(|_| TpmError::SigningFailed("Invalid attestation key length".into()))?;
+             let signing_key = SigningKey::from_bytes(&seed);
+             return Ok(signing_key.sign(&msg).to_vec());
+        }
+        
+        // Fail-close if no key available
+        error!("CRITICAL: Attempted to sign quote without valid attestation key");
+        Err(TpmError::SigningFailed(
+            "Attestation key not initialized".into(),
+        ))
     }
 
     /// Check if hardware TPM is available
@@ -388,7 +451,7 @@ impl TpmContext {
             signature,
             timestamp_ns: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
+                .map_err(|e| format!("SystemTime error: {}", e))?
                 .as_nanos() as u64,
         })
     }
@@ -429,11 +492,11 @@ impl TpmContext {
     }
 
     /// Hybrid quote: use hardware if available, fallback to software
-    pub fn generate_quote_hybrid(&self, nonce: [u8; 16]) -> TpmQuote {
+    pub fn generate_quote_hybrid(&self, nonce: [u8; 16]) -> Result<TpmQuote, TpmError> {
         #[cfg(feature = "hardware_tpm")]
         if self.hardware_available {
             match self.hardware_quote(nonce) {
-                Ok(quote) => return quote,
+                Ok(quote) => return Ok(quote),
                 Err(e) => {
                     warn!(
                         "⚠️ Hardware TPM quote failed, falling back to software: {}",
@@ -469,3 +532,53 @@ impl std::fmt::Display for SecureBootViolation {
 }
 
 impl std::error::Error for SecureBootViolation {}
+
+/// Software Signer (Fallback/Dev mode)
+/// Uses purely software Ed25519 implementation when hardware TPM is absent.
+pub struct SoftwareSigner {
+    signing_key: ed25519_dalek::SigningKey,
+}
+
+impl SoftwareSigner {
+    pub fn new() -> Self {
+        use ed25519_dalek::SigningKey;
+        // Deterministic key for dev/software mode (Insecure but functional for API contract)
+        // Using a fixed seed allows for predictable "Hardware" identities in tests.
+        let seed = [0x55; 32]; 
+        let signing_key = SigningKey::from_bytes(&seed);
+        Self { signing_key }
+    }
+}
+
+#[async_trait::async_trait]
+impl SignerProvider for SoftwareSigner {
+    async fn sign(&self, message: &[u8]) -> Result<Vec<u8>, TpmError> {
+        use ed25519_dalek::Signer;
+        let signature = self.signing_key.sign(message);
+        Ok(signature.to_vec())
+    }
+
+    fn public_key(&self) -> Vec<u8> {
+        self.signing_key.verifying_key().to_bytes().to_vec()
+    }
+
+    fn verify(&self, message: &[u8], signature: &[u8]) -> bool {
+        use ed25519_dalek::Verifier;
+        let pub_key = self.signing_key.verifying_key();
+        if let Ok(sig) = ed25519_dalek::Signature::from_slice(signature) {
+             pub_key.verify(message, &sig).is_ok()
+        } else {
+             false
+        }
+    }
+}
+
+impl TpmContext {
+    /// Get a signer instance (Hardware or Software fallback)
+    pub fn get_signer(&self) -> Box<dyn SignerProvider> {
+        // In a real implementation, this would check self.hardware_available
+        // and return a HardwareSigner if present.
+        // For now, we return SoftwareSigner for the prototype.
+        Box::new(SoftwareSigner::new())
+    }
+}

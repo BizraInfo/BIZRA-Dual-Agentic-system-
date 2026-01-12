@@ -7,6 +7,12 @@ const GENESIS_MANIFEST_PATH: &str = "evidence/genesis/GENESIS_MANIFEST.json";
 const SEALED_GENESIS_HASH: &str =
     "0b3a9faf1e8c34c1fe5a63a6a70b9bd158eca058b755d188e11ff367602ac7a1";
 
+// BIZRA CORE CONSTANTS (Single Source of Truth)
+// Used by genesis_activation.sh to verify FFI alignment
+pub const WEIGHT_TRUTH: f64 = 0.4;
+pub const WEIGHT_LOGIC: f64 = 0.3;
+pub const WEIGHT_INTENT: f64 = 0.3;
+
 #[derive(Debug, Deserialize)]
 struct IhsanConstitutionFile {
     id: Option<String>,

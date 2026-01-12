@@ -406,22 +406,20 @@ impl SATOrchestrator {
                 let mut fate_with_prop = fate;
                 fate_with_prop.add_property("ActionBudgetLimit", "limit <= 10", true);
 
-                if let Some(verification_result) = fate_with_prop.verify_formal(&task_combined) {
-                    if verification_result.starts_with("FAILED") {
+                if let crate::fate::FateVerdict::Rejected(reason) | crate::fate::FateVerdict::Escalated(reason) = fate_with_prop.verify_formal(&task_combined) {
                         warn!(
-                            reason = %verification_result,
+                            reason = %reason,
                             "🚨 Formal verification veto by SAT"
                         );
                         return Ok(AgentValidation {
                             agent_name: agent.name.clone(),
                             approved: false,
-                            message: verification_result.clone(),
+                            message: reason.clone(),
                             confidence: 1.0,
                             rejection_code: Some(RejectionCode::FormalViolation(
-                                verification_result,
+                                reason,
                             )),
                         });
-                    }
                 }
 
                 Ok(AgentValidation {

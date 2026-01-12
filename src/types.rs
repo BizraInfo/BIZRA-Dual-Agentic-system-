@@ -209,7 +209,6 @@ pub struct HardwareState {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum AdapterMode {
-    Simulated,
     Real,
 }
 
@@ -225,15 +224,9 @@ pub struct AdapterModes {
 impl AdapterModes {
     /// Get current adapter modes from environment.
     ///
-    /// Set `BIZRA_ADAPTER_MODE=simulated` to force simulation mode.
-    /// Default is now Real mode for production readiness.
+    /// Simulation mode has been removed. Always returns Real.
     pub fn current() -> Self {
-        let mode = match std::env::var("BIZRA_ADAPTER_MODE") {
-            Ok(v) if v.eq_ignore_ascii_case("simulated") => AdapterMode::Simulated,
-            Ok(v) if v.eq_ignore_ascii_case("real") => AdapterMode::Real,
-            _ => AdapterMode::Real, // Default to Real mode
-        };
-
+        let mode = AdapterMode::Real;
         Self {
             pat: mode.clone(),
             sat: mode.clone(),

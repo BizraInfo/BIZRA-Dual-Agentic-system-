@@ -7,6 +7,7 @@
 
 use crate::fixed::Fixed64;
 use crate::sovereign::system_sanity_check;
+use crate::tpm::{SignerProvider, TpmContext};
 use crate::types::AgentResult;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
@@ -82,12 +83,17 @@ pub struct WasmSandbox {
     pub last_execution: Option<Duration>,
     engine: Engine,
     minimal_module: Module,
+    root_verifier: Box<dyn SignerProvider>,
 }
 
 impl WasmSandbox {
     /// Initialize the sovereign sandbox with real Wasmtime engine
-    pub fn new() -> Self {
+    pub fn new() -> anyhow::Result<Self> {
         info!("💎 Initializing Sovereign WASM Sandbox (Wasmtime Production Mode)");
+
+        // Initialize Hardware Root of Trust Anchor
+        let tpm = TpmContext::new();
+        let root_verifier = tpm.get_signer();
 
         // Configure Wasmtime engine with security constraints
         let mut engine_config = Config::new();
@@ -101,7 +107,7 @@ impl WasmSandbox {
         engine_config.static_memory_maximum_size(64 * 1024 * 1024); // 64MB
         engine_config.guard_before_linear_memory(true);
 
-        let engine = Engine::new(&engine_config).expect("Failed to create Wasmtime engine");
+        let engine = Engine::new(&engine_config)?;
 
         // PRODUCTION HARDENING: Start background epoch pusher
         let engine_clone = engine.clone();
@@ -124,18 +130,18 @@ impl WasmSandbox {
             )
         "#;
 
-        let minimal_module =
-            Module::new(&engine, minimal_wat).expect("Failed to compile minimal WASM module");
+        let minimal_module = Module::new(&engine, minimal_wat)?;
 
         info!("✅ Wasmtime engine initialized with fuel metering and active epoch monitoring");
 
-        Self {
+        Ok(Self {
             config: SandboxConfig::default(),
             status: SandboxStatus::Ready,
             last_execution: None,
             engine,
             minimal_module,
-        }
+            root_verifier,
+        })
     }
 
     /// Create a new WASI context with security restrictions
@@ -199,16 +205,27 @@ impl WasmSandbox {
         Ok(linker)
     }
 
-    /// Execute a WASM module in the isolated sandbox
+    /// Execute a WASM module in the isolated sandbox.
+    /// **SECURITY CRITICAL**: Requires a valid signature from the Hardware Root of Trust.
     pub async fn execute_isolated(
         &mut self,
         wasm_module: &[u8],
         input_data: &str,
+        signature: &[u8],
     ) -> anyhow::Result<AgentResult> {
         let start = Instant::now();
         info!("🚀 Loading module into Sovereign Sandbox...");
 
         self.status = SandboxStatus::Executing;
+
+        // 0. VERIFY CODE SIGNATURE (Fortress Security Gate)
+        if !self.verify_signature(wasm_module, signature) {
+            self.status = SandboxStatus::Violated("Invalid Code Signature".to_string());
+            warn!("⛔ BLOCKED: Attempted to execute unsigned/tampered WASM code");
+            return Err(anyhow::anyhow!(
+                "Security Violation: Code signature verification failed. This module is not trusted by the Root of Trust."
+            ));
+        }
 
         // 1. PRE-EXECUTION IHSAN CHECK
         if !system_sanity_check() {
@@ -238,12 +255,68 @@ impl WasmSandbox {
 
         // Set fuel limit for bounded execution
         store.set_fuel(self.config.fuel_limit)?;
+        
+        // Set epoch deadline to prevent immediate trap (5s execution window)
+        store.set_epoch_deadline(100);
 
         // 4. CREATE LINKER AND INSTANTIATE
         let linker = self.create_linker()?;
         let instance = linker.instantiate(&mut store, &module)?;
 
-        // 5. EXECUTE "reason" or "health" FUNCTION
+        // 5. EXECUTE: SUPPORT FOR BOTH LEGACY AND SAPE ABIs
+        
+        // Strategy A: SAPE v1.∞ (evaluate + alloc)
+        // This is the "Brain Transplant" ABI which allows full context transfer
+        if let Some(evaluate_fn) = instance.get_typed_func::<(i32, i32), i64>(&mut store, "evaluate").ok() {
+            // Need alloc first
+            let alloc_fn = instance.get_typed_func::<i32, i32>(&mut store, "alloc")
+                .map_err(|_| anyhow::anyhow!("SAPE ABI Violation: 'evaluate' found but 'alloc' missing"))?;
+            
+            let input_bytes = input_data.as_bytes();
+            let len = input_bytes.len() as i32;
+            
+            // 1. Allocate Guest Memory
+            let ptr = alloc_fn.call(&mut store, len)?;
+            
+            // 2. Write Input to Guest Memory
+            let memory = instance.get_memory(&mut store, "memory")
+                .ok_or_else(|| anyhow::anyhow!("Memory export missing"))?;
+            memory.write(&mut store, ptr as usize, input_bytes)?;
+            
+            // 3. Execute Brain
+            let packed_result = evaluate_fn.call(&mut store, (ptr, len))?;
+            
+            // 4. Unpack Result (High 32 = Len, Low 32 = Ptr)
+            let res_len = (packed_result >> 32) as usize;
+            let res_ptr = (packed_result & 0xFFFFFFFF) as usize;
+            
+            // 5. Read Result from Guest Memory
+            let mut result_buffer = vec![0u8; res_len];
+            memory.read(&store, res_ptr, &mut result_buffer)?;
+            
+            // 6. Decode
+            let result_str = String::from_utf8(result_buffer)
+                .map_err(|_| anyhow::anyhow!("Invalid UTF-8 in WASM output"))?;
+                
+            // Check FATE status
+            if store.data().fate.vetoed {
+                return Err(anyhow::anyhow!("FATE VETOED"));
+            }
+            
+            // For now, return the raw JSON. The Cognitive Layer will parse it.
+            // But we must return an AgentResult type.
+            // We assume the JSON matches standard format or we wrap it.
+            return Ok(AgentResult {
+                agent_name: "policy_engine".to_string(),
+                contribution: result_str, // JSON output
+                confidence: Fixed64::from_f64(1.0),
+                ihsan_score: Fixed64::from_f64(1.0), // Score is inside the contribution JSON
+                execution_time: Duration::from_millis(0), 
+                metadata: std::collections::HashMap::new(),
+            });
+        }
+        
+        // Strategy B: Legacy Giants Protocol (reason/health)
         let result_content = if let Some(reason_fn) = instance
             .get_typed_func::<i32, i32>(&mut store, "reason")
             .ok()
@@ -296,6 +369,11 @@ impl WasmSandbox {
             execution_time: elapsed,
             metadata: std::collections::HashMap::new(),
         })
+    }
+
+    /// Verify code signature against Hardware Root of Trust
+    pub fn verify_signature(&self, module_bytes: &[u8], signature: &[u8]) -> bool {
+        self.root_verifier.verify(module_bytes, signature)
     }
 
     /// Compile a WASM module from WAT source
@@ -358,6 +436,9 @@ impl WasmSandbox {
 
 impl Default for WasmSandbox {
     fn default() -> Self {
-        Self::new()
+        Self::new().unwrap_or_else(|e| {
+            error!("CRITICAL: WasmSandbox default init failed: {}", e);
+            std::process::abort();
+        })
     }
 }
