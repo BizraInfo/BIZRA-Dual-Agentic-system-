@@ -224,7 +224,7 @@ impl ThoughtExecutor {
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         let ledger_entry = format!(
             "{{\"thought_id\":\"{}\",\"stage\":\"Committed\",\"timestamp\":\"{}\"}}",
-            thought_id.to_string(),
+            thought_id,
             Utc::now().to_rfc3339()
         );
         thought.ledger_entry_hash = Some(*blake3::hash(ledger_entry.as_bytes()).as_bytes());
@@ -239,7 +239,7 @@ impl ThoughtExecutor {
         thought.stage = ThoughtStage::ProofPending;
 
         // Stub: Immediately mark as verified (in production, this is async)
-        let proof_data = format!("stub_proof_{}", thought_id.to_string());
+        let proof_data = format!("stub_proof_{}", thought_id);
         thought.proof_hash = Some(*blake3::hash(proof_data.as_bytes()).as_bytes());
         thought.stage = ThoughtStage::ProofVerified;
 

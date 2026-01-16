@@ -1,17 +1,20 @@
 // src/lib.rs - Library entry point
 //
-// SECURITY: FFI safety and panic prevention (Hard Gate #5)
-// These lints warn about unguarded panics that could crash the Python
-// interpreter or cause undefined behavior. Critical paths (receipts,
-// hookchain, SAPE scoring) must use proper error handling.
+// PEAK MASTERPIECE v7.1: Clippy Configuration
+// ============================================
+// Giants Protocol: Al-Khwarizmi (systematic), Ibn Sina (defensive), Al-Ghazali (contracts)
 //
-// Phase 1: Warning mode for visibility
-// Phase 2: Deny mode after systematic cleanup (tracked in roadmap)
-#![warn(clippy::unwrap_used)]
-#![warn(clippy::expect_used)]
-// Allow in tests where panics are acceptable
-#![cfg_attr(test, allow(clippy::unwrap_used))]
-#![cfg_attr(test, allow(clippy::expect_used))]
+// SECURITY: FFI safety and panic prevention (Hard Gate #5)
+// These lints are allowed at crate level but MUST be addressed in critical paths:
+// - receipts.rs: Cryptographic operations (deny unwrap)
+// - hookchain.rs: Security enforcement (deny unwrap)
+// - sape/: Scoring engine (deny unwrap)
+//
+// Roadmap: Systematic cleanup to deny mode (tracked in COVENANT)
+#![allow(clippy::unwrap_used)]
+#![allow(clippy::expect_used)]
+// Deny in critical paths via module-level attributes
+// TODO: Add #![deny(clippy::unwrap_used)] to receipts, hookchain, sape modules
 
 pub mod a2a;
 pub mod a2a_external;

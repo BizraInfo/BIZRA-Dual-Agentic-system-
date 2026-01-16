@@ -418,8 +418,10 @@ pub struct Kernel {
 
 /// Kernel lifecycle state
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum KernelState {
     /// Kernel is initializing
+    #[default]
     Initializing,
     /// Kernel is ready to process events
     Ready,
@@ -431,11 +433,6 @@ pub enum KernelState {
     Terminated,
 }
 
-impl Default for KernelState {
-    fn default() -> Self {
-        KernelState::Initializing
-    }
-}
 
 impl Kernel {
     /// Create a new kernel
@@ -636,8 +633,8 @@ fn unix_utc_ms() -> u64 {
 /// Hash an event for audit
 fn hash_event(event: &KernelEvent, sequence: u64, timestamp_ms: u64) -> String {
     let mut hasher = Sha256::new();
-    hasher.update(&sequence.to_le_bytes());
-    hasher.update(&timestamp_ms.to_le_bytes());
+    hasher.update(sequence.to_le_bytes());
+    hasher.update(timestamp_ms.to_le_bytes());
     hasher.update(event.event_type().as_bytes());
 
     // Include event-specific data

@@ -295,7 +295,7 @@ impl MultiMethodReasoning {
                     content: anchor.clone(),
                     embedding: vec![0.0; 768], // Placeholder for actual embedding
                     metadata: std::collections::HashMap::new(),
-                    resonance: crate::resonance::ResonanceMetrics::new(&anchor),
+                    resonance: crate::resonance::ResonanceMetrics::new(anchor),
                     children: Vec::new(),
                     parents: Vec::new(),
                 };
@@ -968,6 +968,12 @@ pub struct SynthesisReport {
     pub edge_count: usize,
     pub total_congruence: f64,
     pub summary: String,
+}
+
+impl Default for SovereignGraph {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl SovereignGraph {

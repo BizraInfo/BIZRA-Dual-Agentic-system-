@@ -138,8 +138,8 @@ impl TpmContext {
 
         // PCR Extend: new_pcr = SHA256(old_pcr || module_hash)
         let mut extend_hasher = Sha256::new();
-        extend_hasher.update(&self.pcr_state[pcr_index as usize]);
-        extend_hasher.update(&module_hash);
+        extend_hasher.update(self.pcr_state[pcr_index as usize]);
+        extend_hasher.update(module_hash);
         let extended: [u8; 32] = extend_hasher.finalize().into();
 
         self.pcr_state[pcr_index as usize] = extended;
@@ -167,13 +167,13 @@ impl TpmContext {
 
         // merkle_root = SHA256(SHA256(sape || fate) || spine)
         let mut hasher = Sha256::new();
-        hasher.update(&pcr_sape);
-        hasher.update(&pcr_fate);
+        hasher.update(pcr_sape);
+        hasher.update(pcr_fate);
         let left: [u8; 32] = hasher.finalize().into();
 
         let mut root_hasher = Sha256::new();
-        root_hasher.update(&left);
-        root_hasher.update(&pcr_spine);
+        root_hasher.update(left);
+        root_hasher.update(pcr_spine);
         let root: [u8; 32] = root_hasher.finalize().into();
 
         self.merkle_root = root;
@@ -233,8 +233,8 @@ impl TpmContext {
         let event_hash: [u8; 32] = hasher.finalize().into();
 
         let mut extend_hasher = Sha256::new();
-        extend_hasher.update(&self.pcr_state[pcr_index as usize]);
-        extend_hasher.update(&event_hash);
+        extend_hasher.update(self.pcr_state[pcr_index as usize]);
+        extend_hasher.update(event_hash);
         self.pcr_state[pcr_index as usize] = extend_hasher.finalize().into();
 
         info!(
@@ -263,7 +263,7 @@ impl TpmContext {
         let mut current = proof.leaf_hash;
         for sibling in &proof.siblings {
             let mut hasher = Sha256::new();
-            hasher.update(&current);
+            hasher.update(current);
             hasher.update(sibling);
             current = hasher.finalize().into();
         }
@@ -328,7 +328,7 @@ impl TpmContext {
         // Software-backed key derivation for non-hardware environments
         let mut hasher = Sha256::new();
         hasher.update(b"BIZRA_ATTESTATION_KEY_V1");
-        hasher.update(&self.merkle_root);
+        hasher.update(self.merkle_root);
         let key: [u8; 32] = hasher.finalize().into();
 
         self.attestation_key = Some(key.to_vec());
@@ -537,6 +537,12 @@ impl std::error::Error for SecureBootViolation {}
 /// Uses purely software Ed25519 implementation when hardware TPM is absent.
 pub struct SoftwareSigner {
     signing_key: ed25519_dalek::SigningKey,
+}
+
+impl Default for SoftwareSigner {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl SoftwareSigner {

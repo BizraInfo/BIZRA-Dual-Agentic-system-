@@ -374,7 +374,7 @@ impl EngramStage {
         }
 
         // Normalize to [0.5, 1.0]
-        let avg = total / Fixed64::from_int(count as i32);
+        let avg = total / Fixed64::from_int(count);
         let result = Fixed64::HALF + avg;
 
         if result > Fixed64::ONE {
@@ -669,7 +669,7 @@ impl SAPEStage {
         if count == 0 {
             Fixed64::HALF
         } else {
-            sum / Fixed64::from_int(count as i32)
+            sum / Fixed64::from_int(count)
         }
     }
 }

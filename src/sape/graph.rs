@@ -53,6 +53,12 @@ pub struct ReasoningGraph {
     pub root_id: Option<String>,
 }
 
+impl Default for ReasoningGraph {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ReasoningGraph {
     pub fn new() -> Self {
         Self {
@@ -81,14 +87,10 @@ impl ReasoningGraph {
             verified_by_tpm: false,
         };
 
-        match node_type {
-            NodeType::Initial => {
-                if self.root_id.is_none() {
-                    self.root_id = Some(id.clone());
-                }
+        if node_type == NodeType::Initial
+            && self.root_id.is_none() {
+                self.root_id = Some(id.clone());
             }
-            _ => {}
-        }
 
         self.nodes.insert(id.clone(), node);
         id

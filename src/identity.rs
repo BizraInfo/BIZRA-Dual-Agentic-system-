@@ -19,8 +19,10 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Origin classification for identity
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum IdentityOrigin {
     /// Human user identity
+    #[default]
     Human,
     /// Agent identity (PAT/SAT member)
     Agent,
@@ -30,11 +32,6 @@ pub enum IdentityOrigin {
     FederationNode,
 }
 
-impl Default for IdentityOrigin {
-    fn default() -> Self {
-        IdentityOrigin::Human
-    }
-}
 
 /// IdentityAnchor - Stable user identity binding
 ///
@@ -113,8 +110,8 @@ impl IdentityAnchor {
         let mut hasher = Sha256::new();
         hasher.update(self.user_id.as_bytes());
         hasher.update(self.display_name.as_bytes());
-        hasher.update(&[self.origin as u8]);
-        hasher.update(&self.created_at.to_le_bytes());
+        hasher.update([self.origin as u8]);
+        hasher.update(self.created_at.to_le_bytes());
         for p in &self.principles {
             hasher.update(p.as_bytes());
         }
@@ -133,10 +130,12 @@ impl IdentityAnchor {
 
 /// Goal priority classification
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, PartialOrd, Ord)]
+#[derive(Default)]
 pub enum GoalPriority {
     /// Low priority - nice to have
     Low = 0,
     /// Medium priority - should do
+    #[default]
     Medium = 1,
     /// High priority - must do soon
     High = 2,
@@ -144,18 +143,15 @@ pub enum GoalPriority {
     Critical = 3,
 }
 
-impl Default for GoalPriority {
-    fn default() -> Self {
-        GoalPriority::Medium
-    }
-}
 
 /// Goal time horizon
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum GoalHorizon {
     /// Immediate - within this session
     Immediate,
     /// Short-term - within a day
+    #[default]
     Short,
     /// Medium-term - within a week
     Medium,
@@ -163,16 +159,13 @@ pub enum GoalHorizon {
     Long,
 }
 
-impl Default for GoalHorizon {
-    fn default() -> Self {
-        GoalHorizon::Short
-    }
-}
 
 /// Goal status
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum GoalStatus {
     /// Not yet started
+    #[default]
     Pending,
     /// Currently being worked on
     Active,
@@ -186,11 +179,6 @@ pub enum GoalStatus {
     Blocked,
 }
 
-impl Default for GoalStatus {
-    fn default() -> Self {
-        GoalStatus::Pending
-    }
-}
 
 /// Kalman state for convergence detection and progress tracking
 ///
@@ -443,22 +431,19 @@ impl GoalStack {
 
 /// Enforcement level for covenant rules
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum EnforcementLevel {
     /// Log violation but allow action
     Log,
     /// Warn user but allow action
     Warn,
     /// Block action (soft VETO)
+    #[default]
     Block,
     /// Hard VETO - absolutely forbidden
     Veto,
 }
 
-impl Default for EnforcementLevel {
-    fn default() -> Self {
-        EnforcementLevel::Block
-    }
-}
 
 /// Constraint type for covenant rules
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -590,7 +575,7 @@ impl Covenant {
     fn compute_hash(&self) -> String {
         let mut hasher = Sha256::new();
         hasher.update(self.owner_id.as_bytes());
-        hasher.update(&self.version.to_le_bytes());
+        hasher.update(self.version.to_le_bytes());
 
         // Sort rule IDs for determinism
         let mut rule_ids: Vec<_> = self.rules.keys().collect();
@@ -600,7 +585,7 @@ impl Covenant {
             if let Some(rule) = self.rules.get(rule_id) {
                 hasher.update(rule.rule_id.as_bytes());
                 hasher.update(rule.description.as_bytes());
-                hasher.update(&[rule.enforcement as u8]);
+                hasher.update([rule.enforcement as u8]);
             }
         }
 

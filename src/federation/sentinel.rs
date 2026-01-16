@@ -6,6 +6,12 @@ pub struct Sentinel {
     receipt_cache: HashMap<String, String>, // map output_hash -> node_uid
 }
 
+impl Default for Sentinel {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Sentinel {
     pub fn new() -> Self {
         Self {

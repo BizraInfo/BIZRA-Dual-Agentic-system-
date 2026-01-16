@@ -334,18 +334,18 @@ impl ResonanceMesh {
 
         for node_id in &nodes_to_check {
             // Re-calculate resonance (handles its own locking)
-            let snr = self.calculate_node_resonance(&node_id).await?;
+            let snr = self.calculate_node_resonance(node_id).await?;
 
             // 2. Prune low-resonance nodes (< threshold)
             if snr < self.pruning_threshold {
-                self.prune_node(&node_id).await?;
+                self.prune_node(node_id).await?;
                 pruned += 1;
 
                 warn!("Pruned low-resonance node: {} (SNR: {:.3})", node_id, snr);
             }
             // 3. Amplify high-resonance nodes (> 0.8)
             else if snr > 0.8 {
-                self.amplify_node(&node_id).await?;
+                self.amplify_node(node_id).await?;
                 amplified += 1;
 
                 info!(

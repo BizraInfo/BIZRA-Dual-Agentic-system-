@@ -94,7 +94,7 @@ impl SymbolicHarness {
         for (dim, weight) in weights {
             if let Some(var) = vars.get(dim) {
                 let w_scaled = Int::from_i64(&self.context, (weight * 1_000_000.0) as i64);
-                total_score = total_score + (var * &w_scaled);
+                total_score += var * &w_scaled;
             }
         }
 
@@ -124,8 +124,8 @@ impl SymbolicHarness {
             solver.assert(&y_var.le(&Int::from_i64(&self.context, 1000)));
             solver.assert(&y_var.ge(&x_var));
 
-            sum_x = sum_x + (&x_var * &w_var);
-            sum_y = sum_y + (&y_var * &w_var);
+            sum_x += &x_var * &w_var;
+            sum_y += &y_var * &w_var;
         }
 
         solver.assert(&sum_y.lt(&sum_x));

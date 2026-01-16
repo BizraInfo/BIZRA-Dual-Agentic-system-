@@ -54,6 +54,12 @@ pub struct MemoryLedger {
     pub gini_coefficient: f64,
 }
 
+impl Default for MemoryLedger {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MemoryLedger {
     pub fn new() -> Self {
         Self {

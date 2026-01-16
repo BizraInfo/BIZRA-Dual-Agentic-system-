@@ -449,11 +449,10 @@ impl EvolvingPATOrchestrator {
 
             // Track domain-specific performance for future difficulty adjustment
             let ihsan_score = result.ihsan_score.to_f64();
-            if ihsan_score >= 0.95 {
-                if !self.evolution_state.mastered_domains.contains(&domain) {
+            if ihsan_score >= 0.95
+                && !self.evolution_state.mastered_domains.contains(&domain) {
                     self.evolution_state.mastered_domains.push(domain);
                 }
-            }
         }
     }
 

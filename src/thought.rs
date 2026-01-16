@@ -314,13 +314,13 @@ impl AttestedThought {
         let mut hasher = Sha256::new();
 
         hasher.update(self.id.0.as_bytes());
-        hasher.update(&self.input_hash);
+        hasher.update(self.input_hash);
         hasher.update(self.reasoning_trace.as_bytes());
         hasher.update(self.output_candidate.as_bytes());
         hasher.update(self.model_id.as_bytes());
 
         // Fixed64 to deterministic bits
-        hasher.update(&self.ihsan_score.total.to_bits().to_le_bytes());
+        hasher.update(self.ihsan_score.total.to_bits().to_le_bytes());
 
         hasher.finalize().to_vec()
     }

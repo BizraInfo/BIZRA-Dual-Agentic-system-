@@ -316,9 +316,8 @@ impl WasmSandbox {
 
         // Strategy A: SAPE v1.∞ (evaluate + alloc)
         // This is the "Brain Transplant" ABI which allows full context transfer
-        if let Some(evaluate_fn) = instance
+        if let Ok(evaluate_fn) = instance
             .get_typed_func::<(i32, i32), i64>(&mut store, "evaluate")
-            .ok()
         {
             // Need alloc first
             let alloc_fn = instance
@@ -373,9 +372,8 @@ impl WasmSandbox {
         }
 
         // Strategy B: Legacy Giants Protocol (reason/health)
-        let result_content = if let Some(reason_fn) = instance
+        let result_content = if let Ok(reason_fn) = instance
             .get_typed_func::<i32, i32>(&mut store, "reason")
-            .ok()
         {
             // Execute reasoning function with input length as parameter
             let input_val = input_data.len() as i32;
@@ -394,9 +392,8 @@ impl WasmSandbox {
             }
 
             format!("SANDBOX_SUCCESS: Input processed, output={}", output)
-        } else if let Some(health_fn) = instance
+        } else if let Ok(health_fn) = instance
             .get_typed_func::<(), i32>(&mut store, "health")
-            .ok()
         {
             let health = health_fn.call(&mut store, ())?;
             format!("SANDBOX_HEALTH: status={}", health)

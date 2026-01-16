@@ -118,6 +118,12 @@ pub struct PendingProof {
     pub queued_at: Instant,
 }
 
+impl Default for AsyncFateVerifier {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl AsyncFateVerifier {
     pub fn new() -> Self {
         let proof_queue = Arc::new(Mutex::new(VecDeque::<PendingProof>::new()));
@@ -850,8 +856,6 @@ impl FateEngine {
 
         if moderate_count >= 2 {
             EscalationLevel::Medium
-        } else if moderate_count == 1 {
-            EscalationLevel::Low
         } else {
             EscalationLevel::Low
         }

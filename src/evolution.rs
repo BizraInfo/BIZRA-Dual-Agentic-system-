@@ -287,7 +287,7 @@ impl HRPOOptimizer {
     /// Add task-response pair with raw reward
     pub fn add_sample(&mut self, task: EvolutionTask, response: SolverResponse, raw_reward: Fixed64) {
         let hop = task.hop_count;
-        let group = self.hop_groups.entry(hop).or_insert_with(VecDeque::new);
+        let group = self.hop_groups.entry(hop).or_default();
 
         group.push_back((task, response, raw_reward));
 
@@ -555,7 +555,7 @@ impl SolverAgent {
         }
 
         // Normalize to [0.5, 1.0] range
-        let avg_diff = total_diff / Fixed64::from_int(count as i32);
+        let avg_diff = total_diff / Fixed64::from_int(count);
         let confidence = Fixed64::HALF + (avg_diff / Fixed64::from_int(2));
 
         // Clamp to [0, 1]

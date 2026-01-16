@@ -12,18 +12,15 @@ use tracing::{debug, info, warn};
 
 /// Optimization level for pattern compilation
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Default)]
 pub enum OptimizationLevel {
     Minimum,
+    #[default]
     Balanced,
     Aggressive,
     Maximum,
 }
 
-impl Default for OptimizationLevel {
-    fn default() -> Self {
-        OptimizationLevel::Balanced
-    }
-}
 
 /// A compiled pattern representing a recurring symbol chain
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -54,6 +54,12 @@ pub struct InMemoryReceiptStore {
     head: RwLock<String>,
 }
 
+impl Default for InMemoryReceiptStore {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl InMemoryReceiptStore {
     pub fn new() -> Self {
         Self {

@@ -28,10 +28,12 @@ use tracing::{debug, info, instrument, warn};
 
 /// Sovereignty tier determines resource budget for Engram tables
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum SovereigntyTier {
     /// T0: Mobile devices (iOS/Android) - 50MB budget
     T0Mobile,
     /// T1: Consumer PC (Windows/Linux) - 500MB budget
+    #[default]
     T1Consumer,
     /// T2+: Server/Node - 2GB+ budget
     T2Node,
@@ -75,11 +77,6 @@ impl SovereigntyTier {
     }
 }
 
-impl Default for SovereigntyTier {
-    fn default() -> Self {
-        Self::T1Consumer
-    }
-}
 
 // ============================================================================
 // N-GRAM HASH MAPPING
@@ -105,7 +102,7 @@ impl NgramHashMapping {
         // Generate deterministic odd multipliers for each n-gram size
         // Using prime-based sequence for better distribution
         let layer_multipliers: Vec<u64> = (2..=max_ngram)
-            .map(|n| Self::generate_odd_multiplier(n))
+            .map(Self::generate_odd_multiplier)
             .collect();
 
         Self {

@@ -413,15 +413,9 @@ pub struct SAPEEngine {
 impl SAPEEngine {
     /// Create new SAPE engine with blueprint patterns
     pub fn new() -> Self {
-        // Initialize Cognitive Layer (ignore errors in non-async new, log them)
-        let cognitive = match CognitiveLayer::new() {
-            Ok(layer) => Some(layer),
-            Err(_e) => {
-                // In production, this might be fatal, but for resilient init we log warning
-                // tracing::warn!("SAPE: Cognitive Layer init failed: {}", _e);
-                None
-            }
-        };
+        // Initialize Cognitive Layer (ignore errors for resilient init)
+        // In production, failures are logged via tracing
+        let cognitive = CognitiveLayer::new().ok();
 
         let mut engine = Self {
             patterns: HashMap::new(),

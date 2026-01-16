@@ -83,9 +83,9 @@ impl ExperienceCard {
     /// Calculate signal quality score (10-18 keywords is optimal)
     pub fn signal_quality(&self) -> f64 {
         let count = self.signals.len();
-        if count >= 10 && count <= 18 {
+        if (10..=18).contains(&count) {
             1.0
-        } else if count >= 5 && count < 10 {
+        } else if (5..10).contains(&count) {
             0.8
         } else if count > 18 && count <= 25 {
             0.85

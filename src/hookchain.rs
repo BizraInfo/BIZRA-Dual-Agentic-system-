@@ -19,10 +19,12 @@ use tracing::info;
 
 /// Tier classification for capability budgets (Consumer-first design)
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum CapabilityTier {
     /// T0: Mobile/Phone - Offline-first, strict budgets, minimal tools
     T0Mobile,
     /// T1: Consumer PC - Local model + tool sandbox
+    #[default]
     T1Consumer,
     /// T2: Pro Workstation - Expanded skills + heavier verification
     T2Pro,
@@ -30,11 +32,6 @@ pub enum CapabilityTier {
     T3Pooled,
 }
 
-impl Default for CapabilityTier {
-    fn default() -> Self {
-        CapabilityTier::T1Consumer
-    }
-}
 
 impl CapabilityTier {
     /// Get default budget limits for this tier

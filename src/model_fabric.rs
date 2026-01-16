@@ -22,8 +22,10 @@ use tracing::{info, warn};
 
 /// Supported model backends
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum ModelBackend {
     /// Ollama (default local backend)
+    #[default]
     Ollama,
     /// vLLM for high-throughput serving
     VLLM,
@@ -35,11 +37,6 @@ pub enum ModelBackend {
     Mock,
 }
 
-impl Default for ModelBackend {
-    fn default() -> Self {
-        ModelBackend::Ollama
-    }
-}
 
 impl ModelBackend {
     /// Get the default health check path for this backend
@@ -71,6 +68,7 @@ impl ModelBackend {
 
 /// Health status for a model endpoint
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum HealthStatus {
     /// Endpoint is healthy and responding
     Healthy,
@@ -79,14 +77,10 @@ pub enum HealthStatus {
     /// Endpoint is unhealthy (not responding)
     Unhealthy,
     /// Health status unknown (never checked)
+    #[default]
     Unknown,
 }
 
-impl Default for HealthStatus {
-    fn default() -> Self {
-        HealthStatus::Unknown
-    }
-}
 
 // ============================================================================
 // RESOURCE LIMITS

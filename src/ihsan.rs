@@ -402,6 +402,7 @@ pub fn score(scores: &BTreeMap<String, f64>) -> anyhow::Result<f64> {
 
 /// Compute Ihsān score from individual dimension values.
 /// This is the Python FFI-friendly entry point using positional args.
+#[allow(clippy::too_many_arguments)] // 8 Ihsān dimensions are the API contract
 pub fn compute_ihsan_score(
     correctness: f64,
     safety: f64,

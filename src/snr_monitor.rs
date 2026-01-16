@@ -229,7 +229,7 @@ impl SNRMonitor {
         metrics.compute_snr();
 
         // Trigger optimization if interval reached
-        if metrics.actions_attempted % self.optimization_interval == 0 {
+        if metrics.actions_attempted.is_multiple_of(self.optimization_interval) {
             drop(metrics); // Release lock before optimization
             self.optimize();
         }

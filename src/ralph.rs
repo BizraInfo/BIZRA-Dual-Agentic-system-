@@ -193,8 +193,10 @@ impl ExitCondition {
 
 /// Circuit breaker states
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Default)]
 pub enum CircuitState {
     /// Normal operation - requests allowed
+    #[default]
     Closed,
     /// Failing - requests rejected
     Open,
@@ -202,11 +204,6 @@ pub enum CircuitState {
     HalfOpen,
 }
 
-impl Default for CircuitState {
-    fn default() -> Self {
-        CircuitState::Closed
-    }
-}
 
 /// Circuit breaker for fault tolerance
 #[derive(Debug, Clone)]
@@ -454,6 +451,7 @@ pub struct GateReceipt {
 // ============================================================================
 
 /// Trait for execution backends (BridgeCoordinator, etc.)
+#[allow(clippy::type_complexity)] // Complex return type needed for async trait
 pub trait RalphExecutor: Send + Sync {
     /// Request type
     type Request: Send + Sync + Clone + Serialize + 'static;

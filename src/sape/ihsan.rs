@@ -9,7 +9,7 @@ pub enum IhsanError {
 }
 
 pub fn calculate_score(b: f64, t: f64, j: f64) -> Result<f64, IhsanError> {
-    if b < 0.0 || b > 1.0 || t < 0.0 || t > 1.0 || j < 0.0 || j > 1.0 {
+    if !(0.0..=1.0).contains(&b) || !(0.0..=1.0).contains(&t) || !(0.0..=1.0).contains(&j) {
         return Err(IhsanError::InputOutOfBounds);
     }
     Ok((b * WEIGHT_BENEVOLENCE) + (t * WEIGHT_TRUTH) + (j * WEIGHT_JUSTICE))
@@ -18,6 +18,7 @@ pub fn calculate_score(b: f64, t: f64, j: f64) -> Result<f64, IhsanError> {
 /// Calculate Unified Ihsān Score (8-factor Model)
 /// Single Source of Truth
 /// Source: constitution/ihsan_v1.yaml
+#[allow(clippy::too_many_arguments)] // 8 Ihsān dimensions are the API contract
 pub fn calculate_unified_score(
     correctness: f64,
     safety: f64,

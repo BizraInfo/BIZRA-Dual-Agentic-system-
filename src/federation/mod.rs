@@ -8,6 +8,12 @@ use uuid::Uuid;
 
 pub struct FederationManager;
 
+impl Default for FederationManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl FederationManager {
     pub fn new() -> Self {
         Self
