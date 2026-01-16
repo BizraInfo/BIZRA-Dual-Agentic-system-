@@ -42,12 +42,60 @@ interface GenesisSynapse {
     memoryUsage: number;
     gpuUsage: number | null;
   };
-  services: {
-    postgres: 'healthy' | 'unhealthy' | 'unknown';
-    redis: 'healthy' | 'unhealthy' | 'unknown';
-    ollama: 'healthy' | 'unhealthy' | 'unknown';
-    neo4j: 'healthy' | 'unhealthy' | 'unknown';
+  services: Record<string, string>;
+}
+
+interface TelemetryServiceStatus {
+  name: string;
+  status: string;
+  latencyMs?: number | null;
+}
+
+interface TelemetryResourcePool {
+  status: string;
+  cpuCoresTotal: number;
+  cpuCoresAllocated: number;
+  storageTotalGb: number;
+  storageAllocatedGb: number;
+  totalComputeHours: number;
+  totalTasksProcessed?: number | null;
+  totalBzcEarned: number;
+  gpuEnabled?: boolean | null;
+}
+
+interface TelemetryPayload {
+  timestamp: string;
+  nodeId: string;
+  uptimeSeconds: number;
+  cpuUsagePercent: number;
+  memory: {
+    totalGb: number;
+    usedGb: number;
+    availableGb: number;
+    usagePercent: number;
   };
+  disk: {
+    totalGb: number;
+    usedGb: number;
+    availableGb: number;
+    usagePercent: number;
+  };
+  poiStats: {
+    totalEvents: number;
+    verifiedEvents: number;
+    totalImpact: number;
+    avgIhsan: number;
+    totalMinutes: number;
+    totalBzc: number;
+    totalImp: number;
+  };
+  services: TelemetryServiceStatus[];
+  resourcePool: TelemetryResourcePool | null;
+  satAgents: {
+    role: string;
+    description: string;
+    active: boolean;
+  }[];
 }
 
 // State
@@ -55,36 +103,15 @@ let epoch = 0;
 let lastPoiCount = 0;
 let clients: Set<WebSocket> = new Set();
 
-/**
- * Fetch service status from Rust API
- */
-async function fetchServiceStatus(): Promise<Record<string, string>> {
-  try {
-    const response = await axios.get(`${config.apiUrl}/api/services/status`, {
-      timeout: 2000,
-    });
-    return response.data.data || {};
-  } catch {
-    return {};
+async function fetchTelemetry(): Promise<TelemetryPayload> {
+  const response = await axios.get(`${config.apiUrl}/api/telemetry/live`, {
+    timeout: 2500,
+  });
+  const payload = response.data?.data as TelemetryPayload | undefined;
+  if (!payload) {
+    throw new Error('Telemetry endpoint returned no data');
   }
-}
-
-/**
- * Fetch PoI stats from Rust API
- */
-async function fetchPoiStats(): Promise<{ totalEvents: number; avgIhsan: number }> {
-  try {
-    const response = await axios.get(`${config.apiUrl}/api/poi/stats`, {
-      timeout: 2000,
-    });
-    const data = response.data.data || {};
-    return {
-      totalEvents: data.total_events || 0,
-      avgIhsan: data.avg_ihsan || 0.88,
-    };
-  } catch {
-    return { totalEvents: 0, avgIhsan: 0.88 };
-  }
+  return payload;
 }
 
 /**
@@ -93,52 +120,55 @@ async function fetchPoiStats(): Promise<{ totalEvents: number; avgIhsan: number 
 async function generateSynapse(): Promise<GenesisSynapse> {
   epoch++;
 
-  // Fetch live data
-  const [services, poiStats] = await Promise.all([
-    fetchServiceStatus(),
-    fetchPoiStats(),
-  ]);
+  const telemetry = await fetchTelemetry();
 
-  // Calculate PoI events in last minute (simulated for now)
-  const poiDelta = poiStats.totalEvents - lastPoiCount;
-  lastPoiCount = poiStats.totalEvents;
+  const services: Record<string, string> = {
+    postgres: 'unknown',
+    redis: 'unknown',
+    ollama: 'unknown',
+    neo4j: 'unknown',
+  };
+  telemetry.services.forEach((service) => {
+    services[service.name] = service.status;
+  });
 
-  // Generate realistic resource metrics (would come from actual monitoring)
-  const cpuUsage = 15 + Math.random() * 20; // 15-35%
-  const memoryUsage = 30 + Math.random() * 25; // 30-55%
-  const gpuUsage = services.ollama === 'healthy' ? 10 + Math.random() * 30 : null;
+  const unhealthyServices = telemetry.services.filter((service) => service.status !== 'healthy').length;
+  const serviceFraction = telemetry.services.length ? unhealthyServices / telemetry.services.length : 0;
+  const calculatedErrorRate = Math.min(0.05, serviceFraction * 0.05 + 0.001);
 
-  // Calculate latency (simulate with jitter)
-  const baseLatency = 500; // 500 microseconds base
-  const latencyUs = Math.round(baseLatency + Math.random() * 500);
+  const poiDelta = Math.max(0, telemetry.poiStats.totalEvents - lastPoiCount);
+  lastPoiCount = telemetry.poiStats.totalEvents;
 
-  // Error rate (very low in healthy system)
-  const errorRate = Math.random() * 0.002; // 0-0.2%
+  const latencySource = telemetry.services.find((service) => service.name === 'ollama');
+  const latencyMs = latencySource?.latencyMs ?? 1;
+  const latencyUs = Math.max(250, Math.round(latencyMs * 1000 + telemetry.cpuUsagePercent * 10));
+
+  const gpuUsage =
+    telemetry.resourcePool?.gpuEnabled === true
+      ? Number(Math.min(90, telemetry.cpuUsagePercent + 5).toFixed(2))
+      : null;
+
+  const ihsanScore = Math.min(1, telemetry.poiStats.avgIhsan || 0.85);
 
   return {
-    timestamp: new Date().toISOString(),
-    nodeId: config.nodeId,
+    timestamp: telemetry.timestamp,
+    nodeId: telemetry.nodeId,
     latencyUs,
-    ihsanScore: poiStats.avgIhsan || 0.88 + Math.random() * 0.08,
-    consensusState: 'STABLE',
+    ihsanScore,
+    consensusState: unhealthyServices > 0 ? 'PENDING' : 'STABLE',
     epoch,
     activeAgents: {
       PAT: 7,
-      SAT: 5,
+      SAT: telemetry.satAgents.length,
     },
-    poiEventsLastMinute: Math.max(0, poiDelta),
-    errorRate: Math.round(errorRate * 10000) / 10000,
+    poiEventsLastMinute: poiDelta,
+    errorRate: Number(calculatedErrorRate.toFixed(4)),
     resources: {
-      cpuUsage: Math.round(cpuUsage * 100) / 100,
-      memoryUsage: Math.round(memoryUsage * 100) / 100,
-      gpuUsage: gpuUsage ? Math.round(gpuUsage * 100) / 100 : null,
+      cpuUsage: Number(telemetry.cpuUsagePercent.toFixed(2)),
+      memoryUsage: Number(telemetry.memory.usagePercent.toFixed(2)),
+      gpuUsage,
     },
-    services: {
-      postgres: (services.postgres as any) || 'unknown',
-      redis: (services.redis as any) || 'unknown',
-      ollama: (services.ollama as any) || 'unknown',
-      neo4j: (services.neo4j as any) || 'unknown',
-    },
+    services,
   };
 }
 
@@ -148,14 +178,18 @@ async function generateSynapse(): Promise<GenesisSynapse> {
 async function broadcastTelemetry(): Promise<void> {
   if (clients.size === 0) return;
 
-  const synapse = await generateSynapse();
-  const message = JSON.stringify(synapse);
+  try {
+    const synapse = await generateSynapse();
+    const message = JSON.stringify(synapse);
 
-  clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
-    }
-  });
+    clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+  } catch (error) {
+    console.error('Telemetry generation failed:', error);
+  }
 }
 
 /**
@@ -182,6 +216,8 @@ function startServer(): void {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(synapse));
       }
+    }).catch((error) => {
+      console.error('Initial telemetry emission failed:', error);
     });
 
     ws.on('close', () => {

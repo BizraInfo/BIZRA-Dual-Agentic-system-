@@ -76,10 +76,12 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    id: "ihsan",
-    label: "Ihsan Compliance",
+    id: "auditor",
+    label: "Auditor Core",
     icon: Shield,
+    badge: "OMEGA",
     children: [
+      { id: "third-fact-auditor", label: "Third Fact Auditor" },
       { id: "metrics-dashboard", label: "Metrics Dashboard" },
       { id: "violation-log", label: "Violation Log" },
       { id: "constraint-editor", label: "Constraint Editor" },

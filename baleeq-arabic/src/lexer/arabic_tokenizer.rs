@@ -37,28 +37,47 @@ impl Token {
     }
 }
 
+use std::panic::{catch_unwind, AssertUnwindSafe};
+
+fn panic_airlock<T>(f: impl FnOnce() -> Result<T, LexError>) -> Result<T, LexError> {
+    catch_unwind(AssertUnwindSafe(f)).unwrap_or_else(|_| {
+        Err(LexError::ConstraintViolation("panic_airlock: Rust panic caught".to_string()))
+    })
+}
+
 /// BIZRA Sovereign Tokenizer
 /// Optimized for SNR (Signal-to-Noise Ratio) through zero-copy processing
 /// Releases GIL to support high-concurrency across the 29-agent constellation
 #[pyfunction]
 pub fn tokenize(py: Python, input: &str) -> Result<Vec<Token>, LexError> {
-    // 1. Verify Chain-of-Custody (Simulated for BIM Proof)
-    verify_receipt("receipts/arabic_linguistic_ground_truth_v1.receipt.json")?;
+    panic_airlock(move || {
+        // 1. Verify Chain-of-Custody (Simulated for BIM Proof)
+        verify_receipt("receipts/arabic_linguistic_ground_truth_v1.receipt.json")?;
 
-    // 2. Perform the heavy lifting outside the GIL
-    py.allow_threads(move || {
-        let normalized: String = input.nfkc().collect();
-        
-        Ok(normalized.split_whitespace()
-            .map(|word| {
-                let root = extract_triliteral_root(word);
-                Token {
-                    text: word.to_string(),
-                    root,
-                }
-            })
-            .collect())
+        // 2. Perform the heavy lifting outside the GIL
+        try_allow_threads(py, move || {
+            let normalized: String = input.nfkc().collect();
+            
+            Ok(normalized.split_whitespace()
+                .map(|word| {
+                    let root = extract_triliteral_root(word);
+                    Token {
+                        text: word.to_string(),
+                        root,
+                    }
+                })
+                .collect())
+        })
     })
+}
+
+// Helper to wrap py.allow_threads return type
+fn try_allow_threads<F, R>(py: Python, f: F) -> R
+where
+    F: FnOnce() -> R + Send,
+    R: Send,
+{
+    py.allow_threads(f)
 }
 
 fn verify_receipt(path: &str) -> Result<(), LexError> {

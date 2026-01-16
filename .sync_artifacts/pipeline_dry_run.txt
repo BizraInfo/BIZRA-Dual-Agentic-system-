@@ -1,0 +1,9 @@
+[2026-01-13T14:09:11Z] PIPELINE: DRY RUN MODE - No actual builds
+=== BIZRA Build Pipeline (Dry Run) ===
+Phase 1: Workspace validation - WOULD CHECK
+Phase 2: Core library build - WOULD BUILD meta_alpha_dual_agentic
+Phase 3: Backend build - WOULD BUILD bizra-genesis-node/backend
+Phase 4: Hypervisor check - WOULD CHECK bizra-zero-hv
+Phase 5: Test execution - WOULD RUN cargo test
+Phase 6: Evidence generation - WOULD GENERATE receipts
+=== Dry Run Complete ===

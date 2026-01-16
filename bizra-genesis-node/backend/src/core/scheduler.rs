@@ -786,22 +786,25 @@ impl TaskScheduler {
         // Update task state to running - extract all needed data first
         let task_data = {
             let mut state = state.write().await;
-            if let Some(task) = state.tasks.get_mut(&task_id) {
+            let task_data = if let Some(task) = state.tasks.get_mut(&task_id) {
                 task.state = TaskState::Running;
                 task.started_at = Some(current_timestamp_ms());
                 task.updated_at = current_timestamp_ms();
                 let task_clone = task.clone();
                 let timeout = task.timeout;
-                // Now do the insert after we're done borrowing task
-                drop(task); // Explicitly drop the mutable borrow
+                Some((task_clone, timeout))
+            } else {
+                None
+            };
+
+            if task_data.is_some() {
                 state.running_tasks.insert(task_id);
                 metrics
                     .current_running
                     .fetch_add(1, AtomicOrdering::Relaxed);
-                Some((task_clone, timeout))
-            } else {
-                None
             }
+
+            task_data
         };
 
         let (task, timeout) = match task_data {
@@ -831,6 +834,8 @@ impl TaskScheduler {
             .current_running
             .fetch_sub(1, AtomicOrdering::Relaxed);
 
+        let mut retry_priority = None;
+
         if let Some(task) = state.tasks.get_mut(&task_id) {
             match result {
                 Ok(result_value) => {
@@ -859,21 +864,9 @@ impl TaskScheduler {
                             task.retry_delay.as_millis() as u64 * 2u64.pow(task.retry_count - 1);
                         task.scheduled_at = Some(current_timestamp_ms() + delay);
 
-                        // Re-queue for retry - extract priority first
+                        // Re-queue for retry after releasing the task borrow
                         task.state = TaskState::Pending;
-                        let priority = task.effective_priority();
-                        drop(task); // Release the mutable borrow
-
-                        let seq = state.next_sequence();
-                        state.ready_queue.push(QueueEntry {
-                            priority,
-                            sequence: seq,
-                            task_id,
-                        });
-                        metrics
-                            .current_pending
-                            .fetch_add(1, AtomicOrdering::Relaxed);
-                        metrics.tasks_retried.fetch_add(1, AtomicOrdering::Relaxed);
+                        retry_priority = Some(task.effective_priority());
                     } else {
                         task.state = TaskState::Failed;
                         task.completed_at = Some(current_timestamp_ms());
@@ -882,17 +875,30 @@ impl TaskScheduler {
                     }
                 }
             }
+        }
 
-            // Unblock dependent tasks if completed - check state separately
-            let should_unblock = state
-                .tasks
-                .get(&task_id)
-                .map(|t| t.state == TaskState::Completed)
-                .unwrap_or(false);
+        if let Some(priority) = retry_priority {
+            let seq = state.next_sequence();
+            state.ready_queue.push(QueueEntry {
+                priority,
+                sequence: seq,
+                task_id,
+            });
+            metrics
+                .current_pending
+                .fetch_add(1, AtomicOrdering::Relaxed);
+            metrics.tasks_retried.fetch_add(1, AtomicOrdering::Relaxed);
+        }
 
-            if should_unblock {
-                Self::unblock_dependents(&mut state, task_id);
-            }
+        // Unblock dependent tasks if completed - check state separately
+        let should_unblock = state
+            .tasks
+            .get(&task_id)
+            .map(|t| t.state == TaskState::Completed)
+            .unwrap_or(false);
+
+        if should_unblock {
+            Self::unblock_dependents(&mut state, task_id);
         }
     }
 

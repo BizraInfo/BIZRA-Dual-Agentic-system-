@@ -6,8 +6,8 @@
 //! # L3_APEX_SOVEREIGN
 //! Integrity Lock: ON | Mode: Oracle / Elite Practitioner
 
-use serde::{Serialize, Deserialize};
-use crate::sape::ihsan::PHI; // Using the Golden Ratio from SAPE Ihsan module
+use crate::sape::ihsan::PHI;
+use serde::{Deserialize, Serialize}; // Using the Golden Ratio from SAPE Ihsan module
 
 /// The 8-Vector Ihsan Representation for Masterpiece Verification
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -43,7 +43,6 @@ pub fn verify_golden_topology(node_count: usize) -> bool {
     // Here we just use PHI to "bless" the topology.
     (node_count as f64 * PHI).is_finite()
 }
-
 
 /// The Causal Drag coefficient (Ω)
 pub const CAUSAL_DRAG_LIMIT: f64 = 0.05;
@@ -83,10 +82,10 @@ impl FateEngine {
         // Liveness: AG(Start ⇒ EF(Terminal))
         // Safety: I_score >= 0.95
         // Causal Drag < 0.05
-        
+
         let liveness_proof = true; // Placeholder for Z3 SMT solver result
-        let safety_proof = true;   // Placeholder
-        
+        let safety_proof = true; // Placeholder
+
         liveness_proof && safety_proof && (self.causal_drag <= CAUSAL_DRAG_LIMIT)
     }
 
@@ -113,11 +112,11 @@ pub fn generate_seal() -> OmegaSeal {
         confidence_score: 0.998,
         risks: vec![
             "Quantum-readiness (ML-KEM masking performance)".to_string(),
-            "Real-world latency spikes in non-NUMA hardware".to_string()
+            "Real-world latency spikes in non-NUMA hardware".to_string(),
         ],
         next_experiments: vec![
             "Stress-testing the Harberger Tax under high data-velocity".to_string(),
-            "Implementation of the Shura Protocol".to_string()
+            "Implementation of the Shura Protocol".to_string(),
         ],
         timestamp: "Dubai: Monday, Jan 12, 2026 — 00:55:12 (GMT+4)".to_string(),
     }

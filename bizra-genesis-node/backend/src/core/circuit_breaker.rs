@@ -139,8 +139,7 @@ impl Default for CircuitBreakerConfigBuilder {
 #[derive(Debug, Clone, Copy)]
 enum CallOutcome {
     Success { duration: Duration },
-    Failure { duration: Duration },
-    Timeout,
+    Failure,
 }
 
 /// Sliding window entry for call tracking
@@ -309,7 +308,7 @@ impl CircuitBreaker {
     }
 
     /// Acquire permission to make a call, returning an error if not permitted
-    pub async fn acquire_permission(&self) -> Result<CallPermit, CircuitBreakerError> {
+    pub async fn acquire_permission(&self) -> Result<CallPermit<'_>, CircuitBreakerError> {
         let mut state = self.state.write().await;
 
         match state.current_state {
@@ -459,7 +458,7 @@ impl CircuitBreaker {
     }
 
     /// Record a failed call
-    pub async fn record_failure(&self, duration: Duration, _reason: Option<String>) {
+    pub async fn record_failure(&self, _duration: Duration, _reason: Option<String>) {
         let mut state = self.state.write().await;
 
         // Update metrics
@@ -473,7 +472,7 @@ impl CircuitBreaker {
         self.add_to_window(
             &mut state,
             WindowEntry {
-                outcome: CallOutcome::Failure { duration },
+                outcome: CallOutcome::Failure,
                 timestamp: Instant::now(),
             },
         );
@@ -531,12 +530,7 @@ impl CircuitBreaker {
         let failures = state
             .sliding_window
             .iter()
-            .filter(|e| {
-                matches!(
-                    e.outcome,
-                    CallOutcome::Failure { .. } | CallOutcome::Timeout
-                )
-            })
+            .filter(|e| matches!(e.outcome, CallOutcome::Failure))
             .count();
 
         // Also count slow calls as partial failures if threshold exceeded
@@ -632,6 +626,9 @@ impl CircuitBreaker {
     }
 
     /// Force the circuit to a specific state (for testing/admin purposes)
+    /// DANGEROUS: Force override of safety state.
+    /// MUTATION: This organ is removed in production species.
+    #[cfg(test)]
     pub async fn force_state(&self, new_state: CircuitState) {
         let mut state = self.state.write().await;
         let old_state = state.current_state;

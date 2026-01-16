@@ -1,0 +1,18 @@
+{
+  "task_id": "DEMO-SYNTH-001",
+  "description": "Synthesize insights from codebase structure and documentation",
+  "task_type": "synthesis",
+  "agents": [
+    "claude"
+  ],
+  "solution_hash": "c6cf75796eeb9372f866f48e6c168b2f6076c37141d483449485a76e1650da26",
+  "contributions": [
+    {
+      "agent": "claude",
+      "confidence": 0.99,
+      "tokens": 16
+    }
+  ],
+  "timestamp": "2026-01-13T00:34:44.567394",
+  "evidence_hash": "e77ccb1fe5053f408f64799b2e6bf75914ff992bb5375df35596f020eaddd74c"
+}

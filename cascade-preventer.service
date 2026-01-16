@@ -1,0 +1,29 @@
+[Unit]
+Description=BIZRA Cascade Failure Preventer
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=bizra
+Group=bizra
+WorkingDirectory=/opt/bizra
+ExecStart=/usr/local/bin/cascade-preventer \
+  --config /etc/bizra/cascade-config.yaml \
+  --ledger-path /var/lib/bizra/ledger \
+  --log-level info
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cascade-preventer
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/bizra/ledger
+
+[Install]
+WantedBy=multi-user.target

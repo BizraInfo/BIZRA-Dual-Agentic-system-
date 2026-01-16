@@ -1,0 +1,30 @@
+{
+  "rust-analyzer": {
+    "command": "rust-analyzer",
+    "args": [],
+    "extensionToLanguage": {
+      ".rs": "rust"
+    },
+    "initializationOptions": {
+      "checkOnSave": {
+        "command": "clippy"
+      },
+      "cargo": {
+        "allFeatures": true
+      }
+    },
+    "restartOnCrash": true,
+    "maxRestarts": 3
+  },
+  "typescript-language-server": {
+    "command": "typescript-language-server",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".ts": "typescript",
+      ".tsx": "typescriptreact",
+      ".js": "javascript"
+    },
+    "restartOnCrash": true,
+    "maxRestarts": 3
+  }
+}

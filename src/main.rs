@@ -1,13 +1,14 @@
 use clap::{Parser, Subcommand};
 use meta_alpha_dual_agentic::{
-    metrics, MetaAlphaDualAgentic, 
     federation::{FederationManager, TrustTier},
-    storage::{InMemoryReceiptStore, RedisReceiptStore, ReceiptStore},
+    metrics,
     sape::PatternCompiler,
+    storage::{InMemoryReceiptStore, ReceiptStore, RedisReceiptStore},
     tpm::SoftwareSigner,
+    MetaAlphaDualAgentic,
 };
 use std::sync::Arc;
-use tracing::{info, error, warn};
+use tracing::{error, info, warn};
 use tracing_subscriber::{fmt, EnvFilter};
 
 #[derive(Parser)]
@@ -98,21 +99,24 @@ async fn main() -> anyhow::Result<()> {
 async fn run_server(port: u16, use_redis: bool) -> anyhow::Result<()> {
     // Initialize metrics
     metrics::init_metrics();
-    
+
     // Initialize storage layer
     info!("Initializing Storage Layer...");
     let receipt_store: Arc<dyn ReceiptStore> = if use_redis {
-        let redis_url = std::env::var("REDIS_URL")
-            .unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
+        let redis_url =
+            std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
         info!("Connecting to Redis at {}...", redis_url);
-        
+
         match RedisReceiptStore::new(&redis_url).await {
             Ok(store) => {
                 info!("✅ Redis connection established");
                 Arc::new(store)
             }
             Err(e) => {
-                warn!("Redis connection failed: {}. Falling back to in-memory store.", e);
+                warn!(
+                    "Redis connection failed: {}. Falling back to in-memory store.",
+                    e
+                );
                 Arc::new(InMemoryReceiptStore::new())
             }
         }
@@ -120,18 +124,21 @@ async fn run_server(port: u16, use_redis: bool) -> anyhow::Result<()> {
         info!("Using in-memory storage (development mode)");
         Arc::new(InMemoryReceiptStore::new())
     };
-    
+
     // Initialize Hardware Root of Trust (Software fallback)
     info!("Initializing Hardware Root of Trust...");
     let signer = Arc::new(SoftwareSigner::new());
     info!("✅ Software signer initialized (Ed25519)");
-    
+
     // Initialize Pattern Compiler
     info!("Initializing Pattern Compiler...");
     let pattern_compiler = PatternCompiler::new(signer.clone());
     let stats = pattern_compiler.get_stats().await;
-    info!("Pattern compiler ready: {} patterns cached", stats.total_patterns);
-    
+    info!(
+        "Pattern compiler ready: {} patterns cached",
+        stats.total_patterns
+    );
+
     // Verify chain integrity
     info!("Verifying chain integrity...");
     let head_hash = receipt_store.get_head_hash().await?;
@@ -140,19 +147,22 @@ async fn run_server(port: u16, use_redis: bool) -> anyhow::Result<()> {
     } else {
         info!("📜 Chain head: {}", head_hash);
     }
-    
+
     // Initialize system
     let system = Arc::new(MetaAlphaDualAgentic::initialize().await?);
-    
+
     info!("🚀 BIZRA Node v9.0 is OPERATIONAL");
     info!("   API: http://127.0.0.1:{}", port);
-    info!("   Storage: {}", if use_redis { "Redis" } else { "In-Memory" });
+    info!(
+        "   Storage: {}",
+        if use_redis { "Redis" } else { "In-Memory" }
+    );
     info!("   Hardware RoT: Software Signer (Ed25519)");
     info!("   Pattern Compiler: ACTIVE");
-    
+
     // Start HTTP server
     meta_alpha_dual_agentic::create_http_server(system, port).await?;
-    
+
     Ok(())
 }
 
@@ -166,7 +176,7 @@ async fn run_federation_command(cmd: FedCommands) -> anyhow::Result<()> {
                 "platinum" => TrustTier::Platinum,
                 _ => anyhow::bail!("Invalid trust tier"),
             };
-            
+
             let fed_manager = FederationManager::new();
             let cert = fed_manager.enroll_node(node_id, trust_tier).await?;
             println!("{}", serde_json::to_string_pretty(&cert)?);
@@ -181,19 +191,26 @@ async fn run_federation_command(cmd: FedCommands) -> anyhow::Result<()> {
 
 async fn run_chain_command(cmd: ChainCommands) -> anyhow::Result<()> {
     let redis_url = std::env::var("REDIS_URL").ok();
-    
+
     let store: Arc<dyn ReceiptStore> = if let Some(url) = redis_url {
         Arc::new(RedisReceiptStore::new(&url).await?)
     } else {
         Arc::new(InMemoryReceiptStore::new())
     };
-    
+
     match cmd {
         ChainCommands::Status => {
             let head = store.get_head_hash().await?;
             println!("Chain Status:");
             println!("  Head: {}", head);
-            println!("  Storage: {}", if std::env::var("REDIS_URL").is_ok() { "Redis" } else { "In-Memory" });
+            println!(
+                "  Storage: {}",
+                if std::env::var("REDIS_URL").is_ok() {
+                    "Redis"
+                } else {
+                    "In-Memory"
+                }
+            );
         }
         ChainCommands::Verify => {
             let head = store.get_head_hash().await?;

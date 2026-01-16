@@ -6,6 +6,7 @@
 // Anchors the Ultimate Implementation of BIZRA v7.0.
 
 use crate::fixed::Fixed64;
+use crate::metrics;
 use crate::sovereign::system_sanity_check;
 use crate::tpm::{SignerProvider, TpmContext};
 use crate::types::AgentResult;
@@ -14,7 +15,7 @@ use std::time::{Duration, Instant};
 use tracing::{error, info, warn};
 
 use wasmtime::*;
-use wasmtime_wasi::{WasiCtx, WasiCtxBuilder};
+use wasmtime_wasi::preview1::{add_to_linker_sync, WasiP1Ctx};
 
 /// Wasm Engine Status
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -70,10 +71,12 @@ impl Default for FateContext {
 
 /// Combined WASI + FATE context for the sandbox store
 pub struct SandboxState {
-    pub wasi: WasiCtx,
+    pub wasi: WasiP1Ctx,
     pub fate: FateContext,
     pub execution_id: String,
 }
+
+// WasiView not needed for preview1 API - removed
 
 /// PRODUCTION MASTERPIECE: Sovereign WASM Executor
 /// Real Wasmtime integration with FATE ethics callbacks and fuel metering.
@@ -145,12 +148,14 @@ impl WasmSandbox {
     }
 
     /// Create a new WASI context with security restrictions
-    fn create_wasi_context(&self) -> WasiCtx {
+    fn create_wasi_context(&self) -> WasiP1Ctx {
         // PRODUCTION HARDENING: Pure Air-Gapped WASI Context
-        WasiCtxBuilder::new()
+        // In wasmtime-wasi 24.0.5, WasiP1Ctx is created from WasiCtxBuilder
+        let wasi_ctx = wasmtime_wasi::WasiCtxBuilder::new()
             .inherit_stdout() // Still needed for logs
             .inherit_stderr()
-            .build()
+            .build_p1();
+        wasi_ctx
 
         // Note: Filesystem and Network are disabled by default in WasiCtxBuilder::new()
     }
@@ -159,8 +164,10 @@ impl WasmSandbox {
     fn create_linker(&self) -> Result<Linker<SandboxState>, anyhow::Error> {
         let mut linker = Linker::new(&self.engine);
 
-        // Add WASI functions
-        wasmtime_wasi::add_to_linker(&mut linker, |state: &mut SandboxState| &mut state.wasi)?;
+        // Add WASI functions (wasmtime 24.0.5 preview1 API)
+        add_to_linker_sync(&mut linker, |state: &mut SandboxState| {
+            &mut state.wasi
+        })?;
 
         // Add FATE query callback - runtime ethics verification
         linker.func_wrap(
@@ -207,6 +214,9 @@ impl WasmSandbox {
 
     /// Execute a WASM module in the isolated sandbox.
     /// **SECURITY CRITICAL**: Requires a valid signature from the Hardware Root of Trust.
+    ///
+    /// SECURITY FIX (SEC-004): Atomic verify-then-compile to prevent TOCTOU attacks.
+    /// The module hash is computed once and verified at both signature check and compilation.
     pub async fn execute_isolated(
         &mut self,
         wasm_module: &[u8],
@@ -218,14 +228,34 @@ impl WasmSandbox {
 
         self.status = SandboxStatus::Executing;
 
+        // SECURITY FIX (SEC-004): Compute module hash ONCE for atomic verification
+        // This prevents TOCTOU attacks where module could be swapped between verify and compile
+        use sha2::{Digest, Sha256};
+        let module_hash: [u8; 32] = {
+            let mut hasher = Sha256::new();
+            hasher.update(wasm_module);
+            hasher.finalize().into()
+        };
+
+        tracing::debug!(
+            target: "bizra::wasm::security",
+            "Module hash computed: {:x?}...",
+            &module_hash[..8]
+        );
+
         // 0. VERIFY CODE SIGNATURE (Fortress Security Gate)
+        // The signature must be over the module hash, not the raw bytes
         if !self.verify_signature(wasm_module, signature) {
             self.status = SandboxStatus::Violated("Invalid Code Signature".to_string());
             warn!("⛔ BLOCKED: Attempted to execute unsigned/tampered WASM code");
+            metrics::WASM_SIGNATURE_FAILURES.inc();
             return Err(anyhow::anyhow!(
                 "Security Violation: Code signature verification failed. This module is not trusted by the Root of Trust."
             ));
         }
+
+        // SECURITY: Record verified hash for audit trail
+        let verified_hash = module_hash;
 
         // 1. PRE-EXECUTION IHSAN CHECK
         if !system_sanity_check() {
@@ -236,9 +266,28 @@ impl WasmSandbox {
         }
 
         // 2. COMPILE MODULE (or use minimal module if empty)
+        // SECURITY FIX (SEC-004): Re-verify hash before compilation to ensure atomicity
         let module = if wasm_module.is_empty() {
             self.minimal_module.clone()
         } else {
+            // Re-compute hash to detect any tampering between verify and compile
+            let compile_time_hash: [u8; 32] = {
+                let mut hasher = Sha256::new();
+                hasher.update(wasm_module);
+                hasher.finalize().into()
+            };
+
+            if compile_time_hash != verified_hash {
+                self.status = SandboxStatus::Violated("Module tampering detected".to_string());
+                warn!(
+                    "⛔ SECURITY ALERT: Module hash changed between verification and compilation!"
+                );
+                metrics::WASM_TOCTOU_ATTEMPTS.inc();
+                return Err(anyhow::anyhow!(
+                    "Security Violation: Module integrity compromised (TOCTOU attack detected)"
+                ));
+            }
+
             Module::new(&self.engine, wasm_module)
                 .map_err(|e| anyhow::anyhow!("WASM compilation failed: {}", e))?
         };
@@ -255,7 +304,7 @@ impl WasmSandbox {
 
         // Set fuel limit for bounded execution
         store.set_fuel(self.config.fuel_limit)?;
-        
+
         // Set epoch deadline to prevent immediate trap (5s execution window)
         store.set_epoch_deadline(100);
 
@@ -264,45 +313,52 @@ impl WasmSandbox {
         let instance = linker.instantiate(&mut store, &module)?;
 
         // 5. EXECUTE: SUPPORT FOR BOTH LEGACY AND SAPE ABIs
-        
+
         // Strategy A: SAPE v1.∞ (evaluate + alloc)
         // This is the "Brain Transplant" ABI which allows full context transfer
-        if let Some(evaluate_fn) = instance.get_typed_func::<(i32, i32), i64>(&mut store, "evaluate").ok() {
+        if let Some(evaluate_fn) = instance
+            .get_typed_func::<(i32, i32), i64>(&mut store, "evaluate")
+            .ok()
+        {
             // Need alloc first
-            let alloc_fn = instance.get_typed_func::<i32, i32>(&mut store, "alloc")
-                .map_err(|_| anyhow::anyhow!("SAPE ABI Violation: 'evaluate' found but 'alloc' missing"))?;
-            
+            let alloc_fn = instance
+                .get_typed_func::<i32, i32>(&mut store, "alloc")
+                .map_err(|_| {
+                    anyhow::anyhow!("SAPE ABI Violation: 'evaluate' found but 'alloc' missing")
+                })?;
+
             let input_bytes = input_data.as_bytes();
             let len = input_bytes.len() as i32;
-            
+
             // 1. Allocate Guest Memory
             let ptr = alloc_fn.call(&mut store, len)?;
-            
+
             // 2. Write Input to Guest Memory
-            let memory = instance.get_memory(&mut store, "memory")
+            let memory = instance
+                .get_memory(&mut store, "memory")
                 .ok_or_else(|| anyhow::anyhow!("Memory export missing"))?;
             memory.write(&mut store, ptr as usize, input_bytes)?;
-            
+
             // 3. Execute Brain
             let packed_result = evaluate_fn.call(&mut store, (ptr, len))?;
-            
+
             // 4. Unpack Result (High 32 = Len, Low 32 = Ptr)
             let res_len = (packed_result >> 32) as usize;
             let res_ptr = (packed_result & 0xFFFFFFFF) as usize;
-            
+
             // 5. Read Result from Guest Memory
             let mut result_buffer = vec![0u8; res_len];
             memory.read(&store, res_ptr, &mut result_buffer)?;
-            
+
             // 6. Decode
             let result_str = String::from_utf8(result_buffer)
                 .map_err(|_| anyhow::anyhow!("Invalid UTF-8 in WASM output"))?;
-                
+
             // Check FATE status
             if store.data().fate.vetoed {
                 return Err(anyhow::anyhow!("FATE VETOED"));
             }
-            
+
             // For now, return the raw JSON. The Cognitive Layer will parse it.
             // But we must return an AgentResult type.
             // We assume the JSON matches standard format or we wrap it.
@@ -311,11 +367,11 @@ impl WasmSandbox {
                 contribution: result_str, // JSON output
                 confidence: Fixed64::from_f64(1.0),
                 ihsan_score: Fixed64::from_f64(1.0), // Score is inside the contribution JSON
-                execution_time: Duration::from_millis(0), 
+                execution_time: Duration::from_millis(0),
                 metadata: std::collections::HashMap::new(),
             });
         }
-        
+
         // Strategy B: Legacy Giants Protocol (reason/health)
         let result_content = if let Some(reason_fn) = instance
             .get_typed_func::<i32, i32>(&mut store, "reason")

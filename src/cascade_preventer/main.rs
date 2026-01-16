@@ -1,8 +1,8 @@
 use std::collections::HashMap;
-use std::fs;
 use std::path::Path;
 use std::time::Duration;
 use serde_json::Value;
+use tokio::fs;
 use tokio::time;
 
 #[derive(Debug)]
@@ -87,17 +87,44 @@ impl RiskRegistry {
     }
     
     async fn monitor_ledger(&self, ledger_path: &Path) {
-        let mut last_size = 0;
+        let mut last_size = 0u64;
         
         loop {
-            // Simulated monitoring
-            time::sleep(Duration::from_millis(100)).await;
-            break; // Validating build only
+            let metadata = match fs::metadata(ledger_path).await {
+                Ok(meta) => meta,
+                Err(_) => {
+                    time::sleep(Duration::from_secs(1)).await;
+                    continue;
+                }
+            };
+            let size = metadata.len();
+
+            if size != last_size {
+                last_size = size;
+                if self.check_emergency_halt(ledger_path).await {
+                    self.trigger_system_halt("Emergency halt detected in ledger").await;
+                }
+            }
+
+            time::sleep(Duration::from_secs(1)).await;
         }
     }
     
     async fn check_emergency_halt(&self, ledger_path: &Path) -> bool {
-        // Simulated check - in reality would parse ledger
+        let Ok(contents) = fs::read_to_string(ledger_path).await else {
+            return false;
+        };
+
+        for line in contents.lines().rev().take(1000) {
+            if let Ok(value) = serde_json::from_str::<Value>(line) {
+                if value.get("type").and_then(|t| t.as_str()) == Some("emergency_halt") {
+                    return true;
+                }
+            } else if line.contains("emergency_halt") {
+                return true;
+            }
+        }
+
         false
     }
     
@@ -114,7 +141,7 @@ impl RiskRegistry {
             "signature": "CASCADE_PREVENTER_HALT"
         });
         
-        // 2. Freeze system (simulated)
+        // 2. Freeze system
         eprintln!("   System frozen. Manual intervention required.");
         std::process::exit(99);
     }
@@ -130,5 +157,5 @@ async fn main() {
     
     // Start ledger monitoring
     let ledger_path = Path::new("/var/lib/bizra/ledger");
-    // registry.monitor_ledger(ledger_path).await; // Commented out for MVI compilation speed
+    registry.monitor_ledger(ledger_path).await;
 }

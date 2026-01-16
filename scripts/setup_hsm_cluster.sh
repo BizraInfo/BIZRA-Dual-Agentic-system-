@@ -1,55 +1,43 @@
 #!/bin/bash
-# HSM Cluster Setup Simulation
+# HSM Cluster Setup (Production)
+set -euo pipefail
 
-echo "🏦 HSM CLUSTER SETUP (5 JURISDICTIONS)"
-echo "======================================"
+echo "🏦 HSM CLUSTER SETUP (PRODUCTION)"
+echo "================================="
 
-# Handle non-root paths
+if [ ! -w "/etc" ] || [ ! -w "/var/lib" ]; then
+  echo "ERROR: root access required for /etc and /var/lib"
+  exit 1
+fi
+
+if [ -z "${BIZRA_HSM_CLUSTER_CONFIG_PATH:-}" ]; then
+  echo "ERROR: BIZRA_HSM_CLUSTER_CONFIG_PATH must point to provisioned HSM configs"
+  exit 1
+fi
+
+if [ ! -d "$BIZRA_HSM_CLUSTER_CONFIG_PATH" ]; then
+  echo "ERROR: BIZRA_HSM_CLUSTER_CONFIG_PATH is not a directory"
+  exit 1
+fi
+
 HSM_DIR="/etc/bizra/hsm"
 VAR_DIR="/var/lib/bizra/hsm"
 
-if [ ! -w "/etc" ]; then
-    HSM_DIR="./etc/bizra/hsm"
-    VAR_DIR="./var/lib/bizra/hsm"
-    mkdir -p "$HSM_DIR"
-    mkdir -p "$VAR_DIR/keystores"
-else
-    mkdir -p /etc/bizra/hsm
-    mkdir -p /var/lib/bizra/hsm/keystores
+mkdir -p "$HSM_DIR"
+mkdir -p "$VAR_DIR/keystores"
+
+if ! compgen -G "${BIZRA_HSM_CLUSTER_CONFIG_PATH}/*.yaml" > /dev/null; then
+  echo "ERROR: no HSM YAML configs found in ${BIZRA_HSM_CLUSTER_CONFIG_PATH}"
+  exit 1
 fi
 
-# Generate simulated HSM configurations
-for loc in dubai zurich singapore usa elsalvador; do
-    cat > "$HSM_DIR/${loc}.yaml" << CONFIG_EOF
-location: ${loc}
-hsm_model: YubiHSM2
-serial_number: YK-001-144-00$((${RANDOM:0:3}))
-status: online
-public_key: $(openssl rand -hex 32)
-threshold_scheme: 3-of-5
-backup_slot: $((RANDOM % 10 + 1))
-activation_time: "2026-01-15T00:00:00Z"
-CONFIG_EOF
-    
-    echo "✅ ${loc}: HSM configured"
-done
+cp "${BIZRA_HSM_CLUSTER_CONFIG_PATH}"/*.yaml "$HSM_DIR/"
 
-# Generate threshold key shares (simulated)
-echo "🔑 Generating 3-of-5 threshold key shares..."
-cat > "$VAR_DIR/threshold_keys.json" << KEYS_EOF
-{
-  "threshold_scheme": "3-of-5",
-  "master_public_key": "simulated_pub_key_$(openssl rand -hex 16)",
-  "key_shares": {
-    "dubai": "share_$(openssl rand -hex 8)",
-    "zurich": "share_$(openssl rand -hex 8)",
-    "singapore": "share_$(openssl rand -hex 8)",
-    "usa": "share_$(openssl rand -hex 8)",
-    "elsalvador": "share_$(openssl rand -hex 8)"
-  },
-  "generated": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-  "backup_protocol": "ShamirSecretSharing"
-}
-KEYS_EOF
+if [ ! -f "${BIZRA_HSM_CLUSTER_CONFIG_PATH}/threshold_keys.json" ]; then
+  echo "ERROR: threshold_keys.json missing in ${BIZRA_HSM_CLUSTER_CONFIG_PATH}"
+  exit 1
+fi
 
-echo "✅ HSM cluster simulation complete"
+cp "${BIZRA_HSM_CLUSTER_CONFIG_PATH}/threshold_keys.json" "$VAR_DIR/"
+
+echo "✅ HSM cluster configuration installed"

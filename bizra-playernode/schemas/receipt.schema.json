@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BIZRA Third Fact Receipt",
+  "description": "Cryptographically verifiable proof of agentic action.",
+  "type": "object",
+  "required": ["receipt_id", "timestamp", "actor_did", "action_type", "payload_hash", "sat_ref", "signature"],
+  "properties": {
+    "receipt_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this receipt"
+    },
+    "timestamp": {
+      "type": "integer",
+      "description": "Unix timestamp (UTC) of the action"
+    },
+    "actor_did": {
+      "type": "string",
+      "pattern": "^did:bizra:[a-zA-Z0-9]+$",
+      "description": "Decentralized Identifier of the PAT agent performing the action"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": ["COMPUTE", "STORAGE", "NETWORK", "INFERENCE", "TRANSACTION"],
+      "description": "Classification of the action"
+    },
+    "payload_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "SHA-256 hash of the input/output data associated with the action"
+    },
+    "sat_ref": {
+      "type": "string",
+      "description": "Reference to the Active SAT Manifest hash authorizing this action"
+    },
+    "compute_cost": {
+      "type": "integer",
+      "description": "Micro-compute units consumed"
+    },
+    "ihsan_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Self-reported Excellence Score (verified by SAPE)"
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algo", "u_sig"],
+      "properties": {
+        "algo": {
+          "type": "string",
+          "const": "CRYSTALS-Dilithium-5",
+          "description": "Post-Quantum Cryptographic Algorithm"
+        },
+        "u_sig": {
+          "type": "string",
+          "contentEncoding": "base64",
+          "description": "The PQC signature of the canonicalized receipt fields"
+        }
+      }
+    }
+  }
+}

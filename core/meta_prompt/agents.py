@@ -87,16 +87,15 @@ class OntologyArchitect(MetaAgent):
 
 class LanguageMaster(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        # Placeholder for LLM integration
-        return {"action": "interpret_query", "intent": "simulated"}
+        raise RuntimeError("LanguageMaster requires an LLM integration")
 
 class LearningCore(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        return {"action": "process_prompts", "status": "simulated"}
+        raise RuntimeError("LearningCore requires an LLM integration")
 
 class PromptEngineer(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        return {"action": "generate_prompts", "prompts": ["simulated_prompt"]}
+        raise RuntimeError("PromptEngineer requires an LLM integration")
 
 class KnowledgeHarvester(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -104,7 +103,7 @@ class KnowledgeHarvester(MetaAgent):
 
 class ReasoningEngine(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        return {"action": "analyze_information", "logic": "simulated"}
+        raise RuntimeError("ReasoningEngine requires an LLM integration")
 
 class MetaLearner(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
@@ -112,7 +111,7 @@ class MetaLearner(MetaAgent):
 
 class OutputSynthesizer(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:
-        return {"action": "present_findings", "output": "Simulated Output"}
+        raise RuntimeError("OutputSynthesizer requires an LLM integration")
 
 class EthicsGuardian(MetaAgent):
     async def execute(self, context: Dict[str, Any]) -> Dict[str, Any]:

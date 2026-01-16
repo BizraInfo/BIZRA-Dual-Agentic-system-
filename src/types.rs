@@ -39,6 +39,9 @@ pub enum ReasoningMethod {
     ReAct,
     Reflexion,
     SovereignApotheosis,
+    /// RLM (Recursive Language Models) for infinite context handling
+    /// Decomposes complex problems into subproblems recursively
+    RecursiveLanguage,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

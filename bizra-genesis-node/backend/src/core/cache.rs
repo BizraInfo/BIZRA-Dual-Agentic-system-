@@ -41,7 +41,6 @@ pub enum CacheError {
 #[derive(Debug, Clone)]
 struct CacheEntry<V> {
     value: V,
-    created_at: Instant,
     accessed_at: Instant,
     expires_at: Option<Instant>,
     access_count: u64,
@@ -53,7 +52,6 @@ impl<V> CacheEntry<V> {
         let now = Instant::now();
         Self {
             value,
-            created_at: now,
             accessed_at: now,
             expires_at: ttl.map(|d| now + d),
             access_count: 1,
@@ -84,7 +82,6 @@ impl<V> CacheEntry<V> {
 
 /// LRU node for doubly-linked list
 struct LruNode<K> {
-    key: K,
     prev: Option<K>,
     next: Option<K>,
 }
@@ -137,7 +134,6 @@ impl<K: Eq + Hash + Clone> LruOrder<K> {
 
     fn push_front(&mut self, key: K) {
         let node = LruNode {
-            key: key.clone(),
             prev: None,
             next: self.head.clone(),
         };

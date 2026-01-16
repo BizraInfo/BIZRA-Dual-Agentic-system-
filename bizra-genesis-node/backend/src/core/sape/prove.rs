@@ -114,11 +114,19 @@ impl Validator {
         let mut notes = vec![];
 
         let spec_lower = spec.to_lowercase();
-        
+
         // Critical Safety Violations (-0.3 each)
         let red_flags = [
-            "harm", "exploit", "bypass security", "toxic", "hate speech",
-            "radicalize", "deceive", "manipulate", "private data", "pii"
+            "harm",
+            "exploit",
+            "bypass security",
+            "toxic",
+            "hate speech",
+            "radicalize",
+            "deceive",
+            "manipulate",
+            "private data",
+            "pii",
         ];
         for flag in red_flags {
             if spec_lower.contains(flag) {
@@ -128,9 +136,7 @@ impl Validator {
         }
 
         // Potential Issues (-0.05 each)
-        let orange_flags = [
-            "bias", "unverified", "low confidence", "subjective"
-        ];
+        let orange_flags = ["bias", "unverified", "low confidence", "subjective"];
         for flag in orange_flags {
             if spec_lower.contains(flag) {
                 score -= 0.05;
@@ -139,7 +145,10 @@ impl Validator {
         }
 
         // Alignment check (Inverses)
-        if spec_lower.contains("justice") || spec_lower.contains("fairness") || spec_lower.contains("adl") {
+        if spec_lower.contains("justice")
+            || spec_lower.contains("fairness")
+            || spec_lower.contains("adl")
+        {
             score += 0.01;
         }
 
@@ -149,7 +158,10 @@ impl Validator {
             passed: score >= threshold,
             notes: {
                 if score < threshold {
-                    notes.push(format!("Ihsan score {:.4} below threshold {}", score, threshold));
+                    notes.push(format!(
+                        "Ihsan score {:.4} below threshold {}",
+                        score, threshold
+                    ));
                 }
                 notes
             },

@@ -1,13 +1,36 @@
 // src/lib.rs - Library entry point
+//
+// SECURITY: FFI safety and panic prevention (Hard Gate #5)
+// These lints warn about unguarded panics that could crash the Python
+// interpreter or cause undefined behavior. Critical paths (receipts,
+// hookchain, SAPE scoring) must use proper error handling.
+//
+// Phase 1: Warning mode for visibility
+// Phase 2: Deny mode after systematic cleanup (tracked in roadmap)
+#![warn(clippy::unwrap_used)]
+#![warn(clippy::expect_used)]
+// Allow in tests where panics are acceptable
+#![cfg_attr(test, allow(clippy::unwrap_used))]
+#![cfg_attr(test, allow(clippy::expect_used))]
 
 pub mod a2a;
+pub mod a2a_external;
 pub mod bizra_integration;
 pub mod bridge;
+pub mod covenant_bridge; // COVENANT: Integration layer for existing systems
 pub mod embodied;
+pub mod engram;
 pub mod errors;
 pub mod evidence;
+pub mod evolution;
+pub mod experience_memory;
 pub mod fate;
 pub mod federation;
+// Apotheosis Node modules
+pub mod identity;
+pub mod kernel;
+pub mod model_fabric;
+pub mod ralph;
 #[cfg(feature = "python")]
 pub mod ffi;
 pub mod fixed;
@@ -22,19 +45,24 @@ pub mod metrics;
 pub mod ollama;
 pub mod pat;
 pub mod pat_enhanced;
+pub mod pipeline;
 pub mod poi;
 pub mod primordial;
 pub mod reasoning;
 pub mod receipts;
-pub mod storage;
 pub mod resonance;
 pub mod sape;
 pub mod sat;
 pub mod snr;
+pub mod snr_monitor; // COVENANT: SNR Autonomous Engine
 pub mod sovereign;
+pub mod storage;
 pub mod synapse;
+pub mod thought; // COVENANT: Canonical Thought Object
+pub mod thought_executor; // COVENANT: 8-Stage Pipeline Executor
 pub mod tpm;
 pub mod types;
+pub mod unified_memory;
 pub mod utils;
 pub mod vectors;
 pub mod wasm;
@@ -42,14 +70,32 @@ pub mod wisdom;
 pub mod zk;
 
 // Re-exports
+pub use engram::{EngramProfile, SovereignEngram, SovereigntyTier};
+pub use evolution::{EvolutionState, SovereignEvolution, TaskDomain};
+pub use unified_memory::{UnifiedMemory, UnifiedMemoryConfig, UnifiedSearchResult};
 pub use fate::FateEngine;
+pub use pipeline::{PipelineContext, PipelineResult, SovereignPipeline};
 pub use hookchain::{
-    CapabilityToken, CapabilityTier, ConsentClass, HookDecision,
-    PostHookResult, SATHookChain, SessionNode, SessionDAG,
+    CapabilityTier, CapabilityToken, ConsentClass, HookDecision, PostHookResult, SATHookChain,
+    SessionDAG, SessionNode,
 };
 pub use resonance::{OptimizationResult, ResonanceMesh, ResonanceStats};
 pub use sape::SAPEEngine;
 pub use wasm::WasmSandbox;
+
+// Apotheosis Node re-exports
+pub use identity::{
+    Covenant, CovenantCheckResult, CovenantDecision, CovenantRule, Goal, GoalPriority, GoalStack,
+    GoalStatus, IdentityAnchor, IdentityOrigin, KalmanState,
+};
+pub use kernel::{EventBus, Kernel, KernelEvent, KernelState, ResourceGovernor, ResourceLimits};
+pub use model_fabric::{
+    AgentId, FabricHealth, HealthStatus, ModelBackend, ModelEndpoint, ModelFabric, ModelResponse,
+};
+pub use ralph::{
+    CircuitBreaker, CircuitState, DualExitGate, ExitCondition, IterationReceipt, QualityMetrics,
+    RalphConfig, RalphExecutor, SovereignRalph, TokenBucket,
+};
 
 /// Sovereign Kernel v7.0 - Core BIZRA Infrastructure
 ///
@@ -227,7 +273,7 @@ impl MetaAlphaDualAgentic {
 
 // Re-export for convenience
 pub use http::create_http_server;
-mod embeddings;
-pub mod omega;
 pub mod cognitive;
+mod embeddings;
 pub mod executor;
+pub mod omega;

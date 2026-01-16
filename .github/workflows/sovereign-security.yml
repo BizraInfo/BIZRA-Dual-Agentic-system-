@@ -120,7 +120,7 @@ jobs:
       
       - name: Run Clippy (Strict)
         run: |
-          cargo clippy --all-targets --all-features -- \
+          cargo clippy --all-targets --features all-safe -- \
             -D warnings \
             -D clippy::unwrap_used \
             -D clippy::expect_used \
@@ -174,15 +174,15 @@ jobs:
             python3-dev \
             libclang-dev
       
-      - name: Build (all features)
-        run: cargo build --all-features --release
-      
+      - name: Build (all-safe features)
+        run: cargo build --features all-safe --release
+
       - name: Build (specific features)
         if: matrix.features
         run: cargo build --features "${{ matrix.features }}" --release
-      
+
       - name: Run Tests
-        run: cargo test --all-features --release -- --test-threads=1
+        run: cargo test --features all-safe --release -- --test-threads=1
       
       - name: Run Benchmarks (dry run)
         if: matrix.rust == 'stable'

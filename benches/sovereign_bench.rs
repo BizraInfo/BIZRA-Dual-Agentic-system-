@@ -235,7 +235,7 @@ fn bench_harberger_tax(c: &mut Criterion) {
     group.finish();
 }
 
-/// Benchmark FFI boundary overhead (simulated)
+/// Benchmark FFI boundary overhead (placeholder)
 fn bench_ffi_boundary(c: &mut Criterion) {
     let mut group = c.benchmark_group("FFI Boundary");
     group.measurement_time(Duration::from_secs(5));

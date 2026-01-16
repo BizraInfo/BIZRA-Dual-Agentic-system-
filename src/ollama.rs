@@ -29,7 +29,8 @@ const DEFAULT_MODEL: &str = "llama3.2";
 /// Request timeout for Ollama API calls
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(120);
 
-/// Maximum tokens for generation
+/// Maximum tokens for generation (reserved for future use)
+#[allow(dead_code)]
 const DEFAULT_MAX_TOKENS: u32 = 2048;
 
 lazy_static! {
@@ -215,7 +216,12 @@ pub enum ApiType {
 
 impl OllamaClient {
     /// Create new client with explicit configuration
-    pub fn new(base_url: String, default_model: String, api_type: ApiType, api_key: Option<String>) -> Self {
+    pub fn new(
+        base_url: String,
+        default_model: String,
+        api_type: ApiType,
+        api_key: Option<String>,
+    ) -> Self {
         let http = Client::builder()
             .timeout(REQUEST_TIMEOUT)
             .build()
@@ -233,9 +239,12 @@ impl OllamaClient {
 
     /// Create client from environment variables
     pub async fn from_env() -> Self {
-        let base_url = std::env::var("OLLAMA_URL").unwrap_or_else(|_| DEFAULT_OLLAMA_URL.to_string());
-        let default_model = std::env::var("OLLAMA_MODEL").unwrap_or_else(|_| DEFAULT_MODEL.to_string());
-        let api_type_str = std::env::var("OLLAMA_API_TYPE").unwrap_or_else(|_| "ollama".to_string());
+        let base_url =
+            std::env::var("OLLAMA_URL").unwrap_or_else(|_| DEFAULT_OLLAMA_URL.to_string());
+        let default_model =
+            std::env::var("OLLAMA_MODEL").unwrap_or_else(|_| DEFAULT_MODEL.to_string());
+        let api_type_str =
+            std::env::var("OLLAMA_API_TYPE").unwrap_or_else(|_| "ollama".to_string());
         let api_key = std::env::var("OLLAMA_API_KEY").ok();
 
         let api_type = match api_type_str.to_lowercase().as_str() {
@@ -248,7 +257,10 @@ impl OllamaClient {
         // Test connection
         match client.health_check().await {
             Ok(_) => {
-                info!("🦙 Local LLM connected at {} ({:?})", base_url, client.api_type);
+                info!(
+                    "🦙 Local LLM connected at {} ({:?})",
+                    base_url, client.api_type
+                );
                 client.connected = true;
                 OLLAMA_CONNECTED.set(1.0);
             }
@@ -304,30 +316,31 @@ impl OllamaClient {
         if !self.api_key.is_empty() {
             req = req.header("Authorization", format!("Bearer {}", self.api_key));
         }
-        
+
         let resp = req.send().await?;
         let data: serde_json::Value = resp.json().await?;
 
         // Logic to parse OpenAI models vs Ollama models...
         // For now, if OpenAI, just return empty or minimal list since we rely on configured model
         if matches!(self.api_type, ApiType::OpenAI) {
-             // Basic parsing of OpenAI /models response
-             let models: Vec<ModelInfo> = data.get("data")
+            // Basic parsing of OpenAI /models response
+            let models: Vec<ModelInfo> = data
+                .get("data")
                 .and_then(|v| v.as_array())
                 .map(|arr| {
-                    arr.iter().map(|m| {
-                         ModelInfo {
-                             name: m["id"].as_str().unwrap_or("unknown").to_string(),
-                             model: m["id"].as_str().unwrap_or("unknown").to_string(),
-                             modified_at: "unknown".to_string(),
-                             size: 0,
-                             digest: "unknown".to_string(),
-                             details: None,
-                         }
-                    }).collect()
+                    arr.iter()
+                        .map(|m| ModelInfo {
+                            name: m["id"].as_str().unwrap_or("unknown").to_string(),
+                            model: m["id"].as_str().unwrap_or("unknown").to_string(),
+                            modified_at: "unknown".to_string(),
+                            size: 0,
+                            digest: "unknown".to_string(),
+                            details: None,
+                        })
+                        .collect()
                 })
                 .unwrap_or_default();
-             return Ok(models);
+            return Ok(models);
         }
 
         let models: Vec<ModelInfo> = data
@@ -364,7 +377,6 @@ impl OllamaClient {
         start: Instant,
     ) -> Result<GenerateResponse, OllamaError> {
         let url = format!("{}/api/generate", self.base_url);
-
 
         let mut body = serde_json::json!({
             "model": model,
@@ -520,7 +532,7 @@ impl OllamaClient {
                 body["stop"] = serde_json::json!(stop);
             }
         }
-        
+
         let resp = self.http.post(&url).json(&body).send().await?;
         let latency = start.elapsed();
 
@@ -578,8 +590,11 @@ impl OllamaClient {
         options: Option<GenerationOptions>,
         start: Instant,
     ) -> Result<ChatResponse, OllamaError> {
-        let url = format!("{}/v1/chat/completions", self.base_url.trim_end_matches("/v1"));
-        
+        let url = format!(
+            "{}/v1/chat/completions",
+            self.base_url.trim_end_matches("/v1")
+        );
+
         let mut body = serde_json::json!({
             "model": model,
             "messages": messages,
@@ -587,9 +602,9 @@ impl OllamaClient {
         });
 
         if let Some(opts) = options {
-             if let Some(t) = opts.temperature {
-                 body["temperature"] = serde_json::json!(t);
-             }
+            if let Some(t) = opts.temperature {
+                body["temperature"] = serde_json::json!(t);
+            }
         }
 
         let mut req = self.http.post(&url);
@@ -599,16 +614,25 @@ impl OllamaClient {
 
         let resp = req.json(&body).send().await?;
         let data: serde_json::Value = resp.json().await?;
-        
-        let content = data["choices"][0]["message"]["content"].as_str().unwrap_or_default();
-        let role = data["choices"][0]["message"]["role"].as_str().unwrap_or("assistant");
+
+        let content = data["choices"][0]["message"]["content"]
+            .as_str()
+            .unwrap_or_default();
+        let role = data["choices"][0]["message"]["role"]
+            .as_str()
+            .unwrap_or("assistant");
 
         let prompt_tokens = data["usage"]["prompt_tokens"].as_u64().map(|u| u as u32);
-        let completion_tokens = data["usage"]["completion_tokens"].as_u64().map(|u| u as u32);
+        let completion_tokens = data["usage"]["completion_tokens"]
+            .as_u64()
+            .map(|u| u as u32);
 
         Ok(ChatResponse {
             model: model.to_string(),
-            message: ChatMessage { role: role.to_string(), content: content.to_string() },
+            message: ChatMessage {
+                role: role.to_string(),
+                content: content.to_string(),
+            },
             done: true,
             total_duration: Some(start.elapsed().as_nanos() as u64),
             load_duration: None,
@@ -616,7 +640,7 @@ impl OllamaClient {
             eval_count: completion_tokens,
         })
     }
-    
+
     // START OF APPENDED generate_openai (moved inside impl)
     async fn generate_openai(
         &self,
@@ -635,18 +659,18 @@ impl OllamaClient {
         });
 
         if let Some(opts) = options {
-             if let Some(t) = opts.temperature {
-                 body["temperature"] = serde_json::json!(t);
-             }
-             if let Some(p) = opts.top_p {
-                 body["top_p"] = serde_json::json!(p);
-             }
-             if let Some(max) = opts.num_predict {
-                 body["max_tokens"] = serde_json::json!(max);
-             }
-             if let Some(stop) = opts.stop {
-                 body["stop"] = serde_json::json!(stop);
-             }
+            if let Some(t) = opts.temperature {
+                body["temperature"] = serde_json::json!(t);
+            }
+            if let Some(p) = opts.top_p {
+                body["top_p"] = serde_json::json!(p);
+            }
+            if let Some(max) = opts.num_predict {
+                body["max_tokens"] = serde_json::json!(max);
+            }
+            if let Some(stop) = opts.stop {
+                body["stop"] = serde_json::json!(stop);
+            }
         }
 
         let mut req = self.http.post(&url);
@@ -657,14 +681,22 @@ impl OllamaClient {
         let resp = req.json(&body).send().await?;
 
         if !resp.status().is_success() {
-             return Err(OllamaError::InvalidResponse(format!("OpenAI Status: {}", resp.status())));
+            return Err(OllamaError::InvalidResponse(format!(
+                "OpenAI Status: {}",
+                resp.status()
+            )));
         }
 
         let data: serde_json::Value = resp.json().await?;
-        
-        let text = data["choices"][0]["text"].as_str().unwrap_or_default().to_string();
+
+        let text = data["choices"][0]["text"]
+            .as_str()
+            .unwrap_or_default()
+            .to_string();
         let prompt_tokens = data["usage"]["prompt_tokens"].as_u64().map(|u| u as u32);
-        let completion_tokens = data["usage"]["completion_tokens"].as_u64().map(|u| u as u32);
+        let completion_tokens = data["usage"]["completion_tokens"]
+            .as_u64()
+            .map(|u| u as u32);
 
         Ok(GenerateResponse {
             model: model.to_string(),
@@ -680,24 +712,6 @@ impl OllamaClient {
         })
     }
 }
-/// Mock Fallback for simulation when Offline
-// This allows the http server to run even if Ollama is down
-pub struct OllamaFallback;
-
-impl OllamaFallback {
-    pub fn simulated_response(prompt: &str) -> SimulatedResponse {
-        SimulatedResponse {
-            response: format!("[SIMULATED] Ollama is not available. Your prompt was: '{}'", prompt),
-            model: "simulated-v1".to_string(),
-        }
-    }
-}
-
-pub struct SimulatedResponse {
-    pub response: String,
-    pub model: String,
-}
-
 impl OllamaClient {
     // Legacy helper wrappers for HTTP layer
     pub async fn bizra_generate(

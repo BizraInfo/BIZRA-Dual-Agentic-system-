@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS knowledge_base (
 -- ============================================
 CREATE TABLE IF NOT EXISTS resource_pool (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    node_id TEXT NOT NULL DEFAULT 'NODE0-TITAN',
+    node_id TEXT NOT NULL UNIQUE DEFAULT 'NODE0-TITAN',
     -- CPU allocation
     cpu_cores_total INTEGER NOT NULL,
     cpu_cores_allocated INTEGER NOT NULL DEFAULT 0,
@@ -465,9 +465,9 @@ VALUES (
 -- ============================================
 -- GRANT PERMISSIONS
 -- ============================================
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO bizra;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO bizra;
-GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO bizra;
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO bizra;
+-- GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO bizra;
+-- GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO bizra;
 -- ============================================
 -- GENESIS SEED DATA (BIZRA.AI LAUNCH)
 -- ============================================
@@ -502,4 +502,4 @@ VALUES (
         'Titan GPU Resource Pool Online',
         TRUE,
         NOW()
-    ) ON CONFLICT DO NOTHING;
+    );

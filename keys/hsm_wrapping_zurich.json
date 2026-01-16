@@ -1,0 +1,7 @@
+{
+  "location": "zurich",
+  "key_type": "ed25519",
+  "public_key": "sim_pub_zurich_2026-01-12T12:06:07.674650",
+  "created": "2026-01-12T12:06:07.674657",
+  "purpose": "ephemeral_wrapping_genesis"
+}

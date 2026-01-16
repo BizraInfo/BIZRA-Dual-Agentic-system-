@@ -1,10 +1,10 @@
 pub mod protocol;
 pub mod sentinel;
 
+use anyhow::Result;
 pub use protocol::*;
 pub use sentinel::*;
 use uuid::Uuid;
-use anyhow::Result;
 
 pub struct FederationManager;
 
@@ -13,10 +13,14 @@ impl FederationManager {
         Self
     }
 
-    pub async fn enroll_node(&self, _node_id: String, tier: TrustTier) -> Result<EnrollmentCertificate> {
+    pub async fn enroll_node(
+        &self,
+        _node_id: String,
+        tier: TrustTier,
+    ) -> Result<EnrollmentCertificate> {
         // In a real implementation, this would involve TPM validation
         let node_uid = Uuid::new_v4();
-        
+
         let cert = EnrollmentCertificate {
             node_uid,
             trust_tier: tier,
@@ -50,7 +54,10 @@ mod tests {
     #[tokio::test]
     async fn test_enroll_node_tier_assignment() {
         let manager = FederationManager::new();
-        let cert = manager.enroll_node("test_node".to_string(), TrustTier::Gold).await.unwrap();
+        let cert = manager
+            .enroll_node("test_node".to_string(), TrustTier::Gold)
+            .await
+            .unwrap();
         assert_eq!(cert.trust_tier, TrustTier::Gold);
         assert!(cert.permissions.contains(&"fs.read".to_string()));
     }
@@ -58,14 +65,17 @@ mod tests {
     #[tokio::test]
     async fn test_enrollment_signature_not_empty() {
         let manager = FederationManager::new();
-        let cert = manager.enroll_node("test_node".to_string(), TrustTier::Bronze).await.unwrap();
+        let cert = manager
+            .enroll_node("test_node".to_string(), TrustTier::Bronze)
+            .await
+            .unwrap();
         assert!(!cert.signature.is_empty());
     }
 
     #[tokio::test]
     async fn test_secure_enroll_tpm_elevation() {
         let manager = FederationManager::new();
-        
+
         // Request without TPM -> Bronze
         let req_low = EnrollmentRequest {
             node_id: "node_low".to_string(),

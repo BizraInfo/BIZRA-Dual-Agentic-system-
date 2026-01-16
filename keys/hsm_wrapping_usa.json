@@ -1,0 +1,7 @@
+{
+  "location": "usa",
+  "key_type": "ed25519",
+  "public_key": "sim_pub_usa_2026-01-12T12:06:07.674900",
+  "created": "2026-01-12T12:06:07.674903",
+  "purpose": "ephemeral_wrapping_genesis"
+}

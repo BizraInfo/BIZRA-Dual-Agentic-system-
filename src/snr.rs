@@ -102,9 +102,19 @@ impl SNREngine {
 
         // 3. INTERDISCIPLINARY DENSITY: Measuring cross-domain connections
         let domain_markers = [
-            "thermodynamics", "topology", "axiomatic", "jurisprudence", 
-            "economic", "sociological", "biological", "quantum", "formal",
-            "metaphysical", "cybernetic", "homeostasis", "entropy"
+            "thermodynamics",
+            "topology",
+            "axiomatic",
+            "jurisprudence",
+            "economic",
+            "sociological",
+            "biological",
+            "quantum",
+            "formal",
+            "metaphysical",
+            "cybernetic",
+            "homeostasis",
+            "entropy",
         ];
         let mut domain_diversity = 0;
         for marker in &domain_markers {
@@ -112,8 +122,9 @@ impl SNREngine {
                 domain_diversity += 1;
             }
         }
-        let interdisciplinary_signal = Fixed64::from_i64(domain_diversity as i64) * Fixed64::from_i64(15);
-        
+        let interdisciplinary_signal =
+            Fixed64::from_i64(domain_diversity as i64) * Fixed64::from_i64(15);
+
         // 4. AUTONOMOUS REPAIR BONUS: Rewarding successful Ralph Wiggum loops
         let repair_bonus = if text.contains("<promise>fixed</promise>") {
             Fixed64::from_i64(50)
@@ -124,11 +135,13 @@ impl SNREngine {
         let entropy = Self::calculate_shannon_entropy(&text);
         let information_signal = entropy * Fixed64::from_i64(30);
 
-        let final_signal = total_signal + interdisciplinary_signal + repair_bonus + information_signal;
+        let final_signal =
+            total_signal + interdisciplinary_signal + repair_bonus + information_signal;
 
         // Advanced Noise Detection: Repetition penalty (e.g., same word used > 10% of text)
         let repetition_penalty = Self::calculate_repetition_penalty(&text);
-        let final_noise = Fixed64::from_i64(fluff_hits as i64) + repetition_penalty + Fixed64::from_i64(1); // avoid div zero
+        let final_noise =
+            Fixed64::from_i64(fluff_hits as i64) + repetition_penalty + Fixed64::from_i64(1); // avoid div zero
 
         let ratio = final_signal / final_noise;
 
@@ -142,8 +155,10 @@ impl SNREngine {
 
     fn calculate_repetition_penalty(text: &str) -> Fixed64 {
         let words: Vec<&str> = text.split_whitespace().collect();
-        if words.is_empty() { return Fixed64::ZERO; }
-        
+        if words.is_empty() {
+            return Fixed64::ZERO;
+        }
+
         let mut counts = std::collections::HashMap::new();
         for word in &words {
             *counts.entry(word).or_insert(0) += 1;
@@ -151,7 +166,9 @@ impl SNREngine {
 
         let mut max_count = 0;
         for count in counts.values() {
-            if *count > max_count { max_count = *count; }
+            if *count > max_count {
+                max_count = *count;
+            }
         }
 
         // Penalty if any word > 15% of the text

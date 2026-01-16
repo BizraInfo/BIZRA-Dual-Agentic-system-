@@ -1,7 +1,0 @@
-nohup: ignoring input
-warning: profiles for the non root package will be ignored, specify profiles at the workspace root:
-package:   /root/bizra-genesis/bizra-genesis-node/backend/Cargo.toml
-workspace: /root/bizra-genesis/Cargo.toml
-error: no bin target named `apiserver` in default-run packages
-help: available bin in `bizra-node0` package:
-    apiserver

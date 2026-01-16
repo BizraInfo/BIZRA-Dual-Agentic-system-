@@ -20,6 +20,15 @@ from enum import Enum
 from .ihsan_vector import IhsanVector
 
 
+def canonical_bytes(obj) -> bytes:
+    return json.dumps(
+        obj,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+
+
 class SessionState(Enum):
     """Session lifecycle states."""
     PENDING = "pending"
@@ -90,8 +99,21 @@ class Session:
             "snr_target": 0.90,
             "fate_circuit_breaker_ms": 100,
         }
-        canonical = json.dumps(config, sort_keys=True)
-        return hashlib.sha256(canonical.encode()).hexdigest()
+        return hashlib.sha256(canonical_bytes(config)).hexdigest()
+
+    def to_poi_receipt(self) -> str:
+        # 1. Construct the Full Fact
+        payload = {
+            "type": "session_receipt", 
+            "timestamp_utc": self.created_at, 
+            "session_id": self.session_id,
+            "protocol_hash": self.protocol_hash,
+            "protocol_version": self.protocol_version,
+            "agent_id": self.primary_agent
+        }
+
+        # 3. The Immutable Seal (Full SHA-256)
+        return hashlib.sha256(canonical_bytes(payload)).hexdigest()
     
     def start(self, agent: str, message: str) -> "Session":
         """Start the session."""
@@ -179,6 +201,17 @@ class Session:
     
     def to_poi_receipt(self) -> dict:
         """Generate PoI receipt for Layer 1 BlockGraph."""
+        # Fix: Hash FULL event objects, no truncation
+        events_data = [
+            {
+                "type": e.event_type,
+                "ts": e.timestamp,
+                "data": e.data,
+                "ihsan": e.ihsan_score
+            }
+            for e in self.events
+        ]
+        
         return {
             "receipt_type": "session_completion",
             "session_id": self.session_id,
@@ -187,9 +220,7 @@ class Session:
             "snr_score": self.snr_score,
             "agent": self.primary_agent,
             "timestamp": self.updated_at,
-            "events_hash": hashlib.sha256(
-                json.dumps([e.event_type for e in self.events]).encode()
-            ).hexdigest()[:16],
+            "events_hash": hashlib.sha256(canonical_bytes(events_data)).hexdigest(),
         }
 
 

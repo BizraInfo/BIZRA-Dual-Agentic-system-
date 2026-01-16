@@ -13,22 +13,8 @@ from pathlib import Path
 from typing import Dict, List, Optional
 try:
     import numpy as np
-except ImportError:
-    # Minimal mock for numpy if missing
-    class np_mock:
-        def seed(self, s): pass
-        class random_mock:
-            def randn(self, *args):
-                class ArrayMock:
-                    def __init__(self, data): self.data = data
-                    def tolist(self): return self.data
-                    def __iter__(self): return iter(self.data)
-                    def __len__(self): return len(self.data)
-                return ArrayMock([0.1] * args[0])
-            def seed(self, s): pass
-        random = random_mock()
-        __version__ = "mock"
-    np = np_mock()
+except ImportError as exc:
+    raise RuntimeError("numpy is required for production execution") from exc
 import hashlib
 import os
 import random
@@ -39,34 +25,15 @@ import subprocess
 try:
     from bizra_ffi import BizraFfiBridge, ResonanceMesh
     print("\n✅ [PRODUCTION MODE] Rust FFI Bridge Layer Activated\n")
-except ImportError:
-    # Fallback to mock for CI/CD demonstration if not compiled
-    print("\n⚠️ [MOCK MODE] bizra_ffi not found. Using simulation mocks.\n")
-    class BizraFfiBridge:
-        def __init__(self, **kwargs): pass
-        async def verify_with_fate(self, data): return {"is_valid": True, "ihsan_score": 0.98}
-        async def execute_wasm(self, data): return {"content": "Sovereign thought synthesized", "ihsan_score": 0.99, "confidence": 0.97, "embedding": [0.1]*768}
-    
-    class ResonanceMesh:
-        def __init__(self, **kwargs): pass
-        async def add_node(self, **kwargs): return "node_alpha"
-        async def add_edge(self, **kwargs): return True
-        async def optimize_resonance(self): 
-            return type('OptimizationResult', (), {
-                'pruned_nodes': 5, 'amplified_nodes': 2, 'mesh_size': 100, 
-                'average_snr': 0.92, 'new_pruning_threshold': 0.3
-            })
-        async def get_stats(self):
-            return {"total_nodes": 100, "average_snr": 0.92, "high_resonance_nodes": 45, "mesh_connectivity": 0.15}
+except ImportError as exc:
+    raise RuntimeError("bizra_ffi extension is required for production execution") from exc
 
 try:
     from scaling_orchestrator import SovereignScalingOrchestrator
     from wasm_sandbox import WasmSandbox
     from tpm_attestation import RealTPMAttestation
-except ImportError:
-    class SovereignScalingOrchestrator: pass
-    class WasmSandbox: pass
-    class RealTPMAttestation: pass
+except ImportError as exc:
+    raise RuntimeError("Required production modules are missing") from exc
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("BIZRAv7")

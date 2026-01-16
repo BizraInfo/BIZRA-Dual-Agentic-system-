@@ -1,4 +1,5 @@
-use serde::Deserialize;
+use crate::fixed::Fixed64;
+use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fs, sync::OnceLock};
 
@@ -9,9 +10,11 @@ const SEALED_GENESIS_HASH: &str =
 
 // BIZRA CORE CONSTANTS (Single Source of Truth)
 // Used by genesis_activation.sh to verify FFI alignment
-pub const WEIGHT_TRUTH: f64 = 0.4;
-pub const WEIGHT_LOGIC: f64 = 0.3;
-pub const WEIGHT_INTENT: f64 = 0.3;
+// HARD GATE #1 FIX: Converted to Fixed64 for deterministic cross-platform consensus
+// Q32.32 format: 0.4 = 0x6666_6666, 0.3 = 0x4CCC_CCCD
+pub const WEIGHT_TRUTH: Fixed64 = Fixed64::from_bits(0x0000_0000_6666_6666);  // 0.4
+pub const WEIGHT_LOGIC: Fixed64 = Fixed64::from_bits(0x0000_0000_4CCC_CCCD);  // 0.3
+pub const WEIGHT_INTENT: Fixed64 = Fixed64::from_bits(0x0000_0000_4CCC_CCCD); // 0.3
 
 #[derive(Debug, Deserialize)]
 struct IhsanConstitutionFile {
@@ -377,7 +380,19 @@ fn load_constitution_from_disk() -> anyhow::Result<IhsanConstitution> {
 pub fn constitution() -> &'static IhsanConstitution {
     static ONCE: OnceLock<IhsanConstitution> = OnceLock::new();
     ONCE.get_or_init(|| {
-        load_constitution_from_disk().expect("ihsan constitution must be valid and sealed")
+        // HARD GATE #2 FIX: Fail-fast with clear error message instead of expect()
+        // Constitution loading failure is fatal (fail-closed security policy)
+        // but we provide detailed diagnostics before termination
+        load_constitution_from_disk().unwrap_or_else(|e| {
+            eprintln!("❌ FATAL: Failed to load Ihsān constitution");
+            eprintln!("   Error: {}", e);
+            eprintln!("   Path: {}", IHSAN_CONSTITUTION_PATH);
+            eprintln!("   Genesis Manifest: {}", GENESIS_MANIFEST_PATH);
+            eprintln!("   Sealed Hash: {}", SEALED_GENESIS_HASH);
+            eprintln!("\nThis is a fail-closed security boundary.");
+            eprintln!("Constitution tampering or corruption is not permitted.");
+            std::process::exit(1);
+        })
     })
 }
 
@@ -445,6 +460,45 @@ pub fn should_enforce() -> bool {
     matches!(canonical.as_str(), "ci" | "production")
 }
 
+/// IhsanDimensions: 8-dimensional quality metrics with Islamic naming
+/// Maps to IhsanScore fields in thought.rs
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IhsanDimensions {
+    pub adl: Fixed64,       // Justice (correctness)
+    pub amanah: Fixed64,    // Trust (safety)
+    pub ihsan: Fixed64,     // Excellence (user_benefit)
+    pub hikmah: Fixed64,    // Wisdom (efficiency)
+    pub bayan: Fixed64,     // Clarity (auditability)
+    pub tawhid: Fixed64,    // Unity (anti_centralization)
+    pub sabr: Fixed64,      // Patience (robustness)
+    pub mizan: Fixed64,     // Balance (fairness)
+}
+
+impl IhsanDimensions {
+    /// Compute weighted total using constitutional weights
+    pub fn compute_total(&self, constitution: &IhsanConstitution) -> Fixed64 {
+        let weights = constitution.weights();
+
+        let mut sum = Fixed64::ZERO;
+        for (dim, weight) in weights.iter() {
+            let value = match dim.as_str() {
+                "correctness" => self.adl,
+                "safety" => self.amanah,
+                "user_benefit" => self.ihsan,
+                "efficiency" => self.hikmah,
+                "auditability" => self.bayan,
+                "anti_centralization" => self.tawhid,
+                "robustness" => self.sabr,
+                "adl_fairness" => self.mizan,
+                _ => Fixed64::ZERO,
+            };
+            sum = sum + Fixed64::from_f64(*weight) * value;
+        }
+
+        sum
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -467,7 +521,7 @@ mod tests {
         scores.insert("robustness".to_string(), 0.9);
         scores.insert("adl_fairness".to_string(), 0.8);
 
-        let actual = score(&scores).unwrap();
+        let actual = score(&scores).expect("Score calculation should succeed with valid inputs");
         let expected = 0.20 * 1.0
             + 0.20 * 1.0
             + 0.10 * 0.5

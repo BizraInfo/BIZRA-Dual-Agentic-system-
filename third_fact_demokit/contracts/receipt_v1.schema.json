@@ -12,6 +12,11 @@
     "metadata"
   ],
   "properties": {
+    "prev_hash": {
+       "type": "string",
+       "pattern": "^rec_[A-Za-z0-9_-]{43}$",
+       "description": "Receipt ID of the immediately preceding event (or genesis zeros)"
+    },
     "@context": {
       "type": "string",
       "const": "https://bizra.ai/contexts/receipt/v1"

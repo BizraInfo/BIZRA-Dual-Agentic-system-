@@ -1,0 +1,9 @@
+{
+  "type": "hsm_signing_ceremony",
+  "threshold_met": true,
+  "signatures": {
+    "dubai": "sig_dubai_simulated",
+    "zurich": "sig_zurich_simulated",
+    "singapore": "sig_singapore_simulated"
+  }
+}

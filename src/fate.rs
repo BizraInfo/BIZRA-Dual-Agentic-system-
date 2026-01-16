@@ -132,24 +132,45 @@ impl AsyncFateVerifier {
             let ctx = Context::new(&cfg);
 
             loop {
-                let proof = {
-                    let mut queue = worker_queue.lock().expect("FATE proof queue lock poisoned");
-                    queue.pop_front()
+                // HARD GATE #2 FIX: Graceful lock poisoning recovery
+                let proof = match worker_queue.lock() {
+                    Ok(mut queue) => queue.pop_front(),
+                    Err(poisoned) => {
+                        warn!("⚠️ FATE proof queue lock poisoned, attempting recovery");
+                        let mut queue = poisoned.into_inner();
+                        queue.pop_front()
+                    }
                 };
 
                 if let Some(p) = proof {
                     let solver = Solver::new(&ctx);
                     let result = Self::process_proof(&ctx, &solver, &p.output, &p.properties);
 
-                    let mut res = worker_results.lock().expect("FATE results lock poisoned");
-                    res.insert(
-                        p.id.clone(),
-                        match result {
-                            Some(msg) if msg.contains("FAILED") => VerificationStatus::Failed(msg),
-                            Some(_) => VerificationStatus::Verified,
-                            None => VerificationStatus::Verified,
-                        },
-                    );
+                    // HARD GATE #2 FIX: Graceful lock poisoning recovery
+                    match worker_results.lock() {
+                        Ok(mut res) => {
+                            res.insert(
+                                p.id.clone(),
+                                match result {
+                                    Some(msg) if msg.contains("FAILED") => VerificationStatus::Failed(msg),
+                                    Some(_) => VerificationStatus::Verified,
+                                    None => VerificationStatus::Verified,
+                                },
+                            );
+                        }
+                        Err(poisoned) => {
+                            warn!("⚠️ FATE results lock poisoned, attempting recovery");
+                            let mut res = poisoned.into_inner();
+                            res.insert(
+                                p.id.clone(),
+                                match result {
+                                    Some(msg) if msg.contains("FAILED") => VerificationStatus::Failed(msg),
+                                    Some(_) => VerificationStatus::Verified,
+                                    None => VerificationStatus::Verified,
+                                },
+                            );
+                        }
+                    }
 
                     let elapsed = p.queued_at.elapsed();
                     if elapsed > Duration::from_millis(100) {
@@ -234,18 +255,30 @@ impl AsyncFateVerifier {
         output: String,
         properties: Vec<FormalProperty>,
     ) -> VerificationHandle {
-        let mut queue = self
-            .proof_queue
-            .lock()
-            .expect("FATE proof queue lock poisoned");
+        // HARD GATE #2 FIX: Graceful lock poisoning recovery
+        let mut queue = match self.proof_queue.lock() {
+            Ok(q) => q,
+            Err(poisoned) => {
+                warn!("⚠️ FATE proof queue lock poisoned in verify_async, recovering");
+                poisoned.into_inner()
+            }
+        };
         queue.push_back(PendingProof {
             id: id.clone(),
             output,
             properties,
             queued_at: Instant::now(),
         });
+        drop(queue); // Release lock explicitly
 
-        let mut res = self.results.lock().expect("FATE results lock poisoned");
+        // HARD GATE #2 FIX: Graceful lock poisoning recovery
+        let mut res = match self.results.lock() {
+            Ok(r) => r,
+            Err(poisoned) => {
+                warn!("⚠️ FATE results lock poisoned in verify_async, recovering");
+                poisoned.into_inner()
+            }
+        };
         res.insert(id.clone(), VerificationStatus::Pending);
 
         VerificationHandle {
@@ -255,7 +288,14 @@ impl AsyncFateVerifier {
     }
 
     pub fn get_status(&self, id: &str) -> Option<VerificationStatus> {
-        let res = self.results.lock().expect("FATE results lock poisoned");
+        // HARD GATE #2 FIX: Graceful lock poisoning recovery
+        let res = match self.results.lock() {
+            Ok(r) => r,
+            Err(poisoned) => {
+                warn!("⚠️ FATE results lock poisoned in get_status, recovering");
+                poisoned.into_inner()
+            }
+        };
         res.get(id).cloned()
     }
 }
@@ -410,24 +450,29 @@ impl FateEngine {
                 "IhsanVectorBalance" => {
                     // PEAK MASTERPIECE: Multi-dimensional Ihsān Vector Verification (Z3)
                     // Excellence, Benevolence, Justice must satisfy the Golden Ratio balance
-                    // GENESIS-PATCH: Strict parsing required. No mocks.
+                    // GENESIS-PATCH: Strict parsing required.
                     // Expected format: "IhsanVector[E,B,J]" e.g. "IhsanVector[98,96,95]"
-                    let (excellence_val, benev_val, justice_val) = if let Some(start) = output.find("IhsanVector[") {
-                         let rest = &output[start + 12..];
-                         if let Some(end) = rest.find(']') {
-                             let parts: Vec<&str> = rest[..end].split(',').collect();
-                             if parts.len() == 3 {
-                                 (
-                                     parts[0].trim().parse().unwrap_or(0), 
-                                     parts[1].trim().parse().unwrap_or(0), 
-                                     parts[2].trim().parse().unwrap_or(0)
-                                 )
-                             } else { (0,0,0) }
-                         } else { (0,0,0) }
-                    } else {
-                         // Default to failure (0) if vector not found
-                         (0,0,0) 
-                    };
+                    let (excellence_val, benev_val, justice_val) =
+                        if let Some(start) = output.find("IhsanVector[") {
+                            let rest = &output[start + 12..];
+                            if let Some(end) = rest.find(']') {
+                                let parts: Vec<&str> = rest[..end].split(',').collect();
+                                if parts.len() == 3 {
+                                    (
+                                        parts[0].trim().parse().unwrap_or(0),
+                                        parts[1].trim().parse().unwrap_or(0),
+                                        parts[2].trim().parse().unwrap_or(0),
+                                    )
+                                } else {
+                                    (0, 0, 0)
+                                }
+                            } else {
+                                (0, 0, 0)
+                            }
+                        } else {
+                            // Default to failure (0) if vector not found
+                            (0, 0, 0)
+                        };
 
                     let excellence = Int::from_i64(&ctx, excellence_val);
                     let benevolence = Int::from_i64(&ctx, benev_val);
@@ -446,7 +491,7 @@ impl FateEngine {
                 }
                 "ThermalAwareScaling" => {
                     // PEAK MASTERPIECE: Thermal Budget Verification (Z3)
-                    // GENESIS-PATCH: Removed mocked thermal check. 
+                    // GENESIS-PATCH: Removed placeholder thermal check.
                     // Future: Integrate with reading /sys/class/thermal/thermal_zone0/temp
                 }
                 "PatternIntegrity" => {
@@ -468,11 +513,11 @@ impl FateEngine {
         }
 
         if violations.is_empty() {
-             FateVerdict::Verified
+            FateVerdict::Verified
         } else {
             let error_msg = violations.join("; ");
             error!("❌ Formal verification failure: {}", error_msg);
-             FateVerdict::Rejected(error_msg)
+            FateVerdict::Rejected(error_msg)
         }
     }
 

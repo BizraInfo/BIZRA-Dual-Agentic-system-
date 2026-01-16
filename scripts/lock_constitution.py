@@ -29,32 +29,23 @@ def calculate_constitution_hash():
 
 def generate_hsm_wrapping_keys():
     """Generate ephemeral session keys for HSM communication"""
-    # This would actually use YubiHSM's yubihsm-connector
-    # For simulation, generate Ed25519 keypairs
-    print("🔐 Generating HSM wrapping keys...")
-    
-    keys = {}
-    for location in ["dubai", "zurich", "singapore", "usa", "elsalvador"]:
-        # In production: yubihsm-shell -a generate-asymmetric-key
-        # For simulation:
-        key_path = f"keys/hsm_wrapping_{location}.json"
-        os.makedirs("keys", exist_ok=True)
-        
-        key_data = {
-            "location": location,
-            "key_type": "ed25519",
-            "public_key": f"sim_pub_{location}_{datetime.utcnow().isoformat()}",
-            "created": datetime.utcnow().isoformat(),
-            "purpose": "ephemeral_wrapping_genesis"
-        }
-        
-        with open(key_path, 'w') as f:
-            json.dump(key_data, f, indent=2)
-        
-        keys[location] = key_data["public_key"]
-        print(f"  ✅ {location}: Wrapping key generated")
-    
-    return keys
+    print("🔐 Loading HSM wrapping keys...")
+    keys_path = os.getenv("BIZRA_HSM_KEYS_PATH")
+    if not keys_path:
+        raise RuntimeError("BIZRA_HSM_KEYS_PATH is required for HSM key material")
+
+    with open(keys_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if not isinstance(data, dict) or not data:
+        raise RuntimeError("HSM wrapping keys file must be a non-empty JSON object")
+
+    for location, pub_key in data.items():
+        if not isinstance(location, str) or not isinstance(pub_key, str) or not pub_key.strip():
+            raise RuntimeError("HSM wrapping keys must be a mapping of location -> public key")
+
+    print(f"  ✅ Loaded {len(data)} HSM wrapping keys")
+    return data
 
 def capture_tpm_state():
     """Capture current TPM PCR values for baseline"""
@@ -73,8 +64,7 @@ def capture_tpm_state():
             print(f"📊 TPM PCR baseline captured: {pcr_hash[:16]}...")
             return pcr_hash
     except Exception as e:
-        print(f"⚠️  TPM not available: {e}")
-        return "simulated_tpm_baseline"
+        raise RuntimeError(f"TPM baseline capture failed: {e}") from e
 
 def create_genesis_manifest():
     """Create the immutable genesis manifest"""
@@ -105,6 +95,7 @@ def create_genesis_manifest():
         }
     }
     
+    os.makedirs("receipts", exist_ok=True)
     with open("genesis-manifest.json", "w") as f:
         json.dump(manifest, f, indent=2)
     

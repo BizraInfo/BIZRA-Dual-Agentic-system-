@@ -328,12 +328,10 @@ class GenesisOrchestrator:
         # Determine final status
         if self.snr.compute_score() >= 0.95 and self.ffi_status == "ACTIVE":
             self.seal_status = "SEALED"
-        elif self.snr.compute_score() >= 0.8:
+        elif self.snr.compute_score() >= 0.8 and self.ffi_status == "ACTIVE":
             self.seal_status = "PRODUCTION"
-        elif self.ffi_status in ["ACTIVE", "SIMULATED"]:
-            self.seal_status = "SIMULATED"
         else:
-            self.seal_status = "PENDING"
+            self.seal_status = "FAILED"
         
         seal["status"] = self.seal_status
         
@@ -352,7 +350,7 @@ class GenesisOrchestrator:
         elif self.seal_status == "PRODUCTION":
             print("✅ PRODUCTION READY")
         else:
-            print("⚠️  DEVELOPMENT MODE - Run full build for production seal")
+            print("❌ SEAL FAILED - Production prerequisites not met")
         
         print("=" * 70)
         
@@ -501,14 +499,14 @@ class GenesisOrchestrator:
             ))
             
         except ImportError as e:
-            self.ffi_status = "SIMULATED"
+            self.ffi_status = "FAILED"
             
             # Update evidence graph
             for node in self.graph.nodes:
                 if node.id == "ffi":
-                    node.status = "simulated"
+                    node.status = "failed"
                 elif node.id == "probe":
-                    node.status = "simulated"
+                    node.status = "failed"
             
             # Add SNR check
             self.snr.add_check(SNRCheck(

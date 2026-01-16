@@ -1,0 +1,7 @@
+{
+  "location": "elsalvador",
+  "key_type": "ed25519",
+  "public_key": "sim_pub_elsalvador_2026-01-12T12:06:07.674998",
+  "created": "2026-01-12T12:06:07.675001",
+  "purpose": "ephemeral_wrapping_genesis"
+}

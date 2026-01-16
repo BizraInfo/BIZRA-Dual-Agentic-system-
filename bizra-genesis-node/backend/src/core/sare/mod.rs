@@ -4,17 +4,17 @@ use self::graph::{ReasoningGraph, ThoughtStatus};
 use crate::core::sape::{InternalAgentAttestation, Validator as SapeValidator};
 use crate::AppState;
 use std::sync::Arc;
-use tracing::{debug, info, warn};
+use tracing::{info, warn};
 
 pub struct SareEngine {
-    state: Arc<AppState>,
+    _state: Arc<AppState>,
     validator: SapeValidator,
 }
 
 impl SareEngine {
     pub fn new(state: Arc<AppState>) -> Self {
         Self {
-            state,
+            _state: state,
             validator: SapeValidator,
         }
     }

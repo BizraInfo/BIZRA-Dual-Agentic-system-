@@ -12,18 +12,21 @@ chmod +x scripts/evaluate_commit.sh scripts/commit_to_thought.sh scripts/generat
 
 # 1. Governor signs the internal eval constitution
 echo "🔑 Governor signing internal eval constitution..."
-# Simulating TPM sign
-sha256sum internal_eval_constitution.yaml > internal_eval.sig
+if [ -z "${BIZRA_GOVERNOR_SIGN_CMD:-}" ]; then
+  echo "ERROR: BIZRA_GOVERNOR_SIGN_CMD must sign internal_eval_constitution.yaml"
+  exit 1
+fi
+bash -c "${BIZRA_GOVERNOR_SIGN_CMD} internal_eval_constitution.yaml" > internal_eval.sig
 echo "✅ Constitution signed. All commits must obey."
 
-# 2. Initialize internal ReceiptStore (Redis if available, else skip/mock)
-if command -v redis-cli &> /dev/null; then
-    echo "💾 Initializing internal ReceiptStore..."
-    # redis-cli SET internal_eval:head "genesis" NX || true
-    echo "✅ Internal chain initialized (Redis)."
-else
-    echo "⚠️ Redis not found, using local file store for receipts."
+# 2. Initialize internal ReceiptStore (Redis required)
+if ! command -v redis-cli &> /dev/null; then
+    echo "ERROR: redis-cli is required for internal ReceiptStore"
+    exit 1
 fi
+echo "💾 Initializing internal ReceiptStore..."
+redis-cli SET internal_eval:head "genesis" NX || true
+echo "✅ Internal chain initialized (Redis)."
 
 # 3. Install pre-commit hook (auto-evaluates every commit)
 echo "⚙️ Installing pre-commit hook..."
@@ -49,8 +52,12 @@ echo "✅ Baseline established."
 
 # 5. Schedule hourly self-evaluation (cron)
 echo "⏰ Scheduling hourly self-evaluation..."
-# (crontab -l 2>/dev/null; echo "0 * * * * cd $(pwd) && ./scripts/generate_internal_dashboard.sh") | crontab -
-echo "✅ Hourly self-evaluation scheduled (Simulated)."
+if ! command -v crontab &> /dev/null; then
+  echo "ERROR: crontab is required to schedule hourly evaluation"
+  exit 1
+fi
+(crontab -l 2>/dev/null; echo "0 * * * * cd $(pwd) && ./scripts/generate_internal_dashboard.sh") | crontab -
+echo "✅ Hourly self-evaluation scheduled."
 
 # 6. Publish internal dashboard (Merkle root)
 echo "📡 Publishing internal dashboard (Merkle root)..."

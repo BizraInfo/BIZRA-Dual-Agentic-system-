@@ -1,7 +1,15 @@
 use anyhow::Result;
 
 const THREAT_TERMS: &[&str] = &[
-    "malicious", "hack", "cyber", "attack", "breach", "exploit", "intrusion", "phish", "threat",
+    "malicious",
+    "hack",
+    "cyber",
+    "attack",
+    "breach",
+    "exploit",
+    "intrusion",
+    "phish",
+    "threat",
 ];
 const SAFE_TERMS: &[&str] = &[
     "baking", "cookies", "cooking", "recipe", "garden", "travel", "sunshine", "art", "craft",
@@ -51,10 +59,7 @@ impl EmbeddingEngine {
 }
 
 fn score_terms(text: &str, terms: &[&str]) -> f32 {
-    terms
-        .iter()
-        .filter(|term| text.contains(*term))
-        .count() as f32
+    terms.iter().filter(|term| text.contains(*term)).count() as f32
 }
 
 #[cfg(test)]

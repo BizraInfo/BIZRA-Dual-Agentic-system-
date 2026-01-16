@@ -1,69 +1,88 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
-source scripts/demo_functions.sh
 
-TYPE=""
-METADATA="{}"
-EVIDENCE_DIR=""
-SIGN=1
-SIGNER_ID="${SIGNER_ID:-demo_hsm_slot_0}"
-KEY_PATH="${KEY_PATH:-keys/demo_private_key.pem}"
+# emit_receipt.sh - Generate a BIZRA Canonical Receipt (JCS)
+# Usage: ./emit_receipt.sh <TYPE> <PAYLOAD_JSON_FILE> <KEY_FILE>
 
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --type) TYPE="$2"; shift 2;;
-    --metadata) METADATA="$2"; shift 2;;
-    --evidence-dir) EVIDENCE_DIR="$2"; shift 2;;
-    --no-sign) SIGN=0; shift 1;;
-    --signer) SIGNER_ID="$2"; shift 2;;
-    --key) KEY_PATH="$2"; shift 2;;
-    *) shift 1;;
-  esac
-done
+TYPE=${1:-"generic_event"}
+PAYLOAD_FILE=${2:-""}
+KEY_FILE=${3:-"keys/demo.key"}
+PREV_HASH=${4:-""}
 
-timestamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-evidence_hash="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" # Empty sha256
-
-if [[ -n "$EVIDENCE_DIR" ]]; then
-    evidence_hash="$(verifier/bizra-verify-receipt hash-evidence --dir "$EVIDENCE_DIR" --write-manifest)"
+# If absolute paths not provided, assume relative to P0 root
+if [[ ! -f "$KEY_FILE" ]] && [[ -f "third_fact_demokit/$KEY_FILE" ]]; then
+    KEY_FILE="third_fact_demokit/$KEY_FILE"
 fi
 
-prev="$(last_receipt_id)"
-metadata_with_chain="$(python3 -c "import json,sys; m=json.loads(sys.argv[1]); prev=sys.argv[2]; m['prev_receipt']=prev if prev and 'prev_receipt' not in m else m.get('prev_receipt'); print(json.dumps(m))" "$METADATA" "$prev")"
-
-tmp_payload="receipts/tmp_payload.json"
-cat > "$tmp_payload" <<EOF
-{
-  "@context": "https://bizra.ai/contexts/receipt/v1",
-  "type": "$TYPE",
-  "timestamp": "$timestamp",
-  "evidence_hash": "$evidence_hash",
-  "metadata": $metadata_with_chain
-}
-EOF
-
-rid="$(verifier/bizra-verify-receipt payload-id --file "$tmp_payload")"
-rm -f "$tmp_payload"
-
-receipt_path="receipts/${rid}.json"
-cat > "$receipt_path" <<EOF
-{
-  "@context": "https://bizra.ai/contexts/receipt/v1",
-  "receipt_id": "$rid",
-  "type": "$TYPE",
-  "timestamp": "$timestamp",
-  "evidence_hash": "$evidence_hash",
-  "signatures": [],
-  "metadata": $metadata_with_chain
-}
-EOF
-
-if [[ "$SIGN" == "1" && -f "$KEY_PATH" ]]; then
-    verifier/bizra-verify-receipt sign --file "$receipt_path" --key "$KEY_PATH" --signer "$SIGNER_ID" >/dev/null
+if [[ -z "$PAYLOAD_FILE" ]]; then
+  echo "Usage: $0 <TYPE> <PAYLOAD_FILE> [KEY_FILE]"
+  exit 1
 fi
 
-# Generate canonical form for verification ease
-verifier/bizra-verify-receipt canonicalize --file "$receipt_path" > "receipts/${rid}.canonical.json"
+if [[ ! -f "$PAYLOAD_FILE" ]]; then
+  echo "Error: Payload file not found: $PAYLOAD_FILE"
+  exit 1
+fi
 
-update_chain "$rid"
-echo "$rid"
+if [[ -f "target/release/bizra-verify-receipt" ]]; then
+    VERIFIER_BIN="target/release/bizra-verify-receipt"
+else
+    # Fallback to local build if running standalone
+    if [[ -d "third_fact_demokit/verifier" ]]; then
+       (cd third_fact_demokit/verifier && cargo build --release --quiet)
+       # Determine where cargo put it. If workspace, it's in root target.
+       if [[ -f "target/release/bizra-verify-receipt" ]]; then
+          VERIFIER_BIN="target/release/bizra-verify-receipt"
+       elif [[ -f "third_fact_demokit/verifier/target/release/bizra-verify-receipt" ]]; then
+          VERIFIER_BIN="third_fact_demokit/verifier/target/release/bizra-verify-receipt"
+       else
+           echo "Error: Could not locate verifier binary after build."
+           exit 1
+       fi
+    elif [[ -d "verifier" ]]; then
+        (cd verifier && cargo build --release --quiet)
+        VERIFIER_BIN="verifier/target/release/bizra-verify-receipt"
+    else 
+        echo "Error: verifier source not found"
+        exit 1
+    fi
+fi
+
+# 1. Create Base Receipt JSON
+TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+CONTENT=$(cat "$PAYLOAD_FILE")
+TMP_BASE=$(mktemp)
+
+# Handle Evidence Hash
+EVIDENCE_HASH=$(echo "$CONTENT" | jq -r .evidence_hash)
+if [[ "$EVIDENCE_HASH" == "null" ]]; then
+  EVIDENCE_HASH="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+fi
+
+jq -n \
+  --arg ctx "https://bizra.ai/contexts/receipt/v1" \
+  --arg type "$TYPE" \
+  --arg ts "$TS" \
+  --arg ev "$EVIDENCE_HASH" \
+  --argjson meta "$CONTENT" \
+  '{
+    "@context": $ctx,
+    "receipt_id": "", 
+    "prev_hash": null,
+    "type": $type,
+    "timestamp": $ts,
+    "evidence_hash": $ev,
+    "signatures": [],
+    "metadata": $meta
+  }' > "$TMP_BASE"
+
+# 2. Sign and Finalize
+ARGS="sign --file $TMP_BASE --key $KEY_FILE --signer node-0-genesis"
+if [[ -n "$PREV_HASH" ]]; then
+  ARGS="$ARGS --prev-hash $PREV_HASH"
+fi
+
+$VERIFIER_BIN $ARGS > /dev/null
+
+cat "$TMP_BASE"
+rm "$TMP_BASE"

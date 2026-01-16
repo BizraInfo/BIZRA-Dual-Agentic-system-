@@ -1,0 +1,53 @@
+# bizra-playernode/manifests/capabilities.yaml
+# Capability Token Definitions
+# Defines the specific permissions that can be granted to agents via SATs.
+
+capabilities:
+  - id: "CAP_COMPUTE_LOW"
+    description: "Basic low-priority compute access"
+    ttl_seconds: 3600
+    revocable: true
+    constraints:
+      max_threads: 1
+      priority: 0
+
+  - id: "CAP_COMPUTE_HIGH"
+    description: "High-performance compute access for intensive tasks"
+    ttl_seconds: 300
+    revocable: true
+    constraints:
+      max_threads: 8
+      priority: 10
+
+  - id: "CAP_STORAGE_READ"
+    description: "Read-only access to specific data shards"
+    ttl_seconds: 86400
+    revocable: true
+    resource_type: "SHARD"
+
+  - id: "CAP_STORAGE_WRITE"
+    description: "Write access to user workspace"
+    ttl_seconds: 600
+    revocable: true
+    resource_type: "WORKSPACE"
+
+  - id: "CAP_NET_P2P"
+    description: "Permission to open P2P connections to other nodes"
+    ttl_seconds: 0 # 0 = Infinite/Session duration
+    revocable: true
+    constraints:
+      protocol: "libp2p"
+      max_peers: 50
+
+  - id: "CAP_INFERENCE_LLM"
+    description: "Access to local LLM inference engine"
+    ttl_seconds: 300
+    revocable: true
+    constraints:
+      model_family: "Llama-3-8B"
+      max_tokens: 4096
+
+revocation_rules:
+  on_violation: "IMMEDIATE_KILL"
+  on_timeout: "GRACEFUL_SHUTDOWN"
+  on_user_override: "IMMEDIATE_KILL"

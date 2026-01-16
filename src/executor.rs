@@ -3,20 +3,19 @@
 // GIANTS_PROTOCOL: Integrated with HookChain for Pre/Post capability governance
 
 use crate::hookchain::{
-    CapabilityToken, ExecutedReceipt, HookDecision, PostHookResult,
-    ReceiptDraft, SATHookChain,
+    CapabilityToken, ExecutedReceipt, HookDecision, PostHookResult, ReceiptDraft, SATHookChain,
 };
+use crate::storage::ReceiptStore;
 use crate::tpm::{SignerProvider, TpmContext};
 use crate::types::AgentResult;
 use crate::wasm::WasmSandbox;
-use crate::storage::ReceiptStore;
 use std::sync::Arc;
 // Using the blueprint's ThoughtExecReceipt definition which is distinct for the DemoKit JCS flow.
 
+use bizra_jcs::{compute_digest, compute_payload_id};
 use serde::{Deserialize, Serialize};
-use tracing::{info, instrument, warn};
 use std::time::Instant;
-use bizra_jcs::{compute_payload_id, compute_digest};
+use tracing::{info, instrument, warn};
 
 /// Signed Module (Wasm + Capabilities + Signature)
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,14 +39,14 @@ impl SignedModule {
 pub struct ThoughtExecReceipt {
     /// The canonical payload (JCS canonicalized before hashing)
     pub payload: ThoughtPayload,
-    
+
     /// Unique ID derived from canonical payload: b64url(sha256(JCS(payload)))
     pub payload_id: String,
-    
+
     /// Receipt hash for chaining: sha256(JCS(this_struct_without_signatures)) - simplified here
     /// In practice, signatures wrap this.
-    pub receipt_hash: String, 
-    
+    pub receipt_hash: String,
+
     /// Signatures over the receipt_hash
     pub signatures: Vec<Signature>,
 }
@@ -93,10 +92,10 @@ impl ThoughtExecutor {
         let tpm = TpmContext::new();
         let head = store.get_head_hash().await?;
         let signer: Arc<dyn SignerProvider> = Arc::from(tpm.get_signer());
-        
+
         // Initialize HookChain with the same signer
         let hook_chain = SATHookChain::new(signer.clone(), "BIZRA_v10.0");
-        
+
         Ok(Self {
             sandbox: WasmSandbox::new()?,
             signer,
@@ -105,13 +104,13 @@ impl ThoughtExecutor {
             hook_chain: Some(hook_chain),
         })
     }
-    
+
     /// Create executor without HookChain (for testing/legacy)
     pub async fn new_without_hooks(store: Arc<dyn ReceiptStore>) -> anyhow::Result<Self> {
         let tpm = TpmContext::new();
         let head = store.get_head_hash().await?;
         let signer: Arc<dyn SignerProvider> = Arc::from(tpm.get_signer());
-        
+
         Ok(Self {
             sandbox: WasmSandbox::new()?,
             signer,
@@ -145,7 +144,8 @@ impl ThoughtExecutor {
         // 0. GIANTS PROTOCOL: Pre-Capability Hook
         let session_node = if let Some(ref hook_chain) = self.hook_chain {
             let head = hook_chain.get_session_head().await;
-            head.map(|n| n.node_hash).unwrap_or_else(|| "genesis".to_string())
+            head.map(|n| n.node_hash)
+                .unwrap_or_else(|| "genesis".to_string())
         } else {
             "genesis".to_string()
         };
@@ -187,14 +187,17 @@ impl ThoughtExecutor {
 
         // 1. GATE: Verify Module Signature (Fail-Close)
         if !module.verify_signature(&*self.signer) {
-             return Err(anyhow::anyhow!("⛔ Security Violation: Module signature invalid"));
+            return Err(anyhow::anyhow!(
+                "⛔ Security Violation: Module signature invalid"
+            ));
         }
 
         // 2. CHECK: Capability Safety (WASI allowlist check would go here)
         // For now we trust the SignedModule struct's capabilities field as policy
 
         // 3. EXECUTE: Run in Sandbox
-        let agent_result = self.sandbox
+        let agent_result = self
+            .sandbox
             .execute_isolated(&module.wasm, input, &module.signature)
             .await?;
 
@@ -243,18 +246,21 @@ impl ThoughtExecutor {
         };
 
         // Compute Deterministic ID
-        let payload_id = compute_payload_id(&payload)
-            .map_err(|e| anyhow::anyhow!("JCS ID Error: {}", e))?;
+        let payload_id =
+            compute_payload_id(&payload).map_err(|e| anyhow::anyhow!("JCS ID Error: {}", e))?;
 
         // Hash for the chain
-        let receipt_digest = compute_digest(&payload)
-            .map_err(|e| anyhow::anyhow!("JCS Digest Error: {}", e))?;
+        let receipt_digest =
+            compute_digest(&payload).map_err(|e| anyhow::anyhow!("JCS Digest Error: {}", e))?;
         let receipt_hash = hex::encode(receipt_digest);
 
         // Sign the receipt hash (Operator Attestation)
-        let sig_bytes = self.signer.sign(&receipt_digest).await
+        let sig_bytes = self
+            .signer
+            .sign(&receipt_digest)
+            .await
             .map_err(|e| anyhow::anyhow!("Signing failed: {}", e))?;
-        
+
         let signature = Signature {
             signer_id: "bizra-node-0".to_string(),
             value_hex: hex::encode(sig_bytes),

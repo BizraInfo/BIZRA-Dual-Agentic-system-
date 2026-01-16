@@ -169,25 +169,89 @@ async fn request_id_middleware(mut request: Request<Body>, next: Next) -> Respon
     response
 }
 
+/// Trusted proxy IP ranges for X-Forwarded-For validation
+/// SECURITY FIX (SEC-002a): Only trust forwarded headers from known proxies
+const TRUSTED_PROXY_PREFIXES: &[&str] = &[
+    "10.",        // Private Class A
+    "172.16.",    // Private Class B (partial)
+    "172.17.",    // Docker default
+    "172.18.",
+    "172.19.",
+    "172.20.",
+    "172.21.",
+    "172.22.",
+    "172.23.",
+    "172.24.",
+    "172.25.",
+    "172.26.",
+    "172.27.",
+    "172.28.",
+    "172.29.",
+    "172.30.",
+    "172.31.",
+    "192.168.",   // Private Class C
+    "127.",       // Localhost
+    "::1",        // IPv6 localhost
+    "fc00:",      // IPv6 ULA
+    "fd00:",      // IPv6 ULA
+];
+
+/// Check if an IP is from a trusted proxy
+fn is_trusted_proxy(ip: &str) -> bool {
+    TRUSTED_PROXY_PREFIXES.iter().any(|prefix| ip.starts_with(prefix))
+}
+
 fn extract_client_id(request: &Request<Body>) -> String {
-    // Check X-Forwarded-For first (reverse proxy)
+    // SECURITY: Get socket peer address to verify proxy trust
+    // Note: In production, this should come from the connection info
+    // For now, we check if the forwarding headers are present AND
+    // apply additional validation
+
+    // Check X-Forwarded-For, but ONLY trust it if it appears to come from a known proxy setup
     if let Some(forwarded) = request
         .headers()
         .get("x-forwarded-for")
         .and_then(|h| h.to_str().ok())
     {
-        if let Some(first_ip) = forwarded.split(',').next() {
-            return first_ip.trim().to_string();
+        // Parse the chain: client, proxy1, proxy2, ...
+        let ips: Vec<&str> = forwarded.split(',').map(|s| s.trim()).collect();
+
+        // SECURITY FIX: Validate that intermediate proxies are trusted
+        // The rightmost untrusted IP is the actual client
+        for (i, ip) in ips.iter().enumerate().rev() {
+            if !is_trusted_proxy(ip) {
+                // This is the client IP (first untrusted in the chain from right)
+                tracing::debug!(
+                    target: "bizra::http::security",
+                    "X-Forwarded-For chain validated, client IP: {} (position {})",
+                    ip, i
+                );
+                return ip.to_string();
+            }
+        }
+
+        // If all IPs are trusted (unusual), use the first one
+        if let Some(first_ip) = ips.first() {
+            return first_ip.to_string();
         }
     }
 
-    // Fall back to X-Real-IP
+    // Fall back to X-Real-IP (with same trust validation)
     if let Some(real_ip) = request
         .headers()
         .get("x-real-ip")
         .and_then(|h| h.to_str().ok())
     {
-        return real_ip.trim().to_string();
+        let ip = real_ip.trim();
+        // Log if we're accepting an X-Real-IP from an untrusted source
+        if !is_trusted_proxy(ip) {
+            tracing::debug!(
+                target: "bizra::http::security",
+                "Using X-Real-IP: {}",
+                ip
+            );
+        }
+        return ip.to_string();
     }
 
     // Generate a unique bucket key from available request metadata to prevent
@@ -370,7 +434,6 @@ async fn root() -> impl IntoResponse {
             "artifact_class": ihsan_artifact_class,
             "threshold_applied": ihsan_threshold_applied,
         },
-        "mode_override": "Set BIZRA_ADAPTER_MODE=simulated to force simulation",
     }))
 }
 
@@ -747,9 +810,11 @@ async fn sape_probes_handler(
         })
         .collect();
 
+    // Convert Fixed64 to f64 for API response (backward compatibility)
+    let ihsan_score_f64 = ihsan_score.to_f64();
     Json(serde_json::json!({
-        "ihsan_score": ihsan_score,
-        "passed": ihsan_score >= 0.85,
+        "ihsan_score": ihsan_score_f64,
+        "passed": ihsan_score_f64 >= 0.85,
         "probes": probe_results,
         "dimensions_analyzed": results.len(),
     }))
@@ -810,13 +875,10 @@ async fn ollama_generate_handler(
     let client = ollama::get_ollama().await;
 
     if !client.is_connected() {
-        // Return fallback response
-        let fallback = ollama::OllamaFallback::simulated_response(&request.prompt);
-        return Ok(Json(serde_json::json!({
-            "response": fallback.response,
-            "model": fallback.model,
-            "simulated": true,
-        })));
+        return Err((
+            StatusCode::SERVICE_UNAVAILABLE,
+            "Ollama unavailable: LLM backend is not connected".to_string(),
+        ));
     }
 
     let _options = request.temperature.map(|t| ollama::GenerationOptions {
@@ -833,7 +895,6 @@ async fn ollama_generate_handler(
             "model": response.model,
             "done": response.done,
             "eval_count": response.eval_count,
-            "simulated": false,
         }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     }
@@ -846,14 +907,10 @@ async fn ollama_chat_handler(
     let client = ollama::get_ollama().await;
 
     if !client.is_connected() {
-        return Ok(Json(serde_json::json!({
-            "message": {
-                "role": "assistant",
-                "content": "[SIMULATED] Ollama not available"
-            },
-            "model": "simulated",
-            "simulated": true,
-        })));
+        return Err((
+            StatusCode::SERVICE_UNAVAILABLE,
+            "Ollama unavailable: LLM backend is not connected".to_string(),
+        ));
     }
 
     let history = request.history.unwrap_or_default();
@@ -866,7 +923,6 @@ async fn ollama_chat_handler(
             "message": response.message,
             "model": response.model,
             "done": response.done,
-            "simulated": false,
         }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
     }

@@ -1,7 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
+import { useTelemetrySocket } from "@/hooks/use-telemetry-socket"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -42,21 +43,47 @@ interface MarketData {
 }
 
 const EliteExecutiveDashboard: React.FC = () => {
-  const [currentTime, setCurrentTime] = useState(new Date())
-  const [performanceMetrics] = useState<PerformanceMetrics>({
-    latency: 4.2,
-    throughput: 217,
-    availability: 99.9993,
-    cognition: 92.7,
-    ethics: 100.0,
-  })
+  const { telemetry, isConnected } = useTelemetrySocket()
 
-  const [networkStatus] = useState<NetworkStatus>({
-    genesisStatus: "ONLINE",
-    alphaNodes: 100,
-    consensusFinality: "<2s",
-    securityRating: "AAA+",
-  })
+  const [currentTime, setCurrentTime] = useState(new Date())
+
+  const performanceMetrics: PerformanceMetrics = useMemo(() => {
+    if (!telemetry) {
+      return {
+        latency: 4.2,
+        throughput: 217,
+        availability: 99.9993,
+        cognition: 92.7,
+        ethics: 100.0,
+      }
+    }
+
+    return {
+      latency: Math.round(telemetry.latencyUs / 100) / 10, // Convert us to ms (approx)
+      throughput: telemetry.poiEventsLastMinute, // Events per minute
+      availability: Number((100 - (telemetry.errorRate * 100)).toFixed(4)),
+      cognition: 92.7, // Static for now or derive from something else
+      ethics: Number((telemetry.ihsanScore * 100).toFixed(1)),
+    }
+  }, [telemetry])
+
+  const networkStatus: NetworkStatus = useMemo(() => {
+    if (!telemetry) {
+      return {
+        genesisStatus: "ONLINE",
+        alphaNodes: 100,
+        consensusFinality: "<2s",
+        securityRating: "AAA+",
+      }
+    }
+
+    return {
+      genesisStatus: isConnected ? "ONLINE" : "RECONNECTING",
+      alphaNodes: telemetry.activeAgents.SAT + telemetry.activeAgents.PAT,
+      consensusFinality: telemetry.consensusState === 'STABLE' ? "<1s" : "~2s",
+      securityRating: telemetry.ihsanScore > 0.9 ? "AAA+" : "AA",
+    }
+  }, [telemetry, isConnected])
 
   const [marketData] = useState<MarketData>({
     tam2024: 0.55,
@@ -82,9 +109,9 @@ const EliteExecutiveDashboard: React.FC = () => {
     },
     {
       name: "Throughput",
-      value: Math.min(100, (performanceMetrics.throughput / 250) * 100),
+      value: Math.min(100, (performanceMetrics.throughput / (telemetry ? 100 : 250)) * 100),
       actual: performanceMetrics.throughput,
-      unit: "KRPS",
+      unit: telemetry ? "EPM" : "KRPS",
       color: "#D4AF37",
     },
     {
@@ -153,13 +180,43 @@ const EliteExecutiveDashboard: React.FC = () => {
   ]
 
   // System health data
-  const systemHealthData = [
-    { metric: "CPU", value: 23.4, status: "OPTIMAL", color: "#D4AF37" },
-    { metric: "Memory", value: 67.2, status: "NORMAL", color: "#3B82F6" },
-    { metric: "Network", value: 98.7, status: "EXCELLENT", color: "#10B981" },
-    { metric: "Storage", value: 45.1, status: "OPTIMAL", color: "#D4AF37" },
-    { metric: "Security", value: 100.0, status: "SECURED", color: "#10B981" },
-  ]
+  const systemHealthData = useMemo(() => {
+    if (!telemetry) {
+      return [
+        { metric: "CPU", value: 23.4, status: "OPTIMAL", color: "#D4AF37" },
+        { metric: "Memory", value: 67.2, status: "NORMAL", color: "#3B82F6" },
+        { metric: "Network", value: 98.7, status: "EXCELLENT", color: "#10B981" },
+        { metric: "Storage", value: 45.1, status: "OPTIMAL", color: "#D4AF37" },
+        { metric: "Security", value: 100.0, status: "SECURED", color: "#10B981" },
+      ]
+    }
+
+    const cpu = telemetry.resources.cpuUsage
+    const mem = telemetry.resources.memoryUsage
+
+    return [
+      {
+        metric: "CPU",
+        value: cpu,
+        status: cpu < 60 ? "OPTIMAL" : cpu < 85 ? "NORMAL" : "HIGH",
+        color: cpu < 60 ? "#D4AF37" : cpu < 85 ? "#3B82F6" : "#EF4444"
+      },
+      {
+        metric: "Memory",
+        value: mem,
+        status: mem < 70 ? "OPTIMAL" : mem < 90 ? "NORMAL" : "HIGH",
+        color: mem < 70 ? "#3B82F6" : mem < 90 ? "#D4AF37" : "#EF4444"
+      },
+      { metric: "Network", value: 98.7, status: "EXCELLENT", color: "#10B981" },
+      { metric: "Storage", value: 45.1, status: "OPTIMAL", color: "#D4AF37" },
+      {
+        metric: "Security",
+        value: Number((telemetry.ihsanScore * 100).toFixed(1)),
+        status: telemetry.ihsanScore > 0.95 ? "SECURED" : "MONITORING",
+        color: "#10B981"
+      },
+    ]
+  }, [telemetry])
 
   const PerformanceGauge = ({ data }: { data: (typeof performanceGaugeData)[0] }) => (
     <div className="flex flex-col items-center space-y-2">

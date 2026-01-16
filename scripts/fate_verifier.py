@@ -26,16 +26,17 @@ from datetime import datetime, timezone
 from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
 
-# Try to import Z3, fall back to simulation if unavailable
+# Z3 is required for production verification
 try:
     from z3 import (
         Solver, Int, Real, Bool, And, Or, Not, Implies,
         ForAll, Exists, If, sat, unsat, unknown,
         RealVal, IntVal, BoolVal, Sum, Product
     )
-    Z3_AVAILABLE = True
-except ImportError:
-    Z3_AVAILABLE = False
+except ImportError as exc:
+    raise RuntimeError("Z3 is required for production verification") from exc
+
+Z3_AVAILABLE = True
 
 
 # ============================================
@@ -48,7 +49,6 @@ class VerificationResult(Enum):
     UNSAT = "unsatisfiable"     # Proof fails
     UNKNOWN = "unknown"         # Cannot determine
     TIMEOUT = "timeout"         # Exceeded time budget
-    SIMULATED = "simulated"     # No Z3, using simulation
 
 
 class ConstraintType(Enum):
@@ -130,7 +130,7 @@ class IhsanVerifier:
     }
     
     def __init__(self):
-        self.z3_available = Z3_AVAILABLE
+        pass
     
     def verify(self, scores: Dict[str, float]) -> Tuple[VerificationResult, float]:
         """
@@ -139,10 +139,7 @@ class IhsanVerifier:
         Returns (result, computed_score)
         """
         
-        if self.z3_available:
-            return self._verify_z3(scores)
-        else:
-            return self._verify_simulated(scores)
+        return self._verify_z3(scores)
     
     def _verify_z3(self, scores: Dict[str, float]) -> Tuple[VerificationResult, float]:
         """Verify using Z3 SMT solver"""
@@ -188,19 +185,6 @@ class IhsanVerifier:
         else:
             return (VerificationResult.UNKNOWN, computed_score)
     
-    def _verify_simulated(self, scores: Dict[str, float]) -> Tuple[VerificationResult, float]:
-        """Verify using Python simulation (fallback)"""
-        
-        computed_score = sum(
-            scores.get(dim, 0.0) * weight
-            for dim, weight in self.WEIGHTS.items()
-        )
-        
-        if computed_score >= self.THRESHOLD:
-            return (VerificationResult.SAT, computed_score)
-        else:
-            return (VerificationResult.UNSAT, computed_score)
-
 
 # ============================================
 # ADL INVARIANT VERIFIER
@@ -216,7 +200,7 @@ class AdlVerifier:
     GINI_THRESHOLD = 0.35
     
     def __init__(self):
-        self.z3_available = Z3_AVAILABLE
+        pass
     
     def verify(self, distribution: List[float]) -> Tuple[VerificationResult, float]:
         """
@@ -244,27 +228,21 @@ class AdlVerifier:
         gini = total_diff / (2 * n * n * mean)
         gini = min(1.0, gini)
         
-        if self.z3_available:
-            # Verify with Z3
-            solver = Solver()
-            g = Real("gini")
-            t = Real("threshold")
-            
-            solver.add(g == RealVal(gini))
-            solver.add(t == RealVal(self.GINI_THRESHOLD))
-            solver.add(g <= t)
-            
-            result = solver.check()
-            
-            if result == sat:
-                return (VerificationResult.SAT, gini)
-            else:
-                return (VerificationResult.UNSAT, gini)
+        # Verify with Z3
+        solver = Solver()
+        g = Real("gini")
+        t = Real("threshold")
+        
+        solver.add(g == RealVal(gini))
+        solver.add(t == RealVal(self.GINI_THRESHOLD))
+        solver.add(g <= t)
+        
+        result = solver.check()
+        
+        if result == sat:
+            return (VerificationResult.SAT, gini)
         else:
-            if gini <= self.GINI_THRESHOLD:
-                return (VerificationResult.SAT, gini)
-            else:
-                return (VerificationResult.UNSAT, gini)
+            return (VerificationResult.UNSAT, gini)
 
 
 # ============================================
@@ -288,7 +266,6 @@ class LTLEncoder:
     
     def __init__(self, time_horizon: int = 10):
         self.time_horizon = time_horizon
-        self.z3_available = Z3_AVAILABLE
     
     def encode_safety(self, predicate_func: Callable[[int], bool]) -> VerificationResult:
         """
@@ -296,13 +273,6 @@ class LTLEncoder:
         
         Verifies that P holds at all time steps.
         """
-        
-        if not self.z3_available:
-            # Simulate by checking all time steps
-            for t in range(self.time_horizon):
-                if not predicate_func(t):
-                    return VerificationResult.UNSAT
-            return VerificationResult.SAT
         
         solver = Solver()
         
@@ -322,12 +292,6 @@ class LTLEncoder:
         
         Verifies that P holds at some time step.
         """
-        
-        if not self.z3_available:
-            for t in range(self.time_horizon):
-                if predicate_func(t):
-                    return VerificationResult.SAT
-            return VerificationResult.UNSAT
         
         solver = Solver()
         
@@ -354,19 +318,6 @@ class LTLEncoder:
         
         Whenever P holds, Q must eventually hold within max_delay steps.
         """
-        
-        if not self.z3_available:
-            for t in range(self.time_horizon):
-                if trigger_func(t):
-                    # Check if response occurs within delay
-                    found_response = False
-                    for d in range(max_delay + 1):
-                        if t + d < self.time_horizon and response_func(t + d):
-                            found_response = True
-                            break
-                    if not found_response:
-                        return VerificationResult.UNSAT
-            return VerificationResult.SAT
         
         solver = Solver()
         
@@ -664,7 +615,7 @@ def main():
     print("="*72)
     print("⚖️  FATE VERIFICATION ENGINE — FORMAL PROOFS")
     print("="*72)
-    print(f"   Z3 SMT Solver: {'✅ AVAILABLE' if Z3_AVAILABLE else '⚠️ SIMULATED'}")
+    print("   Z3 SMT Solver: ✅ AVAILABLE")
     print("   Logic: Linear Temporal Logic (LTL)")
     print("   Covenant: Ihsān (إحسان)")
     print("="*72)
@@ -762,7 +713,7 @@ def main():
     
     print(f"   Proofs: {seal['constraints_checked']}")
     print(f"   All Passed: {seal['all_passed']}")
-    print(f"   Z3 Mode: {'NATIVE' if seal['z3_available'] else 'SIMULATED'}")
+    print("   Z3 Mode: NATIVE")
     print(f"   Hash: {seal['seal_hash'][:32]}...")
     
     # Save seal

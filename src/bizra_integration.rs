@@ -1,6 +1,6 @@
 // src/bizra_integration.rs - Connect to external BIZRA components
 
-use crate::wisdom::{HouseOfWisdom, WisdomFallback};
+use crate::wisdom::HouseOfWisdom;
 use std::sync::Arc;
 use tokio::sync::OnceCell;
 use tracing::{info, warn};
@@ -13,9 +13,9 @@ pub async fn get_wisdom() -> Arc<HouseOfWisdom> {
     WISDOM
         .get_or_init(|| async {
             let wisdom = HouseOfWisdom::from_env();
-            // Try to connect but don't fail if Neo4j is unavailable
+            // Try to connect but surface failures at query time
             if let Err(e) = wisdom.connect().await {
-                warn!("⚠️ Neo4j not available: {} - using fallback mode", e);
+                warn!("⚠️ Neo4j not available: {}", e);
             }
             Arc::new(wisdom)
         })
@@ -47,19 +47,15 @@ impl NODE0Integration {
 
     /// Call NODE0 ACE Framework
     pub async fn call_ace_framework(&self, task: &str) -> anyhow::Result<serde_json::Value> {
-        // In production: HTTP call to NODE0
-        // For now: simulated
-        Ok(serde_json::json!({
-            "base_url": &self.base_url,
-            "generator_output": format!("Generated plan for: {}", task),
-            "reflector_output": "Validated plan quality",
-            "curator_output": "Synthesized final recommendation",
-        }))
+        let _ = task;
+        anyhow::bail!(
+            "NODE0 integration not configured for base_url={}",
+            self.base_url
+        );
     }
 
     /// Query HyperGraphRAG (18.7x advantage) via House of Wisdom
     pub async fn query_hypergraph_rag(&self, query: &str) -> anyhow::Result<Vec<String>> {
-        // Try to use real Neo4j via House of Wisdom
         if let Some(wisdom) = &self.wisdom {
             if wisdom.is_connected().await {
                 match wisdom.query_knowledge(query, 10).await {
@@ -78,18 +74,15 @@ impl NODE0Integration {
                     }
                     Err(e) => {
                         warn!("⚠️ HyperGraphRAG query failed: {}", e);
+                        return Err(anyhow::anyhow!(e));
                     }
                 }
             }
         }
 
-        // Fallback to simulated response
-        let fallback = WisdomFallback::simulated_query(query);
-        Ok(fallback
-            .nodes
-            .iter()
-            .map(|n| format!("[simulated] {}", n.content))
-            .collect())
+        Err(anyhow::anyhow!(
+            "HyperGraphRAG unavailable: Neo4j connection required"
+        ))
     }
 
     /// Store knowledge in the graph (if connected)
@@ -125,13 +118,11 @@ impl TaskMasterIntegration {
         _task: &str,
         agent_count: usize,
     ) -> anyhow::Result<serde_json::Value> {
-        // In production: HTTP call to TaskMaster
-        Ok(serde_json::json!({
-            "base_url": &self.base_url,
-            "hive_mind_solution": format!("Solved with {} agents", agent_count),
-            "solve_rate": 0.848,
-            "pattern": "collaborative",
-        }))
+        let _ = agent_count;
+        anyhow::bail!(
+            "TaskMaster integration not configured for base_url={}",
+            self.base_url
+        );
     }
 }
 
@@ -147,11 +138,11 @@ impl DeepAgentIntegration {
 
     /// Execute CUDA-accelerated inference
     pub async fn cuda_inference(&self, prompt: &str, model: &str) -> anyhow::Result<String> {
-        // In production: HTTP call to deepagent
-        Ok(format!(
-            "CUDA-accelerated result for: {} (model: {}, endpoint: {})",
-            prompt, model, self.base_url
-        ))
+        let _ = (prompt, model);
+        anyhow::bail!(
+            "deepagent integration not configured for base_url={}",
+            self.base_url
+        );
     }
 }
 
@@ -172,13 +163,10 @@ impl BlockGraphIntegration {
         impact_type: &str,
         _evidence: serde_json::Value,
     ) -> anyhow::Result<String> {
-        // In production: Blockchain transaction
-        Ok(format!(
-            "POI-{}-{}-{}-{}",
-            user_id,
-            impact_type,
-            chrono::Utc::now().timestamp(),
+        let _ = (user_id, impact_type);
+        anyhow::bail!(
+            "BlockGraph integration not configured for base_url={}",
             self.base_url
-        ))
+        );
     }
 }

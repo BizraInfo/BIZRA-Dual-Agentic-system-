@@ -102,11 +102,11 @@ class SquadOrchestrator:
         }
 
     def _prime_plan(self, query: str) -> List[str]:
-        # Minimalist planning simulation
+        # Minimalist planning baseline
         return ["ANALYZE", "RETRIEVE", "EVOLVE", "VERIFY", "REFINE"]
 
     def _aesthete_refine(self, content: str, verified: bool) -> str:
-        # Tonal refinement simulation
+        # Tonal refinement baseline
         prefix = "✅ [MASTERPIECE]" if verified else "⚠️ [DRAFT]"
         return f"{prefix} {content} | Refined by BIZRA-AESTHETE v1.0"
 

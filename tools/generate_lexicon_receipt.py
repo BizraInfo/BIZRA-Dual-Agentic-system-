@@ -19,7 +19,7 @@ except Exception as exc:  # pragma: no cover
 
 ALLOWED_TRUTH = {"VERIFIED", "MEASURED", "TARGET", "DERIVED"}
 REQUIRED_ADAPTER_MODE_FIELDS = {"pat", "sat", "mcp", "a2a", "reasoning"}
-ALLOWED_ADAPTER_MODES = {"simulated", "real"}
+ALLOWED_ADAPTER_MODES = {"real"}
 GIT_SHA_RE = re.compile(r"^[a-f0-9]{40}$")
 
 
@@ -57,7 +57,7 @@ def parse_adapter_modes(raw: str | None) -> dict[str, str]:
         raw = os.getenv("BIZRA_ADAPTER_MODES_JSON")
 
     if raw is None:
-        return {k: "simulated" for k in sorted(REQUIRED_ADAPTER_MODE_FIELDS)}
+        return {k: "real" for k in sorted(REQUIRED_ADAPTER_MODE_FIELDS)}
 
     try:
         parsed = json.loads(raw)
@@ -117,8 +117,8 @@ def main() -> int:
     parser.add_argument(
         "--adapter-modes-json",
         help=(
-            "JSON object with keys pat/sat/mcp/a2a/reasoning and values simulated|real. "
-            "If omitted, defaults to all simulated (or uses BIZRA_ADAPTER_MODES_JSON)."
+            "JSON object with keys pat/sat/mcp/a2a/reasoning and values real. "
+            "If omitted, defaults to all real (or uses BIZRA_ADAPTER_MODES_JSON)."
         ),
     )
     parser.add_argument(

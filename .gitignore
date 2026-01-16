@@ -40,3 +40,23 @@ PROJECT_STRUCTURE.md
 *.key
 *.pem
 !*.pub
+.vercel
+
+# Embedded git repositories (external dependencies)
+bizra_data_vault/roots/hadith_data/
+bizra_data_vault/roots/kais_dukes/
+crates/ralph-claude-code/
+crates/ralph-orchestrator/
+
+# Archive (large legacy content)
+archive/
+
+# Large data files (should not be in git)
+knowledge_graph_output/
+islamic_knowledge_graph/
+evidence-pack/
+*.log
+
+# Large generated JSON
+**/control_plane_state.json
+**/islamic_knowledge_graph.json

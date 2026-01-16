@@ -6,9 +6,9 @@ use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criteri
 use std::time::Duration;
 
 // Note: In a real benchmark, these would be the actual imports
-// For now, we define minimal mock structures to demonstrate benchmark patterns
+// For now, we define minimal placeholder structures to demonstrate benchmark patterns
 
-/// Mock circuit breaker for benchmarking
+/// Placeholder circuit breaker for benchmarking
 struct CircuitBreaker {
     state: u8,
 }

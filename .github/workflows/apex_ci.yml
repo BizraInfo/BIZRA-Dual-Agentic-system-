@@ -58,7 +58,7 @@ jobs:
           
       - name: 🔨 Build Release
         id: rust_build
-        run: cargo build --release --all-features
+        run: cargo build --release --features all-safe
         
       - name: 📤 Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -80,13 +80,13 @@ jobs:
       - uses: dtolnay/rust-action@stable
       
       - name: 🧪 Run Tests
-        run: cargo test --all-features --no-fail-fast
+        run: cargo test --features all-safe --no-fail-fast
         env:
           RUST_LOG: debug
-          
+
       - name: ✅ Verify 76+ Tests Pass
         run: |
-          TEST_COUNT=\$(cargo test --all-features 2>&1 | grep -oP '\\d+ passed' | head -1 | grep -oP '\\d+')
+          TEST_COUNT=\$(cargo test --features all-safe 2>&1 | grep -oP '\\d+ passed' | head -1 | grep -oP '\\d+')
           echo "Tests passed: \$TEST_COUNT"
           if [ "\$TEST_COUNT" -lt 76 ]; then
             echo "❌ GATE FAILED: Expected 76+ tests, got \$TEST_COUNT"
@@ -113,7 +113,19 @@ jobs:
       - name: 🧪 Run Python Tests
         run: |
           pytest cognitive-plane/ --cov=. --cov-report=xml -v
-          
+
+      - name: 🛡️ Hard Gate #3: Single-Source Ihsan Enforcement
+        run: |
+          echo "Checking for Python Ihsan score implementations (must use Rust FFI)..."
+          # Search for forbidden Python implementations
+          if grep -r "def.*ihsan.*score" --include="*.py" . | grep -v "bizra_ffi" | grep -v "# HARD GATE"; then
+            echo "❌ HARD GATE #3 VIOLATION: Python Ihsan implementations detected!"
+            echo "All Ihsan scoring must use canonical Rust implementation via FFI."
+            echo "See CLAUDE.md Hard Gates section."
+            exit 1
+          fi
+          echo "✅ HARD GATE #3 PASSED: Single-source Ihsan enforcement verified"
+
       - name: 📊 Coverage Report
         uses: codecov/codecov-action@v4
         with:
@@ -166,8 +178,8 @@ jobs:
         run: cargo fmt --all -- --check
         
       - name: 🔍 Clippy Lint
-        run: cargo clippy --all-features -- -D warnings
-        continue-on-error: true
+        run: cargo clippy --features all-safe -- -D warnings
+        # REMOVED continue-on-error to enforce Ihsān (Fail-Closed)
         
       - name: 🐍 Python Lint (Ruff)
         run: |

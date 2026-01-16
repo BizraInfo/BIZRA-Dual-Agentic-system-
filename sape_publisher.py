@@ -55,9 +55,8 @@ class SAPEPublisher:
             from bizra_kernel.recursive_node import RecursiveExpander
             self.expander = RecursiveExpander()
             logger.info("🔬 Recursive Expander initialized")
-        except ImportError:
-            logger.warning("⚠️  Recursive Expander not found, using mock")
-            self.expander = None
+        except ImportError as exc:
+            raise RuntimeError("Recursive Expander is required for production") from exc
 
     async def __aenter__(self):
         self.session = aiohttp.ClientSession()

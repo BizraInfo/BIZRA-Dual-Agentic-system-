@@ -1,5 +1,5 @@
 // src/embodied.rs - Embodied Reasoning Agent (ERA) & AGENT-RAG Synthesis
-// 
+//
 // Implements:
 // 1. Self-Summarization: O(1) context management via state compression.
 // 2. Trajectory Augmentation: Observation -> Reflection -> Plan -> Action.
@@ -59,7 +59,8 @@ impl SovereignSummary {
 
     /// Compress interaction into a summary (Self-Summarization)
     pub fn update(&mut self, step: &EmbodiedStep) {
-        self.accumulated_knowledge.push_str(&format!("\n- {}", step.reflection));
+        self.accumulated_knowledge
+            .push_str(&format!("\n- {}", step.reflection));
         // Keep it lean - only the most critical state
         if self.accumulated_knowledge.len() > 1000 {
             // Primitive summarization fallback
@@ -139,8 +140,13 @@ impl ResearchHarvester {
                     let title = parts[2].trim().to_string();
                     let date = parts[1].replace("**", "").trim().to_string();
                     let authors = parts[3].trim().to_string();
-                    let link = parts[4].split('(').nth(1).and_then(|s| s.split(')').next()).unwrap_or("").to_string();
-                    
+                    let link = parts[4]
+                        .split('(')
+                        .nth(1)
+                        .and_then(|s| s.split(')').next())
+                        .unwrap_or("")
+                        .to_string();
+
                     if !title.is_empty() && !title.contains("Title") {
                         papers.push(ResearchPaper {
                             title,
@@ -164,14 +170,24 @@ pub struct GiantsProtocol;
 impl GiantsProtocol {
     pub fn verify_citation(citation: &str) -> bool {
         // High-authority domain whitelist
-        let authorities = ["arxiv.org", "nature.com", "science.org", "quran.com", "sunnah.com"];
+        let authorities = [
+            "arxiv.org",
+            "nature.com",
+            "science.org",
+            "quran.com",
+            "sunnah.com",
+        ];
         authorities.iter().any(|&domain| citation.contains(domain))
     }
 
     pub fn get_expert_weight(source: &str) -> f64 {
-        if source.contains("quran") || source.contains("hadith") { 1.5 }
-        else if source.contains("nature") || source.contains("arxiv") { 1.2 }
-        else { 1.0 }
+        if source.contains("quran") || source.contains("hadith") {
+            1.5
+        } else if source.contains("nature") || source.contains("arxiv") {
+            1.2
+        } else {
+            1.0
+        }
     }
 }
 

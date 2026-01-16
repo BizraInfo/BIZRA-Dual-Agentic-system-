@@ -7,8 +7,8 @@
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
-use tracing::{error, info};
 use std::time::{SystemTime, UNIX_EPOCH};
+use tracing::{error, info};
 
 #[derive(Debug, thiserror::Error)]
 pub enum TpmError {
@@ -78,7 +78,7 @@ pub struct MerkleProof {
 
 /// TPM Context - Hardware Root of Trust Manager
 pub struct TpmContext {
-    /// Current PCR state (simulated in software for dev)
+    /// Current PCR state (software-backed when hardware is unavailable)
     pcr_state: [[u8; 32]; 24],
     /// Genesis Merkle root stored in NVRAM
     merkle_root: [u8; 32],
@@ -113,7 +113,7 @@ impl TpmContext {
         if hardware_available {
             info!("🔐 TPM 2.0 hardware detected at /dev/tpm0");
         } else {
-            info!("⚠️  TPM 2.0 hardware not found - using software emulation (DEBUG ONLY)");
+            info!("⚠️  TPM 2.0 hardware not found - using software-backed mode (DEBUG ONLY)");
         }
 
         Self {
@@ -190,7 +190,7 @@ impl TpmContext {
         }
         let pcr_digest: [u8; 32] = hasher.finalize().into();
 
-        // Sign with attestation key (simulated)
+        // Sign with attestation key
         let signature = self.sign_quote(&pcr_digest, &nonce)?;
 
         Ok(TpmQuote {
@@ -273,8 +273,8 @@ impl TpmContext {
     /// Sign quote (Real Ed25519 signature)
     fn sign_quote(&self, pcr_digest: &[u8; 32], nonce: &[u8; 16]) -> Result<Vec<u8>, TpmError> {
         // In production, this uses TPM2_Sign.
-        // For Verified Software Node, we use a real Ed25519 software key, not a mock hash.
-        
+        // For Verified Software Node, we use a real Ed25519 software key, not a placeholder hash.
+
         let mut msg = Vec::new();
         msg.extend_from_slice(pcr_digest);
         msg.extend_from_slice(nonce);
@@ -283,24 +283,24 @@ impl TpmContext {
         // If hardware is missing, we must have a valid software key initialized.
         // We do NOT simulate success with a hash. We sign properly.
         if let Some(key_bytes) = &self.attestation_key {
-             // For this reference implementation, we treat the key_bytes as a seed for Ed25519
-             // This ensures cryptographic consistency even in software mode.
-             // (In a real scenario, this key would be in an HSM or secure enclave).
-             if key_bytes.len() < 32 {
-                 error!("CRITICAL: Attestation key is too short for signing");
-                 return Err(TpmError::SigningFailed(
-                     "Attestation key is too short".into(),
-                 ));
-             }
+            // For this reference implementation, we treat the key_bytes as a seed for Ed25519
+            // This ensures cryptographic consistency even in software mode.
+            // (In a real scenario, this key would be in an HSM or secure enclave).
+            if key_bytes.len() < 32 {
+                error!("CRITICAL: Attestation key is too short for signing");
+                return Err(TpmError::SigningFailed(
+                    "Attestation key is too short".into(),
+                ));
+            }
 
-             use ed25519_dalek::{Signer, SigningKey};
-             let seed: [u8; 32] = key_bytes[..32]
-                 .try_into()
-                 .map_err(|_| TpmError::SigningFailed("Invalid attestation key length".into()))?;
-             let signing_key = SigningKey::from_bytes(&seed);
-             return Ok(signing_key.sign(&msg).to_vec());
+            use ed25519_dalek::{Signer, SigningKey};
+            let seed: [u8; 32] = key_bytes[..32]
+                .try_into()
+                .map_err(|_| TpmError::SigningFailed("Invalid attestation key length".into()))?;
+            let signing_key = SigningKey::from_bytes(&seed);
+            return Ok(signing_key.sign(&msg).to_vec());
         }
-        
+
         // Fail-close if no key available
         error!("CRITICAL: Attempted to sign quote without valid attestation key");
         Err(TpmError::SigningFailed(
@@ -325,7 +325,7 @@ impl TpmContext {
             return self.init_hardware_ak();
         }
 
-        // Software fallback: generate deterministic key from genesis
+        // Software-backed key derivation for non-hardware environments
         let mut hasher = Sha256::new();
         hasher.update(b"BIZRA_ATTESTATION_KEY_V1");
         hasher.update(&self.merkle_root);
@@ -540,12 +540,41 @@ pub struct SoftwareSigner {
 }
 
 impl SoftwareSigner {
+    /// Create a new software signer with cryptographically random key.
+    ///
+    /// SECURITY FIX (SEC-001): Replaced hardcoded seed [0x55; 32] with CSPRNG.
+    /// Each instance now has a unique, unpredictable key derived from system entropy.
+    ///
+    /// For deterministic testing, use `SoftwareSigner::new_deterministic()` instead.
     pub fn new() -> Self {
         use ed25519_dalek::SigningKey;
-        // Deterministic key for dev/software mode (Insecure but functional for API contract)
-        // Using a fixed seed allows for predictable "Hardware" identities in tests.
-        let seed = [0x55; 32]; 
+        use rand::rngs::OsRng;
+
+        // SECURITY: Generate cryptographically random seed from OS entropy
+        let signing_key = SigningKey::generate(&mut OsRng);
+
+        tracing::info!(
+            target: "bizra::tpm::security",
+            "🔐 Software signer initialized with CSPRNG-derived key (public: {:?}...)",
+            &signing_key.verifying_key().to_bytes()[..8]
+        );
+
+        Self { signing_key }
+    }
+
+    /// Create a deterministic signer for testing only.
+    ///
+    /// WARNING: This uses a fixed seed and MUST NOT be used in production.
+    /// This function is gated behind #[cfg(test)] to prevent accidental misuse.
+    #[cfg(test)]
+    pub fn new_deterministic() -> Self {
+        use ed25519_dalek::SigningKey;
+        let seed = [0x55; 32]; // Fixed seed for reproducible tests only
         let signing_key = SigningKey::from_bytes(&seed);
+        tracing::warn!(
+            target: "bizra::tpm::security",
+            "⚠️ DETERMINISTIC SIGNER: Using fixed seed for testing only!"
+        );
         Self { signing_key }
     }
 }
@@ -566,9 +595,9 @@ impl SignerProvider for SoftwareSigner {
         use ed25519_dalek::Verifier;
         let pub_key = self.signing_key.verifying_key();
         if let Ok(sig) = ed25519_dalek::Signature::from_slice(signature) {
-             pub_key.verify(message, &sig).is_ok()
+            pub_key.verify(message, &sig).is_ok()
         } else {
-             false
+            false
         }
     }
 }

@@ -5,8 +5,8 @@
 use crate::executor::ThoughtExecReceipt;
 use async_trait::async_trait;
 use std::collections::HashMap;
-use tokio::sync::RwLock;
 use thiserror::Error;
+use tokio::sync::RwLock;
 use tracing::warn;
 
 #[derive(Error, Debug)]
@@ -71,7 +71,10 @@ impl ReceiptStore for InMemoryReceiptStore {
 
         let current = head.clone();
         if receipt.payload.prev_hash != current {
-            warn!("Chain violation in InMemory: Expected {}, got {}", current, receipt.payload.prev_hash);
+            warn!(
+                "Chain violation in InMemory: Expected {}, got {}",
+                current, receipt.payload.prev_hash
+            );
             return Err(StorageError::ChainViolation {
                 expected: current,
                 actual: receipt.payload.prev_hash.clone(),
@@ -119,7 +122,8 @@ impl ReceiptStore for RedisReceiptStore {
         let receipt_key = format!("{}:receipt:{}", self.key_prefix, receipt.receipt_hash);
 
         // Atomic Check-And-Set using Lua
-        let script = redis::Script::new(r"
+        let script = redis::Script::new(
+            r"
             let head_key = KEYS[1]
             let receipt_key = KEYS[2]
             let new_hash = ARGV[1]
@@ -138,7 +142,8 @@ impl ReceiptStore for RedisReceiptStore {
             redis::call('SET', receipt_key, receipt_json)
             redis::call('SET', head_key, new_hash)
             return 'OK'
-        ");
+        ",
+        );
 
         let json = serde_json::to_string(receipt)?;
         let result: Result<String, redis::RedisError> = script
@@ -147,25 +152,32 @@ impl ReceiptStore for RedisReceiptStore {
             .arg(&receipt.receipt_hash)
             .arg(&receipt.payload.prev_hash)
             .arg(&json)
-            .invoke_async(&mut conn).await;
+            .invoke_async(&mut conn)
+            .await;
 
         match result {
             Ok(_) => Ok(()),
             Err(e) => {
                 let msg = e.to_string();
                 if msg.contains("ChainViolation") {
-                     // Best effort parsing
-                     let parts: Vec<&str> = msg.split("Expected ").collect();
-                     if parts.len() > 1 {
-                         let rest = parts[1];
-                         let p2: Vec<&str> = rest.split(", got ").collect();
-                         if p2.len() > 1 {
-                             let exp = p2[0].trim();
-                             let got = p2[1].trim();
-                             return Err(StorageError::ChainViolation { expected: exp.into(), actual: got.into() });
-                         }
-                     }
-                     return Err(StorageError::ChainViolation { expected: "UNKNOWN".into(), actual: receipt.payload.prev_hash.clone() })
+                    // Best effort parsing
+                    let parts: Vec<&str> = msg.split("Expected ").collect();
+                    if parts.len() > 1 {
+                        let rest = parts[1];
+                        let p2: Vec<&str> = rest.split(", got ").collect();
+                        if p2.len() > 1 {
+                            let exp = p2[0].trim();
+                            let got = p2[1].trim();
+                            return Err(StorageError::ChainViolation {
+                                expected: exp.into(),
+                                actual: got.into(),
+                            });
+                        }
+                    }
+                    return Err(StorageError::ChainViolation {
+                        expected: "UNKNOWN".into(),
+                        actual: receipt.payload.prev_hash.clone(),
+                    });
                 }
                 Err(StorageError::Redis(msg))
             }
@@ -173,10 +185,13 @@ impl ReceiptStore for RedisReceiptStore {
     }
 
     async fn get_head_hash(&self) -> Result<String, StorageError> {
-         let mut conn = self.conn_manager.clone();
-         let head_key = format!("{}:head", self.key_prefix);
-         let head: Option<String> = redis::cmd("GET").arg(head_key).query_async(&mut conn).await?;
-         Ok(head.unwrap_or_else(|| "GENESIS".to_string()))
+        let mut conn = self.conn_manager.clone();
+        let head_key = format!("{}:head", self.key_prefix);
+        let head: Option<String> = redis::cmd("GET")
+            .arg(head_key)
+            .query_async(&mut conn)
+            .await?;
+        Ok(head.unwrap_or_else(|| "GENESIS".to_string()))
     }
 
     async fn get_receipt(&self, hash: &str) -> Result<Option<ThoughtExecReceipt>, StorageError> {

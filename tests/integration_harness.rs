@@ -197,8 +197,8 @@ mod sape_integration_tests {
         // All 9 dimensions should be probed
         assert_eq!(results.len(), 9, "Should have 9 probe results");
 
-        // Calculate Ihsān score
-        let ihsan_score = engine.calculate_ihsan_score(&results);
+        // Calculate Ihsān score (Fixed64 for determinism, convert for comparison)
+        let ihsan_score = engine.calculate_ihsan_score(&results).to_f64();
         assert!(
             ihsan_score > 0.5,
             "Ihsān score should be reasonable: {}",

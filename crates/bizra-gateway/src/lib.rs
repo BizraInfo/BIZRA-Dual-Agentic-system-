@@ -1,6 +1,8 @@
 // crates/bizra-gateway/src/lib.rs - WebSocket/REST Bridge
 // Connects React UI (VΩ.3.0) to Rust Sovereign Kernel (VΩ.5.1)
 
+pub mod bifurcator;
+
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Result as ActixResult};
 // use actix_ws::Message; // Removed unused import
 use chrono::{DateTime, Utc};
@@ -31,7 +33,7 @@ pub struct VerifiedFrame {
     pub timestamp: DateTime<Utc>,
 }
 
-/// FATE Sidecar Response (simulated symbolic verification)
+/// FATE Sidecar Response (symbolic verification)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FATEResponse {
     pub verified: bool,

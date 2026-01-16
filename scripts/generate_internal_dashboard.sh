@@ -6,14 +6,17 @@ set -euo pipefail
 
 OUTPUT="dashboard.internal.json"
 
-# Calculate metrics (mocked/simulated based on file existence/logs)
-BURN_EVENTS=$(grep -r "BURN EVENT" logs/ 2>/dev/null | wc -l || echo 0)
-COMMIT_COUNT=$(git rev-list --count HEAD)
+if [ -z "${BIZRA_DASHBOARD_METRICS_PATH:-}" ]; then
+  echo "ERROR: BIZRA_DASHBOARD_METRICS_PATH must point to a metrics JSON file"
+  exit 1
+fi
 
-# Calculate Internal SNR (Approximation)
-# Signal = Passed Tests / Total Tests
-# We grab verify this via cargo test output if we wanted dynamic
-SNR_SCORE=$(echo "scale=2; 249/249" | bc)
+if [ ! -f "$BIZRA_DASHBOARD_METRICS_PATH" ]; then
+  echo "ERROR: Metrics file not found: $BIZRA_DASHBOARD_METRICS_PATH"
+  exit 1
+fi
+
+METRICS_JSON=$(cat "$BIZRA_DASHBOARD_METRICS_PATH")
 
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 RECEIPT_ID="rec_INTERNAL_DASHBOARD_$(uuidgen | tr -d '-')"
@@ -23,15 +26,7 @@ cat > "$OUTPUT" <<EOF
 {
   "receipt_id": "$RECEIPT_ID",
   "timestamp": "$TIMESTAMP",
-  "metrics": {
-    "internal_snr": ${SNR_SCORE},
-    "avg_commit_ihsan": 0.98,
-    "avg_commit_latency_ms": 55,
-    "mutation_kill_rate": 0.97,
-    "tpm_attestation_failures": 0,
-    "burn_events_last_24h": $BURN_EVENTS,
-    "total_compute_burned": 0.05
-  }
+  "metrics": $METRICS_JSON
 }
 EOF
 

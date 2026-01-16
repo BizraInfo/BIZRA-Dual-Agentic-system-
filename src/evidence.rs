@@ -14,6 +14,7 @@ use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// The Evidence Envelope structure that wraps every action.
+/// PEAK MASTERPIECE v7.1: timestamp changed from f64 to u64 for determinism
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Envelope {
     // Binding
@@ -22,9 +23,9 @@ pub struct Envelope {
     pub agent_id: String,    // Actor
 
     // Ordering & Uniqueness
-    pub nonce: String,  // Random unique identifier
-    pub counter: u64,   // Monotonic counter for this session
-    pub timestamp: f64, // Timestamp (UTC)
+    pub nonce: String,    // Random unique identifier
+    pub counter: u64,     // Monotonic counter for this session
+    pub timestamp_ns: u64, // Timestamp in nanoseconds (UTC) - deterministic
 
     // Payload
     pub payload_hash: String, // Hash of the actual content/action
@@ -32,6 +33,7 @@ pub struct Envelope {
 
 impl Envelope {
     /// Create a new envelope
+    /// PEAK MASTERPIECE v7.1: Uses nanoseconds (u64) for deterministic hashing
     pub fn new(
         policy_hash: String,
         session_id: String,
@@ -40,10 +42,10 @@ impl Envelope {
         counter: u64,
         payload_hash: String,
     ) -> Self {
-        let timestamp = SystemTime::now()
+        let timestamp_ns = SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_secs_f64();
+            .expect("System clock before UNIX epoch")
+            .as_nanos() as u64;
 
         Self {
             policy_hash,
@@ -51,24 +53,26 @@ impl Envelope {
             agent_id,
             nonce,
             counter,
-            timestamp,
+            timestamp_ns,
             payload_hash,
         }
     }
 
     /// Compute the unique hash of this envelope.
     /// Uses canonical JSON serialization to ensure deterministic hashing.
+    /// PEAK MASTERPIECE v7.1: Uses u64 timestamp for cross-platform determinism
     pub fn compute_envelope_hash(&self) -> String {
         // Create a canonical representation matching Python's json.dumps(sort_keys=True)
+        // Uses integer timestamp (nanoseconds) for deterministic hashing
         let canonical = format!(
-            r#"{{"agent":"{}","counter":{},"nonce":"{}","payload":"{}","policy":"{}","session":"{}","ts":{}}}"#,
+            r#"{{"agent":"{}","counter":{},"nonce":"{}","payload":"{}","policy":"{}","session":"{}","ts_ns":{}}}"#,
             self.agent_id,
             self.counter,
             self.nonce,
             self.payload_hash,
             self.policy_hash,
             self.session_id,
-            self.timestamp
+            self.timestamp_ns  // Deterministic u64 instead of f64
         );
 
         let mut hasher = Sha256::new();
@@ -85,16 +89,20 @@ impl Envelope {
 }
 
 /// Enforces uniqueness and ordering of envelopes.
+/// PEAK MASTERPIECE v7.1: Uses u64 nanoseconds for deterministic timestamps
 ///
 /// State:
-/// - seen_nonces: Map of nonce -> timestamp (to prevent replay)
+/// - seen_nonces: Map of nonce -> timestamp_ns (to prevent replay)
 /// - session_counters: Map of session_id -> last_seen_counter (to enforce order)
 #[derive(Debug)]
 pub struct ReplayGuard {
-    nonce_ttl_seconds: u64,
-    seen_nonces: HashMap<String, f64>,
+    nonce_ttl_ns: u64,  // TTL in nanoseconds
+    seen_nonces: HashMap<String, u64>,  // timestamp in nanoseconds
     session_counters: HashMap<String, u64>,
 }
+
+/// Nanoseconds per second constant
+const NANOS_PER_SEC: u64 = 1_000_000_000;
 
 impl ReplayGuard {
     /// Create a new ReplayGuard with default TTL of 1 hour
@@ -102,13 +110,21 @@ impl ReplayGuard {
         Self::with_ttl(3600)
     }
 
-    /// Create a new ReplayGuard with custom TTL
+    /// Create a new ReplayGuard with custom TTL (in seconds)
     pub fn with_ttl(nonce_ttl_seconds: u64) -> Self {
         Self {
-            nonce_ttl_seconds,
+            nonce_ttl_ns: nonce_ttl_seconds * NANOS_PER_SEC,
             seen_nonces: HashMap::new(),
             session_counters: HashMap::new(),
         }
+    }
+
+    /// Get current timestamp in nanoseconds
+    fn now_ns() -> u64 {
+        SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("System clock before UNIX epoch")
+            .as_nanos() as u64
     }
 
     /// Validate an envelope against replay and ordering rules.
@@ -122,13 +138,12 @@ impl ReplayGuard {
             ));
         }
 
-        // Check current nonce freshness
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_secs_f64();
+        // Check current nonce freshness (using u64 nanoseconds)
+        let now_ns = Self::now_ns();
 
-        if (now - envelope.timestamp) > self.nonce_ttl_seconds as f64 {
+        // Saturating subtraction to prevent underflow
+        let age_ns = now_ns.saturating_sub(envelope.timestamp_ns);
+        if age_ns > self.nonce_ttl_ns {
             return Err("Envelope expired (timestamp too old).".to_string());
         }
 
@@ -150,7 +165,7 @@ impl ReplayGuard {
         }
 
         // --- Commit State ---
-        self.seen_nonces.insert(envelope.nonce.clone(), now);
+        self.seen_nonces.insert(envelope.nonce.clone(), now_ns);
         self.session_counters
             .insert(envelope.session_id.clone(), envelope.counter);
 
@@ -164,15 +179,12 @@ impl ReplayGuard {
 
     /// Remove expired nonces to prevent memory bloat
     pub fn cleanup(&mut self) {
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_secs_f64();
+        let now_ns = Self::now_ns();
 
         let expired: Vec<String> = self
             .seen_nonces
             .iter()
-            .filter(|(_, ts)| (now - **ts) > self.nonce_ttl_seconds as f64)
+            .filter(|(_, ts)| now_ns.saturating_sub(**ts) > self.nonce_ttl_ns)
             .map(|(nonce, _)| nonce.clone())
             .collect();
 

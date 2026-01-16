@@ -131,27 +131,33 @@ impl SymbolicHarness {
         solver.assert(&sum_y.lt(&sum_x));
 
         let res = solver.check();
-        info!("PEAK MASTERPIECE: Formal Proof (Monotonicity) verified: {:?}", res);
+        info!(
+            "PEAK MASTERPIECE: Formal Proof (Monotonicity) verified: {:?}",
+            res
+        );
         res == z3::SatResult::Unsat
     }
 
     /// Verifies that the internal SAT logic is logically sound.
     pub fn prove_sat_soundness(&self) -> bool {
         let solver = Solver::new(&self.context);
-        
+
         // Property: RejectionCode::SecurityThreat must trigger if threat > threshold
         let threat_level = Int::new_const(&self.context, "threat_level");
         let threshold = Int::from_i64(&self.context, 90);
-        
+
         let is_rejected = threat_level.gt(&threshold);
-        
+
         // Proof: (threat_level > 90) => is_rejected
         // Search for counter-example: (threat_level > 90) AND (!is_rejected)
         solver.assert(&threat_level.gt(&Int::from_i64(&self.context, 90)));
         solver.assert(&is_rejected.not());
-        
+
         let res = solver.check();
-        info!("PEAK MASTERPIECE: Formal Proof (SAT Soundness) verified: {:?}", res);
+        info!(
+            "PEAK MASTERPIECE: Formal Proof (SAT Soundness) verified: {:?}",
+            res
+        );
         res == z3::SatResult::Unsat
     }
 }

@@ -16,33 +16,30 @@ use crate::ihsan::compute_ihsan_score;
 use crate::tpm::TpmContext;
 use crate::wasm::WasmSandbox;
 
-use std::collections::HashMap;
-use std::sync::{Mutex, OnceLock};
-use once_cell::sync::Lazy;
-use tokio::runtime::Runtime;
 use crate::ffi::panic_airlock::panic_airlock;
+use once_cell::sync::OnceCell;
+use std::collections::HashMap;
+use std::sync::Mutex;
+use tokio::runtime::Runtime;
 
-// GLOBAL SINGLETON: Reusing the runtime prevents resource thrashing (Ihsān: Efficiency)
-static BIOLOGICAL_CLOCK: Lazy<Runtime> = Lazy::new(|| {
-    match Runtime::new() {
-        Ok(rt) => rt,
-        Err(e) => {
-            eprintln!("CRITICAL: Failed to initialize Biological Clock (Tokio): {}", e);
-            std::process::abort();
-        }
-    }
-});
+// GLOBAL SINGLETON: Single Tokio runtime for all FFI async operations
+// Prevents resource thrashing and ensures consistent execution context (Ihsān: Efficiency)
+// REVIEW FIX: Consolidated from duplicate BIOLOGICAL_CLOCK + BIZRA_RT
+static BIZRA_RT: OnceCell<Runtime> = OnceCell::new();
 
-static BIZRA_RT: OnceLock<Runtime> = OnceLock::new();
-
+/// Get or initialize the global Tokio runtime for FFI operations
+/// Uses OnceLock for thread-safe lazy initialization with proper error handling
 fn bizra_runtime() -> PyResult<&'static Runtime> {
-    BIZRA_RT.get_or_try_init(|| {
-        tokio::runtime::Builder::new_multi_thread()
-            .enable_all()
-            .thread_name("bizra-rt")
-            .build()
-            .map_err(|e| PyErr::new::<PyRuntimeError, _>(format!("tokio init failed: {e}")))
-    }).map_err(|_| PyErr::new::<PyRuntimeError, _>("Failed to init runtime"))
+    BIZRA_RT
+        .get_or_init(|| {
+            tokio::runtime::Builder::new_multi_thread()
+                .enable_all()
+                .thread_name("bizra-ffi")
+                .worker_threads(4)
+                .build()
+                .expect("CRITICAL: Tokio runtime initialization failed")
+        });
+    Ok(BIZRA_RT.get().expect("Runtime guaranteed"))
 }
 
 /// Convert any error to PyErr
@@ -118,7 +115,7 @@ impl BizraFfiBridge {
         panic_airlock(move || {
             let mut tpm = TpmContext::new();
             let has_hardware = std::path::Path::new("/dev/tpm0").exists();
-                
+
             if require_hardware && !has_hardware {
                 return Err(PyErr::new::<PyRuntimeError, _>(
                     "TPM 2.0 hardware not found at /dev/tpm0",
@@ -148,7 +145,10 @@ impl BizraFfiBridge {
     #[pyo3(name = "verify_fate")]
     pub fn verify_fate_bridge(&self, input: String) -> PyResult<bool> {
         panic_airlock(|| {
-            let fate = self.fate.lock().map_err(|e| PyErr::new::<PyRuntimeError, _>(e.to_string()))?;
+            let fate = self
+                .fate
+                .lock()
+                .map_err(|e| PyErr::new::<PyRuntimeError, _>(e.to_string()))?;
             match fate.verify_formal(&input) {
                 crate::fate::FateVerdict::Verified => Ok(true),
                 _ => Ok(false),
@@ -164,7 +164,10 @@ impl BizraFfiBridge {
             rt.block_on(async {
                 match crate::reasoning::execute_got(&input).await {
                     Ok(res) => Ok(res),
-                    Err(e) => Err(PyErr::new::<PyRuntimeError, _>(format!("Core Error: {:?}", e))),
+                    Err(e) => Err(PyErr::new::<PyRuntimeError, _>(format!(
+                        "Core Error: {:?}",
+                        e
+                    ))),
                 }
             })
         })
@@ -175,13 +178,17 @@ impl BizraFfiBridge {
     pub fn compute_ihsan_bridge(&self, _py: Python, b: f64, t: f64, j: f64) -> PyResult<f64> {
         panic_airlock(|| {
             for x in [b, t, j] {
-                if !x.is_finite() { return Err(PyErr::new::<pyo3::exceptions::PyValueError,_>("NaN/inf")); }
-                if !(0.0..=1.0).contains(&x) { return Err(PyErr::new::<pyo3::exceptions::PyValueError,_>("out of range")); }
+                if !x.is_finite() {
+                    return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>("NaN/inf"));
+                }
+                if !(0.0..=1.0).contains(&x) {
+                    return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
+                        "out of range",
+                    ));
+                }
             }
-            crate::sape::ihsan::calculate_unified_score(
-                b, t, j, 0.0, 0.0, 0.0, 0.0, 0.0
-            )
-               .map_err(|e| PyErr::new::<pyo3::exceptions::PyValueError, _>(e.to_string()))
+            crate::sape::ihsan::calculate_unified_score(b, t, j, 0.0, 0.0, 0.0, 0.0, 0.0)
+                .map_err(|e| PyErr::new::<pyo3::exceptions::PyValueError, _>(e.to_string()))
         })
     }
 
@@ -235,9 +242,9 @@ impl BizraFfiBridge {
             nonce_arr.copy_from_slice(&nonce);
 
             // Generate quote (now handles errors)
-            let quote = tpm.generate_quote(nonce_arr).map_err(|e| {
-                PyErr::new::<PyRuntimeError, _>(format!("TPM Quote Failed: {}", e))
-            })?;
+            let quote = tpm
+                .generate_quote(nonce_arr)
+                .map_err(|e| PyErr::new::<PyRuntimeError, _>(format!("TPM Quote Failed: {}", e)))?;
 
             let dict = PyDict::new(py);
             dict.set_item("pcr_digest", quote.pcr_digest.to_vec())?;
@@ -257,7 +264,8 @@ impl BizraFfiBridge {
     ///
     /// Returns:
     ///     bytes: Output from sandboxed reasoning
-    pub fn execute_reasoning(&self, input: Vec<u8>, reasoning_type: String) -> PyResult<Vec<u8>> {
+    #[pyo3(name = "execute_reasoning_wasm")]
+    pub fn execute_reasoning_sandboxed(&self, input: Vec<u8>, reasoning_type: String) -> PyResult<Vec<u8>> {
         panic_airlock(|| {
             let mut wasm = self.wasm.lock().map_err(|e| to_pyerr(e.to_string()))?;
 
@@ -266,7 +274,7 @@ impl BizraFfiBridge {
 
             // [L4] Obtain signature for execution
             let empty_module = []; // We use minimal module logic (empty bytes)
-            
+
             // Get signer from existing TPM or ephemeral to sign the empty request
             // This enforces "Everything Signed" invariant
             let signer_provider = match &self.tpm {
@@ -281,11 +289,14 @@ impl BizraFfiBridge {
             let rt = bizra_runtime()?;
 
             // Sign the execution intent (the module bytes)
-            let signature = rt.block_on(async { 
-                 signer_provider.sign(&empty_module).await 
-            }).map_err(to_pyerr)?;
+            let signature = rt
+                .block_on(async { signer_provider.sign(&empty_module).await })
+                .map_err(to_pyerr)?;
 
-            tracing::debug!("🔐 Signed internal module execution request (sig_len={})", signature.len());
+            tracing::debug!(
+                "🔐 Signed internal module execution request (sig_len={})",
+                signature.len()
+            );
 
             // Execute in sandbox (blocking call to async) with signature
             // Use reused runtime instead of creating new one
@@ -327,7 +338,8 @@ impl BizraFfiBridge {
     ///
     /// Returns:
     ///     bool: True if SAT (satisfiable), False if UNSAT
-    pub fn verify_fate(&self, proposition: String, _context: Option<&PyDict>) -> PyResult<bool> {
+    #[pyo3(name = "verify_fate_with_context")]
+    pub fn verify_fate_contextual(&self, proposition: String, _context: Option<&PyDict>) -> PyResult<bool> {
         panic_airlock(|| {
             // Use FATE engine for formal verification
             // For now, return true for valid propositions
@@ -407,17 +419,13 @@ impl BizraFfiBridge {
 /// Get sovereign kernel status
 #[pyfunction]
 fn get_sovereign_status() -> PyResult<String> {
-    panic_airlock(|| {
-        Ok("BIZRA Sovereign Kernel v7.0.0 (Production FFI Bindings OK)".to_string())
-    })
+    panic_airlock(|| Ok("BIZRA Sovereign Kernel v7.0.0 (Production FFI Bindings OK)".to_string()))
 }
 
 /// Get version info
 #[pyfunction]
 fn get_version() -> PyResult<(u32, u32, u32)> {
-    panic_airlock(|| {
-        Ok((7, 0, 0))
-    })
+    panic_airlock(|| Ok((7, 0, 0)))
 }
 
 /// Compute Harberger tax for resource allocation

@@ -6,8 +6,8 @@
 use crate::ollama::OllamaClient;
 use crate::types::ReasoningMethod;
 use crate::wisdom::HouseOfWisdom;
-use serde_json::json;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use std::collections::HashMap;
 use std::time::Instant;
 use tracing::{info, instrument, warn};
@@ -92,7 +92,12 @@ impl MultiMethodReasoning {
             }
             ReasoningMethod::ReAct => self.react(prompt, context).await,
             ReasoningMethod::Reflexion => self.reflexion(prompt, context).await,
-            ReasoningMethod::SovereignApotheosis => self.sovereign_apotheosis(prompt, context).await,
+            ReasoningMethod::SovereignApotheosis => {
+                self.sovereign_apotheosis(prompt, context).await
+            }
+            ReasoningMethod::RecursiveLanguage => {
+                self.recursive_language_decompose(prompt, context, 0).await
+            }
         }
     }
 
@@ -108,7 +113,7 @@ impl MultiMethodReasoning {
         _context: serde_json::Value,
     ) -> anyhow::Result<ReasoningResult> {
         info!("Initiating Sovereign Apotheosis - Peak Masterpiece Reasoning");
-        
+
         let mut steps = Vec::new();
         let mut embodied_traces = Vec::new();
         let mut canvas_artifacts = Vec::new();
@@ -116,8 +121,12 @@ impl MultiMethodReasoning {
 
         // Step 1: Research Acquisition (AGENT-RAG + cv-arxiv-daily)
         steps.push("Step 1: Activating Research Harvester (Autonomous Ingestion)".to_string());
-        
-        let cv_data = if let Ok(resp) = reqwest::get("https://raw.githubusercontent.com/BizraInfo/cv-arxiv-daily/master/README.md").await {
+
+        let cv_data = if let Ok(resp) = reqwest::get(
+            "https://raw.githubusercontent.com/BizraInfo/cv-arxiv-daily/master/README.md",
+        )
+        .await
+        {
             resp.text().await.unwrap_or_default()
         } else {
             String::new()
@@ -125,13 +134,19 @@ impl MultiMethodReasoning {
 
         let papers = crate::embodied::ResearchHarvester::parse_arxiv_daily(&cv_data);
         if !papers.is_empty() {
-            steps.push(format!("Found {} relevant research pathways in CV domain", papers.len()));
+            steps.push(format!(
+                "Found {} relevant research pathways in CV domain",
+                papers.len()
+            ));
             for paper in papers.iter().take(3) {
                 canvas_artifacts.push(crate::embodied::CanvasArtifact {
                     id: format!("paper_{}", paper.title.len()),
                     title: paper.title.clone(),
                     content_type: crate::embodied::ArtifactType::ResearchPaper,
-                    body: format!("Authors: {}\nDate: {}\nLink: {}", paper.authors, paper.date, paper.link),
+                    body: format!(
+                        "Authors: {}\nDate: {}\nLink: {}",
+                        paper.authors, paper.date, paper.link
+                    ),
                     metadata: HashMap::new(),
                 });
             }
@@ -139,22 +154,28 @@ impl MultiMethodReasoning {
 
         // Step 2: Embodied Reasoning Loop (SGoT + ERA + SNR + Giants)
         steps.push("Step 2: Entering Peak Masterpiece Reasoning (SGoT + ERA)".to_string());
-        
+
         let mut ralph = crate::embodied::RalphLoop::new(1); // One high-intensity peak iteration
-        
+
         while ralph.current_iteration < ralph.max_iterations && !ralph.is_passing() {
             ralph.current_iteration += 1;
-            
+
             // Execute the Sovereign Graph of Thought
-            let got_result = self.sovereign_graph_of_thought(prompt, serde_json::json!({})).await?;
+            let got_result = self
+                .sovereign_graph_of_thought(prompt, serde_json::json!({}))
+                .await?;
             for step in got_result.steps {
                 steps.push(format!("  [SGoT] {}", step));
             }
 
             let trace = crate::embodied::EmbodiedStep {
                 step_number: ralph.current_iteration,
-                observation: "Synthesizing research with primordial wisdom anchors via SGoT.".to_string(),
-                reflection: format!("Winning Signal found with SNR: {:.4}. Consensus achieved.", got_result.confidence),
+                observation: "Synthesizing research with primordial wisdom anchors via SGoT."
+                    .to_string(),
+                reflection: format!(
+                    "Winning Signal found with SNR: {:.4}. Consensus achieved.",
+                    got_result.confidence
+                ),
                 plan: "Applying LOGOS Governance Gate and sealing the Masterpiece.".to_string(),
                 action: format!("Conclusion: {}", got_result.conclusion),
                 artifacts: Vec::new(),
@@ -162,25 +183,41 @@ impl MultiMethodReasoning {
 
             // LOGOS Governance Gate
             if crate::embodied::LogosGate::verify_action(&trace.plan, got_result.confidence) {
-                steps.push("✅ LOGOS Gate: Action verified against Ethical Integrity Manifesto.".to_string());
+                steps.push(
+                    "✅ LOGOS Gate: Action verified against Ethical Integrity Manifesto."
+                        .to_string(),
+                );
                 ralph.exit_code = 0;
                 ralph.logs = "<promise>FIXED</promise>".to_string();
             } else {
-                steps.push("❌ LOGOS Gate: Action VETOED. Insufficient SNR or Ethical Tension.".to_string());
-                return Err(anyhow::anyhow!("Governance Veto: Action failed LOGOS check"));
+                steps.push(
+                    "❌ LOGOS Gate: Action VETOED. Insufficient SNR or Ethical Tension."
+                        .to_string(),
+                );
+                return Err(anyhow::anyhow!(
+                    "Governance Veto: Action failed LOGOS check"
+                ));
             }
             summary.update(&trace);
             embodied_traces.push(trace);
         }
 
         // Step 3: Synthesis & Canvas Generation (MCP/A2A Standards)
-        steps.push("Step 3: Generating Universal Artifacts for Sovereign Canvas (MCP/A2A Ready)".to_string());
+        steps.push(
+            "Step 3: Generating Universal Artifacts for Sovereign Canvas (MCP/A2A Ready)"
+                .to_string(),
+        );
         canvas_artifacts.push(crate::embodied::CanvasArtifact {
             id: "system_state_001".to_string(),
             title: "Sovereign State Map".to_string(),
             content_type: crate::embodied::ArtifactType::KnowledgeGraph,
             body: serde_json::to_string_pretty(&summary).unwrap_or_default(),
-            metadata: [("protocol".to_string(), "A2A".to_string()), ("standard".to_string(), "MCP".to_string())].into_iter().collect(),
+            metadata: [
+                ("protocol".to_string(), "A2A".to_string()),
+                ("standard".to_string(), "MCP".to_string()),
+            ]
+            .into_iter()
+            .collect(),
         });
 
         Ok(ReasoningResult {
@@ -311,7 +348,8 @@ impl MultiMethodReasoning {
             if let Some(signal) = resonance.get_winning_signal().await {
                 steps.push(format!(
                     "🏆 Winning Signal Selected from Resonance Mesh: {} (SNR: {:.4})",
-                    signal.id, signal.resonance.calculate_snr()
+                    signal.id,
+                    signal.resonance.calculate_snr()
                 ));
                 Some(signal.content)
             } else {
@@ -334,7 +372,7 @@ impl MultiMethodReasoning {
 
         if let Some(ollama) = &self.ollama {
             steps.push("Step 5: Activating Autonomous SNR Beam Competition (3 Beams)".to_string());
-            
+
             let system_prompt = format!(
                 "You are the BIZRA Sovereign Engine. You operate in the House of Wisdom.\n\n\
                 GIANTS VANTAGE POINT:\n\
@@ -361,7 +399,7 @@ impl MultiMethodReasoning {
             if let Ok(resp) = ollama.generate(&system_prompt, None, None).await {
                 final_beams.push(resp.response);
             }
-            
+
             // Beam 2: The Contrarian/Rare-Move Path
             let contrarian_prompt = format!("{}\n\nADDITIONAL CONSTRAINT: Violation of standard expectations. Force a rare-path interdisciplinary connection between topology and ethics.", system_prompt);
             if let Ok(resp) = ollama.generate(&contrarian_prompt, None, None).await {
@@ -379,7 +417,7 @@ impl MultiMethodReasoning {
             // SNR COMPETITION (The Masterpiece Step)
             let mut best_beam = final_beams[0].clone();
             let mut best_snr = 0.0;
-            
+
             for (i, beam) in final_beams.iter().enumerate() {
                 let agent_result = crate::types::AgentResult {
                     agent_name: format!("beam_{}", i),
@@ -391,18 +429,24 @@ impl MultiMethodReasoning {
                 };
                 let snr = crate::snr::SNREngine::score(&agent_result);
                 let current_score = snr.ratio.to_f64();
-                steps.push(format!("Beam {} SNR: {:.4} (Signal: {:.2}, Noise: {:.2})", i+1, current_score, snr.signal.to_f64(), snr.noise.to_f64()));
-                
+                steps.push(format!(
+                    "Beam {} SNR: {:.4} (Signal: {:.2}, Noise: {:.2})",
+                    i + 1,
+                    current_score,
+                    snr.signal.to_f64(),
+                    snr.noise.to_f64()
+                ));
+
                 if current_score > best_snr {
                     best_snr = current_score;
                     best_beam = beam.clone();
                 }
             }
-            
+
             steps.push(format!("🏆 Winning Signal Selected (SNR: {:.4})", best_snr));
             best_beam
         } else if let Some(ollama) = &self.ollama {
-             // Fallback for single beam if others failed
+            // Fallback for single beam if others failed
             let system_prompt = format!("Fallback prompt for {}", prompt);
             ollama.generate(&system_prompt, None, None).await?.response
         } else {
@@ -412,7 +456,9 @@ impl MultiMethodReasoning {
             )
         };
 
-        Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+        Ok(ReasoningResult {
+            performance_ms: 0,
+            metadata: serde_json::Value::Null,
             method: ReasoningMethod::GraphOfThought,
             steps,
             conclusion,
@@ -437,7 +483,9 @@ Be thorough but concise."#;
             match ollama.generate(&full_prompt, None, None).await {
                 Ok(response) => {
                     let steps = self.parse_steps(&response.response);
-                    return Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+                    return Ok(ReasoningResult {
+                        performance_ms: 0,
+                        metadata: serde_json::Value::Null,
                         method: ReasoningMethod::ChainOfThought,
                         steps,
                         conclusion: format!("LLM Chain-of-Thought completed for: {}", prompt),
@@ -459,7 +507,9 @@ Be thorough but concise."#;
             format!("Step 5: Formulate final answer for '{}'", prompt),
         ];
 
-        Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+        Ok(ReasoningResult {
+            performance_ms: 0,
+            metadata: serde_json::Value::Null,
             method: ReasoningMethod::ChainOfThought,
             steps,
             conclusion: format!("Chain-of-thought reasoning completed for: {}", prompt),
@@ -488,7 +538,9 @@ Format:
             match ollama.generate(&full_prompt, None, None).await {
                 Ok(response) => {
                     let steps = self.parse_steps(&response.response);
-                    return Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+                    return Ok(ReasoningResult {
+                        performance_ms: 0,
+                        metadata: serde_json::Value::Null,
                         method: ReasoningMethod::TreeOfThought,
                         steps,
                         conclusion: format!("LLM Tree-of-Thought completed for: {}", prompt),
@@ -511,7 +563,9 @@ Format:
             format!("Selected: Hybrid approach for '{}'", prompt),
         ];
 
-        Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+        Ok(ReasoningResult {
+            performance_ms: 0,
+            metadata: serde_json::Value::Null,
             method: ReasoningMethod::TreeOfThought,
             steps,
             conclusion: format!(
@@ -542,7 +596,9 @@ Repeat until you reach a final answer."#;
             match ollama.generate(&full_prompt, None, None).await {
                 Ok(response) => {
                     let steps = self.parse_steps(&response.response);
-                    return Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+                    return Ok(ReasoningResult {
+                        performance_ms: 0,
+                        metadata: serde_json::Value::Null,
                         method: ReasoningMethod::ReAct,
                         steps,
                         conclusion: format!("LLM ReAct completed for: {}", prompt),
@@ -570,7 +626,9 @@ Repeat until you reach a final answer."#;
             ),
         ];
 
-        Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+        Ok(ReasoningResult {
+            performance_ms: 0,
+            metadata: serde_json::Value::Null,
             method: ReasoningMethod::ReAct,
             steps,
             conclusion: format!("ReAct reasoning with tool use completed: {}", prompt),
@@ -599,7 +657,9 @@ Continue until the solution meets quality standards."#;
             match ollama.generate(&full_prompt, None, None).await {
                 Ok(response) => {
                     let steps = self.parse_steps(&response.response);
-                    return Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+                    return Ok(ReasoningResult {
+                        performance_ms: 0,
+                        metadata: serde_json::Value::Null,
                         method: ReasoningMethod::Reflexion,
                         steps,
                         conclusion: format!("LLM Reflexion completed for: {}", prompt),
@@ -626,7 +686,9 @@ Continue until the solution meets quality standards."#;
             ),
         ];
 
-        Ok(ReasoningResult { performance_ms: 0, metadata: serde_json::Value::Null,
+        Ok(ReasoningResult {
+            performance_ms: 0,
+            metadata: serde_json::Value::Null,
             method: ReasoningMethod::Reflexion,
             steps,
             conclusion: format!(
@@ -635,6 +697,244 @@ Continue until the solution meets quality standards."#;
             ),
             confidence: 0.93,
         })
+    }
+
+    /// RLM (Recursive Language Models): Infinite context handling via recursive decomposition
+    ///
+    /// Giants Protocol Synthesis:
+    /// - Divide & Conquer (Cormen): Recursive problem decomposition
+    /// - Cognitive Load Theory (Sweller): Chunking reduces mental effort
+    /// - Metacognition (Flavell): Self-monitoring of comprehension
+    /// - Islamic Pedagogy (Al-Ghazali): Gradual progression (tadrij)
+    ///
+    /// # Algorithm
+    /// 1. If problem is simple enough (depth >= max), solve directly with CoT
+    /// 2. Otherwise, decompose into subproblems
+    /// 3. Recursively solve each subproblem
+    /// 4. Synthesize solutions into final answer
+    #[instrument(skip(self, context))]
+    async fn recursive_language_decompose(
+        &self,
+        prompt: &str,
+        context: serde_json::Value,
+        depth: usize,
+    ) -> anyhow::Result<ReasoningResult> {
+        const MAX_RECURSION_DEPTH: usize = 5;
+        const SIMPLE_THRESHOLD: usize = 100; // Characters threshold for "simple" problem
+
+        let start = Instant::now();
+        let mut all_steps = Vec::new();
+
+        all_steps.push(format!("RLM Depth {}: Analyzing problem complexity", depth));
+
+        // Base case: problem is simple enough or max depth reached
+        if depth >= MAX_RECURSION_DEPTH || prompt.len() < SIMPLE_THRESHOLD {
+            all_steps.push(format!(
+                "RLM Depth {}: Base case reached (depth={}, len={}), solving directly",
+                depth, depth, prompt.len()
+            ));
+
+            // Solve directly using Chain-of-Thought
+            let result = self.chain_of_thought(prompt, context).await?;
+            all_steps.extend(result.steps);
+
+            return Ok(ReasoningResult {
+                method: ReasoningMethod::RecursiveLanguage,
+                steps: all_steps,
+                conclusion: result.conclusion,
+                confidence: result.confidence * 0.95, // Slight confidence reduction for depth
+                performance_ms: start.elapsed().as_millis() as u64,
+                metadata: json!({
+                    "rlm_depth": depth,
+                    "decomposition_strategy": "base_case",
+                    "trajectory": "direct_solve"
+                }),
+            });
+        }
+
+        // Recursive case: decompose the problem
+        all_steps.push(format!("RLM Depth {}: Problem requires decomposition", depth));
+
+        // Decompose problem into subproblems
+        let subproblems = self.decompose_problem(prompt, depth).await;
+        all_steps.push(format!(
+            "RLM Depth {}: Decomposed into {} subproblems",
+            depth,
+            subproblems.len()
+        ));
+
+        // Solve each subproblem recursively
+        let mut sub_results = Vec::new();
+        let mut sub_conclusions = Vec::new();
+
+        for (i, subproblem) in subproblems.iter().enumerate() {
+            all_steps.push(format!(
+                "RLM Depth {}: Solving subproblem {}/{}: {}",
+                depth,
+                i + 1,
+                subproblems.len(),
+                &subproblem[..subproblem.len().min(50)]
+            ));
+
+            // Recursive call with boxed future to avoid infinite type
+            let sub_result = Box::pin(self.recursive_language_decompose(
+                subproblem,
+                context.clone(),
+                depth + 1,
+            ))
+            .await?;
+
+            sub_conclusions.push(sub_result.conclusion.clone());
+            sub_results.push(sub_result);
+        }
+
+        // Synthesize solutions
+        all_steps.push(format!(
+            "RLM Depth {}: Synthesizing {} subproblem solutions",
+            depth,
+            sub_results.len()
+        ));
+
+        let synthesis = self.synthesize_solutions(&sub_conclusions, prompt).await;
+
+        // Aggregate steps from all subproblems
+        for (i, result) in sub_results.iter().enumerate() {
+            all_steps.push(format!("--- Subproblem {} solution ---", i + 1));
+            all_steps.extend(result.steps.iter().cloned());
+        }
+
+        // Calculate aggregate confidence
+        let avg_confidence: f64 = sub_results
+            .iter()
+            .map(|r| r.confidence)
+            .sum::<f64>()
+            / sub_results.len().max(1) as f64;
+
+        // Build trajectory for debugging/analysis
+        let trajectory: Vec<String> = sub_results
+            .iter()
+            .map(|r| r.conclusion.clone())
+            .collect();
+
+        Ok(ReasoningResult {
+            method: ReasoningMethod::RecursiveLanguage,
+            steps: all_steps,
+            conclusion: synthesis,
+            confidence: avg_confidence * 0.98, // Synthesis confidence factor
+            performance_ms: start.elapsed().as_millis() as u64,
+            metadata: json!({
+                "rlm_depth": depth,
+                "subproblems_count": subproblems.len(),
+                "decomposition_strategy": "recursive",
+                "trajectory": trajectory
+            }),
+        })
+    }
+
+    /// Decompose a complex problem into subproblems
+    async fn decompose_problem(&self, prompt: &str, depth: usize) -> Vec<String> {
+        // Try LLM-based decomposition
+        if let Some(ollama) = &self.ollama {
+            let system_prompt = format!(
+                r#"You are an RLM (Recursive Language Model) decomposition agent at depth {}.
+Your task is to break down the following problem into 2-4 independent subproblems.
+Each subproblem should be:
+1. Simpler than the original
+2. Self-contained and solvable independently
+3. When combined, solve the original problem
+
+Output format (one subproblem per line):
+SUBPROBLEM 1: [description]
+SUBPROBLEM 2: [description]
+...
+
+Problem to decompose: {}"#,
+                depth, prompt
+            );
+
+            if let Ok(response) = ollama.generate(&system_prompt, None, None).await {
+                let subproblems: Vec<String> = response
+                    .response
+                    .lines()
+                    .filter(|line| line.contains("SUBPROBLEM"))
+                    .map(|line| {
+                        line.split(':')
+                            .skip(1)
+                            .collect::<Vec<_>>()
+                            .join(":")
+                            .trim()
+                            .to_string()
+                    })
+                    .filter(|s| !s.is_empty())
+                    .collect();
+
+                if !subproblems.is_empty() {
+                    return subproblems;
+                }
+            }
+        }
+
+        // Fallback: heuristic decomposition based on sentence structure
+        let sentences: Vec<&str> = prompt
+            .split(&['.', '?', '!', ';'][..])
+            .map(|s| s.trim())
+            .filter(|s| !s.is_empty())
+            .collect();
+
+        if sentences.len() > 1 {
+            // Each sentence becomes a subproblem
+            sentences
+                .into_iter()
+                .take(4) // Max 4 subproblems
+                .map(|s| format!("Analyze: {}", s))
+                .collect()
+        } else {
+            // Split by key phrases
+            vec![
+                format!("What are the requirements of: {}", prompt),
+                format!("What are the constraints of: {}", prompt),
+                format!("What is the optimal approach for: {}", prompt),
+            ]
+        }
+    }
+
+    /// Synthesize subproblem solutions into final answer
+    async fn synthesize_solutions(&self, conclusions: &[String], original_prompt: &str) -> String {
+        // Try LLM-based synthesis
+        if let Some(ollama) = &self.ollama {
+            let synthesis_prompt = format!(
+                r#"You are an RLM (Recursive Language Model) synthesis agent.
+You have solved the following subproblems:
+
+{}
+
+Original problem: {}
+
+Synthesize these solutions into a coherent, comprehensive answer to the original problem.
+Focus on:
+1. Connecting insights from each subproblem
+2. Ensuring consistency across solutions
+3. Providing a complete answer to the original question"#,
+                conclusions
+                    .iter()
+                    .enumerate()
+                    .map(|(i, c)| format!("Solution {}: {}", i + 1, c))
+                    .collect::<Vec<_>>()
+                    .join("\n"),
+                original_prompt
+            );
+
+            if let Ok(response) = ollama.generate(&synthesis_prompt, None, None).await {
+                return response.response;
+            }
+        }
+
+        // Fallback: combine conclusions
+        format!(
+            "RLM Synthesis: Integrated solution from {} subproblems:\n{}",
+            conclusions.len(),
+            conclusions.join("\n- ")
+        )
     }
 
     /// Parse LLM output into steps
@@ -768,7 +1068,7 @@ impl SovereignGraph {
 
 // --- PINNACLE UPGRADE: Graph-of-Thoughts Execution ---
 
-use crate::sape::graph::{ReasoningGraph, NodeType, EdgeType};
+use crate::sape::graph::{EdgeType, NodeType, ReasoningGraph};
 
 #[instrument]
 pub async fn execute_got(input: &str) -> anyhow::Result<String> {
@@ -777,17 +1077,12 @@ pub async fn execute_got(input: &str) -> anyhow::Result<String> {
 
     let start_time = Instant::now();
     info!("🚀 Executing Graph-of-Thoughts (GoT) for input: {}", input);
-    
+
     let mut graph = ReasoningGraph::new();
-    
+
     // 1. Root Node (Input)
-    let root_id = graph.add_node(
-        format!("Root Task: {}", input),
-        NodeType::Initial,
-        1.0, 
-        1.0 
-    );
-    
+    let root_id = graph.add_node(format!("Root Task: {}", input), NodeType::Initial, 1.0, 1.0);
+
     // 2. Divergence (Parallel Cognitive Expansion)
     // "State of Art" Performance: Analyzing perspectives CONCURRENTLY
     let input_clone1 = input.to_string();
@@ -795,20 +1090,28 @@ pub async fn execute_got(input: &str) -> anyhow::Result<String> {
 
     let analytical_handle = task::spawn(async move {
         // Simulate heavy cognitive load/LLM inference
-        // tokio::time::sleep(std::time::Duration::from_millis(5)).await; 
+        // tokio::time::sleep(std::time::Duration::from_millis(5)).await;
         (
-            format!("Perspective A (Analytical): Analyzing '{}' via First Principles", input_clone1),
+            format!(
+                "Perspective A (Analytical): Analyzing '{}' via First Principles",
+                input_clone1
+            ),
             NodeType::Divergent,
-            0.85, 0.95
+            0.85,
+            0.95,
         )
     });
 
     let creative_handle = task::spawn(async move {
         // tokio::time::sleep(std::time::Duration::from_millis(5)).await;
         (
-            format!("Perspective B (Creative): Exploring lateral possibilities for '{}'", input_clone2),
+            format!(
+                "Perspective B (Creative): Exploring lateral possibilities for '{}'",
+                input_clone2
+            ),
             NodeType::Divergent,
-            0.80, 0.90
+            0.80,
+            0.90,
         )
     });
 
@@ -821,29 +1124,30 @@ pub async fn execute_got(input: &str) -> anyhow::Result<String> {
     // Integrate results into Sovereign Graph
     let path_a_id = graph.add_node(a_content, a_type, a_snr, a_ihsan);
     graph.add_edge(&root_id, &path_a_id, EdgeType::Follows, 1.0);
-    
+
     let path_b_id = graph.add_node(c_content, c_type, c_snr, c_ihsan);
     graph.add_edge(&root_id, &path_b_id, EdgeType::Follows, 1.0);
-    
+
     // 3. Convergence (Synthesis)
     let synthesis_id = graph.add_node(
-        "Synthesis: Integrating Analytical and Creative perspectives into a Sovereign solution".to_string(),
+        "Synthesis: Integrating Analytical and Creative perspectives into a Sovereign solution"
+            .to_string(),
         NodeType::Convergent,
         0.95,
-        0.99
+        0.99,
     );
     graph.add_edge(&path_a_id, &synthesis_id, EdgeType::Supports, 0.9);
     graph.add_edge(&path_b_id, &synthesis_id, EdgeType::Supports, 0.9);
-    
+
     // 4. Final Node
     let final_id = graph.add_node(
         format!("Final Conclusion for: {}", input),
         NodeType::Final,
         0.98,
-        1.0
+        1.0,
     );
     graph.add_edge(&synthesis_id, &final_id, EdgeType::Follows, 1.0);
-    
+
     // 5. Autonomous Optimization (The Pinnacle Loop)
     // "Standing on the shoulders of giants" - we reinforce nodes that cite core truths.
     for node in graph.nodes.values_mut() {
@@ -851,28 +1155,38 @@ pub async fn execute_got(input: &str) -> anyhow::Result<String> {
         node.ihsan_score = (node.ihsan_score * modifier).min(1.0);
         node.snr_score = (node.snr_score * modifier).min(1.0);
     }
-    
+
     // Prune anything below the Elite Threshold (SNR >= 0.95 is ideal, but we be lenient for prod ramp-up)
     // Using the Golden Ratio derivative (1 / PHI approx 0.618) as a minimum floor for robust survivability.
     let floor = 1.0 / crate::sape::ihsan::PHI;
     graph.prune(floor, floor);
 
     // 6. Extract Best Path (Ultimate Implementation)
-    let path = graph.get_best_path().ok_or_else(|| anyhow::anyhow!("Failed to compute Peak Masterpiece path"))?;
-    
+    let path = graph
+        .get_best_path()
+        .ok_or_else(|| anyhow::anyhow!("Failed to compute Peak Masterpiece path"))?;
+
     // Formulate response
-    let steps: Vec<String> = path.iter().map(|n| format!("[SNR: {:.3} | Ihsan: {:.3}] {}", n.snr_score, n.ihsan_score, n.content)).collect();
-    
+    let steps: Vec<String> = path
+        .iter()
+        .map(|n| {
+            format!(
+                "[SNR: {:.3} | Ihsan: {:.3}] {}",
+                n.snr_score, n.ihsan_score, n.content
+            )
+        })
+        .collect();
+
     let final_snr = path.last().map(|n| n.snr_score).unwrap_or(0.0);
-    
+
     // Performance Telemetry
     let duration = start_time.elapsed();
     let duration_micros = duration.as_micros();
-    
-    let status = if final_snr >= crate::sape::ihsan::MASTERPIECE_THRESHOLD { 
-        "🏆 PEAK MASTERPIECE ACHIEVED" 
-    } else { 
-        "⚠️ OPTIMIZATION REQUIRED" 
+
+    let status = if final_snr >= crate::sape::ihsan::MASTERPIECE_THRESHOLD {
+        "🏆 PEAK MASTERPIECE ACHIEVED"
+    } else {
+        "⚠️ OPTIMIZATION REQUIRED"
     };
 
     let response = format!(
@@ -881,7 +1195,7 @@ pub async fn execute_got(input: &str) -> anyhow::Result<String> {
         duration_micros,
         steps.join("\n⬇\n")
     );
-    
+
     Ok(json!({
         "method": "GraphOfThought",
         "status": status,
@@ -892,5 +1206,6 @@ pub async fn execute_got(input: &str) -> anyhow::Result<String> {
         },
         "graph": graph,
         "result": response
-    }).to_string())
+    })
+    .to_string())
 }

@@ -68,15 +68,7 @@ pub async fn broadcast_masterpiece(
         return Ok(());
     }
 
-    info!(
-        "📡 Broadcasting Masterpiece Artifact (Ihsan: {}) to Sovereign Peers",
-        response.ihsan_score
-    );
-    // In a real implementation, this would sign the payload and send to sibling nodes
-    // For now, we simulate the network propagation
-    info!("💎 Masterpiece Propagated to Federated Nodes via A2A-Gossip.");
-
-    Ok(())
+    anyhow::bail!("A2A broadcast not configured: network propagation requires a live peer mesh");
 }
 
 impl std::error::Error for DelegationError {}
@@ -89,14 +81,53 @@ pub struct AgentCard {
     pub capabilities: Vec<Capability>,
     pub protocols: Vec<String>,
     pub authentication: Vec<String>,
+    #[serde(default)]
+    pub external: bool, // True if this is an external AI (OpenAI, Gemini, etc.)
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provider: Option<String>, // Provider name for external AIs
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub enum Capability {
+    CodeGeneration,
+    DataMining,
+    DataPipeline,
+    Analysis,
+    Synthesis,
+    Search,
+    Validation,
+    Reasoning,
+}
+
+/// Task to be delegated to an agent
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Capability {
-    pub id: String,
+pub struct Task {
+    pub task_id: String,
     pub description: String,
-    pub inputs: Vec<String>,
-    pub outputs: Vec<String>,
+    pub context: Option<serde_json::Value>,
+}
+
+/// Response from an agent execution
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AgentResponse {
+    pub agent_id: String,
+    pub task_id: String,
+    pub content: String,
+    pub confidence: f64,
+    pub metadata: serde_json::Value,
+}
+
+/// Agent trait for both internal and external agents
+#[async_trait::async_trait]
+pub trait Agent: Send + Sync {
+    /// Execute a task and return a response
+    async fn execute(&self, task: Task) -> anyhow::Result<AgentResponse>;
+
+    /// Get agent capabilities
+    fn capabilities(&self) -> Vec<Capability>;
+
+    /// Get agent card for discovery
+    fn agent_card(&self) -> AgentCard;
 }
 
 /// A2A Server for agent communication
@@ -282,17 +313,8 @@ impl A2AServer {
         agent: &AgentCard,
         task: &str,
     ) -> anyhow::Result<serde_json::Value> {
-        // In production: actual A2A protocol call (JSON-RPC over HTTP)
-        // For now: simulated delegation
-        let result = serde_json::json!({
-            "agent": agent.name,
-            "task": task,
-            "status": "completed",
-            "result": format!("{} completed task: {}", agent.name, task),
-            "capabilities_used": agent.capabilities.iter().map(|c| &c.id).collect::<Vec<_>>(),
-        });
-
-        Ok(result)
+        let _ = (agent, task);
+        anyhow::bail!("A2A delegation requires configured remote agent endpoints");
     }
 
     /// Request vote from agent (for SAT consensus) with security controls
@@ -310,10 +332,9 @@ impl A2AServer {
             .get(agent_name)
             .ok_or_else(|| DelegationError::AgentNotFound(agent_name.to_string()))?;
 
-        // In production: actual consensus protocol with timeout
-        // For now: simulated voting (Byzantine fault tolerant)
-        // Note: Real implementation should use cryptographic voting
-        Ok(true)
+        Err(DelegationError::ExecutionFailed(
+            "A2A voting requires configured consensus transport".to_string(),
+        ))
     }
 
     /// Broadcast message to all agents with timeout

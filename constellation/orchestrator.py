@@ -846,11 +846,13 @@ class ConstellationOrchestrator:
             query: The user's task/question
             context: Optional context (stakes, production flag, etc.)
             agent_executor: Callable that takes (agent, query, reasoning_mode)
-                           and returns AgentOutput. If None, uses mock execution.
+                           and returns AgentOutput.
                            
         Returns:
             ConstellationOutput with full structured response
         """
+        if agent_executor is None:
+            raise ValueError("agent_executor is required for constellation execution")
         # Phase 1: INTAKE
         analysis = self.analyzer.analyze(query, context)
         
@@ -861,7 +863,7 @@ class ConstellationOrchestrator:
         outputs = self._execute_work(query, analysis, team, agent_executor)
         
         # Phase 4: VERIFY
-        verifications = self._execute_verification(outputs, verifiers, analysis)
+        verifications = self._execute_verification(outputs, verifiers, analysis, query, agent_executor)
         
         # Phase 5: SYNTHESIZE
         result = self.synthesizer.synthesize(analysis, outputs, verifications, team)
@@ -886,10 +888,9 @@ class ConstellationOrchestrator:
         agents.extend(m for m in team.members if m)
         
         for agent in agents:
-            if agent_executor:
-                output = agent_executor(agent, query, analysis.reasoning_mode)
-            else:
-                output = self._mock_agent_execution(agent, query, analysis)
+            if agent_executor is None:
+                raise ValueError("agent_executor is required for constellation execution")
+            output = agent_executor(agent, query, analysis.reasoning_mode)
             outputs.append(output)
             
         return outputs
@@ -898,7 +899,9 @@ class ConstellationOrchestrator:
         self,
         outputs: list[AgentOutput],
         verifiers: list[Agent],
-        analysis: TaskAnalysis
+        analysis: TaskAnalysis,
+        query: str,
+        agent_executor: Optional[callable],
     ) -> list[VerificationResult]:
         """Execute verification phase."""
         verifications = []
@@ -909,43 +912,15 @@ class ConstellationOrchestrator:
             verifications.append(result)
             
         # Then, if we have designated verifiers, run their checks
-        # In a real implementation, these would be LLM calls
-        for verifier in verifiers:
-            result = VerificationResult(
-                verifier_id=verifier.id,
-                verifier_name=verifier.name,
-                passed=True,  # Mock: always pass
-                issues=[],
-                attestation=f"Attested by {verifier.name}",
-                snr_adjustment=0.02  # Boost for verifier attestation
-            )
-            verifications.append(result)
+        if verifiers:
+            if agent_executor is None:
+                raise ValueError("agent_executor is required for verification")
+            for verifier in verifiers:
+                verifier_output = agent_executor(verifier, query, analysis.reasoning_mode)
+                result = self.evaluator.evaluate(verifier_output, analysis)
+                verifications.append(result)
             
         return verifications
-        
-    def _mock_agent_execution(
-        self,
-        agent: Agent,
-        query: str,
-        analysis: TaskAnalysis
-    ) -> AgentOutput:
-        """Mock agent execution for testing."""
-        return AgentOutput(
-            agent_id=agent.id,
-            agent_name=agent.name,
-            content=f"[Mock response from {agent.name} ({agent.domain})]\n\n"
-                   f"Analyzing query with {agent.reasoning_default.value} reasoning...\n"
-                   f"Specialty applied: {agent.specialty}",
-            claims=[
-                {
-                    "text": f"Analysis from {agent.name} perspective",
-                    "tag": ClaimTag.DERIVED.value,
-                    "evidence": "Mock evidence reference"
-                }
-            ],
-            confidence=agent.snr_target[0],
-            reasoning_trace=f"Applied {agent.reasoning_pattern}"
-        )
         
     def get_agent(self, slug: str) -> Optional[Agent]:
         """Get an agent by slug."""

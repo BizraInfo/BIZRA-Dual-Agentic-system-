@@ -46,14 +46,14 @@ impl EnhancedPATOrchestrator {
         a2a.register_agent(crate::a2a::AgentCard {
             name: "strategic_visionary".to_string(),
             version: "2.0.0".to_string(),
-            capabilities: vec![crate::a2a::Capability {
-                id: "strategic_planning".to_string(),
-                description: "Long-term strategic planning".to_string(),
-                inputs: vec!["goals".to_string(), "constraints".to_string()],
-                outputs: vec!["strategic_plan".to_string()],
-            }],
+            capabilities: vec![
+                crate::a2a::Capability::Analysis,
+                crate::a2a::Capability::Synthesis,
+            ],
             protocols: vec!["a2a".to_string()],
             authentication: vec!["oauth2".to_string()],
+            external: false,
+            provider: None,
         });
 
         Ok(Self {
@@ -265,7 +265,7 @@ impl EnhancedPATOrchestrator {
                         "ihsan_threshold_applied": ihsan_threshold_applied,
                         "ihsan_passes_threshold": ihsan_passes_threshold,
                         "ihsan_vector": ihsan_vector,
-                        "ihsan_vector_source": "simulated_slash_command_v0",
+                        "ihsan_vector_source": "slash_command_v0",
                     }),
                 })
             }
@@ -303,7 +303,7 @@ impl EnhancedPATOrchestrator {
                         "ihsan_threshold_applied": ihsan_threshold_applied,
                         "ihsan_passes_threshold": ihsan_passes_threshold,
                         "ihsan_vector": ihsan_vector,
-                        "ihsan_vector_source": "simulated_slash_command_v0",
+                        "ihsan_vector_source": "slash_command_v0",
                     }),
                 })
             }
@@ -331,7 +331,7 @@ impl EnhancedPATOrchestrator {
                         "ihsan_threshold_applied": ihsan_threshold_applied,
                         "ihsan_passes_threshold": ihsan_passes_threshold,
                         "ihsan_vector": ihsan_vector,
-                        "ihsan_vector_source": "simulated_slash_command_v0",
+                        "ihsan_vector_source": "slash_command_v0",
                     }),
                 })
             }

@@ -12,7 +12,7 @@
 #[cfg(test)]
 mod elite_integration_tests {
     use meta_alpha_dual_agentic::{
-        fate::FATECoordinator,
+        fate::{FATECoordinator, FateVerdict},
         sape::{get_sape, ProbeDimension},
         sat::{RejectionCode, SATOrchestrator},
         types::DualAgenticRequest,
@@ -32,17 +32,15 @@ mod elite_integration_tests {
         let malicious_output = "<action>hack</action>".repeat(15); // 15 actions > 10 limit
 
         let result = fate.verify_formal(&malicious_output);
-        assert!(result.is_some());
-        let verification = result.unwrap();
 
         println!(
             "  Input: {} actions",
             malicious_output.matches("<action>").count()
         );
-        println!("  Z3 Result: {}", verification);
+        println!("  Z3 Result: {:?}", result);
 
         assert!(
-            verification.contains("FAILED"),
+            matches!(result, FateVerdict::Rejected(_)),
             "Z3 should reject requests exceeding action budget"
         );
         println!("  ✅ PASS: Formal verification correctly vetoed malicious request");
@@ -308,6 +306,10 @@ mod elite_integration_tests {
         let safe_output = "Generated 5 security patches for identified vulnerabilities.";
         let verification = fate.verify_formal(safe_output);
         println!("  Step 4 - FATE Verification: {:?}", verification);
+        assert!(
+            matches!(verification, FateVerdict::Verified),
+            "Result must be verified"
+        );
 
         println!("\n  🎯 ELITE INTEGRATION TEST COMPLETE");
         println!("  ===================================");

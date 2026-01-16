@@ -1,0 +1,97 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/mcp.json",
+  "mcpServers": {
+    "bizra-filesystem": {
+      "command": "python3",
+      "args": ["scripts/mcp_server_fs.py"],
+      "env": {
+        "ALLOWED_DIRS": "/root/bizra-genesis",
+        "MAX_READ_BYTES": "2000000",
+        "MAX_GREP_HITS": "100"
+      },
+      "description": "BIZRA filesystem operations with sandboxed access"
+    },
+    "bizra-rust": {
+      "command": "cargo",
+      "args": ["run", "--release", "--bin", "mcp-server"],
+      "cwd": "/root/bizra-genesis",
+      "env": {
+        "RUST_LOG": "info",
+        "BIZRA_IHSAN_ENV": "development"
+      },
+      "description": "BIZRA Rust core operations via MCP",
+      "disabled": true
+    }
+  },
+  "context": {
+    "project": "BIZRA Genesis",
+    "version": "10.0.0-APOTHEOSIS",
+    "architecture": "DDAGI (Decentralized Distributed AGI)",
+    "philosophy": {
+      "covenant": "Ihsan",
+      "law": "We don't assume. If we must, we do it with Ihsan.",
+      "snr_target": 1.5,
+      "ihsan_target": 0.95
+    }
+  },
+  "tools": {
+    "priority": [
+      "Read",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Write",
+      "Bash"
+    ],
+    "restrictions": {
+      "bash_blocklist": [
+        "rm -rf /",
+        "eval",
+        "> /dev/sda",
+        "dd if=/dev/zero"
+      ]
+    }
+  },
+  "agents": {
+    "default_model": "inherit",
+    "parallel_limit": 8,
+    "types": {
+      "spec-requirements": {
+        "path": ".claude/agents/kfc/spec-requirements.md",
+        "parallel": true
+      },
+      "spec-design": {
+        "path": ".claude/agents/kfc/spec-design.md",
+        "parallel": true
+      },
+      "spec-tasks": {
+        "path": ".claude/agents/kfc/spec-tasks.md",
+        "parallel": true
+      },
+      "spec-impl": {
+        "path": ".claude/agents/kfc/spec-impl.md",
+        "parallel": true
+      },
+      "spec-judge": {
+        "path": ".claude/agents/kfc/spec-judge.md",
+        "parallel": true
+      },
+      "spec-test": {
+        "path": ".claude/agents/kfc/spec-test.md",
+        "parallel": false
+      }
+    }
+  },
+  "memory": {
+    "file": "memory.md",
+    "compression": {
+      "method": "golden_condensation",
+      "phi": 1.618
+    },
+    "layers": {
+      "hot": {"retention": 1.0},
+      "warm": {"retention": 0.618},
+      "cold": {"retention": 0.382}
+    }
+  }
+}

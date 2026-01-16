@@ -110,7 +110,6 @@ pub struct RiskAssessment {
 
 pub struct SatOrchestrator {
     ihsan_threshold: f64,
-    halt_threshold: f64,
 }
 
 impl SatOrchestrator {
@@ -121,15 +120,7 @@ impl SatOrchestrator {
             .and_then(|v| v.parse().ok())
             .unwrap_or(0.95); // Gate 7: Fail-Closed Standard
 
-        let halt_threshold = std::env::var("IHSAN_HALT_THRESHOLD")
-            .ok()
-            .and_then(|v| v.parse().ok())
-            .unwrap_or(0.85); // Gate 7: Apoptosis Standard
-
-        Self {
-            ihsan_threshold,
-            halt_threshold,
-        }
+        Self { ihsan_threshold }
     }
 
     /// Get all agents in the SAT team (Cache-optimized retrieval)
@@ -464,7 +455,7 @@ mod tests {
     #[test]
     fn test_verify_poi_event_pass() {
         let sat = SatOrchestrator::new();
-        let result = sat.verify_poi_event(uuid::Uuid::new_v4(), 0.90, 5.0);
+        let result = sat.verify_poi_event(uuid::Uuid::new_v4(), 0.96, 5.0);
         assert!(result.verified);
     }
 
@@ -507,7 +498,7 @@ mod tests {
     fn test_can_proceed() {
         let sat = SatOrchestrator::new();
 
-        let (can, reason) = sat.can_proceed("test_action", 0.90);
+        let (can, reason) = sat.can_proceed("test_action", 0.96);
         assert!(can);
         assert!(reason.is_none());
 

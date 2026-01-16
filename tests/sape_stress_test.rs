@@ -12,7 +12,7 @@ fn create_node(id: &str, content: &str) -> GoTNode {
         content: content.to_string(),
         embedding: vec![0.0; 768],
         metadata: HashMap::new(),
-        resonance: meta_alpha_dual_agentic::resonance::ResonanceMetrics::new(content.to_string()),
+        resonance: meta_alpha_dual_agentic::resonance::ResonanceMetrics::new(content),
         children: Vec::new(),
         parents: Vec::new(),
     }

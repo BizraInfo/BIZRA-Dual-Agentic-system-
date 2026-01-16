@@ -6,9 +6,9 @@
 
 use crate::ihsan;
 // FATECoordinator: Integrated via BridgeCoordinator
+use crate::cognitive::{CognitiveLayer, ThoughtCapsule};
 use crate::sape::elevator::AbstractionElevator;
 use crate::sape::tension::TensionStudio;
-use crate::cognitive::{CognitiveLayer, ThoughtCapsule};
 use lazy_static::lazy_static;
 use prometheus::{
     register_counter_vec, register_gauge_vec, register_histogram, CounterVec, GaugeVec, Histogram,
@@ -389,7 +389,7 @@ impl SemanticCache {
     }
 }
 
-use crate::sape::graph::{ReasoningGraph, NodeType, EdgeType}; // Import Graph types
+use crate::sape::graph::ReasoningGraph; // Import Graph types
 
 /// SAPE Engine - Symbolic-Abstraction Probe Elevation
 pub struct SAPEEngine {
@@ -416,9 +416,9 @@ impl SAPEEngine {
         // Initialize Cognitive Layer (ignore errors in non-async new, log them)
         let cognitive = match CognitiveLayer::new() {
             Ok(layer) => Some(layer),
-            Err(e) => {
+            Err(_e) => {
                 // In production, this might be fatal, but for resilient init we log warning
-                // tracing::warn!("SAPE: Cognitive Layer init failed: {}", e);
+                // tracing::warn!("SAPE: Cognitive Layer init failed: {}", _e);
                 None
             }
         };
@@ -1083,10 +1083,12 @@ impl SAPEEngine {
     }
 
     /// Calculate aggregate Ihsān score from probe results
-    pub fn calculate_ihsan_score(&self, results: &[ProbeResult]) -> f64 {
+    /// Returns Fixed64 for deterministic cross-platform hash consistency
+    pub fn calculate_ihsan_score(&self, results: &[ProbeResult]) -> crate::fixed::Fixed64 {
         let total_weight: f64 = ProbeDimension::all().iter().map(|d| d.weight()).sum();
         let weighted_sum: f64 = results.iter().map(|r| r.weighted_score()).sum();
-        weighted_sum / total_weight
+        let score = weighted_sum / total_weight;
+        crate::fixed::Fixed64::from_f64(score)
     }
 }
 
@@ -1162,7 +1164,7 @@ mod tests {
         assert_eq!(results.len(), 9);
 
         let ihsan = engine.calculate_ihsan_score(&results);
-        assert!(ihsan > 0.7);
+        assert!(ihsan.to_f64() > 0.7);
     }
 
     #[test]

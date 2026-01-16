@@ -49,7 +49,14 @@ pub const MASTERPIECE_THRESHOLD: f64 = 0.95;
 /// Evaluates alignment with the "Standing on Shoulders of Giants" protocol.
 /// Returns a multiplier (1.0 - 1.5) based on citation of core axioms.
 pub fn giant_shoulder_modifier(content: &str) -> f64 {
-    let giants = ["sovereign", "first principles", "axiom", "logic", "proof", "truth"];
+    let giants = [
+        "sovereign",
+        "first principles",
+        "axiom",
+        "logic",
+        "proof",
+        "truth",
+    ];
     let mut multiplier: f64 = 1.0;
     for term in giants {
         if content.to_lowercase().contains(term) {

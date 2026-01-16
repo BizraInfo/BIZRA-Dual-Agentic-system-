@@ -30,6 +30,11 @@ use uuid::Uuid;
 
 use bizra_node0::{ApiResponse, AppState, HealthResponse};
 
+mod telemetry;
+use telemetry::TelemetrySnapshot;
+
+use bizra_node0::api::knowledge::knowledge_router;
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     // Initialize logging
@@ -81,7 +86,7 @@ async fn main() -> anyhow::Result<()> {
     info!("Ollama URL: {}", ollama_url);
 
     // Check Ollama health
-    match check_ollama_health(&ollama_url).await {
+    match telemetry::check_ollama_health(&ollama_url).await {
         Ok(models) => info!("Ollama health check... OK ({} models available)", models),
         Err(e) => info!("Ollama health check... WARN: {}", e),
     }
@@ -99,7 +104,8 @@ async fn main() -> anyhow::Result<()> {
         ReasoningMethod::TreeOfThought,
         ReasoningMethod::GraphOfThought,
         ReasoningMethod::SovereignApotheosis,
-    ]).await;
+    ])
+    .await;
 
     // Create shared state
     let state = Arc::new(AppState {
@@ -163,9 +169,15 @@ async fn main() -> anyhow::Result<()> {
         .route("/api/poi/timeline", get(poi_timeline_handler))
         .route("/api/masterpiece/seal", get(masterpiece_seal_handler))
         .route("/api/reasoning/got", post(got_reasoning_handler))
-        .route("/api/reasoning/apotheosis", post(apotheosis_reasoning_handler))
+        .route(
+            "/api/reasoning/apotheosis",
+            post(apotheosis_reasoning_handler),
+        )
         .route("/api/services/status", get(services_status_handler))
-        .route("/api/env/snapshot", get(env_snapshot_handler));
+        .route("/api/telemetry/live", get(telemetry_handler))
+        .route("/api/env/snapshot", get(env_snapshot_handler))
+        // Knowledge Graph endpoints for bizra.ai / bizra.info
+        .nest("/api/knowledge", knowledge_router());
 
     // Build protected router
     let protected_routes = Router::new()
@@ -221,24 +233,6 @@ async fn main() -> anyhow::Result<()> {
     Ok(())
 }
 
-/// Check Ollama health and return model count
-async fn check_ollama_health(url: &str) -> anyhow::Result<usize> {
-    let client = reqwest::Client::new();
-    let response = client
-        .get(format!("{}/api/tags", url))
-        .timeout(std::time::Duration::from_secs(5))
-        .send()
-        .await?;
-
-    #[derive(Deserialize)]
-    struct OllamaTagsResponse {
-        models: Vec<serde_json::Value>,
-    }
-
-    let tags: OllamaTagsResponse = response.json().await?;
-    Ok(tags.models.len())
-}
-
 // ============================================
 // HANDLERS
 // ============================================
@@ -271,7 +265,11 @@ async fn dual_execute_handler(
     State(state): State<Arc<AppState>>,
     Json(payload): Json<DualExecutePayload>,
 ) -> Json<ApiResponse<serde_json::Value>> {
-    info!("Dual Execution Request: {}", payload.intent);
+    let has_params = payload.params.is_some();
+    info!(
+        "Dual Execution Request: {} (params={})",
+        payload.intent, has_params
+    );
 
     // Initial technical probe (Validator IQ)
     let validator = SapeValidator;
@@ -562,22 +560,20 @@ pub struct MasterpieceSeal {
 
 async fn masterpiece_seal_handler() -> Result<Json<ApiResponse<MasterpieceSeal>>, StatusCode> {
     let seal_path = "/root/bizra-genesis/BIZRA_MASTERPIECE_SEAL.json";
-    
+
     match std::fs::read_to_string(seal_path) {
-        Ok(content) => {
-            match serde_json::from_str::<MasterpieceSeal>(&content) {
-                Ok(seal) => Ok(Json(ApiResponse {
-                    success: true,
-                    data: Some(seal),
-                    message: Some("Masterpiece Seal retrieved successfully".into()),
-                    error: None,
-                })),
-                Err(e) => {
-                    warn!("Failed to parse Masterpiece Seal: {}", e);
-                    Err(StatusCode::INTERNAL_SERVER_ERROR)
-                }
+        Ok(content) => match serde_json::from_str::<MasterpieceSeal>(&content) {
+            Ok(seal) => Ok(Json(ApiResponse {
+                success: true,
+                data: Some(seal),
+                message: Some("Masterpiece Seal retrieved successfully".into()),
+                error: None,
+            })),
+            Err(e) => {
+                warn!("Failed to parse Masterpiece Seal: {}", e);
+                Err(StatusCode::INTERNAL_SERVER_ERROR)
             }
-        }
+        },
         Err(e) => {
             warn!("Failed to read Masterpiece Seal at {}: {}", seal_path, e);
             Err(StatusCode::NOT_FOUND)
@@ -600,22 +596,28 @@ struct GotResponse {
 async fn got_reasoning_handler(
     State(state): State<Arc<AppState>>,
     Json(payload): Json<GotRequest>,
-) ->  impl IntoResponse {
+) -> impl IntoResponse {
     use meta_alpha_dual_agentic::types::ReasoningMethod;
-    
-    match state.reasoning.reason(&ReasoningMethod::GraphOfThought, &payload.prompt, serde_json::json!({})).await {
-        Ok(result) => {
-            Json(ApiResponse {
-                success: true,
-                data: Some(GotResponse {
-                    steps: result.steps,
-                    conclusion: result.conclusion,
-                    confidence: result.confidence,
-                }),
-                message: None,
-                error: None,
-            })
-        }
+
+    match state
+        .reasoning
+        .reason(
+            &ReasoningMethod::GraphOfThought,
+            &payload.prompt,
+            serde_json::json!({}),
+        )
+        .await
+    {
+        Ok(result) => Json(ApiResponse {
+            success: true,
+            data: Some(GotResponse {
+                steps: result.steps,
+                conclusion: result.conclusion,
+                confidence: result.confidence,
+            }),
+            message: None,
+            error: None,
+        }),
         Err(e) => {
             warn!("GoT reasoning failed: {}", e);
             Json(ApiResponse {
@@ -631,21 +633,18 @@ async fn got_reasoning_handler(
 async fn services_status_handler(
     State(state): State<Arc<AppState>>,
 ) -> Json<ApiResponse<serde_json::Value>> {
-    let mut services = serde_json::json!({});
+    let postgres = telemetry::check_postgres_status(&state.db_pool).await;
+    let ollama = telemetry::check_ollama_status(&state.ollama_url).await;
 
-    // Check PostgreSQL
-    let pg_status = match sqlx::query("SELECT 1").fetch_one(&state.db_pool).await {
-        Ok(_) => "healthy",
-        Err(_) => "unhealthy",
-    };
-    services["postgres"] = serde_json::json!(pg_status);
+    let mut services = serde_json::json!({
+        "postgres": postgres.status,
+        "ollama": ollama.status,
+    });
 
-    // Check Ollama
-    let ollama_status = match check_ollama_health(&state.ollama_url).await {
-        Ok(_) => "healthy",
-        Err(_) => "unhealthy",
-    };
-    services["ollama"] = serde_json::json!(ollama_status);
+    if let Ok(redis_url) = std::env::var("REDIS_URL") {
+        let redis = telemetry::check_redis_status(&redis_url).await;
+        services["redis"] = serde_json::json!(redis.status);
+    }
 
     Json(ApiResponse {
         success: true,
@@ -653,6 +652,23 @@ async fn services_status_handler(
         message: None,
         error: None,
     })
+}
+
+async fn telemetry_handler(
+    State(state): State<Arc<AppState>>,
+) -> Result<Json<ApiResponse<TelemetrySnapshot>>, StatusCode> {
+    match telemetry::collect_snapshot(&state).await {
+        Ok(snapshot) => Ok(Json(ApiResponse {
+            success: true,
+            data: Some(snapshot),
+            message: None,
+            error: None,
+        })),
+        Err(err) => {
+            warn!("Telemetry collection failed: {}", err);
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        }
+    }
 }
 
 /// Environment snapshot endpoint
@@ -839,7 +855,10 @@ async fn pat_chat_handler(
     // Audits the intent before committing expensive neural resources.
     let (approved, veto_reason) = state.sat.can_proceed(&payload.message, 1.0); // Assume 1.0 baseline for intent
     if !approved {
-        warn!("SAT VETO triggered for agent chat: {}", veto_reason.clone().unwrap_or_default());
+        warn!(
+            "SAT VETO triggered for agent chat: {}",
+            veto_reason.clone().unwrap_or_default()
+        );
         return Ok(Json(ApiResponse {
             success: false,
             data: None,
@@ -1433,7 +1452,7 @@ struct Asset {
 async fn assets_stats_handler(
     State(state): State<Arc<AppState>>,
 ) -> Result<Json<ApiResponse<serde_json::Value>>, StatusCode> {
-    let result = sqlx::query(
+    let result = sqlx::query_as::<_, Asset>(
         r#"
         SELECT 
             COUNT(*)::bigint as total_assets,
@@ -1446,12 +1465,12 @@ async fn assets_stats_handler(
     .await;
 
     match result {
-        Ok(row) => Ok(Json(ApiResponse {
+        Ok(asset) => Ok(Json(ApiResponse {
             success: true,
             data: Some(serde_json::json!({
-                "total_assets": row.get::<i64, _>("total_assets"),
-                "indexed_assets": row.get::<i64, _>("indexed_assets"),
-                "total_bytes": row.get::<i64, _>("total_bytes"),
+                "total_assets": asset.total_assets,
+                "indexed_assets": asset.indexed_assets,
+                "total_bytes": asset.total_bytes,
             })),
             message: None,
             error: None,
@@ -1736,18 +1755,24 @@ async fn recovery_initiate_handler(
 async fn apotheosis_reasoning_handler(
     State(state): State<Arc<AppState>>,
     Json(payload): Json<GotRequest>,
-) ->  impl IntoResponse {
+) -> impl IntoResponse {
     use meta_alpha_dual_agentic::types::ReasoningMethod;
-    
-    match state.reasoning.reason(&ReasoningMethod::SovereignApotheosis, &payload.prompt, serde_json::json!({})).await {
-        Ok(result) => {
-            Json(ApiResponse {
-                success: true,
-                data: Some(result),
-                message: None,
-                error: None,
-            })
-        }
+
+    match state
+        .reasoning
+        .reason(
+            &ReasoningMethod::SovereignApotheosis,
+            &payload.prompt,
+            serde_json::json!({}),
+        )
+        .await
+    {
+        Ok(result) => Json(ApiResponse {
+            success: true,
+            data: Some(result),
+            message: None,
+            error: None,
+        }),
         Err(e) => {
             warn!("Apotheosis reasoning failed: {}", e);
             Json(ApiResponse {

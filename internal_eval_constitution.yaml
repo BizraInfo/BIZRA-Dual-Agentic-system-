@@ -1,0 +1,25 @@
+# internal_eval_constitution.yaml
+# BIZRA Internal Evaluation Protocol (SAPE v1.∞)
+# "The system becomes recursively self-improving."
+
+conformance:
+  snr_min: 0.99
+  ihsan_min: 0.95
+  max_regression_latency_ms: 1.0
+
+burn_policy:
+  enabled: true
+  default_rate_percent: 5.0
+  security_violation_rate_percent: 100.0
+  low_ihsan_rate_percent: 5.0
+  low_mutation_coverage_rate_percent: 10.0
+
+automation:
+  commit_review: "sat_consensus_7_agents"
+  kpi_dashboard: "merkle_root_only"
+  retrospective: "z3_proof_of_improvement"
+
+gates:
+  pre_commit: true
+  ci_mutation: true
+  hourly_self_eval: true

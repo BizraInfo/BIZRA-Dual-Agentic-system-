@@ -45,7 +45,7 @@ pub struct VectorMetadata {
 }
 
 /// Search result from ChromaDB
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize)]
 pub struct VectorSearchResult {
     pub id: String,
     pub content: String,

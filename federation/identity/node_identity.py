@@ -11,13 +11,15 @@ It acts as the "Passport Office" for the 8B Node Network.
 Standard:
 - ID: SHA-256 Hash of the Genesis Key.
 - Tier: Determined by Proof-of-Impact (PoI) score.
-- Attestation: Signed claims of hardware/software integrity (Simulated).
+- Attestation: Signed claims of hardware/software integrity.
 """
 
 import json
 import secrets
 import hashlib
 import time
+import os
+import subprocess
 from pathlib import Path
 from dataclasses import dataclass, asdict
 from typing import Optional
@@ -48,10 +50,23 @@ class IdentityAuthority:
         hasher.update(hardware_fingerprint.encode())
         node_id = f"node_{hasher.hexdigest()[:16]}"
         
-        # 3. Create Passport (Self-Signed in simulation)
-        # In production, this signature would be Ed25519(private_key, data)
+        # 3. Create Passport signature via external signer
         sig_payload = f"{node_id}:{timestamp}:{hardware_fingerprint}"
-        signature = hashlib.sha256(sig_payload.encode()).hexdigest()
+        sign_cmd = os.getenv("BIZRA_NODE_SIGN_CMD")
+        if not sign_cmd:
+            raise RuntimeError("BIZRA_NODE_SIGN_CMD is required for node identity signing")
+        proc = subprocess.run(
+            sign_cmd,
+            input=sig_payload,
+            text=True,
+            shell=True,
+            capture_output=True,
+        )
+        if proc.returncode != 0:
+            raise RuntimeError(f"Node signing failed: {proc.stderr.strip()}")
+        signature = proc.stdout.strip()
+        if not signature:
+            raise RuntimeError("Node signing produced empty signature")
         
         passport = NodePassport(
             node_id=node_id,
@@ -79,14 +94,17 @@ class IdentityAuthority:
 
     def validate_passport(self, passport: NodePassport) -> bool:
         """Anti-Cheat: Verifies the integrity of the passport."""
-        # Re-construct signature payload
         sig_payload = f"{passport.node_id}:{passport.genesis_timestamp}:{passport.hardware_fingerprint}"
-        expected_sig = hashlib.sha256(sig_payload.encode()).hexdigest()
-        
-        if passport.signature != expected_sig:
-            return False
-            
-        return True
+        verify_cmd = os.getenv("BIZRA_NODE_VERIFY_CMD")
+        if not verify_cmd:
+            raise RuntimeError("BIZRA_NODE_VERIFY_CMD is required for node identity verification")
+        proc = subprocess.run(
+            f"{verify_cmd} '{sig_payload}' '{passport.signature}'",
+            text=True,
+            shell=True,
+            capture_output=True,
+        )
+        return proc.returncode == 0
 
 if __name__ == "__main__":
     # Self-Test / CLI

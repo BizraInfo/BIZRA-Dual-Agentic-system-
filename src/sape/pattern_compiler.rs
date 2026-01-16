@@ -175,7 +175,8 @@ impl PatternCompiler {
                 let mut pattern = Pattern::new(chain);
                 pattern.frequency = freq;
                 pattern.complexity = self.calculate_complexity(&pattern.symbol_chain);
-                pattern.optimization_level = self.determine_optimization_level(freq, pattern.complexity);
+                pattern.optimization_level =
+                    self.determine_optimization_level(freq, pattern.complexity);
                 pattern
             })
             .filter(|p| p.complexity >= self.min_complexity)
@@ -203,7 +204,10 @@ impl PatternCompiler {
         let wasm_bytes = self.generate_wasm(&pattern.symbol_chain, pattern.optimization_level)?;
 
         // Step 2: Sign the WASM module
-        let signature = self.signer.sign(&wasm_bytes).await
+        let signature = self
+            .signer
+            .sign(&wasm_bytes)
+            .await
             .map_err(|e| PatternError::SigningFailed(e.to_string()))?;
 
         // Step 3: Update pattern
@@ -221,12 +225,12 @@ impl PatternCompiler {
         // Store in cache
         {
             let mut lock = self.patterns.write().await;
-            
+
             // Evict old patterns if at capacity
             if lock.len() >= self.max_patterns {
                 self.evict_least_used(&mut lock).await;
             }
-            
+
             lock.insert(pattern.id.clone(), pattern.clone());
         }
 
@@ -261,9 +265,9 @@ impl PatternCompiler {
     ) -> Result<Vec<u8>, PatternError> {
         // Simplified WASM generation - in production this would use wasmtime/cranelift
         // For now, generate a compact representation that can be interpreted
-        
+
         let mut wasm = Vec::new();
-        
+
         // WASM magic number and version
         wasm.extend_from_slice(&[0x00, 0x61, 0x73, 0x6D]); // \0asm
         wasm.extend_from_slice(&[0x01, 0x00, 0x00, 0x00]); // version 1
@@ -287,15 +291,15 @@ impl PatternCompiler {
     /// Encode symbol chain into WASM custom section
     fn encode_symbol_chain(&self, symbols: &[String], opt_level: OptimizationLevel) -> Vec<u8> {
         let mut section = Vec::new();
-        
+
         // Custom section ID (0)
         section.push(0x00);
-        
+
         // Section name: "bizra_pattern"
         let name = b"bizra_pattern";
         section.push(name.len() as u8);
         section.extend_from_slice(name);
-        
+
         // Optimization level
         section.push(match opt_level {
             OptimizationLevel::Minimum => 0,
@@ -303,22 +307,22 @@ impl PatternCompiler {
             OptimizationLevel::Aggressive => 2,
             OptimizationLevel::Maximum => 3,
         });
-        
+
         // Symbol count
         section.push(symbols.len() as u8);
-        
+
         // Encode each symbol
         for symbol in symbols {
             let bytes = symbol.as_bytes();
             section.push(bytes.len() as u8);
             section.extend_from_slice(bytes);
         }
-        
+
         // Prepend section size
         let size = section.len();
         let mut result = vec![size as u8];
         result.extend(section);
-        
+
         result
     }
 
@@ -336,7 +340,8 @@ impl PatternCompiler {
         let diversity_factor = unique.len() as f64 / symbols.len() as f64;
 
         // Factor 3: Symbol complexity (length of individual symbols)
-        let avg_symbol_len: f64 = symbols.iter().map(|s| s.len() as f64).sum::<f64>() / symbols.len() as f64;
+        let avg_symbol_len: f64 =
+            symbols.iter().map(|s| s.len() as f64).sum::<f64>() / symbols.len() as f64;
         let symbol_complexity = (avg_symbol_len / 20.0).min(1.0);
 
         // Weighted combination
@@ -346,7 +351,7 @@ impl PatternCompiler {
     /// Determine optimization level based on frequency and complexity
     fn determine_optimization_level(&self, frequency: usize, complexity: f64) -> OptimizationLevel {
         let score = (frequency as f64).log2() * complexity;
-        
+
         match score {
             s if s > 8.0 => OptimizationLevel::Maximum,
             s if s > 4.0 => OptimizationLevel::Aggressive,
@@ -358,9 +363,7 @@ impl PatternCompiler {
     /// Verify pattern signature
     async fn verify_pattern_signature(&self, pattern: &Pattern) -> Result<bool, PatternError> {
         match (&pattern.compiled_wasm, &pattern.signature) {
-            (Some(wasm), Some(sig)) => {
-                Ok(self.signer.verify(wasm, sig))
-            }
+            (Some(wasm), Some(sig)) => Ok(self.signer.verify(wasm, sig)),
             _ => Ok(false),
         }
     }
@@ -385,7 +388,7 @@ impl PatternCompiler {
     /// Get pattern statistics
     pub async fn get_stats(&self) -> PatternStats {
         let lock = self.patterns.read().await;
-        
+
         let total = lock.len();
         let compiled = lock.values().filter(|p| p.is_compiled()).count();
         let total_frequency: usize = lock.values().map(|p| p.frequency).sum();
@@ -418,13 +421,13 @@ pub struct PatternStats {
 pub enum PatternError {
     #[error("Pattern compilation failed: {0}")]
     CompilationFailed(String),
-    
+
     #[error("Signing failed: {0}")]
     SigningFailed(String),
-    
+
     #[error("Verification failed: {0}")]
     VerificationFailed(String),
-    
+
     #[error("Storage error: {0}")]
     StorageError(String),
 }
@@ -440,17 +443,26 @@ mod tests {
         let compiler = PatternCompiler::new(signer);
 
         let symbols = vec![
-            "A".to_string(), "B".to_string(), "C".to_string(),
-            "A".to_string(), "B".to_string(), "C".to_string(),
-            "A".to_string(), "B".to_string(), "C".to_string(),
-            "D".to_string(), "E".to_string(),
+            "A".to_string(),
+            "B".to_string(),
+            "C".to_string(),
+            "A".to_string(),
+            "B".to_string(),
+            "C".to_string(),
+            "A".to_string(),
+            "B".to_string(),
+            "C".to_string(),
+            "D".to_string(),
+            "E".to_string(),
         ];
 
         let patterns = compiler.analyze_trace(&symbols).await;
-        
+
         assert!(!patterns.is_empty());
         // "A", "B", "C" pattern should be found with frequency 3
-        let abc_pattern = patterns.iter().find(|p| p.symbol_chain == vec!["A", "B", "C"]);
+        let abc_pattern = patterns
+            .iter()
+            .find(|p| p.symbol_chain == vec!["A", "B", "C"]);
         assert!(abc_pattern.is_some());
         assert_eq!(abc_pattern.unwrap().frequency, 3);
     }

@@ -1,0 +1,18 @@
+{
+  "task_id": "DEMO-DATA-001",
+  "description": "Analyze patterns in Quranic corpus word frequency distribution",
+  "task_type": "data_mining",
+  "agents": [
+    "claude"
+  ],
+  "solution_hash": "56bb4aa5f186a6e0fdd429b86cc5e80dfda6e036b3738be001efaede52d7a33a",
+  "contributions": [
+    {
+      "agent": "claude",
+      "confidence": 0.99,
+      "tokens": 17
+    }
+  ],
+  "timestamp": "2026-01-13T00:34:44.567131",
+  "evidence_hash": "41752ecb2c73b37ba5ef656e789187c257c98f00d3ddd33441fd8dada31e6fd7"
+}

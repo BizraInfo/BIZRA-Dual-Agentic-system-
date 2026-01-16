@@ -1,6 +1,6 @@
+use crate::fixed::Fixed64;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use crate::fixed::Fixed64;
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum TrustTier {

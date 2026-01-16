@@ -1,9 +1,7 @@
-use iceoryx2::prelude::*;
-use axum::extract::ws::{Message, WebSocket, WebSocketUpgrade};
+use axum::extract::ws::{WebSocket, WebSocketUpgrade};
 use axum::response::IntoResponse;
-use std::sync::Arc;
-use tokio::sync::Mutex;
-use tracing::{info, error};
+use iceoryx2::prelude::*;
+use tracing::info;
 
 /// Sovereign Bridge: The Connector between Rust Kernel and Cognitive Brain
 /// Implemented via Iceoryx2 Zero-Copy IPC for High-Fidelity Signal Integrity.
@@ -17,18 +15,22 @@ pub struct SovereignBridge {
 pub struct CognitiveFrame {
     pub signal_id: [u8; 16], // UUID as bytes
     pub ihsan_score: f64,
-    pub timestamp: i64,      // Unix nanos
+    pub timestamp: i64, // Unix nanos
     pub payload_len: u32,
-    pub payload: [u8; 512],  // Fixed size for zero-copy
-    pub _pad: [u8; 4],       // Align to 8-byte boundary (548 + 4 = 552, 552 % 8 == 0)
+    pub payload: [u8; 512], // Fixed size for zero-copy
+    pub _pad: [u8; 4],      // Align to 8-byte boundary (548 + 4 = 552, 552 % 8 == 0)
 }
 
 impl SovereignBridge {
     pub fn new(service_name_str: &str) -> Self {
-        info!("Initializing Sovereign Bridge (Iceoryx2) on service: {}", service_name_str);
-        
+        info!(
+            "Initializing Sovereign Bridge (Iceoryx2) on service: {}",
+            service_name_str
+        );
+
         // Initialize Iceoryx2 Node
-        let node_name = NodeName::new(&(format!("bizra_bridge_{}", service_name_str))).expect("Invalid node name");
+        let node_name = NodeName::new(&(format!("bizra_bridge_{}", service_name_str)))
+            .expect("Invalid node name");
         let node = NodeBuilder::new()
             .name(&node_name)
             .create::<ipc::Service>()
@@ -43,7 +45,9 @@ impl SovereignBridge {
     /// Read a frame from the shared memory segment via Iceoryx2
     pub async fn read_zero_copy_frame(&self) -> Option<CognitiveFrame> {
         let s_name = ServiceName::new(&self.service_name).ok()?;
-        let _service = self.node.service_builder(&s_name)
+        let _service = self
+            .node
+            .service_builder(&s_name)
             .event()
             .open_or_create()
             .ok()?;
@@ -73,9 +77,7 @@ impl SovereignBridge {
 }
 
 /// WebSocket Handler for UI Connection
-pub async fn ws_handler(
-    ws: WebSocketUpgrade,
-) -> impl IntoResponse {
+pub async fn ws_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
     ws.on_upgrade(|socket| handle_socket(socket))
 }
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import { useTelemetrySocket } from "@/hooks/use-telemetry-socket"
 import { Card } from "@/components/ui/card"
 
 interface PerformanceMetrics {
@@ -42,6 +43,14 @@ interface OptimizationSuggestion {
 }
 
 export function AdvancedPerformanceMonitor() {
+  const { telemetry } = useTelemetrySocket()
+  const telemetryRef = useRef(telemetry)
+
+  // Keep ref in sync for animation loop
+  useEffect(() => {
+    telemetryRef.current = telemetry
+  }, [telemetry])
+
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
     fps: 60,
     memoryUsage: 0,
@@ -111,11 +120,18 @@ export function AdvancedPerformanceMonitor() {
       // Collective intelligence latency
       const collectiveIntelligenceLatency = Math.random() * 100 + 50
 
+      // Use Telemetry if available, otherwise fallback/browser simulation
+      const t = telemetryRef.current
+
+      const cpuUsage = t ? t.resources.cpuUsage : Math.min(100, memoryUsage * 0.8 + Math.random() * 20)
+      const memUsage = t ? t.resources.memoryUsage : memoryUsage
+      const netLatency = t ? Math.round(t.latencyUs / 100) / 10 : Math.random() * 50 + 20
+
       const newMetrics: PerformanceMetrics = {
         fps,
-        memoryUsage,
-        cpuUsage: Math.min(100, memoryUsage * 0.8 + Math.random() * 20),
-        networkLatency,
+        memoryUsage: memUsage,
+        cpuUsage,
+        networkLatency: netLatency,
         renderTime: Math.random() * 16 + 4,
         jsHeapSize,
         domNodes,
@@ -136,7 +152,7 @@ export function AdvancedPerformanceMonitor() {
   }, [])
 
   const assessSystemHealth = (metrics: PerformanceMetrics): SystemHealth => {
-    const getHealthStatus = (value: number, thresholds: [number, number, number]) => {
+    const getHealthStatus = (value: number, thresholds: [number, number, number]): "optimal" | "good" | "degraded" | "critical" => {
       if (value >= thresholds[0]) return "optimal"
       if (value >= thresholds[1]) return "good"
       if (value >= thresholds[2]) return "degraded"
@@ -167,7 +183,7 @@ export function AdvancedPerformanceMonitor() {
       }
     })
 
-    const averageScore = healthScores.reduce((a, b) => a + b, 0) / healthScores.length
+    const averageScore = healthScores.reduce((a: number, b) => a + b, 0) / healthScores.length
     const overall =
       averageScore >= 3.5 ? "optimal" : averageScore >= 2.5 ? "good" : averageScore >= 1.5 ? "degraded" : "critical"
 
@@ -463,11 +479,10 @@ export function PerformanceOptimizer() {
         {optimizations.map((opt) => (
           <div
             key={opt.id}
-            className={`p-4 rounded-lg border transition-all duration-300 ${
-              opt.implemented
-                ? "bg-green-400/10 border-green-400/30"
-                : "bg-black/40 border-primary/20 hover:border-accent/40"
-            }`}
+            className={`p-4 rounded-lg border transition-all duration-300 ${opt.implemented
+              ? "bg-green-400/10 border-green-400/30"
+              : "bg-black/40 border-primary/20 hover:border-accent/40"
+              }`}
           >
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -598,15 +613,23 @@ export function SystemHealthIndicator() {
 
   const [isVisible, setIsVisible] = useState(false)
 
-  useEffect(() => {
-    // Simple health check based on performance
-    const checkSystemHealth = () => {
-      const memory = (performance as any).memory
-      const memoryUsage = memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 0
+  const { telemetry } = useTelemetrySocket()
 
-      const components = {
-        rendering: memoryUsage < 70 ? "optimal" : memoryUsage < 85 ? "good" : "degraded",
-        memory: memoryUsage < 60 ? "optimal" : memoryUsage < 80 ? "good" : "degraded",
+  useEffect(() => {
+    // Check health based on telemetry or local fallback
+    const checkSystemHealth = () => {
+      let memoryUsage = 0
+
+      if (telemetry) {
+        memoryUsage = telemetry.resources.memoryUsage
+      } else {
+        const memory = (performance as any).memory
+        memoryUsage = memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 0
+      }
+
+      const components: SystemHealth['components'] = {
+        rendering: (memoryUsage < 70 ? "optimal" : memoryUsage < 85 ? "good" : "degraded") as "optimal" | "good" | "degraded" | "critical",
+        memory: (memoryUsage < 60 ? "optimal" : memoryUsage < 80 ? "good" : "degraded") as "optimal" | "good" | "degraded" | "critical",
         network: "optimal", // Simplified for now
         consciousness: "optimal",
         quantum: "optimal",
@@ -628,7 +651,7 @@ export function SystemHealthIndicator() {
         }
       })
 
-      const averageScore = healthScores.reduce((a, b) => a + b, 0) / healthScores.length
+      const averageScore = healthScores.reduce((a: number, b) => a + b, 0) / healthScores.length
       const overall =
         averageScore >= 3.5 ? "optimal" : averageScore >= 2.5 ? "good" : averageScore >= 1.5 ? "degraded" : "critical"
 
@@ -660,15 +683,14 @@ export function SystemHealthIndicator() {
     <div className="fixed top-4 right-4 z-50">
       <button
         onClick={() => setIsVisible(!isVisible)}
-        className={`w-3 h-3 rounded-full transition-all duration-300 ${
-          systemHealth.overall === "optimal"
-            ? "bg-green-500"
-            : systemHealth.overall === "good"
-              ? "bg-primary"
-              : systemHealth.overall === "degraded"
-                ? "bg-accent"
-                : "bg-red-500"
-        } ${isVisible ? "scale-150" : "hover:scale-125"}`}
+        className={`w-3 h-3 rounded-full transition-all duration-300 ${systemHealth.overall === "optimal"
+          ? "bg-green-500"
+          : systemHealth.overall === "good"
+            ? "bg-primary"
+            : systemHealth.overall === "degraded"
+              ? "bg-accent"
+              : "bg-red-500"
+          } ${isVisible ? "scale-150" : "hover:scale-125"}`}
         title={`System Health: ${systemHealth.overall}`}
       />
 

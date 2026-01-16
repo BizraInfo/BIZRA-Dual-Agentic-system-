@@ -37,8 +37,7 @@ def main():
     print("\n[*] Entering Overnight Autonomous Mode...")
     print("[*] System will monitor for 'Trust-Tier Drift' and 'TPM Bypass' attempts.")
     
-    # Infinite loop (simulated for the session, but intended for background)
-    # In this environment, we just show the setup is complete.
+    # Infinite loop omitted in this environment; log a single activation entry instead.
     
     with open("logs/federation_hardening.log", "a") as f:
         f.write(f"[{time.ctime()}] Loop started. Status: OK (3 tests passing)\n")

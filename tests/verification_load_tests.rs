@@ -64,9 +64,12 @@ fn test_tpm_load_measurements_and_attestation() -> Result<()> {
     assert!(ctx.verify_attestation(&root));
 
     let nonce = [0xAB; 16];
-    let quote = ctx.generate_quote(nonce);
+    let quote = ctx
+        .generate_quote(nonce)
+        .expect("Quote generation must succeed");
     assert_eq!(quote.nonce, nonce);
-    assert_eq!(quote.signature.len(), 32);
+    // Ed25519 signatures are 64 bytes
+    assert_eq!(quote.signature.len(), 64);
 
     let proof = ctx.generate_merkle_proof(last_extended);
     assert_eq!(proof.root, root);
@@ -169,7 +172,7 @@ async fn test_sat_load_validations_under_concurrent_pressure() {
 
 #[tokio::test]
 async fn test_wasm_sandbox_high_volume_execution() -> Result<()> {
-    let mut sandbox = WasmSandbox::new();
+    let mut sandbox = WasmSandbox::new()?;
 
     let wat = r#"
         (module
@@ -186,9 +189,18 @@ async fn test_wasm_sandbox_high_volume_execution() -> Result<()> {
     let mut success_count = 0;
     let mut interrupt_count = 0;
 
+    // For testing, generate a valid signature using the test TPM's software signer
+    use meta_alpha_dual_agentic::tpm::TpmContext;
+    let tpm = TpmContext::new();
+    let signer = tpm.get_signer();
+    let test_signature = signer.sign(wat.as_bytes()).await?;
+
     for i in 0..48 {
         let payload = format!("run-input-{}", i);
-        match sandbox.execute_isolated(wat.as_bytes(), &payload).await {
+        match sandbox
+            .execute_isolated(wat.as_bytes(), &payload, &test_signature)
+            .await
+        {
             Ok(result) => {
                 success_count += 1;
                 assert!(

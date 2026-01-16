@@ -1,0 +1,11 @@
+# Ignore everything not needed for dashboard deployment
+node_modules
+.next
+.git
+*.log
+*.md
+tests
+__tests__
+*.test.*
+*.spec.*
+coverage

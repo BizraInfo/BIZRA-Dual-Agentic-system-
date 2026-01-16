@@ -1,0 +1,18 @@
+{
+  "task_id": "DEMO-CODE-001",
+  "description": "Write a Python function to calculate Fibonacci numbers efficiently",
+  "task_type": "code_generation",
+  "agents": [
+    "claude"
+  ],
+  "solution_hash": "d21901e0d30d79323a93e761b0c6ef47b1c4c8f1d6ef4fcf6c7f9a3bce062db9",
+  "contributions": [
+    {
+      "agent": "claude",
+      "confidence": 0.97,
+      "tokens": 18
+    }
+  ],
+  "timestamp": "2026-01-13T00:34:44.566822",
+  "evidence_hash": "8ade228c91dc7241aaf94fd043c81f13f4a583a7fc2440e7a3378b502ae453aa"
+}

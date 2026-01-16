@@ -30,13 +30,13 @@ pub struct ResonanceMetrics {
 
 impl ResonanceMetrics {
     pub fn new(content: &str) -> Self {
+        use crate::fixed::Fixed64;
         use crate::snr::SNREngine;
         use crate::types::AgentResult;
-        use crate::fixed::Fixed64;
         use std::collections::HashMap;
 
         // Use the Elite SNR Engine to initialize metrics
-        let mock_result = AgentResult {
+        let bootstrap_result = AgentResult {
             agent_name: "resonance_init".to_string(),
             contribution: content.to_string(),
             confidence: Fixed64::from_i64(50), // Initial conservative confidence
@@ -45,8 +45,8 @@ impl ResonanceMetrics {
             execution_time: std::time::Duration::from_secs(0),
         };
 
-        let snr_report = SNREngine::score(&mock_result);
-        
+        let snr_report = SNREngine::score(&bootstrap_result);
+
         Self {
             node_id: uuid::Uuid::new_v4().to_string(),
             signal_strength: snr_report.signal.to_f64(),

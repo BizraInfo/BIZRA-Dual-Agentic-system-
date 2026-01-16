@@ -567,7 +567,7 @@ hardware-rooted trust[4].
 [4] TPM 2.0 + Secure Boot + Post-Quantum Crypto"""
     
     def adversarial(self, problem: str) -> str:
-        """Red-team attack simulation"""
+        """Red-team attack scenario"""
         return """Adversarial:
 - Attack: Feed contradictory proofs to Z3
 - Attack: Manipulate Ihsān scoring weights
@@ -755,7 +755,7 @@ class SAPEv1Infinity:
             stakes=StakeLevel.HIGH,
             constraints={"tokens": 8000, "time": "3ms", "tools": ["Z3", "TPM", "WASM", "FFI"]},
             success_metrics=["Z3 proof generated", "Ihsān ≥ 0.95", "3ms latency", "FFI operational"],
-            forbidden=["hallucination", "hidden assumptions", "skipped proof", "mock implementations"]
+            forbidden=["hallucination", "hidden assumptions", "skipped proof", "placeholder implementations"]
         )
         
         if verbose:

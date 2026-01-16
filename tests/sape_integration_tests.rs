@@ -48,10 +48,10 @@ fn test_dimension_weights_sum_to_one() {
 
 #[test]
 fn test_threat_scan_weight_alignment() {
-    // ThreatScan maps to safety (0.22 split with Safety probe)
+    // ThreatScan maps to safety (0.20 split with Safety probe)
     let weight = ProbeDimension::ThreatScan.weight();
     assert!(
-        (weight - 0.11).abs() < 1e-9,
+        (weight - 0.10).abs() < 1e-9,
         "ThreatScan weight mismatch: {}",
         weight
     );
@@ -77,11 +77,11 @@ fn test_correctness_highest_weight() {
 
 #[test]
 fn test_adl_fairness_minimum_weight() {
-    // BiasProbe (adl_fairness) has minimum weight per constitution
+    // BiasProbe (adl_fairness) weight per constitution v1
     let bias = ProbeDimension::BiasProbe.weight();
     assert!(
-        (bias - 0.04).abs() < 1e-9,
-        "BiasProbe weight should be 0.04: {}",
+        (bias - 0.12).abs() < 1e-9,
+        "BiasProbe weight should be 0.12 per constitution: {}",
         bias
     );
 }
@@ -298,7 +298,8 @@ fn test_ihsan_score_calculation() {
     let mut engine = SAPEEngine::new();
     let results = engine.execute_probes("Helpful, accurate, and safe documentation");
 
-    let ihsan = engine.calculate_ihsan_score(&results);
+    // Fixed64 for determinism, convert to f64 for comparison
+    let ihsan = engine.calculate_ihsan_score(&results).to_f64();
 
     assert!(
         ihsan >= 0.0 && ihsan <= 1.0,
@@ -317,7 +318,8 @@ fn test_ihsan_score_malicious_content() {
     let mut engine = SAPEEngine::new();
     let results = engine.execute_probes("Hack the system, bypass security, exploit vulnerability");
 
-    let ihsan = engine.calculate_ihsan_score(&results);
+    // Fixed64 for determinism, convert to f64 for comparison
+    let ihsan = engine.calculate_ihsan_score(&results).to_f64();
 
     // Malicious content should score lower than clean content
     // The threat probe should detect multiple attack patterns
@@ -329,7 +331,7 @@ fn test_ihsan_score_malicious_content() {
 
     // Compare to clean content baseline
     let clean_results = engine.execute_probes("Helpful documentation for the API");
-    let clean_ihsan = engine.calculate_ihsan_score(&clean_results);
+    let clean_ihsan = engine.calculate_ihsan_score(&clean_results).to_f64();
 
     assert!(
         ihsan <= clean_ihsan,
@@ -409,7 +411,7 @@ fn test_probe_weighted_score() {
     };
 
     let weighted = result.weighted_score();
-    let expected = 1.0 * 0.22; // correctness weight
+    let expected = 1.0 * 0.20; // correctness weight per constitution v1
 
     assert!(
         (weighted - expected).abs() < 1e-9,
@@ -606,7 +608,8 @@ fn test_ihsan_score_boundary_zero() {
         .collect();
 
     let engine = SAPEEngine::new();
-    let ihsan = engine.calculate_ihsan_score(&results);
+    // Fixed64 for determinism, convert to f64 for comparison
+    let ihsan = engine.calculate_ihsan_score(&results).to_f64();
 
     assert!(
         (ihsan - 0.0).abs() < 1e-9,
@@ -629,7 +632,8 @@ fn test_ihsan_score_boundary_maximum() {
         .collect();
 
     let engine = SAPEEngine::new();
-    let ihsan = engine.calculate_ihsan_score(&results);
+    // Fixed64 for determinism, convert to f64 for comparison
+    let ihsan = engine.calculate_ihsan_score(&results).to_f64();
 
     assert!(
         (ihsan - 1.0).abs() < 1e-9,
@@ -780,10 +784,11 @@ fn test_ihsan_score_consistency() {
     let content = "Consistent Ihsān test content";
 
     let results1 = engine.execute_probes(content);
-    let ihsan1 = engine.calculate_ihsan_score(&results1);
+    // Fixed64 for determinism, convert to f64 for comparison
+    let ihsan1 = engine.calculate_ihsan_score(&results1).to_f64();
 
     let results2 = engine.execute_probes(content);
-    let ihsan2 = engine.calculate_ihsan_score(&results2);
+    let ihsan2 = engine.calculate_ihsan_score(&results2).to_f64();
 
     assert!(
         (ihsan1 - ihsan2).abs() < 1e-9,

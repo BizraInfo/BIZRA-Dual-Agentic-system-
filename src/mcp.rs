@@ -437,7 +437,8 @@ impl MCPClient {
 
         // Execute SAPE probes across Ihsan dimensions
         let probe_results = engine.execute_probes(content);
-        let ihsan_score = engine.calculate_ihsan_score(&probe_results);
+        // calculate_ihsan_score returns Fixed64 for determinism; convert to f64 for API
+        let ihsan_score = engine.calculate_ihsan_score(&probe_results).to_f64();
 
         // Get environment-specific threshold
         let env = ihsan::current_env();
@@ -841,36 +842,17 @@ impl MCPClient {
         // Look up tool to find its server
         let tool = self.tool_registry.get(tool_name);
 
-        if let Some(tool_def) = tool {
-            // Find the server for this tool
-            if let Some(server) = self.servers.get(&tool_def.server) {
-                // Try real HTTP MCP call
-                match self.call_mcp_server(server, tool_name, arguments).await {
-                    Ok(result) => return Ok(result),
-                    Err(e) => {
-                        warn!(
-                            tool = tool_name,
-                            server = %tool_def.server,
-                            error = %e,
-                            "MCP server call failed, falling back to simulation"
-                        );
-                        // Fall through to simulation
-                    }
-                }
-            }
-        }
+        let tool_def =
+            tool.ok_or_else(|| anyhow::anyhow!("MCP tool not registered: {}", tool_name))?;
+        let server = self.servers.get(&tool_def.server).ok_or_else(|| {
+            anyhow::anyhow!(
+                "MCP server '{}' not registered for tool '{}'",
+                tool_def.server,
+                tool_name
+            )
+        })?;
 
-        // Fallback: simulated execution for development/testing
-        debug!(tool = tool_name, "Using simulated tool execution");
-        let result = serde_json::json!({
-            "tool": tool_name,
-            "arguments": arguments,
-            "result": format!("Executed {} successfully (simulated)", tool_name),
-            "status": "success",
-            "simulated": true,
-        });
-
-        Ok(result)
+        self.call_mcp_server(server, tool_name, arguments).await
     }
 
     /// Call external MCP server via HTTP/JSON-RPC

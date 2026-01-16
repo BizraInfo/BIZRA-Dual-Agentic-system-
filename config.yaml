@@ -1,0 +1,18 @@
+node_id: "bizra-genesis-server-0"
+memory:
+  type: "Redis"
+  url: "redis://synapse:6379"
+  prefix: "bizra:context"
+agents:
+  - name: "default"
+    model:
+      type: "Ollama"
+      name: "llama3"
+      model: "llama3"
+      base_url: "http://host.docker.internal:11434"
+      options:
+        temperature: 0.7
+  - name: "echo-agent"
+    model:
+      type: "Echo"
+      id: "echo-fallback"

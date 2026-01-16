@@ -28,9 +28,10 @@ const FATE_TTL_SECS: u64 = 7 * 24 * 60 * 60;
 const LOCK_TTL_SECS: u64 = 30;
 
 /// Synapse client for Redis state management
+/// PEAK MASTERPIECE v7.1: Optional connection for true fallback mode
 #[derive(Clone)]
 pub struct SynapseClient {
-    conn: ConnectionManager,
+    conn: Option<ConnectionManager>,
     available: bool,
 }
 
@@ -55,19 +56,19 @@ impl SynapseClient {
             Ok(conn) => {
                 info!("✅ Synapse connection established");
                 Ok(Self {
-                    conn,
+                    conn: Some(conn),
                     available: true,
                 })
             }
             Err(e) => {
-                warn!(error = %e, "Synapse unavailable, using fallback mode");
-                // Create a dummy connection for fallback mode
-                let dummy_client = Client::open("redis://127.0.0.1:6379")?;
-                let conn = ConnectionManager::new(dummy_client)
-                    .await
-                    .unwrap_or_else(|_| panic!("Cannot create even dummy connection"));
+                // PEAK MASTERPIECE v7.1: Graceful fallback without panic
+                warn!(
+                    error = %e,
+                    "⚠️ Synapse unavailable - running in memory-only fallback mode \
+                     (receipts will not be persisted to Redis)"
+                );
                 Ok(Self {
-                    conn,
+                    conn: None,
                     available: false,
                 })
             }
@@ -77,6 +78,14 @@ impl SynapseClient {
     /// Check if Synapse is available
     pub fn is_available(&self) -> bool {
         self.available
+    }
+
+    /// Get connection reference (panics if unavailable - caller must check is_available first)
+    /// PEAK MASTERPIECE v7.1: Internal helper for safe connection access
+    fn conn(&self) -> ConnectionManager {
+        self.conn
+            .clone()
+            .expect("BUG: conn() called without checking is_available()")
     }
 
     // ================================================================
@@ -98,7 +107,7 @@ impl SynapseClient {
         let key = format!("{}{}", KEY_PREFIX_FATE, escalation_id);
         let value = serde_json::to_string(escalation)?;
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         conn.set_ex::<_, _, ()>(&key, &value, FATE_TTL_SECS)
             .await
             .context("Failed to store FATE escalation")?;
@@ -123,7 +132,7 @@ impl SynapseClient {
         }
 
         let key = format!("{}{}", KEY_PREFIX_FATE, escalation_id);
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let value: Option<String> = conn.get(&key).await?;
 
         match value {
@@ -139,7 +148,7 @@ impl SynapseClient {
             return Ok(0);
         }
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let count: usize = conn.llen("bizra:fate:pending").await?;
         Ok(count)
     }
@@ -151,7 +160,7 @@ impl SynapseClient {
             return Ok(None);
         }
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let id: Option<String> = conn.rpop("bizra:fate:pending", None).await?;
         Ok(id)
     }
@@ -164,7 +173,7 @@ impl SynapseClient {
         }
 
         let key = format!("{}{}:resolution", KEY_PREFIX_FATE, escalation_id);
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         conn.set_ex::<_, _, ()>(&key, resolution, FATE_TTL_SECS)
             .await?;
 
@@ -197,7 +206,7 @@ impl SynapseClient {
         let key = format!("{}{}", KEY_PREFIX_RECEIPT, receipt_id);
         let value = serde_json::to_string(receipt)?;
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         conn.set_ex::<_, _, ()>(&key, &value, RECEIPT_TTL_SECS)
             .await
             .context("Failed to store receipt")?;
@@ -218,7 +227,7 @@ impl SynapseClient {
         }
 
         let key = format!("{}{}", KEY_PREFIX_RECEIPT, receipt_id);
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let value: Option<String> = conn.get(&key).await?;
 
         match value {
@@ -234,7 +243,7 @@ impl SynapseClient {
             return Ok(vec![]);
         }
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let ids: Vec<String> = conn.zrevrange("bizra:receipts:index", 0, count - 1).await?;
 
         Ok(ids)
@@ -254,7 +263,7 @@ impl SynapseClient {
         let key = format!("{}{}", KEY_PREFIX_LOCK, resource);
         let lock_id = uuid::Uuid::new_v4().to_string();
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let acquired: bool = conn
             .set_options(
                 &key,
@@ -277,7 +286,7 @@ impl SynapseClient {
         }
 
         let key = format!("{}{}", KEY_PREFIX_LOCK, resource);
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         conn.del::<_, ()>(&key).await?;
         Ok(())
     }
@@ -294,7 +303,7 @@ impl SynapseClient {
         }
 
         let key = format!("{}{}", KEY_PREFIX_METRICS, metric);
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let value: i64 = conn.incr(&key, 1).await?;
         Ok(value)
     }
@@ -307,7 +316,7 @@ impl SynapseClient {
         }
 
         let key = format!("{}{}", KEY_PREFIX_METRICS, metric);
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let value: i64 = conn.get(&key).await.unwrap_or(0);
         Ok(value)
     }
@@ -323,7 +332,7 @@ impl SynapseClient {
             return Ok(false);
         }
 
-        let mut conn = self.conn.clone();
+        let mut conn = self.conn();
         let pong: String = redis::cmd("PING")
             .query_async(&mut conn)
             .await
@@ -334,16 +343,15 @@ impl SynapseClient {
 }
 
 /// Create Synapse client with fallback
+/// PEAK MASTERPIECE v7.1: True fallback mode returns None connection (no panic)
 pub async fn synapse_client() -> SynapseClient {
     match SynapseClient::from_env().await {
         Ok(client) => client,
         Err(e) => {
             error!(error = %e, "Failed to create Synapse client, running in degraded mode");
-            // Return a client in unavailable mode
+            // Return a client in unavailable mode with no connection
             SynapseClient {
-                conn: ConnectionManager::new(Client::open("redis://127.0.0.1:6379").unwrap())
-                    .await
-                    .expect("Fallback connection failed"),
+                conn: None,
                 available: false,
             }
         }

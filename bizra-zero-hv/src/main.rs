@@ -268,15 +268,14 @@ pub extern "C" fn _start() -> ! {
 }
 
 #[no_mangle]
-#[naked]
+#[unsafe(naked)]
 pub unsafe extern "C" fn guest_entry() -> ! {
-    asm!(
+    core::arch::naked_asm!(
         "xor eax, eax",
         "cpuid",
         "2:",
         "vmmcall",
         "jmp 2b",
-        options(noreturn)
     );
 }
 

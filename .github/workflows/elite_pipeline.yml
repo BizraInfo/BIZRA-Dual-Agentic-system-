@@ -1,0 +1,130 @@
+name: Elite BIZRA Pipeline v2.0
+
+# PMBOK-Aligned CI/CD with Ihsān Quality Gates
+# Created by Peak Masterpiece Protocol v7.1
+
+on:
+  push:
+    branches: [ "main", "feature/*", "main-v7" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+  IHSAN_STRICT_MODE: "1"
+  RUST_BACKTRACE: "1"
+  BIZRA_ALLOW_SOFTWARE_TPM: "1"  # Required for CI (no hardware TPM)
+
+jobs:
+  # Stage 0: Security Sentinel Gate (VETO Power)
+  security_sentinel:
+    name: "🛡️ Security Sentinel (VETO)"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "SEC-001: Detect Hardcoded Secrets"
+        run: |
+          echo "🔍 Scanning for hardcoded secrets..."
+          # Check for hardcoded key patterns (now should be fixed)
+          if grep -rn "let seed = \[0x55" src/ --include="*.rs" | grep -v "#\[cfg(test)\]" | grep -v "new_deterministic"; then
+            echo "❌ VETO: Hardcoded TPM key detected outside test context!"
+            exit 1
+          fi
+          echo "✅ No hardcoded secrets found"
+
+      - name: "SEC-002: Authentication Audit"
+        run: |
+          echo "🔍 Verifying authentication middleware..."
+          if ! grep -q "auth_middleware" src/http.rs; then
+            echo "❌ VETO: Authentication middleware missing!"
+            exit 1
+          fi
+          echo "✅ Authentication middleware present"
+
+      - name: "SEC-003: Dependency Vulnerability Scan"
+        run: |
+          cargo install cargo-audit || true
+          cargo audit || echo "⚠️ Advisory: Some vulnerabilities detected (non-blocking)"
+
+  # Stage 1: Knowledge Gate (Static Analysis)
+  knowledge_gate:
+    name: "📚 Knowledge Gate (Static Analysis)"
+    needs: security_sentinel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Check Formatting
+        run: cargo fmt -- --check
+
+      - name: Clippy (Strict)
+        run: cargo clippy --features all-safe -- -D warnings -A clippy::too_many_arguments
+
+  # 2. The Gate of Power (Security & Tests)
+  power_gate:
+    name: "Gate 2: Power (Security & Tests)"
+    needs: knowledge_gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: swatinem/rust-cache@v2
+
+      - name: Install Audit
+        run: cargo install cargo-audit
+
+      - name: Security Audit
+        run: cargo audit
+
+      - name: Run Tests (Parallel)
+        run: cargo test --verbose
+
+  # 3. The Gate of Ethics (Ihsan Check)
+  ethics_gate:
+    name: "Gate 3: Ethics (Ihsan Verification)"
+    needs: power_gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run Omega Optimizer
+        run: |
+          chmod +x scripts/omega_optimizer.py
+          ./scripts/omega_optimizer.py > omega_report.txt
+          cat omega_report.txt
+      
+      - name: Verify Ihsān Score
+        run: |
+          if grep -q "Status: ELITE MASTERPIECE ACHIEVED" omega_report.txt; then
+            echo "✅ Ethics Gate Passed"
+          else
+            echo "❌ Ethics Gate Failed: Code does not meet Ihsān standards."
+            exit 1
+          fi
+
+  # 4. The Gate of Destiny (Release)
+  destiny_gate:
+    name: "Gate 4: Destiny (Artifact Sealing)"
+    needs: ethics_gate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Build Release
+        run: cargo build --release
+        
+      - name: Generate Receipt
+        run: |
+          echo "Build Verified: $(date)" > build_receipt.txt
+          sha256sum target/release/bizra-node >> build_receipt.txt
+          
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bizra-omega-release
+          path: target/release/bizra-node

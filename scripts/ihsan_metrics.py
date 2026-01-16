@@ -34,8 +34,18 @@ class IhsanVector:
     adl_fairness: float = 0.95
 
     def compute_score(self) -> float:
-        vals = [getattr(self, f) for f in self.__dataclass_fields__]
-        return sum(vals) / len(vals)
+        """
+        HARD GATE #3: Single-Source Scoring
+        Must call canonical Rust implementation.
+        """
+        try:
+            from bizra_ffi import compute_ihsan
+            return compute_ihsan(self.to_dict())
+        except ImportError:
+            raise RuntimeError(
+                "FATAL: bizra_ffi not available. "
+                "Build with: maturin develop --features python"
+            )
 
     def to_dict(self) -> Dict[str, float]:
         return {f: getattr(self, f) for f in self.__dataclass_fields__}
@@ -59,7 +69,7 @@ class IhsanMonitor:
         }
         self.history.append(entry)
         
-        # Log to "stdout" (Prometheus scraped endpoint simulation)
+        # Log to stdout for Prometheus scraping
         print(f"📈 [METRICS] Agent: {agent_id} | Global Ihsān: {entry['global_score']:.4f}")
         for m, v in entry['metrics'].items():
             # In production: prometheus_client.Gauge(m).set(v)

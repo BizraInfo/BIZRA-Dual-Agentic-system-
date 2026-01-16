@@ -18,6 +18,7 @@ import { RewriteHistory } from "./rewrite-history"
 import { ModelConfig } from "./model-config"
 import { IhsanDashboard } from "./ihsan-dashboard"
 import { GenesisStory } from "./genesis-story"
+import { ThirdFactAuditor } from "../auditor/ThirdFactAuditor"
 
 export function SovereignDashboard() {
   const [activeSection, setActiveSection] = useState("genesis-story")
@@ -29,6 +30,8 @@ export function SovereignDashboard() {
       case "semiotics":
       case "principles":
         return <GenesisStory />
+      case "third-fact-auditor":
+        return <ThirdFactAuditor />
       case "circuit-browser":
         return <CircuitBrowser />
       case "verification-log":
@@ -126,7 +129,10 @@ export function SovereignDashboard() {
   }
 
   const isGenesisView =
-    activeSection.startsWith("genesis") || activeSection === "semiotics" || activeSection === "principles"
+    activeSection.startsWith("genesis") || 
+    activeSection === "semiotics" || 
+    activeSection === "principles" ||
+    activeSection === "third-fact-auditor"
 
   return (
     <div className="h-screen flex flex-col bg-background overflow-hidden">

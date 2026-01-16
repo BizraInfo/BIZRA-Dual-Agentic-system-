@@ -337,18 +337,35 @@ impl Histogram {
             .position(|&b| value <= b)
             .unwrap_or(self.buckets_config.bounds.len());
 
+        // Helper to update histogram safely
+        let update_hist = |hist: &HistogramData| {
+            // Update bucket
+            if bucket_idx < hist.buckets.len() {
+                hist.buckets[bucket_idx].fetch_add(1, Ordering::Relaxed);
+            }
+            // Update sum safely using CAS loop for f64 addition
+            let mut current_bits = hist.sum.load(Ordering::Relaxed);
+            loop {
+                let current_val = f64::from_bits(current_bits);
+                let new_val = current_val + value;
+                match hist.sum.compare_exchange_weak(
+                    current_bits,
+                    new_val.to_bits(),
+                    Ordering::Relaxed,
+                    Ordering::Relaxed,
+                ) {
+                    Ok(_) => break,
+                    Err(actual) => current_bits = actual,
+                }
+            }
+            hist.count.fetch_add(1, Ordering::Relaxed);
+        };
+
         // Get or create histogram data
         {
             let data = self.data.read().await;
             if let Some(hist) = data.get(&labels) {
-                // Update bucket
-                if bucket_idx < hist.buckets.len() {
-                    hist.buckets[bucket_idx].fetch_add(1, Ordering::Relaxed);
-                }
-                // Update sum and count
-                let bits = value.to_bits();
-                hist.sum.fetch_add(bits, Ordering::Relaxed);
-                hist.count.fetch_add(1, Ordering::Relaxed);
+                update_hist(hist);
                 return;
             }
         }
@@ -359,11 +376,7 @@ impl Histogram {
             .entry(labels)
             .or_insert_with(|| HistogramData::new(self.buckets_config.bounds.len() + 1));
 
-        if bucket_idx < hist.buckets.len() {
-            hist.buckets[bucket_idx].fetch_add(1, Ordering::Relaxed);
-        }
-        hist.sum.fetch_add(value.to_bits(), Ordering::Relaxed);
-        hist.count.fetch_add(1, Ordering::Relaxed);
+        update_hist(hist);
     }
 
     /// Time a block of code
@@ -513,8 +526,8 @@ pub struct TimeSeriesPoint {
 /// Time series data with retention
 #[derive(Debug)]
 pub struct TimeSeries {
-    name: String,
-    labels: Labels,
+    _name: String,
+    _labels: Labels,
     points: RwLock<VecDeque<TimeSeriesPoint>>,
     retention: Duration,
     max_points: usize,
@@ -529,8 +542,8 @@ impl TimeSeries {
         max_points: usize,
     ) -> Self {
         Self {
-            name: name.into(),
-            labels,
+            _name: name.into(),
+            _labels: labels,
             points: RwLock::new(VecDeque::with_capacity(max_points)),
             retention,
             max_points,
@@ -631,7 +644,7 @@ pub struct MetricsRegistry {
     counters: RwLock<HashMap<String, Arc<Counter>>>,
     gauges: RwLock<HashMap<String, Arc<Gauge>>>,
     histograms: RwLock<HashMap<String, Arc<Histogram>>>,
-    time_series: RwLock<HashMap<String, Arc<TimeSeries>>>,
+    _time_series: RwLock<HashMap<String, Arc<TimeSeries>>>,
     /// Broadcast channel for real-time streaming
     event_tx: broadcast::Sender<MetricEvent>,
 }
@@ -644,7 +657,7 @@ impl MetricsRegistry {
             counters: RwLock::new(HashMap::new()),
             gauges: RwLock::new(HashMap::new()),
             histograms: RwLock::new(HashMap::new()),
-            time_series: RwLock::new(HashMap::new()),
+            _time_series: RwLock::new(HashMap::new()),
             event_tx,
         }
     }

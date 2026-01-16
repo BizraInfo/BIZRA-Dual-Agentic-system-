@@ -57,7 +57,7 @@ pub struct ResourcePool {
     pub system_info: Option<serde_json::Value>,
 }
 
-/// Network task (simulated for Node0)
+/// Network task
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NetworkTask {
     pub id: String,
@@ -145,41 +145,6 @@ impl ResourcePoolService {
             .await?;
 
         Ok(())
-    }
-
-    /// Simulate network task assignment (Node0 only)
-    pub fn generate_simulated_task(&self) -> NetworkTask {
-        use rand::Rng;
-        let mut rng = rand::thread_rng();
-
-        let task_types = [
-            (
-                "data_processing",
-                "Process CSV dataset for sentiment analysis",
-            ),
-            ("model_inference", "Run inference batch for classification"),
-            (
-                "embedding_generation",
-                "Generate embeddings for text corpus",
-            ),
-            ("data_validation", "Validate data integrity for network"),
-        ];
-
-        let (task_type, description) = task_types[rng.gen_range(0..task_types.len())];
-        let cpu_cores_needed = rng.gen_range(1..=4);
-        let estimated_minutes = rng.gen_range(5..=30);
-        let reward_bzc = estimated_minutes as f64 * 2.0 + rng.gen::<f64>() * 10.0;
-
-        NetworkTask {
-            id: format!("task-{}", uuid::Uuid::new_v4()),
-            task_type: task_type.to_string(),
-            description: description.to_string(),
-            cpu_cores_needed,
-            gpu_needed: false,
-            estimated_minutes,
-            reward_bzc: (reward_bzc * 100.0).round() / 100.0,
-            status: "pending".to_string(),
-        }
     }
 
     /// Record task completion

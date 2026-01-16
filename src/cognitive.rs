@@ -4,12 +4,12 @@
 // Implements Thought Capsules, Policy Gates, and Evidence Chains.
 // Ensures that every cognitive action is wrapped, signed, and audited.
 
-use crate::types::AgentResult;
-use crate::executor::{ThoughtExecutor, SignedModule}; // Use Executor instead of raw Sandbox
+use crate::executor::{SignedModule, ThoughtExecutor}; // Use Executor instead of raw Sandbox
 use crate::storage::ReceiptStore;
-use std::sync::Arc;
+use crate::types::AgentResult;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
+use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
 use tracing::{info, instrument}; // warn removed
 
@@ -24,7 +24,7 @@ pub struct ThoughtCapsule {
     pub wasm_module_hash: String, // Canonical hash of the WASM bytes
     pub required_permissions: Vec<String>,
     pub signature: Vec<u8>, // Signature over the module bytes by RoT
-    
+
     // The actual payload (Wasm bytecode)
     // Skipped in serialization if we just want the metadata
     #[serde(skip)]
@@ -33,11 +33,7 @@ pub struct ThoughtCapsule {
 
 impl ThoughtCapsule {
     /// Create a new signed thought capsule
-    pub fn new(
-        module_bytes: Vec<u8>,
-        signature: Vec<u8>,
-        permissions: Vec<String>,
-    ) -> Self {
+    pub fn new(module_bytes: Vec<u8>, signature: Vec<u8>, permissions: Vec<String>) -> Self {
         let mut hasher = Sha256::new();
         hasher.update(&module_bytes);
         let wasm_hash = hex::encode(hasher.finalize());
@@ -78,9 +74,7 @@ pub struct CognitiveLayer {
 impl CognitiveLayer {
     pub fn new() -> anyhow::Result<Self> {
         info!("🧠 Initializing L4 Cognitive Layer (SAPE-E) [Pending Store]");
-        Ok(Self {
-            executor: None,
-        })
+        Ok(Self { executor: None })
     }
 
     pub async fn init_executor(&mut self, store: Arc<dyn ReceiptStore>) -> anyhow::Result<()> {
@@ -101,13 +95,15 @@ impl CognitiveLayer {
         self.check_policy(capsule)?;
 
         // Ensure Executor is Ready
-        let executor = self.executor.as_mut()
+        let executor = self
+            .executor
+            .as_mut()
             .ok_or_else(|| anyhow::anyhow!("Executor not initialized (Store missing)"))?;
 
         // 2. INTEGRITY CHECK: Verify hash matches bytes
         // (ThoughtExecutor checks signature, but we verify hash to match capsule metadata)
         // ... (This logic can remain or move to executor) ...
-        
+
         // Construct SignedModule from Capsule
         let module = SignedModule {
             wasm: capsule.module_bytes.clone(),
@@ -139,7 +135,7 @@ impl CognitiveLayer {
     // Helper: Check Policy
     fn check_policy(&self, capsule: &ThoughtCapsule) -> anyhow::Result<()> {
         if capsule.policy_version != "v1.0" && capsule.policy_version != "v1.0-genesis" {
-             return Err(anyhow::anyhow!("Unsupported policy version"));
+            return Err(anyhow::anyhow!("Unsupported policy version"));
         }
         Ok(())
     }

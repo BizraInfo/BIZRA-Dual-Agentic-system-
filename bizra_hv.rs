@@ -366,23 +366,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // Simulate incoming particle (FATE-over-PubSub)
-    let simulated_peer = ThoughtParticle {
-        id: "simulated_01".to_string(),
-        content: "Simulated peer thought with valid signature".to_string(),
-        snr_score: 0.85,
-        ihsan_vector: IhsanVector::genesis(),
-        timestamp: chrono::Utc::now().timestamp(),
-        signature: hex::encode(kernel.identity.sign(b"simulated_payload").to_bytes()),
-        signer_pub_key: hex::encode(kernel.verifying_key.to_bytes()),
-        por_a_proof: "simulated_proof".to_string(),
-    };
-
-    println!("\n  [SWARM] Simulating incoming FATE proof from peer...");
-    match kernel.verify_and_import(simulated_peer).await {
-        Ok(_) => println!("  ✅ PEER PARTICLE VERIFIED & IMPORTED"),
-        Err(e) => println!("  ❌ PEER PARTICLE REJECTED: {}", e),
-    }
+    println!("\n  [SWARM] Awaiting incoming FATE proofs from peers...");
 
     println!("\n  ────────────────────────────────────────────────────────────");
     println!("  [STATE] Knowledge Graph: {} particles", kernel.knowledge_graph.read().await.len());

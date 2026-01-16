@@ -36,11 +36,20 @@ lazy_static! {
         vec![0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0]
     ).unwrap();
 
-    /// SAT consensus approvals (3/5 required)
-    pub static ref SAT_CONSENSUS_APPROVALS: GaugeVec = register_gauge_vec!(
+    /// SAT consensus approvals (last request)
+    /// PERFORMANCE FIX (PERF-001): Removed unbounded request_id label to prevent memory leak
+    /// Previous: GaugeVec with request_id -> unbounded cardinality -> OOM
+    /// Now: Simple gauge tracking the last request's approval count
+    pub static ref SAT_CONSENSUS_APPROVALS: Gauge = register_gauge!(
         "bizra_sat_consensus_approvals",
-        "Number of SAT validators that approved (last request)",
-        &["request_id"]
+        "Number of SAT validators that approved (last request)"
+    ).unwrap();
+
+    /// SAT consensus approval histogram (distribution)
+    pub static ref SAT_CONSENSUS_APPROVALS_HISTOGRAM: Histogram = register_histogram!(
+        "bizra_sat_consensus_approvals_distribution",
+        "Distribution of SAT validator approval counts",
+        vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0]  // 6 validators max
     ).unwrap();
 
     // ============================================================
@@ -165,6 +174,32 @@ lazy_static! {
     ).unwrap();
 
     // ============================================================
+    // External AI Metrics (OpenAI, Gemini, etc.)
+    // ============================================================
+
+    /// External AI API calls by provider and result
+    pub static ref EXTERNAL_AI_CALLS: CounterVec = register_counter_vec!(
+        "bizra_external_ai_calls_total",
+        "Total external AI API calls by provider",
+        &["provider", "model", "result"]  // openai/gemini, model name, success/error/rejected
+    ).unwrap();
+
+    /// External AI API call latency
+    pub static ref EXTERNAL_AI_LATENCY: HistogramVec = register_histogram_vec!(
+        "bizra_external_ai_latency_seconds",
+        "External AI API call latency in seconds",
+        &["provider", "model"],
+        vec![0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0]
+    ).unwrap();
+
+    /// External AI token usage
+    pub static ref EXTERNAL_AI_TOKENS: CounterVec = register_counter_vec!(
+        "bizra_external_ai_tokens_total",
+        "Total tokens used by external AI APIs",
+        &["provider", "model", "type"]  // type: prompt/completion
+    ).unwrap();
+
+    // ============================================================
     // HTTP Security Metrics
     // ============================================================
 
@@ -184,6 +219,29 @@ lazy_static! {
     pub static ref HTTP_REQUESTS_UNAUTHORIZED: prometheus::Counter = prometheus::register_counter!(
         "bizra_http_requests_unauthorized_total",
         "Total HTTP requests rejected due to missing/invalid authentication"
+    ).unwrap();
+
+    // ============================================================
+    // WASM Sandbox Security Metrics
+    // SECURITY FIX (SEC-004): Track signature and TOCTOU violations
+    // ============================================================
+
+    /// WASM modules rejected for invalid signature
+    pub static ref WASM_SIGNATURE_FAILURES: prometheus::Counter = prometheus::register_counter!(
+        "bizra_wasm_signature_failures_total",
+        "Total WASM modules rejected due to invalid signature"
+    ).unwrap();
+
+    /// WASM TOCTOU attack attempts detected
+    pub static ref WASM_TOCTOU_ATTEMPTS: prometheus::Counter = prometheus::register_counter!(
+        "bizra_wasm_toctou_attempts_total",
+        "Total WASM TOCTOU attack attempts detected (module tampering between verify and compile)"
+    ).unwrap();
+
+    /// WASM modules successfully executed
+    pub static ref WASM_EXECUTIONS_SUCCESS: prometheus::Counter = prometheus::register_counter!(
+        "bizra_wasm_executions_success_total",
+        "Total WASM modules successfully executed in sandbox"
     ).unwrap();
 }
 
