@@ -13,7 +13,172 @@ use crate::thought::{ThoughtId, ThoughtStage};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
+
+// ============================================================================
+// SNR CONSTITUTION LOADING
+// ============================================================================
+
+const SNR_CONSTITUTION_PATH: &str = "constitution/snr_v1.yaml";
+
+/// SNR Constitution: Loaded weights and thresholds from canonical YAML
+#[derive(Debug, Clone, Deserialize)]
+pub struct SNRConstitution {
+    pub version: u32,
+    pub id: String,
+    pub thresholds: SNRThresholds,
+    pub signal_contributors: HashMap<String, WeightSpec>,
+    pub noise_contributors: HashMap<String, WeightSpec>,
+    pub cycle_costs: HashMap<String, CycleCostSpec>,
+    pub windowing: WindowingConfig,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct SNRThresholds {
+    pub production: f64,
+    pub ci: f64,
+    pub development: f64,
+    pub prototype: f64,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct WeightSpec {
+    pub weight: f64,
+    pub description: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct CycleCostSpec {
+    pub base_cycles: u64,
+    #[serde(default)]
+    pub per_token: u64,
+    pub description: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
+pub struct WindowingConfig {
+    pub default_window_seconds: u64,
+    pub min_samples: u64,
+    pub trend_window_count: u64,
+}
+
+impl Default for SNRConstitution {
+    fn default() -> Self {
+        // Hardcoded fallback matching snr_v1.yaml
+        let mut signal_contributors = HashMap::new();
+        signal_contributors.insert("action_committed".to_string(), WeightSpec {
+            weight: 1.0,
+            description: "Action successfully committed".to_string(),
+        });
+        signal_contributors.insert("proof_verified".to_string(), WeightSpec {
+            weight: 1.0,
+            description: "Proof verified".to_string(),
+        });
+
+        let mut noise_contributors = HashMap::new();
+        noise_contributors.insert("rollback".to_string(), WeightSpec {
+            weight: 1.0,
+            description: "Action rolled back".to_string(),
+        });
+        noise_contributors.insert("human_veto".to_string(), WeightSpec {
+            weight: 2.0,
+            description: "Human veto".to_string(),
+        });
+
+        let mut cycle_costs = HashMap::new();
+        cycle_costs.insert("inference".to_string(), CycleCostSpec {
+            base_cycles: 1000,
+            per_token: 10,
+            description: "LLM inference".to_string(),
+        });
+
+        Self {
+            version: 1,
+            id: "snr_v1_fallback".to_string(),
+            thresholds: SNRThresholds {
+                production: 0.95,
+                ci: 0.90,
+                development: 0.75,
+                prototype: 0.50,
+            },
+            signal_contributors,
+            noise_contributors,
+            cycle_costs,
+            windowing: WindowingConfig {
+                default_window_seconds: 3600,
+                min_samples: 10,
+                trend_window_count: 24,
+            },
+        }
+    }
+}
+
+/// Load SNR constitution from YAML file (cached via OnceLock)
+static SNR_CONSTITUTION: OnceLock<SNRConstitution> = OnceLock::new();
+
+pub fn snr_constitution() -> &'static SNRConstitution {
+    SNR_CONSTITUTION.get_or_init(|| {
+        match std::fs::read_to_string(SNR_CONSTITUTION_PATH) {
+            Ok(yaml) => {
+                match serde_yaml::from_str(&yaml) {
+                    Ok(constitution) => constitution,
+                    Err(e) => {
+                        eprintln!("WARN: Failed to parse SNR constitution: {e}. Using defaults.");
+                        SNRConstitution::default()
+                    }
+                }
+            }
+            Err(e) => {
+                eprintln!("WARN: Failed to read SNR constitution from {SNR_CONSTITUTION_PATH}: {e}. Using defaults.");
+                SNRConstitution::default()
+            }
+        }
+    })
+}
+
+/// Get threshold for environment
+pub fn snr_threshold_for_env(env: &str) -> Fixed64 {
+    let constitution = snr_constitution();
+    let threshold = match env.to_lowercase().as_str() {
+        "production" | "prod" => constitution.thresholds.production,
+        "ci" => constitution.thresholds.ci,
+        "development" | "dev" => constitution.thresholds.development,
+        "prototype" => constitution.thresholds.prototype,
+        _ => constitution.thresholds.production, // Default to strictest
+    };
+    Fixed64::from_f64(threshold)
+}
+
+/// Get signal weight for contributor type
+pub fn signal_weight(contributor: &str) -> Fixed64 {
+    let constitution = snr_constitution();
+    constitution.signal_contributors
+        .get(contributor)
+        .map(|spec| Fixed64::from_f64(spec.weight))
+        .unwrap_or(Fixed64::ONE)
+}
+
+/// Get noise weight for contributor type
+pub fn noise_weight(contributor: &str) -> Fixed64 {
+    let constitution = snr_constitution();
+    constitution.noise_contributors
+        .get(contributor)
+        .map(|spec| Fixed64::from_f64(spec.weight))
+        .unwrap_or(Fixed64::ONE)
+}
+
+/// Get cycle cost for operation type
+pub fn cycle_cost(operation: &str) -> u64 {
+    let constitution = snr_constitution();
+    constitution.cycle_costs
+        .get(operation)
+        .map(|spec| spec.base_cycles)
+        .unwrap_or(100) // Default cost
+}
+
+// ============================================================================
+// SNR METRICS
+// ============================================================================
 
 /// SNR Metrics: Core counters (COVENANT Article V)
 #[derive(Debug, Clone, Serialize, Deserialize)]

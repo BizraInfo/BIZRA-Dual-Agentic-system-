@@ -97,7 +97,7 @@ sha2 = "0.10"
 hex = "0.4"
 
 [features]
-default = ["http", "observability"]
+default = ["http", "observability", "zk_stub"]
 http = []
 observability = []
 
@@ -110,6 +110,13 @@ hardware_tpm = ["tss-esapi"]
 ci = ["http", "observability"]
 all-safe = ["http", "observability", "python"]  # For full testing without hardware
 
+# Development features
+prototype_warnings = []  # Enable compile-time warnings for PROTOTYPE/STUB code
+
+# ZK backend selection
+zk_stub = [] # Stubbed zk-SNARK backend (development only)
+zk_real = [] # Placeholder for real backend (halo2/bellman integration)
+
 [profile.dev]
 # Note: panic = "abort" disabled to allow test execution
 # Production deployments should use release profile which has panic = "abort"
@@ -119,6 +126,11 @@ opt-level = 3
 lto = true
 codegen-units = 1
 panic = "abort"  # Smaller binary, fail-closed behavior
+
+# Binary targets
+[[bin]]
+name = "verify_chain"
+path = "src/bin/verify_chain.rs"
 
 # Benchmark configuration
 [[bench]]
@@ -133,3 +145,4 @@ harness = false
 criterion = { version = "0.5", features = ["html_reports"] }
 tokio-test = "0.4"
 bizra-jcs = { path = "crates/bizra-jcs" }
+tempfile = "3.14"

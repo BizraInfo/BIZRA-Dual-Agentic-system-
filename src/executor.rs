@@ -96,8 +96,11 @@ impl ThoughtExecutor {
         // Initialize HookChain with the same signer
         let hook_chain = SATHookChain::new(signer.clone(), "BIZRA_v10.0");
 
+        // SECURITY FIX: Share the same signer with the sandbox for consistent verification
+        let sandbox = WasmSandbox::with_verifier(signer.clone())?;
+
         Ok(Self {
-            sandbox: WasmSandbox::new()?,
+            sandbox,
             signer,
             store,
             cached_head: head,
@@ -111,13 +114,25 @@ impl ThoughtExecutor {
         let head = store.get_head_hash().await?;
         let signer: Arc<dyn SignerProvider> = Arc::from(tpm.get_signer());
 
+        // SECURITY FIX: Share the same signer with the sandbox for consistent verification
+        let sandbox = WasmSandbox::with_verifier(signer.clone())?;
+
         Ok(Self {
-            sandbox: WasmSandbox::new()?,
+            sandbox,
             signer,
             store,
             cached_head: head,
             hook_chain: None,
         })
+    }
+
+    /// Get reference to the executor's signer for signing modules
+    /// 
+    /// This enables callers to sign modules that will be accepted by this
+    /// executor's verification logic. Access should be restricted to trusted
+    /// code paths in production deployments.
+    pub fn get_signer(&self) -> Arc<dyn SignerProvider> {
+        self.signer.clone()
     }
 
     /// Execute a signed module and emit a Third Fact Receipt

@@ -1,0 +1,25 @@
+{
+  "schema": "bizra-rejection-receipt-v1",
+  "receipt_type": "Rejection",
+  "receipt_id": "REJ-20260117210309-000001",
+  "timestamp": "2026-01-17T21:03:09.986650673Z",
+  "task_summary": "Add this to the page: <script>document.cookie</script>",
+  "rejection_codes": [
+    "SECURITY_THREAT: Blocked pattern: <script>"
+  ],
+  "primary_reason": "SECURITY_THREAT: Blocked pattern: <script>",
+  "escalation_level": "CRITICAL",
+  "escalation_id": "FATE-000002",
+  "rejecting_validators": [
+    "security_guardian"
+  ],
+  "approving_validators": [
+    "formal_validator",
+    "ethics_validator",
+    "performance_monitor",
+    "consistency_checker",
+    "resource_optimizer"
+  ],
+  "recommended_action": "BLOCK: Security threat detected. Do not execute under any circumstances.",
+  "integrity_hash": "sha256:902489df3d5731172090f6d2458280ea6da147dc6f24159ad5c3dedd5cd51afa"
+}

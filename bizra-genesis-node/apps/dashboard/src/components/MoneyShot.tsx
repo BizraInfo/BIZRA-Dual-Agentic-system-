@@ -15,6 +15,13 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useBizraLiveMetrics, type BizraLiveMetrics } from '@/lib/live-data';
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// LIVE DATA CONTEXT
+// ═══════════════════════════════════════════════════════════════════════════════
+const LiveDataContext = React.createContext<BizraLiveMetrics | null>(null);
+const useLiveData = () => React.useContext(LiveDataContext);
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // ICON COMPONENTS
@@ -366,16 +373,29 @@ const AdversarialScene: React.FC<{ active: boolean }> = ({ active }) => {
   );
 };
 
-// Scene 4: Agent Symphony
+// Scene 4: Agent Symphony (LIVE DATA)
 const AgentScene: React.FC<{ active: boolean }> = ({ active }) => {
-  const [patStatus, setPatStatus] = useState(['idle','idle','idle','idle']);
-  const [satStatus, setSatStatus] = useState(['idle','idle','idle']);
+  const liveData = useLiveData();
+  const [patStatus, setPatStatus] = useState(['idle','idle','idle','idle','idle','idle','idle']);
+  const [satStatus, setSatStatus] = useState(['idle','idle','idle','idle','idle']);
+
+  const patCount = liveData?.health?.agents?.pat_count || 7;
+  const satCount = liveData?.health?.agents?.sat_count || 5;
 
   useEffect(() => {
-    if (!active) { setPatStatus(['idle','idle','idle','idle']); setSatStatus(['idle','idle','idle']); return; }
-    [0,1,2,3].forEach(i => setTimeout(() => setPatStatus(p => p.map((s,j) => j===i ? 'complete' : s)), (i+1)*500));
-    [0,1,2].forEach(i => setTimeout(() => setSatStatus(p => p.map((s,j) => j===i ? 'complete' : s)), (i+1)*600));
-  }, [active]);
+    if (!active) {
+      setPatStatus(Array(7).fill('idle'));
+      setSatStatus(Array(5).fill('idle'));
+      return;
+    }
+    // Animate agents coming online
+    Array.from({length: patCount}, (_, i) => i).forEach(i =>
+      setTimeout(() => setPatStatus(p => p.map((s,j) => j===i ? 'complete' : s)), (i+1)*300)
+    );
+    Array.from({length: satCount}, (_, i) => i).forEach(i =>
+      setTimeout(() => setSatStatus(p => p.map((s,j) => j===i ? 'complete' : s)), (i+1)*400)
+    );
+  }, [active, patCount, satCount]);
 
   const AgentRow = ({ name, status, type }: { name: string; status: string; type: string }) => (
     <div className={`flex items-center gap-3 p-3 rounded-lg border ${status === 'complete' ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-slate-800/50 border-slate-700/30'}`}>
@@ -385,18 +405,27 @@ const AgentScene: React.FC<{ active: boolean }> = ({ active }) => {
     </div>
   );
 
+  const patAgents = ['Scribe','Analyst','Arbiter','Synthesizer','Designer','Executor','Guardian'];
+  const satAgents = ['Security Sentinel','Formal Validator','Ethics Guardian','Resource Guardian','Context Validator'];
+
   return (
     <div className="grid grid-cols-2 gap-4">
       <GlassCard className="p-4">
-        <div className="text-xs font-mono text-slate-500 mb-3">PAT (7 Agents)</div>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-mono text-slate-500">PAT ({patCount} Agents)</span>
+          <span className="text-xs font-mono text-emerald-400">{liveData?.health?.status === 'healthy' ? '● LIVE' : '○ ...'}</span>
+        </div>
         <div className="space-y-2">
-          {['Scribe','Analyst','Arbiter','Synthesizer'].map((n,i) => <AgentRow key={n} name={n} status={patStatus[i]} type="PAT" />)}
+          {patAgents.slice(0, patCount).map((n,i) => <AgentRow key={n} name={n} status={patStatus[i]} type="PAT" />)}
         </div>
       </GlassCard>
       <GlassCard className="p-4">
-        <div className="text-xs font-mono text-slate-500 mb-3">SAT (5 Validators)</div>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-mono text-slate-500">SAT ({satCount} Validators)</span>
+          <span className="text-xs font-mono text-emerald-400">{liveData?.health?.status === 'healthy' ? '● LIVE' : '○ ...'}</span>
+        </div>
         <div className="space-y-2">
-          {['Sentinel','Oracle','Treasury'].map((n,i) => <AgentRow key={n} name={n} status={satStatus[i]} type="SAT" />)}
+          {satAgents.slice(0, satCount).map((n,i) => <AgentRow key={n} name={n} status={satStatus[i]} type="SAT" />)}
         </div>
       </GlassCard>
     </div>
@@ -493,24 +522,66 @@ const ResurrectionScene: React.FC<{ active: boolean }> = ({ active }) => {
   );
 };
 
-// Scene 7: Network
+// Scene 7: Network (LIVE DATA)
 const NetworkScene: React.FC<{ active: boolean }> = ({ active }) => {
+  const liveData = useLiveData();
+  const avgIhsan = liveData?.avgIhsan || 0;
+  const gatesPassed = liveData?.gatesPassed || 0;
+  const httpRequests = liveData?.httpRequests || 0;
+  const sapePatterns = liveData?.health?.sape?.patterns_registered || 0;
+
+  // Ihsān dimension breakdown
+  const ihsanDimensions = liveData?.ihsanDimensions || [];
+
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <GlassCard className="p-4 text-center">
-          <div className="text-3xl font-bold text-emerald-400 font-mono">127</div>
-          <div className="text-xs text-slate-500">Active Nodes</div>
-        </GlassCard>
-        <GlassCard className="p-4 text-center">
-          <div className="text-3xl font-bold text-cyan-400 font-mono">3,383</div>
-          <div className="text-xs text-slate-500">TFLOPS</div>
-        </GlassCard>
-        <GlassCard className="p-4 text-center">
-          <div className="text-3xl font-bold text-violet-400 font-mono">0.98</div>
+          <div className="text-3xl font-bold text-emerald-400 font-mono">{avgIhsan.toFixed(2)}</div>
           <div className="text-xs text-slate-500">Avg Ihsān</div>
+          <div className="text-[10px] text-emerald-500 mt-1">● LIVE</div>
+        </GlassCard>
+        <GlassCard className="p-4 text-center">
+          <div className="text-3xl font-bold text-cyan-400 font-mono">{gatesPassed}</div>
+          <div className="text-xs text-slate-500">Gates Passed</div>
+        </GlassCard>
+        <GlassCard className="p-4 text-center">
+          <div className="text-3xl font-bold text-violet-400 font-mono">{httpRequests}</div>
+          <div className="text-xs text-slate-500">Requests</div>
+        </GlassCard>
+        <GlassCard className="p-4 text-center">
+          <div className="text-3xl font-bold text-amber-400 font-mono">{sapePatterns}</div>
+          <div className="text-xs text-slate-500">SAPE Patterns</div>
         </GlassCard>
       </div>
+
+      {/* Live Ihsān Dimensions */}
+      <GlassCard className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-mono text-slate-500">IHSĀN 8-DIMENSION SCORES</span>
+          <span className="text-xs font-mono text-emerald-400">● REAL-TIME</span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {ihsanDimensions.map((dim) => (
+            <div key={dim.dimension} className="p-2 rounded bg-slate-800/50">
+              <div className="flex items-center justify-between">
+                <span className="text-slate-400 text-xs capitalize">{dim.dimension.replace('_', ' ')}</span>
+                <span className={`font-mono text-sm ${dim.score >= 0.95 ? 'text-emerald-400' : dim.score >= 0.90 ? 'text-amber-400' : 'text-red-400'}`}>
+                  {dim.score.toFixed(2)}
+                </span>
+              </div>
+              <div className="w-full bg-slate-700 h-1 mt-1 rounded-full overflow-hidden">
+                <div
+                  className={`h-full ${dim.score >= 0.95 ? 'bg-emerald-500' : dim.score >= 0.90 ? 'bg-amber-500' : 'bg-red-500'}`}
+                  style={{ width: `${dim.score * 100}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </GlassCard>
+
+      {/* Global node presence */}
       <GlassCard className="p-4">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           {GLOBAL_NODES.map((node) => (
@@ -624,6 +695,7 @@ const SCENE_COMPONENTS: Record<string, React.FC<{ active: boolean }>> = {
 export const MoneyShot: React.FC = () => {
   const [currentStage, setCurrentStage] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const liveMetrics = useBizraLiveMetrics();
 
   const stage = STAGES[currentStage];
   const SceneComponent = SCENE_COMPONENTS[stage.id];
@@ -650,56 +722,81 @@ export const MoneyShot: React.FC = () => {
   const Icon = Icons[stage.icon];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8">
-      {/* Header */}
-      <div className="max-w-6xl mx-auto mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-4">
-            <div className={`w-12 h-12 ${colorMap[stage.color]}`}><Icon /></div>
-            <div>
-              <h1 className="text-2xl font-bold">{stage.title}</h1>
-              <p className="text-slate-500">{stage.subtitle}</p>
+    <LiveDataContext.Provider value={liveMetrics}>
+      <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8">
+        {/* Live Status Bar */}
+        <div className="max-w-6xl mx-auto mb-4">
+          <div className="flex items-center justify-between px-4 py-2 bg-slate-900/50 rounded-lg border border-slate-800">
+            <div className="flex items-center gap-4">
+              <span className={`flex items-center gap-2 text-xs font-mono ${liveMetrics.health?.status === 'healthy' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
+                {liveMetrics.health?.status?.toUpperCase() || 'CONNECTING...'}
+              </span>
+              <span className="text-xs text-slate-500">|</span>
+              <span className="text-xs font-mono text-slate-400">
+                Ihsān: <span className="text-emerald-400">{liveMetrics.avgIhsan.toFixed(2)}</span>
+              </span>
+              <span className="text-xs text-slate-500">|</span>
+              <span className="text-xs font-mono text-slate-400">
+                Agents: <span className="text-cyan-400">{liveMetrics.health?.agents?.total || 0}</span>
+              </span>
+            </div>
+            <span className="text-xs font-mono text-slate-500">
+              {new Date().toLocaleTimeString()}
+            </span>
+          </div>
+        </div>
+
+        {/* Header */}
+        <div className="max-w-6xl mx-auto mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 ${colorMap[stage.color]}`}><Icon /></div>
+              <div>
+                <h1 className="text-2xl font-bold">{stage.title}</h1>
+                <p className="text-slate-500">{stage.subtitle}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setCurrentStage(s => Math.max(0, s - 1))} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700">
+                <div className="w-5 h-5"><Icons.ChevronLeft /></div>
+              </button>
+              <button onClick={() => setIsPlaying(!isPlaying)} className="p-2 rounded-lg bg-emerald-500 hover:bg-emerald-600">
+                <div className="w-5 h-5">{isPlaying ? <Icons.Pause /> : <Icons.Play />}</div>
+              </button>
+              <button onClick={() => setCurrentStage(s => Math.min(STAGES.length - 1, s + 1))} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700">
+                <div className="w-5 h-5"><Icons.ChevronRight /></div>
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={() => setCurrentStage(s => Math.max(0, s - 1))} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700">
-              <div className="w-5 h-5"><Icons.ChevronLeft /></div>
-            </button>
-            <button onClick={() => setIsPlaying(!isPlaying)} className="p-2 rounded-lg bg-emerald-500 hover:bg-emerald-600">
-              <div className="w-5 h-5">{isPlaying ? <Icons.Pause /> : <Icons.Play />}</div>
-            </button>
-            <button onClick={() => setCurrentStage(s => Math.min(STAGES.length - 1, s + 1))} className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700">
-              <div className="w-5 h-5"><Icons.ChevronRight /></div>
-            </button>
+
+          {/* Progress */}
+          <div className="flex gap-1">
+            {STAGES.map((_, i) => (
+              <button key={i} onClick={() => setCurrentStage(i)}
+                className={`flex-1 h-1 rounded-full transition ${i <= currentStage ? 'bg-emerald-500' : 'bg-slate-800'}`} />
+            ))}
           </div>
         </div>
 
-        {/* Progress */}
-        <div className="flex gap-1">
-          {STAGES.map((_, i) => (
-            <button key={i} onClick={() => setCurrentStage(i)}
-              className={`flex-1 h-1 rounded-full transition ${i <= currentStage ? 'bg-emerald-500' : 'bg-slate-800'}`} />
-          ))}
+        {/* Narration */}
+        <div className="max-w-6xl mx-auto mb-8">
+          <GlassCard className="p-4">
+            <p className="text-slate-300 italic text-center">"{stage.narration}"</p>
+          </GlassCard>
+        </div>
+
+        {/* Scene */}
+        <div className="max-w-6xl mx-auto">
+          <SceneComponent active={true} />
+        </div>
+
+        {/* Footer */}
+        <div className="max-w-6xl mx-auto mt-8 text-center text-slate-600 text-xs">
+          BIZRA Genesis • Block 0 • {new Date().toISOString().split('T')[0]} • LIVE DATA
         </div>
       </div>
-
-      {/* Narration */}
-      <div className="max-w-6xl mx-auto mb-8">
-        <GlassCard className="p-4">
-          <p className="text-slate-300 italic text-center">"{stage.narration}"</p>
-        </GlassCard>
-      </div>
-
-      {/* Scene */}
-      <div className="max-w-6xl mx-auto">
-        <SceneComponent active={true} />
-      </div>
-
-      {/* Footer */}
-      <div className="max-w-6xl mx-auto mt-8 text-center text-slate-600 text-xs">
-        BIZRA Genesis • Block 0 • {new Date().toISOString().split('T')[0]}
-      </div>
-    </div>
+    </LiveDataContext.Provider>
   );
 };
 

@@ -1,0 +1,18 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260117204905-000001",
+  "timestamp": "2026-01-17T20:49:05.433942147Z",
+  "task_summary": "Implement feature toggle system",
+  "sat_validation_ms": 184,
+  "pat_execution_ms": 19,
+  "total_latency_ms": 206,
+  "synergy_score": 0.9216221345122904,
+  "ihsan_score": 0.9271892034448683,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00009999983012676239,
+  "integrity_hash": "sha256:c9bf5e18cb150fe05dcebba8c848d9c76fdb50c913bfc9f27821af2df239b9b3"
+}

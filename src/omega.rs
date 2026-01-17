@@ -84,13 +84,33 @@ pub struct FateEngine {
 }
 
 impl FateEngine {
+    /// Check formal invariants for FATE verification.
+    ///
+    /// # PROTOTYPE WARNING
+    ///
+    /// **STATUS: PROTOTYPE - NOT FOR PRODUCTION USE**
+    ///
+    /// This function currently uses stub values for liveness and safety proofs.
+    /// In production, these MUST be replaced with actual Z3 SMT solver verification.
+    ///
+    /// The current implementation will ALWAYS return `true` for formal proofs,
+    /// which means it provides NO SECURITY GUARANTEES.
+    ///
+    /// TODO: Integrate with `src/fate/constraint_smt.rs` for real Z3 verification.
     pub fn check_invariants(&self) -> bool {
         // Liveness: AG(Start ⇒ EF(Terminal))
         // Safety: I_score >= 0.95
         // Causal Drag < 0.05
 
-        let liveness_proof = true; // Placeholder for Z3 SMT solver result
-        let safety_proof = true; // Placeholder
+        // PROTOTYPE: These are stub values. Real implementation requires Z3.
+        // SECURITY: Do not deploy without replacing with actual SMT verification.
+        #[cfg(feature = "prototype_warnings")]
+        tracing::warn!(
+            "FATE check_invariants() using STUB values - NOT production-safe"
+        );
+
+        let liveness_proof = true; // STUB: Replace with Z3 AG(Start ⇒ EF(Terminal)) check
+        let safety_proof = true; // STUB: Replace with Z3 safety property verification
 
         liveness_proof && safety_proof && (self.causal_drag <= CAUSAL_DRAG_LIMIT)
     }

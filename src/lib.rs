@@ -37,12 +37,14 @@ pub mod ralph;
 #[cfg(feature = "python")]
 pub mod ffi;
 pub mod fixed;
+pub mod genesis; // Priority 0: Genesis receipt + chain verification + identity registry
 pub mod giants;
 pub mod hookchain;
 pub mod hot_path;
 pub mod http;
 pub mod ihsan;
 pub mod ledger;
+pub mod logic_envelope; // Priority 1: Tiered validation for LLM outputs
 pub mod mcp;
 pub mod metrics;
 pub mod ollama;

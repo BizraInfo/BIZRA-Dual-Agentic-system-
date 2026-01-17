@@ -1,0 +1,111 @@
+# SNR Constitution v1.0
+# Signal-to-Noise Ratio formalization per COVENANT Article II
+#
+# IMMUTABLE: This document defines the canonical SNR calculation parameters.
+# Changes require constitutional amendment process.
+
+version: 1
+id: snr_v1
+status: canonical
+
+# Core SNR Definition (COVENANT Article II)
+# SNR = (Verifiably Correct Actions) / (Total Compute Cycles)
+definition: >
+  Signal-to-Noise Ratio measures system efficiency and correctness.
+  Signal represents verified, valuable computation.
+  Noise represents wasted, rolled-back, or unverified computation.
+  Target: SNR >= 0.95 for production readiness.
+
+# Threshold Configuration
+thresholds:
+  production: 0.95      # Hard requirement for production
+  ci: 0.90              # CI pipeline requirement
+  development: 0.75     # Development mode (relaxed)
+  prototype: 0.50       # Prototype/experimental
+
+# Signal Contributors (add to signal counter)
+signal_contributors:
+  action_committed:
+    weight: 1.0
+    description: "Action successfully committed and not rolled back"
+  proof_verified:
+    weight: 1.0
+    description: "Cryptographic proof successfully verified"
+  ihsan_passed:
+    weight: 0.5
+    description: "Action passed Ihsan threshold gate"
+  fate_verified:
+    weight: 0.5
+    description: "FATE formal verification passed"
+
+# Noise Contributors (add to noise counter)
+noise_contributors:
+  rollback:
+    weight: 1.0
+    description: "Action was rolled back"
+  human_veto:
+    weight: 2.0
+    description: "Human vetoed action (higher weight - indicates serious issue)"
+  ihsan_rejection:
+    weight: 0.5
+    description: "Ihsan score below threshold"
+  fate_violation:
+    weight: 1.5
+    description: "FATE constraint violation"
+  timeout:
+    weight: 0.3
+    description: "Action timed out"
+  error:
+    weight: 0.5
+    description: "Runtime error during execution"
+
+# Cycle Costs (compute cycles attributed to each operation)
+cycle_costs:
+  inference:
+    base_cycles: 1000
+    per_token: 10
+    description: "LLM inference operation"
+  verification:
+    base_cycles: 100
+    description: "Proof/signature verification"
+  storage:
+    base_cycles: 50
+    description: "Storage I/O operation"
+  network:
+    base_cycles: 200
+    description: "Network I/O operation"
+
+# Window Configuration
+windowing:
+  default_window_seconds: 3600  # 1 hour rolling window
+  min_samples: 10               # Minimum samples for valid SNR
+  trend_window_count: 24        # Hours for trend calculation
+
+# Autonomous Optimization (COVENANT Article V)
+optimization:
+  enabled: true
+  check_interval_seconds: 60
+  actions:
+    - trigger: "snr < 0.90"
+      action: "alert"
+      description: "Send alert when SNR drops below warning threshold"
+    - trigger: "snr < 0.85"
+      action: "throttle"
+      description: "Reduce throughput to improve quality"
+    - trigger: "snr_trend < -0.01"
+      action: "investigate"
+      description: "Negative trend requires investigation"
+
+# Invariants
+invariants:
+  signal_weight_range: [0.0, 2.0]
+  noise_weight_range: [0.0, 3.0]
+  threshold_range: [0.0, 1.0]
+  required_thresholds:
+    - production
+    - ci
+
+provenance:
+  covenant_article: "II"
+  source: "COVENANT.md"
+  sealed: "2026-01-17"

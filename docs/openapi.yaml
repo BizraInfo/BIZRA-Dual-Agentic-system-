@@ -33,14 +33,14 @@ info:
     url: https://opensource.org/licenses/MIT
 
 servers:
-  - url: http://127.0.0.1:8080
-    description: Local development server
+  - url: http://127.0.0.1:9091
+    description: Local development server (default port)
   - url: http://127.0.0.1:{port}
     description: Custom port
     variables:
       port:
-        default: "8080"
-        description: Server port
+        default: "9091"
+        description: Server port (matches runtime default)
 
 tags:
   - name: Public

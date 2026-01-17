@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
-import { Network, Activity, Shield, Brain, Settings, ChevronRight, Cpu, Lock, Sparkles, BookOpen } from "lucide-react"
+import { Network, Activity, Shield, Brain, Settings, ChevronRight, Cpu, Lock, Sparkles, BookOpen, Gauge, ExternalLink } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { SeedOfLife } from "./seed-of-life"
 
@@ -86,6 +86,23 @@ const navItems: NavItem[] = [
       { id: "violation-log", label: "Violation Log" },
       { id: "constraint-editor", label: "Constraint Editor" },
     ],
+  },
+  {
+    id: "cognitive",
+    label: "Cognitive Center",
+    icon: Gauge,
+    badge: "SNR",
+    children: [
+      { id: "snr-monitor", label: "SNR Monitor" },
+      { id: "thought-graph", label: "Thought Graph" },
+      { id: "ihsan-radar", label: "Ihsan Radar" },
+    ],
+  },
+  {
+    id: "money-shot",
+    label: "Investor Theater",
+    icon: ExternalLink,
+    badge: "LIVE",
   },
 ]
 

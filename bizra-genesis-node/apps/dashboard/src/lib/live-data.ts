@@ -7,7 +7,38 @@
 
 import useSWR from 'swr';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9091';
+/**
+ * API URL Configuration
+ *
+ * Priority:
+ * 1. NEXT_PUBLIC_API_URL env var (explicit backend URL)
+ * 2. NEXT_PUBLIC_USE_PROXY=true -> use /api/proxy route
+ * 3. Production (non-localhost) -> auto-use proxy
+ * 4. Development -> localhost:9091
+ */
+function getApiUrl(): string {
+  // Explicit backend URL takes priority
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+
+  // Check if we should use the proxy
+  const useProxy = process.env.NEXT_PUBLIC_USE_PROXY === 'true';
+
+  // In browser, detect if we're in production
+  if (typeof window !== 'undefined') {
+    const isProduction = !window.location.hostname.includes('localhost');
+    if (isProduction || useProxy) {
+      // Use the Edge API proxy
+      return '/api/proxy';
+    }
+  }
+
+  // Default to localhost for development
+  return 'http://localhost:9091';
+}
+
+const API_URL = getApiUrl();
 
 // ============================================================================
 // Types
@@ -226,6 +257,202 @@ export async function queryPattern(
   }
 
   return res.json();
+}
+
+// ============================================================================
+// BIZRA Core Metrics Types (Money Shot Data)
+// ============================================================================
+
+export interface BizraHealth {
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  timestamp: string;
+  agents: {
+    pat_count: number;
+    sat_count: number;
+    total: number;
+  };
+  gates: {
+    ihsan: string;
+    performance: string;
+    quality: string;
+    security: string;
+  };
+  ihsan: {
+    constitution_id: string;
+    dimensions_count: number;
+    enforcement_active: boolean;
+    env: string;
+    threshold_baseline: number;
+    threshold_ci: number;
+    threshold_production: number;
+  };
+  sape: {
+    patterns_active: number;
+    patterns_registered: number;
+    pending_elevations: number;
+    sequences_observed: number;
+    total_latency_saved_ms: number;
+    total_snr_improvement: number;
+    unique_sequences: number;
+  };
+}
+
+export interface IhsanDimension {
+  dimension: string;
+  score: number;
+}
+
+export interface PrometheusMetric {
+  name: string;
+  value: number;
+  labels?: Record<string, string>;
+}
+
+export interface BizraLiveMetrics {
+  health: BizraHealth | null;
+  ihsanDimensions: IhsanDimension[];
+  gatesPassed: number;
+  gatesFailed: number;
+  httpRequests: number;
+  ollamaConnected: boolean;
+  fateEscalations: number;
+  avgIhsan: number;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+// ============================================================================
+// Core BIZRA Live Metrics Hooks
+// ============================================================================
+
+/**
+ * Fetch BIZRA health status
+ * Updates every 2 seconds for real-time feel
+ */
+export function useBizraHealth() {
+  return useSWR<BizraHealth>(
+    `${API_URL}/health`,
+    fetcher,
+    {
+      refreshInterval: 2000, // 2 seconds
+      dedupingInterval: 1000,
+      revalidateOnFocus: true,
+    }
+  );
+}
+
+/**
+ * Parse Prometheus metrics text format
+ */
+function parsePrometheusMetrics(text: string): Map<string, PrometheusMetric[]> {
+  const metrics = new Map<string, PrometheusMetric[]>();
+  const lines = text.split('\n');
+
+  for (const line of lines) {
+    if (line.startsWith('#') || !line.trim()) continue;
+
+    // Parse metric line: metric_name{label="value"} value
+    const match = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)(?:\{([^}]*)\})?\s+(.+)$/);
+    if (match) {
+      const [, name, labelsStr, valueStr] = match;
+      const value = parseFloat(valueStr);
+
+      if (isNaN(value)) continue;
+
+      const labels: Record<string, string> = {};
+      if (labelsStr) {
+        const labelMatches = labelsStr.matchAll(/([a-zA-Z_][a-zA-Z0-9_]*)="([^"]*)"/g);
+        for (const m of labelMatches) {
+          labels[m[1]] = m[2];
+        }
+      }
+
+      const existing = metrics.get(name) || [];
+      existing.push({ name, value, labels });
+      metrics.set(name, existing);
+    }
+  }
+
+  return metrics;
+}
+
+/**
+ * Fetch raw Prometheus metrics
+ */
+async function fetchMetrics(): Promise<Map<string, PrometheusMetric[]>> {
+  const res = await fetch(`${API_URL}/metrics`);
+  if (!res.ok) throw new Error('Failed to fetch metrics');
+  const text = await res.text();
+  return parsePrometheusMetrics(text);
+}
+
+/**
+ * Combined hook for all live BIZRA metrics (Money Shot data)
+ * This is the main hook for the investor dashboard
+ */
+export function useBizraLiveMetrics(): BizraLiveMetrics {
+  const { data: health, error: healthError, isLoading: healthLoading } = useBizraHealth();
+
+  const { data: metricsMap, error: metricsError } = useSWR(
+    'prometheus-metrics',
+    fetchMetrics,
+    {
+      refreshInterval: 3000,
+      dedupingInterval: 1500,
+    }
+  );
+
+  // Extract Ihsān dimension scores
+  const ihsanDimensions: IhsanDimension[] = [];
+  if (metricsMap) {
+    const dimensionMetrics = metricsMap.get('bizra_ihsan_dimension_score') || [];
+    for (const m of dimensionMetrics) {
+      if (m.labels?.dimension) {
+        ihsanDimensions.push({
+          dimension: m.labels.dimension,
+          score: m.value,
+        });
+      }
+    }
+  }
+
+  // Extract gate results
+  let gatesPassed = 0;
+  let gatesFailed = 0;
+  if (metricsMap) {
+    const gateMetrics = metricsMap.get('bizra_ihsan_gate_total') || [];
+    for (const m of gateMetrics) {
+      if (m.labels?.result === 'passed') gatesPassed = m.value;
+      if (m.labels?.result === 'failed') gatesFailed = m.value;
+    }
+  }
+
+  // Extract HTTP requests
+  const httpRequests = metricsMap?.get('bizra_http_requests_allowed_total')?.[0]?.value || 0;
+
+  // Extract Ollama status
+  const ollamaConnected = (metricsMap?.get('bizra_ollama_connected')?.[0]?.value || 0) === 1;
+
+  // Extract FATE escalations
+  const fateEscalations = metricsMap?.get('bizra_fate_pending_escalations')?.[0]?.value || 0;
+
+  // Calculate average Ihsān
+  const avgIhsan = ihsanDimensions.length > 0
+    ? ihsanDimensions.reduce((sum, d) => sum + d.score, 0) / ihsanDimensions.length
+    : 0;
+
+  return {
+    health: health || null,
+    ihsanDimensions,
+    gatesPassed,
+    gatesFailed,
+    httpRequests,
+    ollamaConnected,
+    fateEscalations,
+    avgIhsan,
+    isLoading: healthLoading,
+    error: healthError || metricsError || null,
+  };
 }
 
 // ============================================================================

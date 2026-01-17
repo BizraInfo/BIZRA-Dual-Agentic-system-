@@ -1,0 +1,115 @@
+# Identity Registry - Priority 0 Implementation
+# Maps node_id and agent_id to expected public keys for signature verification
+#
+# PEAK MASTERPIECE v7.1: Trust anchor for identity binding
+# Giants Protocol: X.509/SPIFFE identity attestation patterns
+#
+# Invariant I2 (Signature validity): receipts MUST be signed by registered nodes
+# Invariant: agent_id -> allowed_nodes must match for execution
+
+version: "1"
+id: "identity_registry_v1"
+status: "active"
+
+# Node identities - each node has a unique Ed25519 keypair
+nodes:
+  NODE0-TITAN:
+    public_key: "" # Placeholder - generate with: cargo run --bin generate_keys
+    name: "BIZRA Genesis Node 0 (TITAN)"
+    tier: "sovereign"
+    trusted: true
+
+  NODE1-GUARDIAN:
+    public_key: "" # Placeholder
+    name: "BIZRA Guardian Node 1"
+    tier: "guardian"
+    trusted: true
+
+  NODE2-OPERATOR:
+    public_key: "" # Placeholder
+    name: "BIZRA Operator Node 2"
+    tier: "operator"
+    trusted: true
+
+# Agent identities - PAT and SAT agents with node restrictions
+agents:
+  # PAT Agents (7)
+  strategic_visionary:
+    name: "Strategic Visionary"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "pat_strategic"
+
+  creative_innovator:
+    name: "Creative Innovator"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "pat_creative"
+
+  analytical_optimizer:
+    name: "Analytical Optimizer"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "pat_analytical"
+
+  implementation_specialist:
+    name: "Implementation Specialist"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN", "NODE2-OPERATOR"]
+    role: "pat_implementation"
+
+  quality_guardian:
+    name: "Quality Guardian"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "pat_quality"
+
+  user_advocate:
+    name: "User Advocate"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN", "NODE2-OPERATOR"]
+    role: "pat_user"
+
+  integration_coordinator:
+    name: "Integration Coordinator"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "pat_integration"
+
+  # SAT Validators (6)
+  security_sentinel:
+    name: "Security Sentinel"
+    allowed_nodes: ["NODE0-TITAN"]  # Highest security - sovereign node only
+    role: "sat_security"
+
+  formal_validator:
+    name: "Formal Validator"
+    allowed_nodes: ["NODE0-TITAN"]  # Critical validation - sovereign node only
+    role: "sat_formal"
+
+  ethics_guardian:
+    name: "Ethics Guardian"
+    allowed_nodes: ["NODE0-TITAN"]  # Ethics - sovereign node only
+    role: "sat_ethics"
+
+  resource_guardian:
+    name: "Resource Guardian"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "sat_resource"
+
+  context_validator:
+    name: "Context Validator"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN"]
+    role: "sat_context"
+
+  performance_monitor:
+    name: "Performance Monitor"
+    allowed_nodes: ["NODE0-TITAN", "NODE1-GUARDIAN", "NODE2-OPERATOR"]
+    role: "sat_performance"
+
+# Provenance
+provenance:
+  created: "2026-01-17"
+  created_by: "BIZRA Genesis Team"
+  note: >
+    This registry defines the identity binding for all BIZRA nodes and agents.
+    Public keys MUST be generated securely (HSM/TPM in production) and
+    registered here before any node can emit valid receipts.
+
+    To generate keys:
+      cargo run --bin generate_keys -- --node-id NODE0-TITAN --output keys/
+
+    Then update this file with the generated public key.

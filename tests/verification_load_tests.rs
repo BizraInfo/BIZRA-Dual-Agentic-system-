@@ -189,10 +189,9 @@ async fn test_wasm_sandbox_high_volume_execution() -> Result<()> {
     let mut success_count = 0;
     let mut interrupt_count = 0;
 
-    // For testing, generate a valid signature using the test TPM's software signer
-    use meta_alpha_dual_agentic::tpm::TpmContext;
-    let tpm = TpmContext::new();
-    let signer = tpm.get_signer();
+    // SECURITY FIX: Use the sandbox's own verifier for signing
+    // This ensures the signature is accepted by the sandbox's internal verification
+    let signer = sandbox.get_verifier();
     let test_signature = signer.sign(wat.as_bytes()).await?;
 
     for i in 0..48 {

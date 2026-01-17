@@ -68,7 +68,7 @@ fn main() -> anyhow::Result<()> {
             Ok((thought, receipt)) => {
                 println!("✅ PIPELINE SUCCESS");
                 println!("   Thought ID: {}", thought.id.to_string());
-                println!("   Ihsān Score: {:.4}", thought.ihsan_score.aggregate.to_f64());
+                println!("   Ihsān Score: {:.4}", thought.ihsan_score.total.to_f64());
                 println!("   Gates Passed: {}", thought.gates_passed.len());
                 println!("   Contributed to Signal: {}", thought.contributed_to_signal);
                 println!("\n   Receipt:");

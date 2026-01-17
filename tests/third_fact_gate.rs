@@ -4,7 +4,7 @@
 
 use meta_alpha_dual_agentic::executor::{SignedModule, ThoughtExecutor};
 use meta_alpha_dual_agentic::storage::InMemoryReceiptStore;
-use meta_alpha_dual_agentic::tpm::{SignerProvider, TpmContext};
+use meta_alpha_dual_agentic::tpm::SignerProvider;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::sync::Arc;
@@ -30,8 +30,10 @@ async fn test_thought_executor_signed_only_gate() {
     let mut executor = ThoughtExecutor::new(store)
         .await
         .expect("Init Executor failed");
-    let tpm = TpmContext::new();
-    let signer = tpm.get_signer();
+    
+    // SECURITY FIX: Use the executor's own signer to create valid signatures
+    // This is the only way to produce signatures the executor will accept
+    let signer = executor.get_signer();
 
     let wasm_bytes = vec![0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00]; // Magic header
 
@@ -111,9 +113,9 @@ async fn test_chain_persistence_restart() {
         .await
         .expect("Exec1 init");
 
-    // Create valid signed module (mocked or constructed)
-    let tpm = TpmContext::new();
-    let signer = tpm.get_signer();
+    // SECURITY FIX: Use the executor's own signer for valid signatures
+    let signer = exec1.get_signer();
+    
     // Valid minimal WASM module: Magic (4 bytes) + Version (4 bytes: 1)
     let wasm = vec![0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00];
     let signature = signer.sign(&wasm).await.unwrap();
@@ -146,13 +148,29 @@ async fn test_chain_persistence_restart() {
 
     // 2. Restart (New Executor sharing same store)
     // This simulates process restart relying on the Store for state
+    //
+    // SECURITY INVARIANT: Each executor has its own cryptographic identity.
+    // After restart, modules must be re-signed with the new executor's signer.
+    // This ensures that modules signed by a potentially compromised prior
+    // instance cannot be accepted by the new instance.
     let mut exec2 = ThoughtExecutor::new(store.clone())
         .await
         .expect("Exec2 init");
 
-    // Run 3
+    // Get the new executor's signer and re-sign the module
+    let signer2 = exec2.get_signer();
+    let signature2 = signer2.sign(&wasm).await.unwrap();
+    let module2 = SignedModule {
+        wasm: wasm.clone(),
+        module_hash: hex::encode(Sha256::digest(&wasm)),
+        signature: signature2,
+        capabilities: vec![],
+        gas_limit: 1000,
+    };
+
+    // Run 3 with the re-signed module
     let (_, r3) = exec2
-        .execute(&module, "input3")
+        .execute(&module2, "input3")
         .await
         .expect("Exec3 failed");
 

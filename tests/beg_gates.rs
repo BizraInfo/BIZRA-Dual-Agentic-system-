@@ -2,8 +2,9 @@
 // BIZRA Entry Gates - CI verification for Giants Protocol compliance
 // These tests MUST pass before any merge to main
 
+use meta_alpha_dual_agentic::fixed::Fixed64;
 use meta_alpha_dual_agentic::hookchain::{
-    CapabilityTier, CapabilityToken, ConsentClass, ExecutedReceipt, HookDecision, PostHookResult,
+    CapabilityTier, CapabilityToken, ExecutedReceipt, HookDecision, PostHookResult,
     ReceiptDraft, SATHookChain, SessionDAG,
 };
 use meta_alpha_dual_agentic::tpm::SoftwareSigner;
@@ -258,7 +259,7 @@ mod session_dag_gates {
         let dag = SessionDAG::new("v1.0.0");
 
         let genesis = dag.get_head().await.unwrap();
-        let child = dag.advance("state1", "receipts1", 0.1).await;
+        let child = dag.advance("state1", "receipts1", Fixed64::from_f64(0.1)).await.unwrap();
 
         assert_eq!(
             child.parent_hash,
@@ -272,7 +273,7 @@ mod session_dag_gates {
         let dag = SessionDAG::new("v1.0.0");
 
         let head = dag.get_head().await.unwrap();
-        let forked = dag.fork("experiment-1").await;
+        let forked = dag.fork("experiment-1").await.unwrap();
 
         assert_eq!(
             forked.state_root, head.state_root,
@@ -289,8 +290,8 @@ mod session_dag_gates {
     async fn beg03_node_hash_is_unique() {
         let dag = SessionDAG::new("v1.0.0");
 
-        let node1 = dag.advance("state1", "receipts1", 0.1).await;
-        let node2 = dag.advance("state2", "receipts2", 0.2).await;
+        let node1 = dag.advance("state1", "receipts1", Fixed64::from_f64(0.1)).await.unwrap();
+        let node2 = dag.advance("state2", "receipts2", Fixed64::from_f64(0.2)).await.unwrap();
 
         assert_ne!(
             node1.node_hash, node2.node_hash,
@@ -302,10 +303,11 @@ mod session_dag_gates {
     async fn beg03_impact_delta_is_recorded() {
         let dag = SessionDAG::new("v1.0.0");
 
-        let child = dag.advance("state1", "receipts1", 0.42).await;
+        let expected = Fixed64::from_f64(0.42);
+        let child = dag.advance("state1", "receipts1", expected).await.unwrap();
 
-        assert!(
-            (child.impact_delta - 0.42).abs() < f64::EPSILON,
+        assert_eq!(
+            child.impact_delta, expected,
             "BEG-03: Impact delta must be recorded"
         );
     }

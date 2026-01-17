@@ -12,7 +12,7 @@ use tracing::{error, info, warn};
 use tracing_subscriber::{fmt, EnvFilter};
 
 #[derive(Parser)]
-#[command(author, version, about = "BIZRA Sovereign Kernel v9.0")]
+#[command(author, version, about = "BIZRA Sovereign Kernel")]
 struct Cli {
     #[command(subcommand)]
     command: Option<Commands>,
@@ -71,7 +71,7 @@ async fn main() -> anyhow::Result<()> {
         .with_thread_ids(true)
         .init();
 
-    info!("🧬 BIZRA Node v9.0 - Production Bootstrap");
+    info!("🧬 BIZRA Node v{} - Production Bootstrap", env!("CARGO_PKG_VERSION"));
     info!("==========================================");
 
     let cli = Cli::parse();
@@ -151,7 +151,7 @@ async fn run_server(port: u16, use_redis: bool) -> anyhow::Result<()> {
     // Initialize system
     let system = Arc::new(MetaAlphaDualAgentic::initialize().await?);
 
-    info!("🚀 BIZRA Node v9.0 is OPERATIONAL");
+    info!("🚀 BIZRA Node v{} is OPERATIONAL", env!("CARGO_PKG_VERSION"));
     info!("   API: http://127.0.0.1:{}", port);
     info!(
         "   Storage: {}",

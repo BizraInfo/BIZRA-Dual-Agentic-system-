@@ -1,0 +1,18 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260117210310-000001",
+  "timestamp": "2026-01-17T21:03:10.141746737Z",
+  "task_summary": "Generate unit tests for the user authentication module",
+  "sat_validation_ms": 140,
+  "pat_execution_ms": 21,
+  "total_latency_ms": 163,
+  "synergy_score": 0.9226175311487168,
+  "ihsan_score": 0.9215873435605317,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00009999983012676239,
+  "integrity_hash": "sha256:6b5ea69d347e0518a2480b567c512e05ff738fd1a5d1ef451de4aca9aab3dbd6"
+}

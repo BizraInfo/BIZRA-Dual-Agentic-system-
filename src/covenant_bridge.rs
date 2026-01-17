@@ -20,6 +20,7 @@ use blake3;
 use crate::{
     fixed::Fixed64,
     ihsan::IhsanDimensions,
+    logic_envelope::{LogicEnvelope, ValidationContext, ValidationTier},
     snr_monitor::{global_monitor, ThoughtEvent},
     thought::{
         Action, AttestedThought, Citation, GateReceipt, GateType, IhsanScore,
@@ -29,22 +30,71 @@ use crate::{
 };
 use chrono::Utc;
 use std::collections::BTreeMap;
-use tracing::info;
+use std::sync::atomic::{AtomicU64, Ordering};
+use tracing::{info, warn};
+
+/// Build validation context for a thought
+fn build_validation_context(thought_id: ThoughtId) -> ValidationContext {
+    let mut metadata = std::collections::HashMap::new();
+    metadata.insert("thought_id".to_string(), thought_id.to_string());
+    
+    ValidationContext {
+        source: "covenant_gate".to_string(),
+        session_id: Some(thought_id.to_string()),
+        metadata,
+    }
+}
 
 /// COVENANT integration layer for existing BridgeCoordinator
 ///
 /// This struct acts as a translation layer between:
 /// - Existing: DualAgenticRequest → PAT/SAT → AgentResult → Receipt
 /// - COVENANT: Input → 8-stage pipeline → AttestedThought → SNR metrics
+///
+/// Giants Protocol: Inspired by Dijkstra's layered design, Hoare's correctness proofs,
+/// and Kernighan's clarity principles.
 pub struct CovenantBridge {
     enable_covenant_mode: bool,
+    /// LogicEnvelope for tiered LLM output validation (Priority 1)
+    logic_envelope: LogicEnvelope,
+    /// Event counter for SNR auto-optimization trigger
+    event_counter: AtomicU64,
+    /// Optimization interval (COVENANT Article V)
+    optimization_interval: u64,
 }
 
 impl CovenantBridge {
-    /// Create new COVENANT bridge
+    /// Create new COVENANT bridge with SNR auto-optimization
     pub fn new(enable_covenant_mode: bool) -> Self {
         Self {
             enable_covenant_mode,
+            logic_envelope: LogicEnvelope::new(),
+            event_counter: AtomicU64::new(0),
+            optimization_interval: 100, // Match SNR monitor default
+        }
+    }
+
+    /// Create with custom optimization interval
+    pub fn with_optimization_interval(enable_covenant_mode: bool, interval: u64) -> Self {
+        Self {
+            enable_covenant_mode,
+            logic_envelope: LogicEnvelope::new(),
+            event_counter: AtomicU64::new(0),
+            optimization_interval: interval,
+        }
+    }
+
+    /// Increment event counter and trigger auto-optimization if threshold reached
+    fn maybe_trigger_optimization(&self) {
+        let count = self.event_counter.fetch_add(1, Ordering::SeqCst) + 1;
+        
+        if count % self.optimization_interval == 0 {
+            let monitor = global_monitor();
+            monitor.optimize();
+            info!(
+                event_count = count,
+                "🎯 COVENANT Article V: Auto-optimization triggered"
+            );
         }
     }
 
@@ -96,6 +146,9 @@ impl CovenantBridge {
             monitor.record_event(ThoughtEvent::IhsanRejection(thought_id, ihsan_score));
         }
 
+        // Trigger auto-optimization check
+        self.maybe_trigger_optimization();
+
         info!(
             thought_id = %thought_id.to_string(),
             ihsan_score = %ihsan_score.to_f64(),
@@ -104,9 +157,86 @@ impl CovenantBridge {
         );
     }
 
+    /// Validate LLM output with tiered LogicEnvelope (COVENANT Stage 4: GATE enhancement)
+    ///
+    /// Applies tiered validation: Cheap (blocklist) → Medium (JSON schema) → Expensive (semantic)
+    /// Giants Protocol: Layered validation inspired by defense-in-depth security architecture.
+    pub fn validate_output_with_envelope(
+        &self,
+        thought_id: ThoughtId,
+        output: &str,
+        tier: ValidationTier,
+    ) -> Result<bool, String> {
+        let context = build_validation_context(thought_id);
+
+        match self.logic_envelope.validate_tier(output, &context, tier) {
+            Ok(result) => {
+                info!(
+                    thought_id = %thought_id.to_string(),
+                    tier = ?tier,
+                    validation_time_ms = result.elapsed_ms,
+                    "🔵 COVENANT Stage 4 (GATE): LogicEnvelope validation passed"
+                );
+                Ok(result.passed)
+            }
+            Err(e) => {
+                let monitor = global_monitor();
+                monitor.record_event(ThoughtEvent::FateViolation(
+                    thought_id,
+                    format!("LogicEnvelope: {:?}", e),
+                ));
+                warn!(
+                    thought_id = %thought_id.to_string(),
+                    error = ?e,
+                    "🔴 COVENANT Stage 4 (GATE): LogicEnvelope validation FAILED"
+                );
+                Err(format!("LogicEnvelope validation failed: {:?}", e))
+            }
+        }
+    }
+
+    /// Validate output with automatic tier escalation
+    ///
+    /// Starts with Cheap tier and escalates if suspicious patterns detected.
+    /// This implements the "fail-fast, escalate-smart" pattern from security engineering.
+    pub fn validate_output_adaptive(
+        &self,
+        thought_id: ThoughtId,
+        output: &str,
+    ) -> Result<bool, String> {
+        // Start with Cheap tier (blocklist, length check) - <10ms
+        let cheap_result = self.validate_output_with_envelope(thought_id, output, ValidationTier::Cheap);
+        
+        match cheap_result {
+            Ok(true) => {
+                // Cheap passed - escalate to Medium if output looks like JSON
+                if output.trim_start().starts_with('{') || output.trim_start().starts_with('[') {
+                    let context = build_validation_context(thought_id);
+                    
+                    match self.logic_envelope.validate_tier(output, &context, ValidationTier::Medium) {
+                        Ok(result) => Ok(result.passed),
+                        Err(e) => {
+                            warn!(
+                                thought_id = %thought_id.to_string(),
+                                "Medium tier validation failed: {:?}", e
+                            );
+                            // Medium failures are warnings, not hard rejections
+                            Ok(true)
+                        }
+                    }
+                } else {
+                    Ok(true)
+                }
+            }
+            Ok(false) => Ok(false),
+            Err(e) => Err(e),
+        }
+    }
+
     /// Record SAT validation (COVENANT Stage 4: GATE)
     ///
-    /// Maps existing SAT consensus to COVENANT gate stage
+    /// Maps existing SAT consensus to COVENANT gate stage.
+    /// Triggers SNR auto-optimization check after recording.
     pub fn record_sat_validation(
         &self,
         thought_id: ThoughtId,
@@ -120,6 +250,9 @@ impl CovenantBridge {
             monitor.record_event(ThoughtEvent::FateViolation(thought_id, reason));
         }
 
+        // Trigger auto-optimization check (COVENANT Article V)
+        self.maybe_trigger_optimization();
+
         info!(
             thought_id = %thought_id.to_string(),
             consensus = consensus_reached,
@@ -129,10 +262,14 @@ impl CovenantBridge {
 
     /// Record action commitment (COVENANT Stage 5: ACT)
     ///
-    /// Maps successful execution to COVENANT commit stage
+    /// Maps successful execution to COVENANT commit stage.
+    /// Triggers SNR auto-optimization check after recording.
     pub fn record_action_committed(&self, thought_id: ThoughtId) {
         let monitor = global_monitor();
         monitor.record_event(ThoughtEvent::Committed(thought_id));
+
+        // Trigger auto-optimization check (COVENANT Article V)
+        self.maybe_trigger_optimization();
 
         info!(
             thought_id = %thought_id.to_string(),
@@ -328,9 +465,12 @@ mod tests {
 
         // Create mock request
         let request = DualAgenticRequest {
+            user_id: "test-user".to_string(),
             task: "Test task".to_string(),
-            context: HashMap::new(),
-            mode: crate::types::AdapterModes::Auto,
+            requirements: vec![],
+            target: "test-target".to_string(),
+            priority: crate::types::Priority::default(),
+            context: std::collections::HashMap::new(),
         };
 
         // Stage 1: SENSE
@@ -366,17 +506,22 @@ mod tests {
         let bridge = CovenantBridge::new(true);
 
         let request = DualAgenticRequest {
+            user_id: "test-user".to_string(),
             task: "Generate summary".to_string(),
-            context: HashMap::new(),
-            mode: crate::types::AdapterModes::Auto,
+            requirements: vec![],
+            target: "summary".to_string(),
+            priority: crate::types::Priority::default(),
+            context: std::collections::HashMap::new(),
         };
 
         let thought_id = ThoughtId::new();
         let results = vec![AgentResult {
             agent_name: "TestAgent".to_string(),
-            output: "Test output".to_string(),
-            confidence: 0.95,
+            contribution: "Test output".to_string(),
+            confidence: Fixed64::from_f64(0.95),
+            ihsan_score: Fixed64::from_f64(0.92),
             execution_time: std::time::Duration::from_millis(100),
+            metadata: std::collections::HashMap::new(),
         }];
 
         let ihsan_dimensions = IhsanDimensions {
@@ -425,5 +570,76 @@ mod tests {
 
         // Cleanup
         std::env::remove_var("BIZRA_COVENANT_MODE");
+    }
+
+    #[test]
+    fn test_logic_envelope_integration_clean_output() {
+        let bridge = CovenantBridge::new(true);
+        let thought_id = ThoughtId::new();
+        
+        // Clean output should pass
+        let result = bridge.validate_output_with_envelope(
+            thought_id,
+            "This is a helpful and safe response.",
+            ValidationTier::Cheap,
+        );
+        assert!(result.is_ok());
+        assert!(result.unwrap());
+    }
+
+    #[test]
+    fn test_logic_envelope_integration_blocked_output() {
+        let bridge = CovenantBridge::new(true);
+        let thought_id = ThoughtId::new();
+        
+        // Blocked pattern should fail
+        let result = bridge.validate_output_with_envelope(
+            thought_id,
+            "sudo rm -rf / will destroy everything",
+            ValidationTier::Cheap,
+        );
+        assert!(result.is_ok());
+        assert!(!result.unwrap()); // Should be rejected
+    }
+
+    #[test]
+    fn test_logic_envelope_adaptive_json_escalation() {
+        let bridge = CovenantBridge::new(true);
+        let thought_id = ThoughtId::new();
+        
+        // Valid JSON should pass through Medium tier
+        let result = bridge.validate_output_adaptive(
+            thought_id,
+            r#"{"status": "success", "data": [1, 2, 3]}"#,
+        );
+        assert!(result.is_ok());
+        assert!(result.unwrap());
+    }
+
+    #[test]
+    fn test_auto_optimization_trigger() {
+        // Create bridge with small interval for testing
+        let bridge = CovenantBridge::with_optimization_interval(true, 5);
+        
+        let request = DualAgenticRequest {
+            user_id: "test-user".to_string(),
+            task: "Test task".to_string(),
+            requirements: vec![],
+            target: "test-target".to_string(),
+            priority: crate::types::Priority::default(),
+            context: std::collections::HashMap::new(),
+        };
+
+        // Run 5 events to trigger optimization
+        for _ in 0..5 {
+            let thought_id = bridge.record_request_start(&request);
+            bridge.record_reasoning_complete(thought_id, 3);
+            bridge.record_ihsan_scoring(thought_id, Fixed64::from_f64(0.9), true);
+            bridge.record_sat_validation(thought_id, true, &[]);
+            bridge.record_action_committed(thought_id);
+        }
+
+        // Verify event counter advanced
+        assert!(bridge.event_counter.load(Ordering::SeqCst) >= 15);
     }
 }

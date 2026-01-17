@@ -11,6 +11,7 @@ use crate::sovereign::system_sanity_check;
 use crate::tpm::{SignerProvider, TpmContext};
 use crate::types::AgentResult;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tracing::{error, info, warn};
 
@@ -86,7 +87,7 @@ pub struct WasmSandbox {
     pub last_execution: Option<Duration>,
     engine: Engine,
     minimal_module: Module,
-    root_verifier: Box<dyn SignerProvider>,
+    root_verifier: Arc<dyn SignerProvider>,
 }
 
 impl WasmSandbox {
@@ -96,8 +97,13 @@ impl WasmSandbox {
 
         // Initialize Hardware Root of Trust Anchor
         let tpm = TpmContext::new();
-        let root_verifier = tpm.get_signer();
+        let root_verifier: Arc<dyn SignerProvider> = Arc::from(tpm.get_signer());
 
+        Self::with_verifier(root_verifier)
+    }
+
+    /// Initialize sandbox with a specific verifier (for shared signer scenarios)
+    pub fn with_verifier(root_verifier: Arc<dyn SignerProvider>) -> anyhow::Result<Self> {
         // Configure Wasmtime engine with security constraints
         let mut engine_config = Config::new();
         engine_config.consume_fuel(true); // Enable fuel metering
@@ -484,6 +490,15 @@ impl WasmSandbox {
     /// Get fuel consumption from last execution
     pub fn last_fuel_consumed(&self) -> Option<u64> {
         self.last_execution.map(|_| self.config.fuel_limit)
+    }
+
+    /// Get the sandbox's root verifier for signing modules
+    /// 
+    /// Returns a reference to the signer that this sandbox uses for
+    /// signature verification. Callers can use this to sign modules
+    /// that will be accepted by this sandbox.
+    pub fn get_verifier(&self) -> Arc<dyn SignerProvider> {
+        self.root_verifier.clone()
     }
 }
 

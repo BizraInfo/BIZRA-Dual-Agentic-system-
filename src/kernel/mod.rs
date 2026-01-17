@@ -665,6 +665,7 @@ fn regex_matches(text: &str, pattern: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::identity::CovenantDecision;
 
     #[test]
     fn test_kernel_event_types() {
