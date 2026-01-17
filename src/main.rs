@@ -8,7 +8,7 @@ use meta_alpha_dual_agentic::{
     MetaAlphaDualAgentic,
 };
 use std::sync::Arc;
-use tracing::{error, info, warn};
+use tracing::{info, warn};
 use tracing_subscriber::{fmt, EnvFilter};
 
 #[derive(Parser)]

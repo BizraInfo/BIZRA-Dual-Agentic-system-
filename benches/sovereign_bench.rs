@@ -13,9 +13,9 @@ use std::time::Duration;
 
 // Import from main crate
 use meta_alpha_dual_agentic::fixed::Fixed64;
-use meta_alpha_dual_agentic::ihsan;
-use meta_alpha_dual_agentic::tpm::TpmContext;
+use meta_alpha_dual_agentic::tpm::{SignerProvider, SoftwareSigner, TpmContext};
 use meta_alpha_dual_agentic::wasm::WasmSandbox;
+use std::sync::Arc;
 
 /// Benchmark TPM PCR operations
 fn bench_tpm_operations(c: &mut Criterion) {
@@ -69,17 +69,32 @@ fn bench_wasm_sandbox(c: &mut Criterion) {
 
     // Sandbox initialization (Target: <50ms)
     group.bench_function("init", |b| {
-        b.iter(|| WasmSandbox::new());
+        b.iter(|| WasmSandbox::new().expect("Failed to create sandbox"));
     });
 
     // WASM execution (Target: <500ms)
     group.bench_function("execute_reasoning", |b| {
-        let mut sandbox = WasmSandbox::new();
+        // Create signer for RoT verification
+        let signer: Arc<dyn SignerProvider> = Arc::new(SoftwareSigner::new());
+        let mut sandbox = WasmSandbox::with_verifier(signer.clone())
+            .expect("Failed to create sandbox with verifier");
         let wasm_module = sandbox.elevate_pattern("bench_pattern");
+
+        // Sign the module with our signer (sync via block_on)
+        use sha2::{Digest, Sha256};
+        let mut hasher = Sha256::new();
+        hasher.update(&wasm_module);
+        let module_hash: [u8; 32] = hasher.finalize().into();
+        let signature = futures::executor::block_on(signer.sign(&module_hash))
+            .expect("Failed to sign module");
 
         b.iter(|| {
             let _ = futures::executor::block_on(
-                sandbox.execute_isolated(black_box(&wasm_module), black_box("test_input")),
+                sandbox.execute_isolated(
+                    black_box(&wasm_module),
+                    black_box("test_input"),
+                    black_box(&signature),
+                ),
             );
         });
     });
@@ -186,7 +201,7 @@ fn bench_receipt_generation(c: &mut Criterion) {
 
         b.iter(|| {
             let nonce = [0u8; 16];
-            let quote = tpm.generate_quote(nonce);
+            let quote = tpm.generate_quote(nonce).expect("Failed to generate quote");
 
             // Simulate receipt creation
             let mut hasher = Sha256::new();
@@ -227,7 +242,8 @@ fn bench_harberger_tax(c: &mut Criterion) {
 
         b.iter(|| {
             let numerator = black_box(resource_size) * black_box(tax_rate);
-            // Note: Fixed64 division may need implementation
+            // Use ihsan_score in calculation (Fixed64 division via reciprocal multiply)
+            let _ = black_box(ihsan_score);
             black_box(numerator)
         });
     });

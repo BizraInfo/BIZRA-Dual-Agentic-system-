@@ -4,7 +4,7 @@
 
 use meta_alpha_dual_agentic::cognitive::{CognitiveLayer, ThoughtCapsule};
 use meta_alpha_dual_agentic::storage::InMemoryReceiptStore;
-use meta_alpha_dual_agentic::tpm::{SignerProvider, TpmContext};
+use meta_alpha_dual_agentic::tpm::TpmContext;
 use serde_json::json;
 use std::env;
 use std::fs;
