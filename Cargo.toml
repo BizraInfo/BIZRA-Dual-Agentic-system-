@@ -98,6 +98,7 @@ hex = "0.4"
 
 [features]
 default = ["http", "observability", "zk_stub"]
+simulation = []
 http = []
 observability = []
 

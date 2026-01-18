@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
-use std::time::{Duration, Instant};
+use std::time::Duration;
+#[cfg(feature = "simulation")]
+use std::time::Instant;
 
 /// BIZRA zk-SNARK Verification Engine (Pillar #4)
 /// Provides verifiable computation proofs for agent state transitions.
@@ -39,12 +41,8 @@ impl ZKVerifier {
     /// This function DOES NOT generate real zk-SNARK proofs. It simulates
     /// proof generation timing but provides NO cryptographic security.
     ///
-    /// For production use, integrate with:
-    /// - bellman (Rust Groth16)
-    /// - gnark (Go, via FFI)
-    /// - arkworks (Rust ecosystem)
-    ///
     /// The returned `is_valid: true` is UNCONDITIONAL and provides no verification.
+    #[cfg(feature = "simulation")]
     pub fn generate_proof(&self, state_root: &str, _impact_data: &str) -> StateProof {
         ensure_stub_not_in_production();
         let start = Instant::now();
@@ -60,6 +58,12 @@ impl ZKVerifier {
             is_valid: true, // STUB: Always true - provides NO security
             commitment_root: format!("commitment_{}", state_root),
         }
+    }
+
+    /// Production-stub function that panics if called without simulation feature
+    #[cfg(not(feature = "simulation"))]
+    pub fn generate_proof(&self, _state_root: &str, _impact_data: &str) -> StateProof {
+         panic!("CRITICAL: Attempted to use simulated ZK proofs in PRODUCTION build. Enable 'simulation' feature or link real backend.");
     }
 
     /// Verify a proof against the Ihsān Constitution.

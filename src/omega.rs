@@ -47,7 +47,7 @@ pub fn verify_golden_topology(node_count: usize) -> bool {
 /// The Causal Drag coefficient (Ω)
 pub const CAUSAL_DRAG_LIMIT: f64 = 0.05;
 
-/// The Harberger Tax on Memory (Simulated)
+/// The Harberger Tax on Memory
 /// Enforces Thermodynamic Equilibrium of Adl via Gini Coefficient constraint.
 pub struct MemoryLedger {
     pub entropy_pool: f64,

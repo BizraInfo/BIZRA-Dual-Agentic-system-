@@ -32,8 +32,9 @@ pub enum ModelBackend {
     LlamaCpp,
     /// OpenAI-compatible API (external)
     OpenAICompatible,
-    /// Mock backend for testing
-    Mock,
+    /// TestStub backend for testing
+    #[cfg(any(test, feature = "simulation"))]
+    TestStub,
 }
 
 impl ModelBackend {
@@ -44,7 +45,10 @@ impl ModelBackend {
             ModelBackend::VLLM => "/health",
             ModelBackend::LlamaCpp => "/health",
             ModelBackend::OpenAICompatible => "/v1/models",
-            ModelBackend::Mock => "/health",
+            #[cfg(any(test, feature = "simulation"))]
+            ModelBackend::TestStub => "/health",
+            #[cfg(not(any(test, feature = "simulation")))]
+            _ => panic!("Backend not available in production"),
         }
     }
 
@@ -55,7 +59,10 @@ impl ModelBackend {
             ModelBackend::VLLM => "/v1/completions",
             ModelBackend::LlamaCpp => "/completion",
             ModelBackend::OpenAICompatible => "/v1/chat/completions",
-            ModelBackend::Mock => "/completion",
+            #[cfg(any(test, feature = "simulation"))]
+            ModelBackend::TestStub => "/completion",
+            #[cfg(not(any(test, feature = "simulation")))]
+            _ => panic!("Backend not available in production"),
         }
     }
 }
@@ -484,12 +491,21 @@ impl ModelFabric {
                 Ok(json["content"].as_str().unwrap_or("").to_string())
             }
 
-            ModelBackend::Mock => {
-                // For testing - return a mock response
+            #[cfg(any(test, feature = "simulation"))]
+            ModelBackend::TestStub => {
+                // For testing - return a stub response
                 Ok(format!(
-                    "Mock response for: {}",
+                    "Stub response for: {}",
                     prompt.chars().take(50).collect::<String>()
                 ))
+            }
+            #[cfg(not(any(test, feature = "simulation")))]
+            _ => {
+                 // Optimization: This branch should be unreachable if TestStub is cfg-gated out of the enum,
+                 // but Rust match exhaustiveness might require it if we don't gate the enum variant perfectly
+                 // everywhere. Since we GATED the enum variant, we don't need to match it if it doesn't exist.
+                 // However, to keep code compiling if usage leaks:
+                 panic!("Unreachable backend state"); 
             }
         }
     }
@@ -819,7 +835,7 @@ mod tests {
     #[test]
     fn test_endpoint_success_rate() {
         let mut endpoint =
-            ModelEndpoint::new("test", "test-model", ModelBackend::Mock, "http://localhost");
+            ModelEndpoint::new("test", "test-model", ModelBackend::TestStub, "http://localhost");
 
         // No requests yet - 100% success
         assert_eq!(endpoint.success_rate(), 1.0);
@@ -865,7 +881,7 @@ mod tests {
         let endpoint = ModelEndpoint::new(
             "test-ep",
             "test-model",
-            ModelBackend::Mock,
+            ModelBackend::TestStub,
             "http://localhost",
         );
         fabric.add_endpoint(endpoint).await;
