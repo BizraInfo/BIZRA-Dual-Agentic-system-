@@ -90,12 +90,11 @@ impl IhsanConstitution {
 
     /// Parse weights from YAML string
     fn from_yaml_str(yaml: &str) -> Result<Self, IhsanError> {
-        let parsed: IhsanConstitutionFile = serde_yaml::from_str(yaml)
-            .map_err(|e| IhsanError::ConstitutionError(e.to_string()))?;
+        let parsed: IhsanConstitutionFile =
+            serde_yaml::from_str(yaml).map_err(|e| IhsanError::ConstitutionError(e.to_string()))?;
 
-        let get_weight = |name: &str| -> f64 {
-            parsed.dimensions.get(name).map(|d| d.weight).unwrap_or(0.0)
-        };
+        let get_weight =
+            |name: &str| -> f64 { parsed.dimensions.get(name).map(|d| d.weight).unwrap_or(0.0) };
 
         let weights = Self {
             correctness: get_weight("correctness"),

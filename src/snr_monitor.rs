@@ -66,31 +66,46 @@ impl Default for SNRConstitution {
     fn default() -> Self {
         // Hardcoded fallback matching snr_v1.yaml
         let mut signal_contributors = HashMap::new();
-        signal_contributors.insert("action_committed".to_string(), WeightSpec {
-            weight: 1.0,
-            description: "Action successfully committed".to_string(),
-        });
-        signal_contributors.insert("proof_verified".to_string(), WeightSpec {
-            weight: 1.0,
-            description: "Proof verified".to_string(),
-        });
+        signal_contributors.insert(
+            "action_committed".to_string(),
+            WeightSpec {
+                weight: 1.0,
+                description: "Action successfully committed".to_string(),
+            },
+        );
+        signal_contributors.insert(
+            "proof_verified".to_string(),
+            WeightSpec {
+                weight: 1.0,
+                description: "Proof verified".to_string(),
+            },
+        );
 
         let mut noise_contributors = HashMap::new();
-        noise_contributors.insert("rollback".to_string(), WeightSpec {
-            weight: 1.0,
-            description: "Action rolled back".to_string(),
-        });
-        noise_contributors.insert("human_veto".to_string(), WeightSpec {
-            weight: 2.0,
-            description: "Human veto".to_string(),
-        });
+        noise_contributors.insert(
+            "rollback".to_string(),
+            WeightSpec {
+                weight: 1.0,
+                description: "Action rolled back".to_string(),
+            },
+        );
+        noise_contributors.insert(
+            "human_veto".to_string(),
+            WeightSpec {
+                weight: 2.0,
+                description: "Human veto".to_string(),
+            },
+        );
 
         let mut cycle_costs = HashMap::new();
-        cycle_costs.insert("inference".to_string(), CycleCostSpec {
-            base_cycles: 1000,
-            per_token: 10,
-            description: "LLM inference".to_string(),
-        });
+        cycle_costs.insert(
+            "inference".to_string(),
+            CycleCostSpec {
+                base_cycles: 1000,
+                per_token: 10,
+                description: "LLM inference".to_string(),
+            },
+        );
 
         Self {
             version: 1,
@@ -152,7 +167,8 @@ pub fn snr_threshold_for_env(env: &str) -> Fixed64 {
 /// Get signal weight for contributor type
 pub fn signal_weight(contributor: &str) -> Fixed64 {
     let constitution = snr_constitution();
-    constitution.signal_contributors
+    constitution
+        .signal_contributors
         .get(contributor)
         .map(|spec| Fixed64::from_f64(spec.weight))
         .unwrap_or(Fixed64::ONE)
@@ -161,7 +177,8 @@ pub fn signal_weight(contributor: &str) -> Fixed64 {
 /// Get noise weight for contributor type
 pub fn noise_weight(contributor: &str) -> Fixed64 {
     let constitution = snr_constitution();
-    constitution.noise_contributors
+    constitution
+        .noise_contributors
         .get(contributor)
         .map(|spec| Fixed64::from_f64(spec.weight))
         .unwrap_or(Fixed64::ONE)
@@ -170,7 +187,8 @@ pub fn noise_weight(contributor: &str) -> Fixed64 {
 /// Get cycle cost for operation type
 pub fn cycle_cost(operation: &str) -> u64 {
     let constitution = snr_constitution();
-    constitution.cycle_costs
+    constitution
+        .cycle_costs
         .get(operation)
         .map(|spec| spec.base_cycles)
         .unwrap_or(100) // Default cost
@@ -197,9 +215,9 @@ pub struct SNRMetrics {
     pub fate_violations: u64,
 
     // Derived Metrics (Fixed64 for determinism)
-    pub signal: u64,       // actions_committed with verified proofs
-    pub noise: u64,        // cycles_total - signal_cycles
-    pub snr: Fixed64,      // signal / cycles_total
+    pub signal: u64,        // actions_committed with verified proofs
+    pub noise: u64,         // cycles_total - signal_cycles
+    pub snr: Fixed64,       // signal / cycles_total
     pub snr_trend: Fixed64, // d(SNR)/dt
 
     // Temporal
@@ -246,8 +264,8 @@ impl SNRMetrics {
         self.noise = self.cycles_total.saturating_sub(signal_cycles);
 
         // SNR = signal / total
-        self.snr = Fixed64::from_i64(self.signal as i64)
-            / Fixed64::from_i64(self.cycles_total as i64);
+        self.snr =
+            Fixed64::from_i64(self.signal as i64) / Fixed64::from_i64(self.cycles_total as i64);
     }
 
     /// Check if SNR meets COVENANT threshold
@@ -394,7 +412,10 @@ impl SNRMonitor {
         metrics.compute_snr();
 
         // Trigger optimization if interval reached
-        if metrics.actions_attempted.is_multiple_of(self.optimization_interval) {
+        if metrics
+            .actions_attempted
+            .is_multiple_of(self.optimization_interval)
+        {
             drop(metrics); // Release lock before optimization
             self.optimize();
         }
@@ -554,7 +575,10 @@ mod tests {
         let thought_id = ThoughtId::new();
 
         monitor.record_event(ThoughtEvent::Attempted(thought_id));
-        monitor.record_event(ThoughtEvent::Rollback(thought_id, "FATE violation".to_string()));
+        monitor.record_event(ThoughtEvent::Rollback(
+            thought_id,
+            "FATE violation".to_string(),
+        ));
 
         let metrics = monitor.snapshot();
         assert_eq!(metrics.rollbacks, 1);

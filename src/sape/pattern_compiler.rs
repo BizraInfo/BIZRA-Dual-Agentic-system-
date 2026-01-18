@@ -11,8 +11,7 @@ use tokio::sync::RwLock;
 use tracing::{debug, info, warn};
 
 /// Optimization level for pattern compilation
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Default)]
 pub enum OptimizationLevel {
     Minimum,
     #[default]
@@ -20,7 +19,6 @@ pub enum OptimizationLevel {
     Aggressive,
     Maximum,
 }
-
 
 /// A compiled pattern representing a recurring symbol chain
 #[derive(Debug, Clone, Serialize, Deserialize)]

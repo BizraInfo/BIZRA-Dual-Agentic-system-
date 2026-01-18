@@ -30,15 +30,14 @@ static BIZRA_RT: OnceCell<Runtime> = OnceCell::new();
 /// Get or initialize the global Tokio runtime for FFI operations
 /// Uses OnceLock for thread-safe lazy initialization with proper error handling
 fn bizra_runtime() -> PyResult<&'static Runtime> {
-    BIZRA_RT
-        .get_or_init(|| {
-            tokio::runtime::Builder::new_multi_thread()
-                .enable_all()
-                .thread_name("bizra-ffi")
-                .worker_threads(4)
-                .build()
-                .expect("CRITICAL: Tokio runtime initialization failed")
-        });
+    BIZRA_RT.get_or_init(|| {
+        tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .thread_name("bizra-ffi")
+            .worker_threads(4)
+            .build()
+            .expect("CRITICAL: Tokio runtime initialization failed")
+    });
     Ok(BIZRA_RT.get().expect("Runtime guaranteed"))
 }
 
@@ -265,7 +264,11 @@ impl BizraFfiBridge {
     /// Returns:
     ///     bytes: Output from sandboxed reasoning
     #[pyo3(name = "execute_reasoning_wasm")]
-    pub fn execute_reasoning_sandboxed(&self, input: Vec<u8>, reasoning_type: String) -> PyResult<Vec<u8>> {
+    pub fn execute_reasoning_sandboxed(
+        &self,
+        input: Vec<u8>,
+        reasoning_type: String,
+    ) -> PyResult<Vec<u8>> {
         panic_airlock(|| {
             let mut wasm = self.wasm.lock().map_err(|e| to_pyerr(e.to_string()))?;
 
@@ -339,7 +342,11 @@ impl BizraFfiBridge {
     /// Returns:
     ///     bool: True if SAT (satisfiable), False if UNSAT
     #[pyo3(name = "verify_fate_with_context")]
-    pub fn verify_fate_contextual(&self, proposition: String, _context: Option<&PyDict>) -> PyResult<bool> {
+    pub fn verify_fate_contextual(
+        &self,
+        proposition: String,
+        _context: Option<&PyDict>,
+    ) -> PyResult<bool> {
         panic_airlock(|| {
             // Use FATE engine for formal verification
             // For now, return true for valid propositions

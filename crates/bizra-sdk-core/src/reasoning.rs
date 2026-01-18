@@ -98,8 +98,16 @@ impl ReasoningEngine {
 
         // Factor 3: Structure markers (reasoning quality)
         let structure_markers = [
-            "because", "therefore", "however", "analysis", "evidence",
-            "consider", "implies", "proof", "given", "conclude",
+            "because",
+            "therefore",
+            "however",
+            "analysis",
+            "evidence",
+            "consider",
+            "implies",
+            "proof",
+            "given",
+            "conclude",
         ];
         let structure_hits = structure_markers
             .iter()
@@ -109,8 +117,14 @@ impl ReasoningEngine {
 
         // Factor 4: Noise markers (negative signal)
         let noise_markers = [
-            "as an ai", "i cannot", "i'm sorry", "apologize",
-            "aaaaa", "xxxxx", "????", "!!!!",
+            "as an ai",
+            "i cannot",
+            "i'm sorry",
+            "apologize",
+            "aaaaa",
+            "xxxxx",
+            "????",
+            "!!!!",
         ];
         let noise_hits = noise_markers
             .iter()

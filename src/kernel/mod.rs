@@ -42,10 +42,7 @@ pub enum KernelEvent {
         description: String,
     },
     /// Post-plan hook
-    PlanPost {
-        plan_id: String,
-        success: bool,
-    },
+    PlanPost { plan_id: String, success: bool },
     /// Pre-action hook (before tool/capability use)
     ActionPre {
         action_id: String,
@@ -59,9 +56,7 @@ pub enum KernelEvent {
         duration_ms: u64,
     },
     /// Pre-verify hook (before SAT validation)
-    VerifyPre {
-        validation_id: String,
-    },
+    VerifyPre { validation_id: String },
     /// Post-verify hook
     VerifyPost {
         validation_id: String,
@@ -74,19 +69,14 @@ pub enum KernelEvent {
         content_hash: String,
     },
     /// Post-memory-commit hook
-    MemoryCommitPost {
-        receipt_id: String,
-    },
+    MemoryCommitPost { receipt_id: String },
     /// Receipt finalized
     ReceiptFinalized {
         receipt_id: String,
         receipt_hash: String,
     },
     /// Exit event (session termination)
-    Exit {
-        reason: String,
-        success: bool,
-    },
+    Exit { reason: String, success: bool },
     /// Custom event (for extensions)
     Custom {
         event_type: String,
@@ -417,8 +407,7 @@ pub struct Kernel {
 }
 
 /// Kernel lifecycle state
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum KernelState {
     /// Kernel is initializing
     #[default]
@@ -432,7 +421,6 @@ pub enum KernelState {
     /// Kernel has terminated
     Terminated,
 }
-
 
 impl Kernel {
     /// Create a new kernel
@@ -765,7 +753,11 @@ mod tests {
         let kernel = Kernel::new();
         kernel.initialize().await.unwrap();
 
-        let anchor = IdentityAnchor::new("user123", "Test User", crate::identity::IdentityOrigin::Human);
+        let anchor = IdentityAnchor::new(
+            "user123",
+            "Test User",
+            crate::identity::IdentityOrigin::Human,
+        );
         kernel.load_identity(anchor).await.unwrap();
 
         let identity = kernel.get_identity().await;

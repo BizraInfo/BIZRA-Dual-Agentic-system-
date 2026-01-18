@@ -23,8 +23,8 @@ pub struct Envelope {
     pub agent_id: String,    // Actor
 
     // Ordering & Uniqueness
-    pub nonce: String,    // Random unique identifier
-    pub counter: u64,     // Monotonic counter for this session
+    pub nonce: String,     // Random unique identifier
+    pub counter: u64,      // Monotonic counter for this session
     pub timestamp_ns: u64, // Timestamp in nanoseconds (UTC) - deterministic
 
     // Payload
@@ -72,7 +72,7 @@ impl Envelope {
             self.payload_hash,
             self.policy_hash,
             self.session_id,
-            self.timestamp_ns  // Deterministic u64 instead of f64
+            self.timestamp_ns // Deterministic u64 instead of f64
         );
 
         let mut hasher = Sha256::new();
@@ -96,8 +96,8 @@ impl Envelope {
 /// - session_counters: Map of session_id -> last_seen_counter (to enforce order)
 #[derive(Debug)]
 pub struct ReplayGuard {
-    nonce_ttl_ns: u64,  // TTL in nanoseconds
-    seen_nonces: HashMap<String, u64>,  // timestamp in nanoseconds
+    nonce_ttl_ns: u64,                 // TTL in nanoseconds
+    seen_nonces: HashMap<String, u64>, // timestamp in nanoseconds
     session_counters: HashMap<String, u64>,
 }
 

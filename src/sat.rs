@@ -621,7 +621,7 @@ impl SATOrchestrator {
                     }
                 };
                 // Only enforce thermal limits when sensor is available
-                if temp > 0.0 && temp > 85.0 {
+                if temp > 85.0 {
                     warn!(
                         temp,
                         "🚨 THERMAL EMERGENCY: CPU temperature critical - THROTTLING"
@@ -664,7 +664,11 @@ impl SATOrchestrator {
                     message: format!(
                         "Resources available: Task '{}' can be executed{}",
                         request.task,
-                        if thermal_confidence < 1.0 { " (thermal sensor unavailable)" } else { "" }
+                        if thermal_confidence < 1.0 {
+                            " (thermal sensor unavailable)"
+                        } else {
+                            ""
+                        }
                     ),
                     confidence: 0.91 * thermal_confidence, // Reduce confidence if thermal unknown
                     rejection_code: None,

@@ -346,8 +346,8 @@ Apply Ihsān principles: excellence through harmonious integration."#
 // EVOLVING PAT ORCHESTRATOR (DrZero Integration)
 // ============================================================================
 
-use crate::evolution::{EvolutionState, TaskDomain, SovereignEvolution};
 use crate::engram::SovereigntyTier;
+use crate::evolution::{EvolutionState, SovereignEvolution, TaskDomain};
 
 /// Evolving PAT Orchestrator with DrZero-style self-evolution
 ///
@@ -449,10 +449,9 @@ impl EvolvingPATOrchestrator {
 
             // Track domain-specific performance for future difficulty adjustment
             let ihsan_score = result.ihsan_score.to_f64();
-            if ihsan_score >= 0.95
-                && !self.evolution_state.mastered_domains.contains(&domain) {
-                    self.evolution_state.mastered_domains.push(domain);
-                }
+            if ihsan_score >= 0.95 && !self.evolution_state.mastered_domains.contains(&domain) {
+                self.evolution_state.mastered_domains.push(domain);
+            }
         }
     }
 
@@ -526,10 +525,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_evolving_pat_creation() {
-        let evolving_pat = EvolvingPATOrchestrator::new(
-            SovereigntyTier::T0Mobile,
-            42
-        ).await.unwrap();
+        let evolving_pat = EvolvingPATOrchestrator::new(SovereigntyTier::T0Mobile, 42)
+            .await
+            .unwrap();
 
         assert_eq!(evolving_pat.pat().get_agent_count(), 7);
         assert_eq!(evolving_pat.evolution_state().generation, 0);
@@ -537,10 +535,9 @@ mod tests {
 
     #[tokio::test]
     async fn test_evolving_pat_execution() {
-        let mut evolving_pat = EvolvingPATOrchestrator::new(
-            SovereigntyTier::T1Consumer,
-            12345
-        ).await.unwrap();
+        let mut evolving_pat = EvolvingPATOrchestrator::new(SovereigntyTier::T1Consumer, 12345)
+            .await
+            .unwrap();
 
         let request = DualAgenticRequest {
             task: "Test task for evolution".to_string(),

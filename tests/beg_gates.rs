@@ -4,8 +4,8 @@
 
 use meta_alpha_dual_agentic::fixed::Fixed64;
 use meta_alpha_dual_agentic::hookchain::{
-    CapabilityTier, CapabilityToken, ExecutedReceipt, HookDecision, PostHookResult,
-    ReceiptDraft, SATHookChain, SessionDAG,
+    CapabilityTier, CapabilityToken, ExecutedReceipt, HookDecision, PostHookResult, ReceiptDraft,
+    SATHookChain, SessionDAG,
 };
 use meta_alpha_dual_agentic::tpm::SoftwareSigner;
 use std::sync::Arc;
@@ -259,7 +259,10 @@ mod session_dag_gates {
         let dag = SessionDAG::new("v1.0.0");
 
         let genesis = dag.get_head().await.unwrap();
-        let child = dag.advance("state1", "receipts1", Fixed64::from_f64(0.1)).await.unwrap();
+        let child = dag
+            .advance("state1", "receipts1", Fixed64::from_f64(0.1))
+            .await
+            .unwrap();
 
         assert_eq!(
             child.parent_hash,
@@ -290,8 +293,14 @@ mod session_dag_gates {
     async fn beg03_node_hash_is_unique() {
         let dag = SessionDAG::new("v1.0.0");
 
-        let node1 = dag.advance("state1", "receipts1", Fixed64::from_f64(0.1)).await.unwrap();
-        let node2 = dag.advance("state2", "receipts2", Fixed64::from_f64(0.2)).await.unwrap();
+        let node1 = dag
+            .advance("state1", "receipts1", Fixed64::from_f64(0.1))
+            .await
+            .unwrap();
+        let node2 = dag
+            .advance("state2", "receipts2", Fixed64::from_f64(0.2))
+            .await
+            .unwrap();
 
         assert_ne!(
             node1.node_hash, node2.node_hash,

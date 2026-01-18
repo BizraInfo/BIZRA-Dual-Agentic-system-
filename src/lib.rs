@@ -30,10 +30,6 @@ pub mod experience_memory;
 pub mod fate;
 pub mod federation;
 // Apotheosis Node modules
-pub mod identity;
-pub mod kernel;
-pub mod model_fabric;
-pub mod ralph;
 #[cfg(feature = "python")]
 pub mod ffi;
 pub mod fixed;
@@ -42,17 +38,21 @@ pub mod giants;
 pub mod hookchain;
 pub mod hot_path;
 pub mod http;
+pub mod identity;
 pub mod ihsan;
+pub mod kernel;
 pub mod ledger;
 pub mod logic_envelope; // Priority 1: Tiered validation for LLM outputs
 pub mod mcp;
 pub mod metrics;
+pub mod model_fabric;
 pub mod ollama;
 pub mod pat;
 pub mod pat_enhanced;
 pub mod pipeline;
 pub mod poi;
 pub mod primordial;
+pub mod ralph;
 pub mod reasoning;
 pub mod receipts;
 pub mod resonance;
@@ -77,15 +77,15 @@ pub mod zk;
 // Re-exports
 pub use engram::{EngramProfile, SovereignEngram, SovereigntyTier};
 pub use evolution::{EvolutionState, SovereignEvolution, TaskDomain};
-pub use unified_memory::{UnifiedMemory, UnifiedMemoryConfig, UnifiedSearchResult};
 pub use fate::FateEngine;
-pub use pipeline::{PipelineContext, PipelineResult, SovereignPipeline};
 pub use hookchain::{
     CapabilityTier, CapabilityToken, ConsentClass, HookDecision, PostHookResult, SATHookChain,
     SessionDAG, SessionNode,
 };
+pub use pipeline::{PipelineContext, PipelineResult, SovereignPipeline};
 pub use resonance::{OptimizationResult, ResonanceMesh, ResonanceStats};
 pub use sape::SAPEEngine;
+pub use unified_memory::{UnifiedMemory, UnifiedMemoryConfig, UnifiedSearchResult};
 pub use wasm::WasmSandbox;
 
 // Apotheosis Node re-exports

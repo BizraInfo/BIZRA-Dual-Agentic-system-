@@ -161,7 +161,13 @@ impl UnifiedMemory {
         // Step 1: Store in MemGovern
         let receipt_id = self
             .experience
-            .store_experience(card.clone(), source_repo, source_issue, transfer_ctx, transformation)
+            .store_experience(
+                card.clone(),
+                source_repo,
+                source_issue,
+                transfer_ctx,
+                transformation,
+            )
             .await?;
 
         // Step 2: Extract n-grams and populate Engram
@@ -280,7 +286,11 @@ impl UnifiedMemory {
             card.problem_summary.clone(),
             card.fix_strategy.clone(),
             card.root_cause.clone(),
-            card.signals.iter().map(|s| s.to_string()).collect::<Vec<_>>().join(" "),
+            card.signals
+                .iter()
+                .map(|s| s.to_string())
+                .collect::<Vec<_>>()
+                .join(" "),
         ]
     }
 

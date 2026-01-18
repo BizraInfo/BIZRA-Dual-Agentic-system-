@@ -87,10 +87,9 @@ impl ReasoningGraph {
             verified_by_tpm: false,
         };
 
-        if node_type == NodeType::Initial
-            && self.root_id.is_none() {
-                self.root_id = Some(id.clone());
-            }
+        if node_type == NodeType::Initial && self.root_id.is_none() {
+            self.root_id = Some(id.clone());
+        }
 
         self.nodes.insert(id.clone(), node);
         id

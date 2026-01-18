@@ -13,7 +13,6 @@
 
 use meta_alpha_dual_agentic::snr_monitor::global_monitor;
 use meta_alpha_dual_agentic::thought_executor::ThoughtExecutor;
-use tracing_subscriber;
 
 fn main() -> anyhow::Result<()> {
     // Initialize logging
@@ -33,7 +32,7 @@ fn main() -> anyhow::Result<()> {
     let monitor = global_monitor();
 
     // Test cases demonstrating different pipeline outcomes
-    let test_cases = vec![
+    let test_cases = [
         (
             "Calculate the factorial of 5",
             "Should PASS - Safe mathematical operation",
@@ -56,7 +55,10 @@ fn main() -> anyhow::Result<()> {
         ),
     ];
 
-    println!("🚀 Running {} test thoughts through COVENANT pipeline...\n", test_cases.len());
+    println!(
+        "🚀 Running {} test thoughts through COVENANT pipeline...\n",
+        test_cases.len()
+    );
 
     for (i, (input, expected_outcome)) in test_cases.iter().enumerate() {
         println!("─────────────────────────────────────────────────────────────");
@@ -67,10 +69,13 @@ fn main() -> anyhow::Result<()> {
         match executor.execute(input) {
             Ok((thought, receipt)) => {
                 println!("✅ PIPELINE SUCCESS");
-                println!("   Thought ID: {}", thought.id.to_string());
+                println!("   Thought ID: {}", thought.id);
                 println!("   Ihsān Score: {:.4}", thought.ihsan_score.total.to_f64());
                 println!("   Gates Passed: {}", thought.gates_passed.len());
-                println!("   Contributed to Signal: {}", thought.contributed_to_signal);
+                println!(
+                    "   Contributed to Signal: {}",
+                    thought.contributed_to_signal
+                );
                 println!("\n   Receipt:");
                 for line in receipt.lines().take(5) {
                     println!("   {}", line);

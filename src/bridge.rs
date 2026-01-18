@@ -28,15 +28,9 @@ fn get_memory_usage_percent() -> Fixed64 {
 
             for line in contents.lines() {
                 if line.starts_with("MemTotal:") {
-                    mem_total = line
-                        .split_whitespace()
-                        .nth(1)
-                        .and_then(|s| s.parse().ok());
+                    mem_total = line.split_whitespace().nth(1).and_then(|s| s.parse().ok());
                 } else if line.starts_with("MemAvailable:") {
-                    mem_available = line
-                        .split_whitespace()
-                        .nth(1)
-                        .and_then(|s| s.parse().ok());
+                    mem_available = line.split_whitespace().nth(1).and_then(|s| s.parse().ok());
                 }
                 if mem_total.is_some() && mem_available.is_some() {
                     break;
@@ -403,9 +397,9 @@ impl BridgeCoordinator {
                 sat_validation_ms: sat_validation_time.as_millis(),
                 pat_execution_ms: pat_execution_time.as_millis(),
                 total_latency_ms: total_latency.as_millis(),
-                synergy_score,               // Fixed64 directly
-                ihsan_score,                 // Fixed64 directly
-                ihsan_threshold: ihsan_threshold_fixed,  // Fixed64
+                synergy_score,                          // Fixed64 directly
+                ihsan_score,                            // Fixed64 directly
+                ihsan_threshold: ihsan_threshold_fixed, // Fixed64
                 pat_agents_count: pat_results.len(),
                 sat_approvers_count: sat_approvers,
                 memory_usage_percent: get_memory_usage_percent(), // Real system metric

@@ -172,33 +172,23 @@ async fn request_id_middleware(mut request: Request<Body>, next: Next) -> Respon
 /// Trusted proxy IP ranges for X-Forwarded-For validation
 /// SECURITY FIX (SEC-002a): Only trust forwarded headers from known proxies
 const TRUSTED_PROXY_PREFIXES: &[&str] = &[
-    "10.",        // Private Class A
-    "172.16.",    // Private Class B (partial)
-    "172.17.",    // Docker default
-    "172.18.",
-    "172.19.",
-    "172.20.",
-    "172.21.",
-    "172.22.",
-    "172.23.",
-    "172.24.",
-    "172.25.",
-    "172.26.",
-    "172.27.",
-    "172.28.",
-    "172.29.",
-    "172.30.",
-    "172.31.",
-    "192.168.",   // Private Class C
-    "127.",       // Localhost
-    "::1",        // IPv6 localhost
-    "fc00:",      // IPv6 ULA
-    "fd00:",      // IPv6 ULA
+    "10.",     // Private Class A
+    "172.16.", // Private Class B (partial)
+    "172.17.", // Docker default
+    "172.18.", "172.19.", "172.20.", "172.21.", "172.22.", "172.23.", "172.24.", "172.25.",
+    "172.26.", "172.27.", "172.28.", "172.29.", "172.30.", "172.31.",
+    "192.168.", // Private Class C
+    "127.",     // Localhost
+    "::1",      // IPv6 localhost
+    "fc00:",    // IPv6 ULA
+    "fd00:",    // IPv6 ULA
 ];
 
 /// Check if an IP is from a trusted proxy
 fn is_trusted_proxy(ip: &str) -> bool {
-    TRUSTED_PROXY_PREFIXES.iter().any(|prefix| ip.starts_with(prefix))
+    TRUSTED_PROXY_PREFIXES
+        .iter()
+        .any(|prefix| ip.starts_with(prefix))
 }
 
 fn extract_client_id(request: &Request<Body>) -> String {

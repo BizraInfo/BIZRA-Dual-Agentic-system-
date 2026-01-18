@@ -21,8 +21,7 @@ use tracing::{info, warn};
 // ============================================================================
 
 /// Supported model backends
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum ModelBackend {
     /// Ollama (default local backend)
     #[default]
@@ -36,7 +35,6 @@ pub enum ModelBackend {
     /// Mock backend for testing
     Mock,
 }
-
 
 impl ModelBackend {
     /// Get the default health check path for this backend
@@ -67,8 +65,7 @@ impl ModelBackend {
 // ============================================================================
 
 /// Health status for a model endpoint
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum HealthStatus {
     /// Endpoint is healthy and responding
     Healthy,
@@ -80,7 +77,6 @@ pub enum HealthStatus {
     #[default]
     Unknown,
 }
-
 
 // ============================================================================
 // RESOURCE LIMITS
@@ -490,7 +486,10 @@ impl ModelFabric {
 
             ModelBackend::Mock => {
                 // For testing - return a mock response
-                Ok(format!("Mock response for: {}", prompt.chars().take(50).collect::<String>()))
+                Ok(format!(
+                    "Mock response for: {}",
+                    prompt.chars().take(50).collect::<String>()
+                ))
             }
         }
     }
@@ -548,7 +547,13 @@ impl ModelFabric {
         let url = format!("{}{}", endpoint.url, endpoint.backend.health_path());
         let start = Instant::now();
 
-        match self.client.get(&url).timeout(Duration::from_secs(5)).send().await {
+        match self
+            .client
+            .get(&url)
+            .timeout(Duration::from_secs(5))
+            .send()
+            .await
+        {
             Ok(resp) => {
                 let elapsed = start.elapsed();
                 if resp.status().is_success() {
@@ -602,7 +607,10 @@ impl ModelFabric {
         if let Some(alt_id) = alternative {
             for agent_key in affected_agents {
                 bindings.insert(agent_key.clone(), alt_id.clone());
-                warn!("Rebalanced agent {} from {} to {}", agent_key, failed_endpoint_id, alt_id);
+                warn!(
+                    "Rebalanced agent {} from {} to {}",
+                    agent_key, failed_endpoint_id, alt_id
+                );
             }
         } else {
             anyhow::bail!("No healthy alternative endpoint available");
@@ -722,14 +730,19 @@ pub mod lm_studio {
         port: u16,
     ) -> ModelEndpoint {
         let url = format!("{}:{}", host, port);
-        ModelEndpoint::new(endpoint_id, model_name, ModelBackend::OpenAICompatible, &url)
-            .with_limits(ResourceLimits {
-                max_tokens: 8192,          // LM Studio typically supports larger contexts
-                max_concurrent: 1,          // Local models usually single-threaded
-                timeout_ms: 120_000,        // 2 min for larger reasoning tasks
-                memory_limit_mb: 0,
-                gpu_memory_limit_mb: 0,
-            })
+        ModelEndpoint::new(
+            endpoint_id,
+            model_name,
+            ModelBackend::OpenAICompatible,
+            &url,
+        )
+        .with_limits(ResourceLimits {
+            max_tokens: 8192,    // LM Studio typically supports larger contexts
+            max_concurrent: 1,   // Local models usually single-threaded
+            timeout_ms: 120_000, // 2 min for larger reasoning tasks
+            memory_limit_mb: 0,
+            gpu_memory_limit_mb: 0,
+        })
     }
 
     /// Create standard PAT council endpoints for LM Studio
@@ -750,15 +763,22 @@ pub mod lm_studio {
     pub async fn setup_pat_council(fabric: &ModelFabric) -> anyhow::Result<()> {
         // Add endpoints
         for ep in council_endpoints() {
-            info!("Adding LM Studio endpoint: {} -> {}", ep.endpoint_id, ep.model_name);
+            info!(
+                "Adding LM Studio endpoint: {} -> {}",
+                ep.endpoint_id, ep.model_name
+            );
             fabric.add_endpoint(ep).await;
         }
 
         // Bind agents to appropriate endpoints
         // Reasoning tasks → ministral-14b
-        fabric.bind_agent(&agents::planner(), "lm-reasoning").await?;
+        fabric
+            .bind_agent(&agents::planner(), "lm-reasoning")
+            .await?;
         fabric.bind_agent(&agents::ethics(), "lm-reasoning").await?;
-        fabric.bind_agent(&agents::integrator(), "lm-reasoning").await?;
+        fabric
+            .bind_agent(&agents::integrator(), "lm-reasoning")
+            .await?;
 
         // Code tasks → qwen2.5-14b
         fabric.bind_agent(&agents::builder(), "lm-code").await?;
@@ -798,12 +818,8 @@ mod tests {
 
     #[test]
     fn test_endpoint_success_rate() {
-        let mut endpoint = ModelEndpoint::new(
-            "test",
-            "test-model",
-            ModelBackend::Mock,
-            "http://localhost",
-        );
+        let mut endpoint =
+            ModelEndpoint::new("test", "test-model", ModelBackend::Mock, "http://localhost");
 
         // No requests yet - 100% success
         assert_eq!(endpoint.success_rate(), 1.0);
@@ -886,7 +902,10 @@ mod tests {
         assert_eq!(ModelBackend::VLLM.health_path(), "/health");
         assert_eq!(ModelBackend::VLLM.completion_path(), "/v1/completions");
 
-        assert_eq!(ModelBackend::OpenAICompatible.completion_path(), "/v1/chat/completions");
+        assert_eq!(
+            ModelBackend::OpenAICompatible.completion_path(),
+            "/v1/chat/completions"
+        );
     }
 
     // ========================================================================

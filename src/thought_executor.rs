@@ -8,15 +8,14 @@
 // - Article III: 8-stage thought lifecycle enforced
 // - Article V: SNR metrics tracked for every thought
 
-use blake3;
 use crate::fixed::Fixed64;
-use crate::ihsan::{IhsanConstitution, IhsanDimensions, compute_ihsan_score};
+use crate::ihsan::{compute_ihsan_score, IhsanConstitution, IhsanDimensions};
 use crate::snr_monitor::{global_monitor, ThoughtEvent};
 use crate::thought::{
-    Action, AttestedThought, GateReceipt, GateType, IhsanScore,
-    ThoughtId, ThoughtStage,
+    Action, AttestedThought, GateReceipt, GateType, IhsanScore, ThoughtId, ThoughtStage,
 };
 use anyhow::Result;
+use blake3;
 use chrono::Utc;
 
 /// Stub Reasoner: Minimal inference engine for testing
@@ -43,14 +42,14 @@ impl StubReasoner {
     /// Evaluate reasoning quality (stub - returns high scores for testing)
     pub fn evaluate(&self, _trace: &str) -> IhsanDimensions {
         IhsanDimensions {
-            adl: Fixed64::from_f64(0.95),      // Correctness
-            amanah: Fixed64::from_f64(0.92),   // Safety
-            ihsan: Fixed64::from_f64(0.97),    // User benefit
-            hikmah: Fixed64::from_f64(0.90),   // Efficiency
-            bayan: Fixed64::from_f64(0.93),    // Auditability
-            tawhid: Fixed64::from_f64(0.88),   // Anti-centralization
-            sabr: Fixed64::from_f64(0.91),     // Robustness
-            mizan: Fixed64::from_f64(0.94),    // Fairness
+            adl: Fixed64::from_f64(0.95),    // Correctness
+            amanah: Fixed64::from_f64(0.92), // Safety
+            ihsan: Fixed64::from_f64(0.97),  // User benefit
+            hikmah: Fixed64::from_f64(0.90), // Efficiency
+            bayan: Fixed64::from_f64(0.93),  // Auditability
+            tawhid: Fixed64::from_f64(0.88), // Anti-centralization
+            sabr: Fixed64::from_f64(0.91),   // Robustness
+            mizan: Fixed64::from_f64(0.94),  // Fairness
         }
     }
 }
@@ -114,16 +113,21 @@ impl ThoughtExecutor {
 
         let input_hash = *blake3::hash(input.as_bytes()).as_bytes();
 
-        tracing::info!("🔵 STAGE 1 (SENSE): thought_id={}, input_hash={}",
-            thought_id.to_string(), hex::encode(input_hash));
+        tracing::info!(
+            "🔵 STAGE 1 (SENSE): thought_id={}, input_hash={}",
+            thought_id.to_string(),
+            hex::encode(input_hash)
+        );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // STAGE 2: REASON - Inference + trace generation
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         let reasoning_trace = self.reasoner.reason(input);
 
-        tracing::info!("🔵 STAGE 2 (REASON): Generated reasoning trace ({} chars)",
-            reasoning_trace.len());
+        tracing::info!(
+            "🔵 STAGE 2 (REASON): Generated reasoning trace ({} chars)",
+            reasoning_trace.len()
+        );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // STAGE 3: SCORE - Ihsān 8-dimensional evaluation
@@ -153,7 +157,10 @@ impl ThoughtExecutor {
         };
 
         let threshold = Fixed64::from_f64(0.85); // COVENANT default
-        tracing::info!("🔵 STAGE 3 (SCORE): Ihsān total={:.4}", ihsan_score.total.to_f64());
+        tracing::info!(
+            "🔵 STAGE 3 (SCORE): Ihsān total={:.4}",
+            ihsan_score.total.to_f64()
+        );
 
         // Check Ihsān threshold
         if !ihsan_score.passes_threshold(threshold) {
@@ -197,15 +204,21 @@ impl ThoughtExecutor {
 
         let fate_receipt = self.fate_gate.verify(&thought)?;
 
-        tracing::info!("🔵 STAGE 4 (GATE): FATE gate {}",
-            if fate_receipt.passed { "PASSED" } else { "FAILED" });
+        tracing::info!(
+            "🔵 STAGE 4 (GATE): FATE gate {}",
+            if fate_receipt.passed {
+                "PASSED"
+            } else {
+                "FAILED"
+            }
+        );
 
         if !fate_receipt.passed {
-            let reason = fate_receipt.reason.clone().unwrap_or_else(|| "Unknown FATE failure".to_string());
-            monitor.record_event(ThoughtEvent::FateViolation(
-                thought_id,
-                reason.clone(),
-            ));
+            let reason = fate_receipt
+                .reason
+                .clone()
+                .unwrap_or_else(|| "Unknown FATE failure".to_string());
+            monitor.record_event(ThoughtEvent::FateViolation(thought_id, reason.clone()));
             return Err(anyhow::anyhow!("ROLLBACK: FATE gate failed - {}", reason));
         }
 
@@ -229,8 +242,10 @@ impl ThoughtExecutor {
         );
         thought.ledger_entry_hash = Some(*blake3::hash(ledger_entry.as_bytes()).as_bytes());
 
-        tracing::info!("🟢 STAGE 6 (LEDGER): Entry hash={}",
-            hex::encode(thought.ledger_entry_hash.as_ref().unwrap()));
+        tracing::info!(
+            "🟢 STAGE 6 (LEDGER): Entry hash={}",
+            hex::encode(thought.ledger_entry_hash.as_ref().unwrap())
+        );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // STAGE 7: PROOF - zk-SNARK generation (async in production)
@@ -245,8 +260,10 @@ impl ThoughtExecutor {
 
         monitor.record_event(ThoughtEvent::ProofVerified(thought_id, true));
 
-        tracing::info!("🟢 STAGE 7 (PROOF): Proof hash={}",
-            hex::encode(thought.proof_hash.as_ref().unwrap()));
+        tracing::info!(
+            "🟢 STAGE 7 (PROOF): Proof hash={}",
+            hex::encode(thought.proof_hash.as_ref().unwrap())
+        );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // STAGE 8: SNR UPDATE - Metrics increment
@@ -254,7 +271,10 @@ impl ThoughtExecutor {
         thought.contributed_to_signal = true;
 
         let final_snr = monitor.current_snr();
-        tracing::info!("🟢 STAGE 8 (SNR UPDATE): Current SNR={:.4}", final_snr.to_f64());
+        tracing::info!(
+            "🟢 STAGE 8 (SNR UPDATE): Current SNR={:.4}",
+            final_snr.to_f64()
+        );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // Generate receipt
@@ -326,13 +346,13 @@ mod tests {
         // Verify thoughts executed successfully and contributed to signal
         assert!(result1.is_ok());
         assert!(result2.is_ok());
-        
+
         let (thought1, _) = result1.unwrap();
         let (thought2, _) = result2.unwrap();
-        
+
         assert!(thought1.contributed_to_signal);
         assert!(thought2.contributed_to_signal);
-        
+
         // Verify SNR is valid (non-negative)
         let snr = monitor.current_snr();
         assert!(snr.to_f64() >= 0.0);

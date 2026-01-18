@@ -1,0 +1,18 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260117235654-000001",
+  "timestamp": "2026-01-17T23:56:54.800823047Z",
+  "task_summary": "分析这个问题 العربية 日本語 한국어 🎉🚀",
+  "sat_validation_ms": 560,
+  "pat_execution_ms": 261,
+  "total_latency_ms": 824,
+  "synergy_score": 0.9226175311487168,
+  "ihsan_score": 0.9215873435605317,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00032305996865034103,
+  "integrity_hash": "sha256:b0a0fec8def9b7a05c52f52d47b755484ecd470364a7d20a7753681151b2c55e"
+}

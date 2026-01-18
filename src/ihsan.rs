@@ -12,8 +12,8 @@ const SEALED_GENESIS_HASH: &str =
 // Used by genesis_activation.sh to verify FFI alignment
 // HARD GATE #1 FIX: Converted to Fixed64 for deterministic cross-platform consensus
 // Q32.32 format: 0.4 = 0x6666_6666, 0.3 = 0x4CCC_CCCD
-pub const WEIGHT_TRUTH: Fixed64 = Fixed64::from_bits(0x0000_0000_6666_6666);  // 0.4
-pub const WEIGHT_LOGIC: Fixed64 = Fixed64::from_bits(0x0000_0000_4CCC_CCCD);  // 0.3
+pub const WEIGHT_TRUTH: Fixed64 = Fixed64::from_bits(0x0000_0000_6666_6666); // 0.4
+pub const WEIGHT_LOGIC: Fixed64 = Fixed64::from_bits(0x0000_0000_4CCC_CCCD); // 0.3
 pub const WEIGHT_INTENT: Fixed64 = Fixed64::from_bits(0x0000_0000_4CCC_CCCD); // 0.3
 
 #[derive(Debug, Deserialize)]
@@ -465,14 +465,14 @@ pub fn should_enforce() -> bool {
 /// Maps to IhsanScore fields in thought.rs
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IhsanDimensions {
-    pub adl: Fixed64,       // Justice (correctness)
-    pub amanah: Fixed64,    // Trust (safety)
-    pub ihsan: Fixed64,     // Excellence (user_benefit)
-    pub hikmah: Fixed64,    // Wisdom (efficiency)
-    pub bayan: Fixed64,     // Clarity (auditability)
-    pub tawhid: Fixed64,    // Unity (anti_centralization)
-    pub sabr: Fixed64,      // Patience (robustness)
-    pub mizan: Fixed64,     // Balance (fairness)
+    pub adl: Fixed64,    // Justice (correctness)
+    pub amanah: Fixed64, // Trust (safety)
+    pub ihsan: Fixed64,  // Excellence (user_benefit)
+    pub hikmah: Fixed64, // Wisdom (efficiency)
+    pub bayan: Fixed64,  // Clarity (auditability)
+    pub tawhid: Fixed64, // Unity (anti_centralization)
+    pub sabr: Fixed64,   // Patience (robustness)
+    pub mizan: Fixed64,  // Balance (fairness)
 }
 
 impl IhsanDimensions {

@@ -167,7 +167,10 @@ impl ExitCondition {
             ExitCondition::MaxIterations { limit } => {
                 format!("Maximum iterations reached: {}", limit)
             }
-            ExitCondition::Timeout { elapsed_ms, limit_ms } => {
+            ExitCondition::Timeout {
+                elapsed_ms,
+                limit_ms,
+            } => {
                 format!("Timeout: {}ms / {}ms", elapsed_ms, limit_ms)
             }
             ExitCondition::ResourceExhausted { resource, usage } => {
@@ -192,8 +195,7 @@ impl ExitCondition {
 // ============================================================================
 
 /// Circuit breaker states
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum CircuitState {
     /// Normal operation - requests allowed
     #[default]
@@ -203,7 +205,6 @@ pub enum CircuitState {
     /// Testing recovery - limited requests
     HalfOpen,
 }
-
 
 /// Circuit breaker for fault tolerance
 #[derive(Debug, Clone)]
@@ -370,7 +371,10 @@ impl QualityMetrics {
     /// Compute weighted composite score
     pub fn composite(&self) -> f64 {
         // Weights tuned for BIZRA quality gates
-        (0.30 * self.snr) + (0.35 * self.ihsan) + (0.25 * self.sat_consensus) + (0.10 * self.confidence)
+        (0.30 * self.snr)
+            + (0.35 * self.ihsan)
+            + (0.25 * self.sat_consensus)
+            + (0.10 * self.confidence)
     }
 
     /// Convert SNR to Fixed64 for deterministic operations

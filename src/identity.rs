@@ -18,8 +18,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 // ============================================================================
 
 /// Origin classification for identity
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum IdentityOrigin {
     /// Human user identity
     #[default]
@@ -31,7 +30,6 @@ pub enum IdentityOrigin {
     /// Federation node identity
     FederationNode,
 }
-
 
 /// IdentityAnchor - Stable user identity binding
 ///
@@ -129,8 +127,7 @@ impl IdentityAnchor {
 // ============================================================================
 
 /// Goal priority classification
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, PartialOrd, Ord)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, PartialOrd, Ord, Default)]
 pub enum GoalPriority {
     /// Low priority - nice to have
     Low = 0,
@@ -143,10 +140,8 @@ pub enum GoalPriority {
     Critical = 3,
 }
 
-
 /// Goal time horizon
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum GoalHorizon {
     /// Immediate - within this session
     Immediate,
@@ -159,10 +154,8 @@ pub enum GoalHorizon {
     Long,
 }
 
-
 /// Goal status
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum GoalStatus {
     /// Not yet started
     #[default]
@@ -178,7 +171,6 @@ pub enum GoalStatus {
     /// Blocked by dependency or constraint
     Blocked,
 }
-
 
 /// Kalman state for convergence detection and progress tracking
 ///
@@ -430,8 +422,7 @@ impl GoalStack {
 // ============================================================================
 
 /// Enforcement level for covenant rules
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum EnforcementLevel {
     /// Log violation but allow action
     Log,
@@ -444,18 +435,23 @@ pub enum EnforcementLevel {
     Veto,
 }
 
-
 /// Constraint type for covenant rules
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum CovenantConstraint {
     /// Pattern-based constraint (regex or glob)
     Pattern { pattern: String, target: String },
     /// Action-based constraint
-    ForbiddenAction { action_type: String, context: Option<String> },
+    ForbiddenAction {
+        action_type: String,
+        context: Option<String>,
+    },
     /// Resource constraint
     ResourceLimit { resource: String, max_value: f64 },
     /// Time-based constraint
-    TimeWindow { allowed_hours: Vec<u8>, timezone: String },
+    TimeWindow {
+        allowed_hours: Vec<u8>,
+        timezone: String,
+    },
     /// Custom Z3 formula for formal verification
     Formal { z3_formula: String },
 }

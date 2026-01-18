@@ -158,7 +158,9 @@ impl AsyncFateVerifier {
                             res.insert(
                                 p.id.clone(),
                                 match result {
-                                    Some(msg) if msg.contains("FAILED") => VerificationStatus::Failed(msg),
+                                    Some(msg) if msg.contains("FAILED") => {
+                                        VerificationStatus::Failed(msg)
+                                    }
                                     Some(_) => VerificationStatus::Verified,
                                     None => VerificationStatus::Verified,
                                 },
@@ -170,7 +172,9 @@ impl AsyncFateVerifier {
                             res.insert(
                                 p.id.clone(),
                                 match result {
-                                    Some(msg) if msg.contains("FAILED") => VerificationStatus::Failed(msg),
+                                    Some(msg) if msg.contains("FAILED") => {
+                                        VerificationStatus::Failed(msg)
+                                    }
                                     Some(_) => VerificationStatus::Verified,
                                     None => VerificationStatus::Verified,
                                 },

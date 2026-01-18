@@ -26,8 +26,8 @@ use meta_alpha_dual_agentic::genesis::{
     ChainVerificationFailure, ChainVerificationResult, GenesisReceipt, IdentityRegistry,
 };
 use std::path::PathBuf;
-use std::{cmp::Ordering, fs};
 use std::process::ExitCode;
+use std::{cmp::Ordering, fs};
 
 /// BIZRA Genesis Chain Verifier
 ///
@@ -129,7 +129,9 @@ fn run_verification(args: &Args) -> Result<bool> {
     // Load identity registry if provided
     let mut registry: Option<IdentityRegistry> = None;
     if let Some(registry_path) = &args.registry {
-        let registry_str = registry_path.to_str().unwrap_or("constitution/identity_registry.yaml");
+        let registry_str = registry_path
+            .to_str()
+            .unwrap_or("constitution/identity_registry.yaml");
         let loaded = IdentityRegistry::load(registry_str)
             .with_context(|| format!("Failed to load registry from {:?}", registry_path))?;
 
@@ -428,9 +430,18 @@ fn run_verification(args: &Args) -> Result<bool> {
         println!("   Failures:          {}", result.failures.len());
 
         println!("\n🔒 Integrity Checks:");
-        println!("   Genesis Valid:     {}", status_icon(result.genesis_valid));
-        println!("   Chain Continuous:  {}", status_icon(result.chain_continuous));
-        println!("   Signatures Valid:  {}", status_icon(result.signatures_valid));
+        println!(
+            "   Genesis Valid:     {}",
+            status_icon(result.genesis_valid)
+        );
+        println!(
+            "   Chain Continuous:  {}",
+            status_icon(result.chain_continuous)
+        );
+        println!(
+            "   Signatures Valid:  {}",
+            status_icon(result.signatures_valid)
+        );
 
         if !result.failures.is_empty() {
             println!("\n❌ Failures:");
@@ -461,7 +472,11 @@ fn run_verification(args: &Args) -> Result<bool> {
 }
 
 fn status_icon(status: bool) -> &'static str {
-    if status { "✅ PASS" } else { "❌ FAIL" }
+    if status {
+        "✅ PASS"
+    } else {
+        "❌ FAIL"
+    }
 }
 
 fn sha256_hex(data: &[u8]) -> String {

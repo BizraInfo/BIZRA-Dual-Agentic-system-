@@ -316,7 +316,7 @@ impl ReceiptEmitter {
         };
 
         let mut receipt = ExecutionReceipt {
-            schema: "bizra-execution-receipt-v3".to_string(),  // v3 = Complete field hash (PEAK v7.1)
+            schema: "bizra-execution-receipt-v3".to_string(), // v3 = Complete field hash (PEAK v7.1)
             receipt_type: ReceiptType::Execution,
             hardware_anchor: data.hardware_anchor,
             receipt_id: receipt_id.clone(),
@@ -381,7 +381,7 @@ impl ReceiptEmitter {
         };
 
         let mut receipt = SapeProbeReceipt {
-            schema: "bizra-sape-probe-receipt-v2".to_string(),  // v2 = Fixed64 deterministic
+            schema: "bizra-sape-probe-receipt-v2".to_string(), // v2 = Fixed64 deterministic
             receipt_type: ReceiptType::SapeProbe,
             receipt_id: receipt_id.clone(),
             request_id,
@@ -422,7 +422,7 @@ impl ReceiptEmitter {
             "{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}|{}",
             receipt.receipt_id,
             receipt.timestamp.to_rfc3339(),
-            receipt.hardware_anchor,           // Added: tamper-evident
+            receipt.hardware_anchor, // Added: tamper-evident
             receipt.task_summary,
             receipt.sat_validation_ms,         // Added: timing integrity
             receipt.pat_execution_ms,          // Added: timing integrity
@@ -445,7 +445,7 @@ impl ReceiptEmitter {
             receipt.receipt_id,
             receipt.timestamp.to_rfc3339(),
             receipt.content_hash,
-            receipt.ihsan_score.to_bits(),  // Deterministic i64 representation
+            receipt.ihsan_score.to_bits(), // Deterministic i64 representation
             receipt.probe_count
         );
         let hash = Sha256::digest(content.as_bytes());
@@ -559,8 +559,8 @@ impl ReceiptEmitter {
     ) -> Fixed64 {
         // Elite Implementation: Progressive Harberger Tax using Fixed64 arithmetic
         // Constants in Fixed64 format
-        let half = Fixed64::HALF;                    // 0.5
-        let one = Fixed64::ONE;                      // 1.0
+        let half = Fixed64::HALF; // 0.5
+        let one = Fixed64::ONE; // 1.0
         let ihsan_perfection = Fixed64::from_f64(0.98);
         let base_multiplier = Fixed64::from_f64(0.05);
         let low_usage_factor = Fixed64::from_f64(0.1);
@@ -569,7 +569,9 @@ impl ReceiptEmitter {
         // 1. Base rate: (latency_ms / 1000) * 0.05
         let latency_fixed = Fixed64::from_i64(latency_ms as i64);
         let thousand = Fixed64::from_int(1000);
-        let base_rate = latency_fixed.saturating_div(thousand).saturating_mul(base_multiplier);
+        let base_rate = latency_fixed
+            .saturating_div(thousand)
+            .saturating_mul(base_multiplier);
 
         // 2. Progressive scaling: 10x discount for low memory usage (<50%)
         let usage_factor = if memory_usage_percent < half {
@@ -586,7 +588,10 @@ impl ReceiptEmitter {
         };
 
         // Final calculation with minimum floor
-        base_rate.saturating_mul(usage_factor).saturating_mul(ihsan_factor).max(min_tax)
+        base_rate
+            .saturating_mul(usage_factor)
+            .saturating_mul(ihsan_factor)
+            .max(min_tax)
     }
 }
 

@@ -8,8 +8,8 @@
 // - Hard Gate #2: Attestation wraps every operation
 // - Article III: Mandatory 8-stage lifecycle
 
-use blake3;
 use crate::fixed::Fixed64;
+use blake3;
 use chrono::{DateTime, Utc};
 use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use serde::{Deserialize, Serialize};
@@ -49,15 +49,15 @@ pub type Blake3Hash = [u8; 32];
 /// Thought Stage: Position in canonical pipeline
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ThoughtStage {
-    Sensed,           // Input captured
-    Reasoned,         // Inference complete
-    Scored,           // Ihsān evaluated
-    GateChecked,      // FATE/Human veto complete
-    Committed,        // State mutation applied
-    Ledgered,         // BlockGraph entry written
-    ProofPending,     // zk-SNARK generation queued
-    ProofVerified,    // Proof cryptographically verified
-    Rollback,         // Failed gate, no state change
+    Sensed,        // Input captured
+    Reasoned,      // Inference complete
+    Scored,        // Ihsān evaluated
+    GateChecked,   // FATE/Human veto complete
+    Committed,     // State mutation applied
+    Ledgered,      // BlockGraph entry written
+    ProofPending,  // zk-SNARK generation queued
+    ProofVerified, // Proof cryptographically verified
+    Rollback,      // Failed gate, no state change
 }
 
 /// Gate Result: Outcome of FATE or Human Veto gate
@@ -73,8 +73,8 @@ pub struct GateReceipt {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum GateType {
-    FateSMT,       // Z3 formal verification
-    HumanVeto,     // CLI/UI manual approval
+    FateSMT,        // Z3 formal verification
+    HumanVeto,      // CLI/UI manual approval
     IhsanThreshold, // Constitutional score check
 }
 
@@ -237,12 +237,7 @@ impl AttestedThought {
     }
 
     /// Advance to REASONED stage
-    pub fn with_reasoning(
-        mut self,
-        trace: String,
-        output: String,
-        model_id: String,
-    ) -> Self {
+    pub fn with_reasoning(mut self, trace: String, output: String, model_id: String) -> Self {
         self.reasoning_trace = trace;
         self.output_candidate = output;
         self.model_id = model_id;

@@ -1,0 +1,18 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260117235655-000001",
+  "timestamp": "2026-01-17T23:56:55.951511878Z",
+  "task_summary": "Generate a summary of best practices for Rust error handling",
+  "sat_validation_ms": 90,
+  "pat_execution_ms": 6,
+  "total_latency_ms": 102,
+  "synergy_score": 0.9226175311487168,
+  "ihsan_score": 0.9215873435605317,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00009999983012676239,
+  "integrity_hash": "sha256:12aa407540bd437514f9a6dfd80f7787b8edac70bf2fa44cee8d985dba1e7cd0"
+}

@@ -105,9 +105,7 @@ impl FateEngine {
         // PROTOTYPE: These are stub values. Real implementation requires Z3.
         // SECURITY: Do not deploy without replacing with actual SMT verification.
         #[cfg(feature = "prototype_warnings")]
-        tracing::warn!(
-            "FATE check_invariants() using STUB values - NOT production-safe"
-        );
+        tracing::warn!("FATE check_invariants() using STUB values - NOT production-safe");
 
         let liveness_proof = true; // STUB: Replace with Z3 AG(Start ⇒ EF(Terminal)) check
         let safety_proof = true; // STUB: Replace with Z3 safety property verification

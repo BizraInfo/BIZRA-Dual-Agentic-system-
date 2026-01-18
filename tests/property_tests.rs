@@ -308,8 +308,19 @@ use sha2::{Digest, Sha256};
 #[test]
 fn fixed64_bits_determinism() {
     let test_values = [
-        0.0, 1.0, -1.0, 0.5, 0.25, 0.125, 0.95, 0.85,
-        100.0, -100.0, 0.001, 0.999, 0.123456789,
+        0.0,
+        1.0,
+        -1.0,
+        0.5,
+        0.25,
+        0.125,
+        0.95,
+        0.85,
+        100.0,
+        -100.0,
+        0.001,
+        0.999,
+        0.123456789,
     ];
 
     for &f in &test_values {
@@ -523,8 +534,16 @@ fn harberger_tax_calculation_determinism() {
     let tax2 = compute_tax(latency_ms, ihsan_score, memory_usage);
     let tax3 = compute_tax(latency_ms, ihsan_score, memory_usage);
 
-    assert_eq!(tax1.to_bits(), tax2.to_bits(), "Tax calculation must be deterministic");
-    assert_eq!(tax2.to_bits(), tax3.to_bits(), "Tax calculation must be deterministic");
+    assert_eq!(
+        tax1.to_bits(),
+        tax2.to_bits(),
+        "Tax calculation must be deterministic"
+    );
+    assert_eq!(
+        tax2.to_bits(),
+        tax3.to_bits(),
+        "Tax calculation must be deterministic"
+    );
 
     // Verify hash determinism
     let hash1 = {
@@ -578,11 +597,7 @@ fn fixed64_one_determinism() {
         one2.to_bits(),
         "ONE constant must equal from_f64(1.0)"
     );
-    assert_eq!(
-        one1.to_bits(),
-        Fixed64::SCALE,
-        "ONE must equal SCALE"
-    );
+    assert_eq!(one1.to_bits(), Fixed64::SCALE, "ONE must equal SCALE");
 }
 
 // ============================================================================
@@ -609,13 +624,13 @@ fn fuzz_fixed64_all_bit_patterns_no_panic() {
         -Fixed64::SCALE,
         Fixed64::SCALE - 1,
         Fixed64::SCALE + 1,
-        0x7FFF_FFFF_FFFF_FFFF, // All bits except sign
+        0x7FFF_FFFF_FFFF_FFFF,            // All bits except sign
         0x8000_0000_0000_0000_u64 as i64, // Only sign bit
-        0x5555_5555_5555_5555, // Alternating bits
-        0xAAAA_AAAA_AAAA_AAAAu64 as i64, // Alternating bits (inverted)
-        0x0000_0000_FFFF_FFFF, // Lower 32 bits
-        0xFFFF_FFFF_0000_0000u64 as i64, // Upper 32 bits
-        0x0000_FFFF_FFFF_0000, // Middle bits
+        0x5555_5555_5555_5555,            // Alternating bits
+        0xAAAA_AAAA_AAAA_AAAAu64 as i64,  // Alternating bits (inverted)
+        0x0000_0000_FFFF_FFFF,            // Lower 32 bits
+        0xFFFF_FFFF_0000_0000u64 as i64,  // Upper 32 bits
+        0x0000_FFFF_FFFF_0000,            // Middle bits
     ];
 
     for bits in patterns {
@@ -657,7 +672,11 @@ fn fuzz_fixed64_special_float_values() {
 
         // If input was finite, output should be finite
         if f.is_finite() {
-            assert!(back.is_finite(), "from_f64({}) produced non-finite result", f);
+            assert!(
+                back.is_finite(),
+                "from_f64({}) produced non-finite result",
+                f
+            );
         }
     }
 }
@@ -675,7 +694,8 @@ fn fuzz_ihsan_score_range() {
         assert!(
             (back - score).abs() < 1e-9,
             "Ihsān score {} failed round-trip: got {}",
-            score, back
+            score,
+            back
         );
 
         // Hash should be deterministic
@@ -765,8 +785,16 @@ fn fuzz_receipt_hash_computation() {
 #[test]
 fn fuzz_session_node_impact_delta() {
     let deltas: [f64; 10] = [
-        0.0, 0.01, -0.01, 0.5, -0.5,
-        0.001, -0.001, 1.0, -1.0, 0.123456789,
+        0.0,
+        0.01,
+        -0.01,
+        0.5,
+        -0.5,
+        0.001,
+        -0.001,
+        1.0,
+        -1.0,
+        0.123456789,
     ];
 
     for delta in deltas {
@@ -798,14 +826,14 @@ fn fuzz_session_node_impact_delta() {
 #[test]
 fn fuzz_harberger_tax_edge_cases() {
     let test_cases: [(usize, f64, f64); 8] = [
-        (0, 0.95, 0.3),      // Zero latency
-        (1000, 0.95, 0.3),   // 1 second latency
-        (50, 1.0, 0.0),      // Perfect Ihsān, zero memory
-        (50, 0.0, 1.0),      // Zero Ihsān, full memory
-        (50, 0.5, 0.5),      // Balanced
-        (1, 0.99, 0.01),     // Minimal latency
-        (999, 0.01, 0.99),   // High latency, low Ihsān
-        (100, 0.85, 0.5),    // Threshold case
+        (0, 0.95, 0.3),    // Zero latency
+        (1000, 0.95, 0.3), // 1 second latency
+        (50, 1.0, 0.0),    // Perfect Ihsān, zero memory
+        (50, 0.0, 1.0),    // Zero Ihsān, full memory
+        (50, 0.5, 0.5),    // Balanced
+        (1, 0.99, 0.01),   // Minimal latency
+        (999, 0.01, 0.99), // High latency, low Ihsān
+        (100, 0.85, 0.5),  // Threshold case
     ];
 
     for (latency, ihsan, memory) in test_cases {
@@ -825,9 +853,12 @@ fn fuzz_harberger_tax_edge_cases() {
             .saturating_mul(efficiency);
 
         assert_eq!(
-            tax.to_bits(), tax2.to_bits(),
+            tax.to_bits(),
+            tax2.to_bits(),
             "Tax calculation not deterministic for latency={}, ihsan={}, memory={}",
-            latency, ihsan, memory
+            latency,
+            ihsan,
+            memory
         );
     }
 }

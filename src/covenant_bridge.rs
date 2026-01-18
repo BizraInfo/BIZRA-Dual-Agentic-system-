@@ -16,18 +16,18 @@
 // Phase 2: Add AttestedThought receipt generation (parallel to existing)
 // Phase 3: Enable covenant mode as opt-in feature flag
 
-use blake3;
 use crate::{
     fixed::Fixed64,
     ihsan::IhsanDimensions,
     logic_envelope::{LogicEnvelope, ValidationContext, ValidationTier},
     snr_monitor::{global_monitor, ThoughtEvent},
     thought::{
-        Action, AttestedThought, Citation, GateReceipt, GateType, IhsanScore,
-        ThoughtId, ThoughtStage,
+        Action, AttestedThought, Citation, GateReceipt, GateType, IhsanScore, ThoughtId,
+        ThoughtStage,
     },
     types::{AgentResult, DualAgenticRequest},
 };
+use blake3;
 use chrono::Utc;
 use std::collections::BTreeMap;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -37,7 +37,7 @@ use tracing::{info, warn};
 fn build_validation_context(thought_id: ThoughtId) -> ValidationContext {
     let mut metadata = std::collections::HashMap::new();
     metadata.insert("thought_id".to_string(), thought_id.to_string());
-    
+
     ValidationContext {
         source: "covenant_gate".to_string(),
         session_id: Some(thought_id.to_string()),
@@ -87,8 +87,8 @@ impl CovenantBridge {
     /// Increment event counter and trigger auto-optimization if threshold reached
     fn maybe_trigger_optimization(&self) {
         let count = self.event_counter.fetch_add(1, Ordering::SeqCst) + 1;
-        
-        if count % self.optimization_interval == 0 {
+
+        if count.is_multiple_of(self.optimization_interval) {
             let monitor = global_monitor();
             monitor.optimize();
             info!(
@@ -119,11 +119,7 @@ impl CovenantBridge {
     /// Record PAT execution completion (COVENANT Stage 2: REASON)
     ///
     /// The existing PAT orchestrator acts as the reasoning engine
-    pub fn record_reasoning_complete(
-        &self,
-        thought_id: ThoughtId,
-        results_count: usize,
-    ) {
+    pub fn record_reasoning_complete(&self, thought_id: ThoughtId, results_count: usize) {
         info!(
             thought_id = %thought_id.to_string(),
             results_count,
@@ -205,15 +201,20 @@ impl CovenantBridge {
         output: &str,
     ) -> Result<bool, String> {
         // Start with Cheap tier (blocklist, length check) - <10ms
-        let cheap_result = self.validate_output_with_envelope(thought_id, output, ValidationTier::Cheap);
-        
+        let cheap_result =
+            self.validate_output_with_envelope(thought_id, output, ValidationTier::Cheap);
+
         match cheap_result {
             Ok(true) => {
                 // Cheap passed - escalate to Medium if output looks like JSON
                 if output.trim_start().starts_with('{') || output.trim_start().starts_with('[') {
                     let context = build_validation_context(thought_id);
-                    
-                    match self.logic_envelope.validate_tier(output, &context, ValidationTier::Medium) {
+
+                    match self.logic_envelope.validate_tier(
+                        output,
+                        &context,
+                        ValidationTier::Medium,
+                    ) {
                         Ok(result) => Ok(result.passed),
                         Err(e) => {
                             warn!(
@@ -410,7 +411,11 @@ impl CovenantBridge {
             input_hash,
             input_metadata: BTreeMap::new(),
             reasoning_trace,
-            output_candidate: results.iter().map(|r| r.contribution.clone()).collect::<Vec<_>>().join("\n"),
+            output_candidate: results
+                .iter()
+                .map(|r| r.contribution.clone())
+                .collect::<Vec<_>>()
+                .join("\n"),
             model_id: "dual_agentic".to_string(),
             ihsan_score: ihsan_score_obj,
             gates_passed,
@@ -419,7 +424,11 @@ impl CovenantBridge {
             proof_hash,
             proof_verified: false,
             contributed_to_signal,
-            noise_reason: if !contributed_to_signal { Some("SAT consensus failed or Ihsan below threshold".to_string()) } else { None },
+            noise_reason: if !contributed_to_signal {
+                Some("SAT consensus failed or Ihsan below threshold".to_string())
+            } else {
+                None
+            },
             citations,
             signature,
         }
@@ -576,7 +585,7 @@ mod tests {
     fn test_logic_envelope_integration_clean_output() {
         let bridge = CovenantBridge::new(true);
         let thought_id = ThoughtId::new();
-        
+
         // Clean output should pass
         let result = bridge.validate_output_with_envelope(
             thought_id,
@@ -591,7 +600,7 @@ mod tests {
     fn test_logic_envelope_integration_blocked_output() {
         let bridge = CovenantBridge::new(true);
         let thought_id = ThoughtId::new();
-        
+
         // Blocked pattern should fail
         let result = bridge.validate_output_with_envelope(
             thought_id,
@@ -606,12 +615,10 @@ mod tests {
     fn test_logic_envelope_adaptive_json_escalation() {
         let bridge = CovenantBridge::new(true);
         let thought_id = ThoughtId::new();
-        
+
         // Valid JSON should pass through Medium tier
-        let result = bridge.validate_output_adaptive(
-            thought_id,
-            r#"{"status": "success", "data": [1, 2, 3]}"#,
-        );
+        let result = bridge
+            .validate_output_adaptive(thought_id, r#"{"status": "success", "data": [1, 2, 3]}"#);
         assert!(result.is_ok());
         assert!(result.unwrap());
     }
@@ -620,7 +627,7 @@ mod tests {
     fn test_auto_optimization_trigger() {
         // Create bridge with small interval for testing
         let bridge = CovenantBridge::with_optimization_interval(true, 5);
-        
+
         let request = DualAgenticRequest {
             user_id: "test-user".to_string(),
             task: "Test task".to_string(),

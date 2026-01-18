@@ -127,7 +127,7 @@ impl ThoughtExecutor {
     }
 
     /// Get reference to the executor's signer for signing modules
-    /// 
+    ///
     /// This enables callers to sign modules that will be accepted by this
     /// executor's verification logic. Access should be restricted to trusted
     /// code paths in production deployments.

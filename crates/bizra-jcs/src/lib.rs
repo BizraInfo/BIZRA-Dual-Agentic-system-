@@ -112,7 +112,10 @@ mod tests {
 
         // Verify determinism: same input always produces same output
         let digest_again = compute_digest(&envelope).unwrap();
-        assert_eq!(digest, digest_again, "Digest must be deterministic across calls");
+        assert_eq!(
+            digest, digest_again,
+            "Digest must be deterministic across calls"
+        );
 
         // Golden Vector 2: Receipt with Fixed64-style integers
         let receipt = json!({
@@ -127,7 +130,10 @@ mod tests {
 
         // Verify determinism: same input always produces same output
         let receipt_digest_2 = compute_digest(&receipt).unwrap();
-        assert_eq!(receipt_digest, receipt_digest_2, "Digest must be deterministic");
+        assert_eq!(
+            receipt_digest, receipt_digest_2,
+            "Digest must be deterministic"
+        );
 
         // Verify canonical form is sorted
         assert!(

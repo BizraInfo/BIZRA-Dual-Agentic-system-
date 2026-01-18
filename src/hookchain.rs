@@ -18,8 +18,7 @@ use tracing::info;
 // ============================================================================
 
 /// Tier classification for capability budgets (Consumer-first design)
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum CapabilityTier {
     /// T0: Mobile/Phone - Offline-first, strict budgets, minimal tools
     T0Mobile,
@@ -31,7 +30,6 @@ pub enum CapabilityTier {
     /// T3: Pooled Compute - Verified contribution + reward
     T3Pooled,
 }
-
 
 impl CapabilityTier {
     /// Get default budget limits for this tier
@@ -361,9 +359,10 @@ impl SessionDAG {
         receipts_root: &str,
         impact_delta: Fixed64,
     ) -> Result<SessionNode, HookError> {
-        let head = self.get_head().await.ok_or_else(|| {
-            HookError::InvalidToken("DAG has no head node".to_string())
-        })?;
+        let head = self
+            .get_head()
+            .await
+            .ok_or_else(|| HookError::InvalidToken("DAG has no head node".to_string()))?;
         let child = head.child(state_root, receipts_root, impact_delta);
 
         let mut nodes = self.nodes.write().await;
@@ -378,9 +377,10 @@ impl SessionDAG {
     /// Fork the current head for parallel execution
     /// Returns error if DAG has no head (should never happen after initialization)
     pub async fn fork(&self, fork_id: &str) -> Result<SessionNode, HookError> {
-        let head = self.get_head().await.ok_or_else(|| {
-            HookError::InvalidToken("DAG has no head node".to_string())
-        })?;
+        let head = self
+            .get_head()
+            .await
+            .ok_or_else(|| HookError::InvalidToken("DAG has no head node".to_string()))?;
         let forked = head.fork(fork_id);
 
         let mut nodes = self.nodes.write().await;
@@ -789,7 +789,10 @@ mod tests {
         assert!(head1.parent_hash.is_none()); // Genesis has no parent
 
         // Use Fixed64 for deterministic impact delta
-        let child = dag.advance("state1", "receipts1", Fixed64::from_f64(0.05)).await.unwrap();
+        let child = dag
+            .advance("state1", "receipts1", Fixed64::from_f64(0.05))
+            .await
+            .unwrap();
         assert_eq!(child.parent_hash, Some(head1.node_hash));
 
         let head2 = dag.get_head().await.unwrap();
@@ -995,7 +998,10 @@ mod tests {
         let dag = SessionDAG::new("v1.0.0");
 
         // Advance once
-        let _child1 = dag.advance("state1", "receipts1", Fixed64::from_f64(0.1)).await.unwrap();
+        let _child1 = dag
+            .advance("state1", "receipts1", Fixed64::from_f64(0.1))
+            .await
+            .unwrap();
 
         // Fork from current head
         let fork_result = dag.fork("experimental").await;
@@ -1058,6 +1064,9 @@ mod tests {
 
         assert_eq!(node.policy_version, deserialized.policy_version);
         assert_eq!(node.parent_hash, deserialized.parent_hash);
-        assert_eq!(node.impact_delta.to_bits(), deserialized.impact_delta.to_bits());
+        assert_eq!(
+            node.impact_delta.to_bits(),
+            deserialized.impact_delta.to_bits()
+        );
     }
 }

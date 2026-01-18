@@ -27,8 +27,7 @@ use tracing::{debug, info, instrument, warn};
 // ============================================================================
 
 /// Sovereignty tier determines resource budget for Engram tables
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-#[derive(Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub enum SovereigntyTier {
     /// T0: Mobile devices (iOS/Android) - 50MB budget
     T0Mobile,
@@ -44,7 +43,7 @@ impl SovereigntyTier {
     pub fn max_table_bytes(&self) -> usize {
         match self {
             Self::T0Mobile => 50 * 1024 * 1024,     // 50 MB
-            Self::T1Consumer => 500 * 1024 * 1024, // 500 MB
+            Self::T1Consumer => 500 * 1024 * 1024,  // 500 MB
             Self::T2Node => 2 * 1024 * 1024 * 1024, // 2 GB
         }
     }
@@ -61,9 +60,9 @@ impl SovereigntyTier {
     /// Embedding dimension for this tier
     pub fn embedding_dim(&self) -> usize {
         match self {
-            Self::T0Mobile => 256,    // Compact
-            Self::T1Consumer => 512,  // Balanced
-            Self::T2Node => 1024,     // Full
+            Self::T0Mobile => 256,   // Compact
+            Self::T1Consumer => 512, // Balanced
+            Self::T2Node => 1024,    // Full
         }
     }
 
@@ -76,7 +75,6 @@ impl SovereigntyTier {
         }
     }
 }
-
 
 // ============================================================================
 // N-GRAM HASH MAPPING
@@ -101,9 +99,8 @@ impl NgramHashMapping {
 
         // Generate deterministic odd multipliers for each n-gram size
         // Using prime-based sequence for better distribution
-        let layer_multipliers: Vec<u64> = (2..=max_ngram)
-            .map(Self::generate_odd_multiplier)
-            .collect();
+        let layer_multipliers: Vec<u64> =
+            (2..=max_ngram).map(Self::generate_odd_multiplier).collect();
 
         Self {
             vocab_size: tier.max_vocab_size(),
@@ -235,14 +232,15 @@ impl MultiHeadEmbeddingTable {
     #[inline]
     pub fn get(&self, ngram_size: usize, head: usize, hash_idx: usize) -> Option<&EngramEmbedding> {
         let table_idx = ngram_size.checked_sub(2)?;
-        self.tables
-            .get(table_idx)?
-            .get(head)?
-            .get(hash_idx)
+        self.tables.get(table_idx)?.get(head)?.get(hash_idx)
     }
 
     /// Retrieve and aggregate embeddings across all heads for n-gram
-    pub fn retrieve_aggregated(&self, ngram_size: usize, hash_idx: usize) -> Option<EngramEmbedding> {
+    pub fn retrieve_aggregated(
+        &self,
+        ngram_size: usize,
+        hash_idx: usize,
+    ) -> Option<EngramEmbedding> {
         let table_idx = ngram_size.checked_sub(2)?;
         let head_tables = self.tables.get(table_idx)?;
 
@@ -526,7 +524,11 @@ impl SovereignEngram {
     }
 
     /// Get from cache or retrieve from embedding table
-    fn get_cached_or_retrieve(&mut self, ngram_size: usize, hash_idx: usize) -> Option<EngramEmbedding> {
+    fn get_cached_or_retrieve(
+        &mut self,
+        ngram_size: usize,
+        hash_idx: usize,
+    ) -> Option<EngramEmbedding> {
         let key = (ngram_size, hash_idx);
 
         // Check cache
@@ -733,17 +735,42 @@ impl EngramProfile {
         match self {
             Self::General => &[],
             Self::IslamicKnowledge => &[
-                "الله", "محمد", "قرآن", "سورة", "آية", "حديث", "صحيح", "فقه", "شريعة",
-                "Allah", "Muhammad", "Quran", "Surah", "Ayah", "Hadith", "Sahih", "Fiqh",
+                "الله",
+                "محمد",
+                "قرآن",
+                "سورة",
+                "آية",
+                "حديث",
+                "صحيح",
+                "فقه",
+                "شريعة",
+                "Allah",
+                "Muhammad",
+                "Quran",
+                "Surah",
+                "Ayah",
+                "Hadith",
+                "Sahih",
+                "Fiqh",
             ],
             Self::CodeGeneration => &[
                 "function", "class", "async", "await", "impl", "struct", "enum", "trait",
             ],
             Self::Mathematics => &[
-                "theorem", "proof", "lemma", "integral", "derivative", "equation", "matrix",
+                "theorem",
+                "proof",
+                "lemma",
+                "integral",
+                "derivative",
+                "equation",
+                "matrix",
             ],
             Self::Scientific => &[
-                "hypothesis", "experiment", "analysis", "conclusion", "methodology",
+                "hypothesis",
+                "experiment",
+                "analysis",
+                "conclusion",
+                "methodology",
             ],
         }
     }
@@ -759,8 +786,14 @@ mod tests {
 
     #[test]
     fn test_sovereignty_tier_budgets() {
-        assert!(SovereigntyTier::T0Mobile.max_table_bytes() < SovereigntyTier::T1Consumer.max_table_bytes());
-        assert!(SovereigntyTier::T1Consumer.max_table_bytes() < SovereigntyTier::T2Node.max_table_bytes());
+        assert!(
+            SovereigntyTier::T0Mobile.max_table_bytes()
+                < SovereigntyTier::T1Consumer.max_table_bytes()
+        );
+        assert!(
+            SovereigntyTier::T1Consumer.max_table_bytes()
+                < SovereigntyTier::T2Node.max_table_bytes()
+        );
     }
 
     #[test]
@@ -781,15 +814,22 @@ mod tests {
         // Should be able to retrieve for valid indices
         let emb = table.retrieve_aggregated(2, 0);
         assert!(emb.is_some());
-        assert_eq!(emb.unwrap().len(), SovereigntyTier::T0Mobile.embedding_dim());
+        assert_eq!(
+            emb.unwrap().len(),
+            SovereigntyTier::T0Mobile.embedding_dim()
+        );
     }
 
     #[test]
     fn test_gate_computation() {
         let gate = EngramGate::new(256);
 
-        let hidden: Vec<Fixed64> = (0..256).map(|i| Fixed64::from_f64(i as f64 / 256.0)).collect();
-        let engram: Vec<Fixed64> = (0..256).map(|i| Fixed64::from_f64((255 - i) as f64 / 256.0)).collect();
+        let hidden: Vec<Fixed64> = (0..256)
+            .map(|i| Fixed64::from_f64(i as f64 / 256.0))
+            .collect();
+        let engram: Vec<Fixed64> = (0..256)
+            .map(|i| Fixed64::from_f64((255 - i) as f64 / 256.0))
+            .collect();
 
         let gate_value = gate.compute_gate(&hidden, &engram);
 
@@ -804,9 +844,7 @@ mod tests {
 
         let tokens = vec![1u32, 2, 3, 4, 5];
         let dim = engram.dim();
-        let hidden_states: Vec<Vec<Fixed64>> = (0..5)
-            .map(|_| vec![Fixed64::HALF; dim])
-            .collect();
+        let hidden_states: Vec<Vec<Fixed64>> = (0..5).map(|_| vec![Fixed64::HALF; dim]).collect();
 
         let output = engram.forward(&tokens, &hidden_states);
 

@@ -48,8 +48,8 @@ impl EvolutionConfig {
     pub fn for_tier(tier: SovereigntyTier) -> Self {
         match tier {
             SovereigntyTier::T0Mobile => Self {
-                cycles_per_session: 3,      // Conservative for battery
-                questions_per_cycle: 12,    // At least 2 per domain (6 domains)
+                cycles_per_session: 3,   // Conservative for battery
+                questions_per_cycle: 12, // At least 2 per domain (6 domains)
                 hrpo_group_size: 3,
                 improvement_threshold: Fixed64::from_f64(0.01),
                 max_difficulty: 5,
@@ -177,7 +177,10 @@ impl EvolutionTask {
     pub fn generate_id(question: &str, domain: TaskDomain) -> String {
         let content = format!("{}:{:?}", question, domain);
         let hash = Sha256::digest(content.as_bytes());
-        format!("task-{:x}", &hash[..8].iter().fold(0u64, |acc, &b| acc << 8 | b as u64))
+        format!(
+            "task-{:x}",
+            &hash[..8].iter().fold(0u64, |acc, &b| acc << 8 | b as u64)
+        )
     }
 
     /// Create new task
@@ -285,7 +288,12 @@ impl HRPOOptimizer {
     }
 
     /// Add task-response pair with raw reward
-    pub fn add_sample(&mut self, task: EvolutionTask, response: SolverResponse, raw_reward: Fixed64) {
+    pub fn add_sample(
+        &mut self,
+        task: EvolutionTask,
+        response: SolverResponse,
+        raw_reward: Fixed64,
+    ) {
         let hop = task.hop_count;
         let group = self.hop_groups.entry(hop).or_default();
 
@@ -306,13 +314,15 @@ impl HRPOOptimizer {
         };
 
         // Compute group baseline (mean reward)
-        let sum: Fixed64 = group.iter()
+        let sum: Fixed64 = group
+            .iter()
             .map(|(_, _, r)| *r)
             .fold(Fixed64::ZERO, |acc, r| acc + r);
         let baseline = sum / Fixed64::from_int(group.len() as i32);
 
         // Compute relative rewards
-        group.iter()
+        group
+            .iter()
             .map(|(task, _, reward)| {
                 let relative = *reward - baseline;
                 (task.task_id.clone(), relative)
@@ -329,14 +339,15 @@ impl HRPOOptimizer {
         }
 
         // Average of positive relative rewards
-        let positives: Vec<_> = rewards.iter()
-            .filter(|(_, r)| *r > Fixed64::ZERO)
-            .collect();
+        let positives: Vec<_> = rewards.iter().filter(|(_, r)| *r > Fixed64::ZERO).collect();
 
         if positives.is_empty() {
             Fixed64::ZERO
         } else {
-            let sum: Fixed64 = positives.iter().map(|(_, r)| *r).fold(Fixed64::ZERO, |a, r| a + r);
+            let sum: Fixed64 = positives
+                .iter()
+                .map(|(_, r)| *r)
+                .fold(Fixed64::ZERO, |a, r| a + r);
             sum / Fixed64::from_int(positives.len() as i32)
         }
     }
@@ -435,7 +446,12 @@ impl ProposerAgent {
     }
 
     /// Update difficulty based on Solver mastery signal
-    pub fn adjust_difficulty(&mut self, domain: TaskDomain, mastery: Fixed64, config: &EvolutionConfig) {
+    pub fn adjust_difficulty(
+        &mut self,
+        domain: TaskDomain,
+        mastery: Fixed64,
+        config: &EvolutionConfig,
+    ) {
         let current = *self.difficulty_targets.get(&domain).unwrap_or(&1);
 
         // If Solver is mastering (positive mastery), increase difficulty
@@ -497,11 +513,7 @@ impl SolverAgent {
         self.tasks_attempted += 1;
 
         // Tokenize question (simplified)
-        let tokens: Vec<u32> = task.question
-            .bytes()
-            .map(|b| b as u32)
-            .take(32)
-            .collect();
+        let tokens: Vec<u32> = task.question.bytes().map(|b| b as u32).take(32).collect();
 
         // Create hidden state (simplified)
         let hidden: Vec<Vec<Fixed64>> = vec![vec![Fixed64::HALF; engram.dim()]; tokens.len()];
@@ -520,7 +532,10 @@ impl SolverAgent {
 
         // Add reasoning steps
         response.add_step(format!("Retrieved {} Engram embeddings", tokens.len()));
-        response.add_step(format!("Domain: {:?}, Difficulty: {}", task.domain, task.difficulty));
+        response.add_step(format!(
+            "Domain: {:?}, Difficulty: {}",
+            task.domain, task.difficulty
+        ));
         response.add_step(format!("Confidence: {:.4}", confidence.to_f64()));
 
         debug!(
@@ -695,7 +710,10 @@ impl SovereignEvolution {
     /// Run one evolution cycle
     #[instrument(skip(self))]
     pub fn evolve_cycle(&mut self) -> EvolutionState {
-        info!(generation = self.state.generation, "Starting evolution cycle");
+        info!(
+            generation = self.state.generation,
+            "Starting evolution cycle"
+        );
 
         let mut total_reward = Fixed64::ZERO;
         let mut tasks_completed = 0;
@@ -725,7 +743,8 @@ impl SovereignEvolution {
             // Adjust Proposer based on HRPO signals
             let hop = *self.proposer.hop_targets.get(domain).unwrap_or(&1);
             let mastery = self.hrpo.get_hop_mastery(hop);
-            self.proposer.adjust_difficulty(*domain, mastery, &self.config);
+            self.proposer
+                .adjust_difficulty(*domain, mastery, &self.config);
             self.proposer.adjust_hops(*domain, mastery);
         }
 
@@ -737,7 +756,9 @@ impl SovereignEvolution {
         } else {
             Fixed64::ZERO
         };
-        self.state.max_difficulty_reached = self.proposer.difficulty_targets
+        self.state.max_difficulty_reached = self
+            .proposer
+            .difficulty_targets
             .values()
             .max()
             .copied()
@@ -801,7 +822,9 @@ impl SovereignEvolution {
             // Check for improvement plateau
             if states.len() >= 3 {
                 let recent: Vec<_> = states.iter().rev().take(3).collect();
-                let improving = recent.windows(2).all(|w| w[0].avg_reward >= w[1].avg_reward);
+                let improving = recent
+                    .windows(2)
+                    .all(|w| w[0].avg_reward >= w[1].avg_reward);
 
                 if !improving {
                     let diff = recent[0].avg_reward - recent[2].avg_reward;
@@ -920,7 +943,10 @@ mod tests {
         let state = evolution.evolve_cycle();
 
         assert_eq!(state.generation, 1);
-        assert!(state.tasks_completed > 0, "Expected tasks to complete, got 0");
+        assert!(
+            state.tasks_completed > 0,
+            "Expected tasks to complete, got 0"
+        );
     }
 
     #[test]

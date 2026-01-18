@@ -62,13 +62,19 @@ async fn test_fortress_gate_enforcement() {
     // This is EXPECTED and CORRECT behavior - the sandbox has its own cryptographic identity
     let external_tpm = TpmContext::new();
     let external_signer = external_tpm.get_signer();
-    let external_signature = external_signer.sign(&module_bytes).await.expect("Sign failed");
+    let external_signature = external_signer
+        .sign(&module_bytes)
+        .await
+        .expect("Sign failed");
 
     // Execution should FAIL because external signer != sandbox's internal RoT
     let result = sandbox
         .execute_isolated(&module_bytes, "input", &external_signature)
         .await;
-    assert!(result.is_err(), "External signature should be rejected by sandbox's RoT");
+    assert!(
+        result.is_err(),
+        "External signature should be rejected by sandbox's RoT"
+    );
 
     // Verify tampered signatures also fail
     let mut bad_sig = external_signature.clone();
@@ -81,9 +87,7 @@ async fn test_fortress_gate_enforcement() {
     }
 
     // Verify empty signatures fail
-    let result_empty = sandbox
-        .execute_isolated(&module_bytes, "input", &[])
-        .await;
+    let result_empty = sandbox.execute_isolated(&module_bytes, "input", &[]).await;
     assert!(result_empty.is_err(), "Empty signature should fail");
 }
 
@@ -104,12 +108,15 @@ async fn test_cognitive_layer_flow() {
         .expect("Executor init failed");
 
     let module_bytes = vec![0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00];
-    
+
     // SECURITY INVARIANT: External signers cannot forge signatures for the executor's RoT
     // This tests that the cognitive layer properly propagates security failures
     let external_tpm = TpmContext::new();
     let external_signer = external_tpm.get_signer();
-    let signature = external_signer.sign(&module_bytes).await.expect("Sign failed");
+    let signature = external_signer
+        .sign(&module_bytes)
+        .await
+        .expect("Sign failed");
 
     let capsule = ThoughtCapsule::new(module_bytes, signature, vec!["root".into()]);
 

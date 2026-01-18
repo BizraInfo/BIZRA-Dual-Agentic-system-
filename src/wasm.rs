@@ -171,9 +171,7 @@ impl WasmSandbox {
         let mut linker = Linker::new(&self.engine);
 
         // Add WASI functions (wasmtime 24.0.5 preview1 API)
-        add_to_linker_sync(&mut linker, |state: &mut SandboxState| {
-            &mut state.wasi
-        })?;
+        add_to_linker_sync(&mut linker, |state: &mut SandboxState| &mut state.wasi)?;
 
         // Add FATE query callback - runtime ethics verification
         linker.func_wrap(
@@ -322,8 +320,7 @@ impl WasmSandbox {
 
         // Strategy A: SAPE v1.∞ (evaluate + alloc)
         // This is the "Brain Transplant" ABI which allows full context transfer
-        if let Ok(evaluate_fn) = instance
-            .get_typed_func::<(i32, i32), i64>(&mut store, "evaluate")
+        if let Ok(evaluate_fn) = instance.get_typed_func::<(i32, i32), i64>(&mut store, "evaluate")
         {
             // Need alloc first
             let alloc_fn = instance
@@ -378,34 +375,31 @@ impl WasmSandbox {
         }
 
         // Strategy B: Legacy Giants Protocol (reason/health)
-        let result_content = if let Ok(reason_fn) = instance
-            .get_typed_func::<i32, i32>(&mut store, "reason")
-        {
-            // Execute reasoning function with input length as parameter
-            let input_val = input_data.len() as i32;
-            let output = reason_fn.call(&mut store, input_val)?;
+        let result_content =
+            if let Ok(reason_fn) = instance.get_typed_func::<i32, i32>(&mut store, "reason") {
+                // Execute reasoning function with input length as parameter
+                let input_val = input_data.len() as i32;
+                let output = reason_fn.call(&mut store, input_val)?;
 
-            // Check if FATE vetoed the execution
-            if store.data().fate.vetoed {
-                let reason = store
-                    .data()
-                    .fate
-                    .veto_reason
-                    .clone()
-                    .unwrap_or_else(|| "Unknown FATE violation".to_string());
-                self.status = SandboxStatus::Violated(reason.clone());
-                return Err(anyhow::anyhow!("FATE VETO: {}", reason));
-            }
+                // Check if FATE vetoed the execution
+                if store.data().fate.vetoed {
+                    let reason = store
+                        .data()
+                        .fate
+                        .veto_reason
+                        .clone()
+                        .unwrap_or_else(|| "Unknown FATE violation".to_string());
+                    self.status = SandboxStatus::Violated(reason.clone());
+                    return Err(anyhow::anyhow!("FATE VETO: {}", reason));
+                }
 
-            format!("SANDBOX_SUCCESS: Input processed, output={}", output)
-        } else if let Ok(health_fn) = instance
-            .get_typed_func::<(), i32>(&mut store, "health")
-        {
-            let health = health_fn.call(&mut store, ())?;
-            format!("SANDBOX_HEALTH: status={}", health)
-        } else {
-            "SANDBOX_SUCCESS: Module executed (no exported functions)".to_string()
-        };
+                format!("SANDBOX_SUCCESS: Input processed, output={}", output)
+            } else if let Ok(health_fn) = instance.get_typed_func::<(), i32>(&mut store, "health") {
+                let health = health_fn.call(&mut store, ())?;
+                format!("SANDBOX_HEALTH: status={}", health)
+            } else {
+                "SANDBOX_SUCCESS: Module executed (no exported functions)".to_string()
+            };
 
         // 6. COMPUTE REMAINING FUEL (for metrics)
         let remaining_fuel = store.get_fuel().unwrap_or(0);
@@ -493,7 +487,7 @@ impl WasmSandbox {
     }
 
     /// Get the sandbox's root verifier for signing modules
-    /// 
+    ///
     /// Returns a reference to the signer that this sandbox uses for
     /// signature verification. Callers can use this to sign modules
     /// that will be accepted by this sandbox.

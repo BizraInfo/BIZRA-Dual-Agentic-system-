@@ -30,7 +30,7 @@ async fn test_thought_executor_signed_only_gate() {
     let mut executor = ThoughtExecutor::new(store)
         .await
         .expect("Init Executor failed");
-    
+
     // SECURITY FIX: Use the executor's own signer to create valid signatures
     // This is the only way to produce signatures the executor will accept
     let signer = executor.get_signer();
@@ -115,7 +115,7 @@ async fn test_chain_persistence_restart() {
 
     // SECURITY FIX: Use the executor's own signer for valid signatures
     let signer = exec1.get_signer();
-    
+
     // Valid minimal WASM module: Magic (4 bytes) + Version (4 bytes: 1)
     let wasm = vec![0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00];
     let signature = signer.sign(&wasm).await.unwrap();

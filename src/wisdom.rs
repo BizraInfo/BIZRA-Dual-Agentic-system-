@@ -121,8 +121,7 @@ impl HouseOfWisdom {
         }
 
         // Initialize Engram O(1) static memory (DeepSeek AI)
-        let engram_tier = std::env::var("ENGRAM_TIER")
-            .unwrap_or_else(|_| "t1".to_string());
+        let engram_tier = std::env::var("ENGRAM_TIER").unwrap_or_else(|_| "t1".to_string());
         let tier = match engram_tier.to_lowercase().as_str() {
             "t0" | "mobile" => SovereigntyTier::T0Mobile,
             "t1" | "consumer" => SovereigntyTier::T1Consumer,
@@ -131,7 +130,10 @@ impl HouseOfWisdom {
         };
 
         let engram = SovereignEngram::new(tier);
-        info!("🧠 House of Wisdom initialized with Engram O(1) static memory (tier: {:?})", tier);
+        info!(
+            "🧠 House of Wisdom initialized with Engram O(1) static memory (tier: {:?})",
+            tier
+        );
         {
             let mut guard = wisdom.engram.write().await;
             *guard = Some(engram);
@@ -515,9 +517,9 @@ impl HouseOfWisdom {
             vector_results,
             engram_hits,
             query_time_ms: latency.as_millis() as u64,
-            graph_boost: 18.7,  // HyperGraphRAG advantage
-            vector_boost: 1.0,  // Base semantic similarity
-            engram_boost: 2.5,  // O(1) static memory speedup
+            graph_boost: 18.7, // HyperGraphRAG advantage
+            vector_boost: 1.0, // Base semantic similarity
+            engram_boost: 2.5, // O(1) static memory speedup
         })
     }
 

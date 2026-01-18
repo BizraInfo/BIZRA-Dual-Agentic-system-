@@ -731,7 +731,9 @@ Continue until the solution meets quality standards."#;
         if depth >= MAX_RECURSION_DEPTH || prompt.len() < SIMPLE_THRESHOLD {
             all_steps.push(format!(
                 "RLM Depth {}: Base case reached (depth={}, len={}), solving directly",
-                depth, depth, prompt.len()
+                depth,
+                depth,
+                prompt.len()
             ));
 
             // Solve directly using Chain-of-Thought
@@ -753,7 +755,10 @@ Continue until the solution meets quality standards."#;
         }
 
         // Recursive case: decompose the problem
-        all_steps.push(format!("RLM Depth {}: Problem requires decomposition", depth));
+        all_steps.push(format!(
+            "RLM Depth {}: Problem requires decomposition",
+            depth
+        ));
 
         // Decompose problem into subproblems
         let subproblems = self.decompose_problem(prompt, depth).await;
@@ -777,12 +782,9 @@ Continue until the solution meets quality standards."#;
             ));
 
             // Recursive call with boxed future to avoid infinite type
-            let sub_result = Box::pin(self.recursive_language_decompose(
-                subproblem,
-                context.clone(),
-                depth + 1,
-            ))
-            .await?;
+            let sub_result =
+                Box::pin(self.recursive_language_decompose(subproblem, context.clone(), depth + 1))
+                    .await?;
 
             sub_conclusions.push(sub_result.conclusion.clone());
             sub_results.push(sub_result);
@@ -804,17 +806,11 @@ Continue until the solution meets quality standards."#;
         }
 
         // Calculate aggregate confidence
-        let avg_confidence: f64 = sub_results
-            .iter()
-            .map(|r| r.confidence)
-            .sum::<f64>()
-            / sub_results.len().max(1) as f64;
+        let avg_confidence: f64 =
+            sub_results.iter().map(|r| r.confidence).sum::<f64>() / sub_results.len().max(1) as f64;
 
         // Build trajectory for debugging/analysis
-        let trajectory: Vec<String> = sub_results
-            .iter()
-            .map(|r| r.conclusion.clone())
-            .collect();
+        let trajectory: Vec<String> = sub_results.iter().map(|r| r.conclusion.clone()).collect();
 
         Ok(ReasoningResult {
             method: ReasoningMethod::RecursiveLanguage,

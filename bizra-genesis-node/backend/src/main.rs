@@ -438,7 +438,7 @@ async fn auth_middleware(
             match &jwt_secret {
                 Some(secret) => {
                     // Validate JWT signature
-                    use jsonwebtoken::{decode, DecodingKey, Validation, Algorithm};
+                    use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 
                     #[derive(Debug, serde::Deserialize)]
                     struct Claims {
@@ -473,14 +473,19 @@ async fn auth_middleware(
 
             // SECURITY: Invite tokens should be validated against database
             // For now, require minimum length and format validation
-            if invite_code.len() < 16 || !invite_code.chars().all(|c| c.is_alphanumeric() || c == '-') {
+            if invite_code.len() < 16
+                || !invite_code.chars().all(|c| c.is_alphanumeric() || c == '-')
+            {
                 warn!("Invalid invite token format");
                 return Err(StatusCode::UNAUTHORIZED);
             }
 
             // TODO: Add database lookup to verify invite_code exists and is not expired
             // For now, log that this needs database validation
-            info!("Invite token accepted (pending DB validation): {}...", &invite_code[..invite_code.len().min(8)]);
+            info!(
+                "Invite token accepted (pending DB validation): {}...",
+                &invite_code[..invite_code.len().min(8)]
+            );
             Ok(next.run(request).await)
         }
         _ => {

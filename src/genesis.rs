@@ -168,12 +168,7 @@ impl GenesisReceipt {
         let fingerprint = Self::compute_hash(public_key.as_bytes());
 
         // Initial chain root (derived from genesis data)
-        let chain_root_data = format!(
-            "GENESIS:{}:{}:{}",
-            policy_hash,
-            pk_hex,
-            version
-        );
+        let chain_root_data = format!("GENESIS:{}:{}:{}", policy_hash, pk_hex, version);
         let chain_root = Self::compute_hash(chain_root_data.as_bytes());
 
         // Create unsigned receipt
@@ -275,7 +270,9 @@ impl IdentityRegistry {
         message: &[u8],
         signature: &str,
     ) -> anyhow::Result<bool> {
-        let node = self.nodes.get(node_id)
+        let node = self
+            .nodes
+            .get(node_id)
             .ok_or_else(|| anyhow::anyhow!("Unknown node: {}", node_id))?;
 
         if !node.trusted {
@@ -293,7 +290,8 @@ impl IdentityRegistry {
 
     /// Check if an agent is allowed to execute on a node
     pub fn is_agent_allowed(&self, agent_id: &str, node_id: &str) -> bool {
-        self.agents.get(agent_id)
+        self.agents
+            .get(agent_id)
             .map(|a| a.allowed_nodes.contains(&node_id.to_string()))
             .unwrap_or(false)
     }
@@ -372,7 +370,8 @@ impl ChainVerifier {
             let path = entry.path();
 
             if path.extension().map(|e| e == "json").unwrap_or(false) {
-                let filename = path.file_name()
+                let filename = path
+                    .file_name()
                     .and_then(|n| n.to_str())
                     .unwrap_or("unknown")
                     .to_string();
@@ -383,19 +382,17 @@ impl ChainVerifier {
                 }
 
                 match fs::read_to_string(&path) {
-                    Ok(content) => {
-                        match serde_json::from_str::<serde_json::Value>(&content) {
-                            Ok(json) => receipts.push((filename, json)),
-                            Err(e) => {
-                                result.failures.push(ChainVerificationFailure {
-                                    receipt_id: filename,
-                                    reason: format!("JSON parse error: {}", e),
-                                    expected: None,
-                                    actual: None,
-                                });
-                            }
+                    Ok(content) => match serde_json::from_str::<serde_json::Value>(&content) {
+                        Ok(json) => receipts.push((filename, json)),
+                        Err(e) => {
+                            result.failures.push(ChainVerificationFailure {
+                                receipt_id: filename,
+                                reason: format!("JSON parse error: {}", e),
+                                expected: None,
+                                actual: None,
+                            });
                         }
-                    }
+                    },
                     Err(e) => {
                         result.failures.push(ChainVerificationFailure {
                             receipt_id: filename,
@@ -816,8 +813,7 @@ mod tests {
         assert!(
             is_weakening,
             "I6 VERIFICATION: Correctly detects that {} < {} is a weakening attempt",
-            proposed_threshold,
-            current_threshold
+            proposed_threshold, current_threshold
         );
 
         // In production, this detection would trigger a rejection
@@ -942,7 +938,9 @@ mod tests {
         assert_eq!(result.total_receipts, 1);
         assert_eq!(result.verified, 0);
         assert_eq!(result.failures.len(), 1);
-        assert!(result.failures[0].reason.contains("Integrity hash mismatch"));
+        assert!(result.failures[0]
+            .reason
+            .contains("Integrity hash mismatch"));
     }
 
     #[test]

@@ -86,7 +86,10 @@ impl PipelineContext {
             .as_nanos();
         let content = format!("{}:{}", timestamp, input);
         let hash = Sha256::digest(content.as_bytes());
-        format!("req-{:x}", &hash[..8].iter().fold(0u64, |acc, &b| acc << 8 | b as u64))
+        format!(
+            "req-{:x}",
+            &hash[..8].iter().fold(0u64, |acc, &b| acc << 8 | b as u64)
+        )
     }
 
     /// Simple tokenization (in production, use proper tokenizer)
@@ -233,7 +236,10 @@ impl InputStage {
     /// Check for blocked patterns
     fn is_safe(&self, input: &str) -> bool {
         let upper = input.to_uppercase();
-        !self.blocked_patterns.iter().any(|p| upper.contains(&p.to_uppercase()))
+        !self
+            .blocked_patterns
+            .iter()
+            .any(|p| upper.contains(&p.to_uppercase()))
     }
 }
 
@@ -323,7 +329,8 @@ impl PipelineStage for EngramStage {
 
         // Create hidden states from tokens
         let dim = self.engram.dim();
-        let hidden_states: Vec<Vec<Fixed64>> = ctx.tokens
+        let hidden_states: Vec<Vec<Fixed64>> = ctx
+            .tokens
             .iter()
             .map(|_| vec![Fixed64::HALF; dim])
             .collect();
@@ -765,7 +772,10 @@ impl PipelineStage for ResonanceStage {
 
         let output = StageOutput::new(self.name(), true, feedback)
             .with_data("feedback", &format!("{:.4}", feedback.to_f64()))
-            .with_data("prune_threshold", &format!("{:.4}", self.prune_threshold.to_f64()))
+            .with_data(
+                "prune_threshold",
+                &format!("{:.4}", self.prune_threshold.to_f64()),
+            )
             .with_data("should_prune", &should_prune.to_string())
             .with_execution_time(start.elapsed().as_nanos() as u64);
 
@@ -903,8 +913,7 @@ impl SovereignPipeline {
         );
 
         // Initialize context
-        let mut ctx = PipelineContext::new(input, self.tier)
-            .with_state(PipelineState::Running);
+        let mut ctx = PipelineContext::new(input, self.tier).with_state(PipelineState::Running);
 
         // Execute each stage
         // Note: Receipt stage always runs for auditability (even on rejection)
@@ -1046,8 +1055,11 @@ mod tests {
     #[test]
     fn test_input_stage_rejects_long_input() {
         let mut stage = InputStage::new(10);
-        let ctx = PipelineContext::new("this input is too long".to_string(), SovereigntyTier::T0Mobile)
-            .with_state(PipelineState::Ready);
+        let ctx = PipelineContext::new(
+            "this input is too long".to_string(),
+            SovereigntyTier::T0Mobile,
+        )
+        .with_state(PipelineState::Ready);
 
         let result = stage.execute(ctx);
 

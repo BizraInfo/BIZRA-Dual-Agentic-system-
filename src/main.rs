@@ -71,7 +71,10 @@ async fn main() -> anyhow::Result<()> {
         .with_thread_ids(true)
         .init();
 
-    info!("🧬 BIZRA Node v{} - Production Bootstrap", env!("CARGO_PKG_VERSION"));
+    info!(
+        "🧬 BIZRA Node v{} - Production Bootstrap",
+        env!("CARGO_PKG_VERSION")
+    );
     info!("==========================================");
 
     let cli = Cli::parse();
@@ -151,7 +154,10 @@ async fn run_server(port: u16, use_redis: bool) -> anyhow::Result<()> {
     // Initialize system
     let system = Arc::new(MetaAlphaDualAgentic::initialize().await?);
 
-    info!("🚀 BIZRA Node v{} is OPERATIONAL", env!("CARGO_PKG_VERSION"));
+    info!(
+        "🚀 BIZRA Node v{} is OPERATIONAL",
+        env!("CARGO_PKG_VERSION")
+    );
     info!("   API: http://127.0.0.1:{}", port);
     info!(
         "   Storage: {}",

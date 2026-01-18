@@ -85,17 +85,15 @@ fn bench_wasm_sandbox(c: &mut Criterion) {
         let mut hasher = Sha256::new();
         hasher.update(&wasm_module);
         let module_hash: [u8; 32] = hasher.finalize().into();
-        let signature = futures::executor::block_on(signer.sign(&module_hash))
-            .expect("Failed to sign module");
+        let signature =
+            futures::executor::block_on(signer.sign(&module_hash)).expect("Failed to sign module");
 
         b.iter(|| {
-            let _ = futures::executor::block_on(
-                sandbox.execute_isolated(
-                    black_box(&wasm_module),
-                    black_box("test_input"),
-                    black_box(&signature),
-                ),
-            );
+            let _ = futures::executor::block_on(sandbox.execute_isolated(
+                black_box(&wasm_module),
+                black_box("test_input"),
+                black_box(&signature),
+            ));
         });
     });
 

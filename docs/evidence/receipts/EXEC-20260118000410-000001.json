@@ -1,0 +1,18 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260118000410-000001",
+  "timestamp": "2026-01-18T00:04:10.927777337Z",
+  "task_summary": "Critical security patch review",
+  "sat_validation_ms": 569,
+  "pat_execution_ms": 225,
+  "total_latency_ms": 796,
+  "synergy_score": 0.9198749826755375,
+  "ihsan_score": 0.9259874934796244,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.0002945696469396353,
+  "integrity_hash": "sha256:45eab936b3caf53ee9bf51aaacd83731b1e0d9e2ed91f18cbe51ae78262bd5ad"
+}
