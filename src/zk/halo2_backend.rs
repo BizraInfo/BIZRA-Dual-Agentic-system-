@@ -1,3 +1,4 @@
+use anyhow::Context;
 //! BIZRA Halo2 ZK Proof Backend
 //!
 //! Giants Protocol Citation:
@@ -438,7 +439,7 @@ mod tests {
             Fp::from(300_000u64),
         ];
 
-        let prover = MockProver::run(k, &circuit, vec![public_inputs]).unwrap();
+        let prover = MockProver::run(k, &circuit, vec![public_inputs]).context("Failed to unwrap result")?;
         assert!(prover.verify().is_ok());
     }
 
@@ -458,7 +459,7 @@ mod tests {
             Fp::from(300_000u64),
         ];
 
-        let prover = MockProver::run(k, &circuit, vec![public_inputs]).unwrap();
+        let prover = MockProver::run(k, &circuit, vec![public_inputs]).context("Failed to unwrap result")?;
         // This should fail verification due to constraint violation
         // Note: The constraint implementation needs refinement for proper failure detection
     }

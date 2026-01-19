@@ -151,15 +151,15 @@ EOF
 
 echo "  ✓ Created src/tpm/config.rs"
 
-# 4. Update Cargo.toml with TPM features
+# 4. Check Cargo.toml for TPM features (read-only)
 echo ""
-echo "📋 Phase 4: Updating Cargo.toml features..."
+echo "📋 Phase 4: Checking Cargo.toml for TPM features..."
 
 # Check if hardware_tpm feature already exists
 if grep -q 'hardware_tpm' Cargo.toml; then
     echo "  ✓ hardware_tpm feature already defined"
 else
-    echo "  ℹ TPM feature will be added during Cargo.toml update phase"
+    echo "  ℹ TPM feature is not yet defined in Cargo.toml (read-only check only)"
 fi
 
 # 5. Generate status report

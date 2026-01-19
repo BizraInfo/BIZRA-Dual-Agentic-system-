@@ -291,6 +291,7 @@ class EthicalEquilibrium:
     
     def get_dimension_report(self) -> Dict[str, Any]:
         """Generate a report of all dimensions."""
+        equilibrium_value = self.compute_equilibrium()
         return {
             "dimensions": {
                 dim: {
@@ -300,9 +301,9 @@ class EthicalEquilibrium:
                 }
                 for dim, (name, weight) in self.DIMENSIONS.items()
             },
-            "equilibrium": self.compute_equilibrium(),
+            "equilibrium": equilibrium_value,
             "adl_weight": self.ADL_WEIGHT,
-            "status": "EQUILIBRIUM" if self.compute_equilibrium() >= 0.95 else "IMBALANCED"
+            "status": "EQUILIBRIUM" if equilibrium_value >= 0.95 else "IMBALANCED"
         }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -357,7 +358,6 @@ class FATEGate:
     
     def __init__(self):
         self.id = str(uuid.uuid4())[:8]
-        self.z3 = Z3Wrapper()
         self.constitution = SymbolicConstitution()
         self.ethics = EthicalEquilibrium()
         self.verdicts: List[FATEVerdict] = []
@@ -382,18 +382,21 @@ class FATEGate:
         verdict_id = f"FATE-{len(self.verdicts)+1:04d}"
         timestamp = datetime.now(timezone.utc).isoformat()
         
+        # Use a fresh solver per evaluation to prevent constraint accumulation across calls
+        z3_wrapper = Z3Wrapper()
+
         # Step 1: Add constitutional constraints
         for inv_id, inv in self.constitution.invariants.items():
             holds = self.constitution.check_invariant(inv_id, context)
-            self.z3.add_constraint(
+            z3_wrapper.add_constraint(
                 name=inv_id,
                 condition=holds,
                 description=inv.check_fn
             )
-            self.z3.assert_invariant(inv_id, holds)
+            z3_wrapper.assert_invariant(inv_id, holds)
         
         # Step 2: Check Z3 satisfiability
-        z3_result, z3_model = self.z3.check()
+        z3_result, z3_model = z3_wrapper.check()
         
         # Step 3: Verify all invariants
         all_hold, invariant_results = self.constitution.verify_all(context)

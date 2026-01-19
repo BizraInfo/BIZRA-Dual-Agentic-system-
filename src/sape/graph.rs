@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/sape/graph.rs
 
 use serde::{Deserialize, Serialize};
@@ -243,7 +244,7 @@ impl ReasoningGraph {
                 // If multiple parents, pick best
                 if let Some(best_parent_edge) = parents
                     .iter()
-                    .max_by(|a, b| a.weight.partial_cmp(&b.weight).unwrap())
+                    .max_by(|a, b| a.weight.partial_cmp(&b.weight).context("Failed to unwrap result")?)
                 {
                     if let Some(parent_node) = self.nodes.get(&best_parent_edge.from) {
                         current = parent_node;

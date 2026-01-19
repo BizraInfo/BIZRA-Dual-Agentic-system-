@@ -1,0 +1,61 @@
+manifest_version: "1.0.0-elite"
+
+node:
+  id: "node0"
+  env: "prod"
+  mode: "fail_closed"
+  data_dir: "./state"
+  ledger_dir: "./state/ledger"
+  keys_dir: "./state/keys"
+  registry_path: "./state/registry.json"
+
+standing_on_giants:
+  canonicalization:
+    profile: "BIZRA-CANON-INT-1"
+  crypto:
+    signature: "Ed25519"
+    hash: "SHA-256"
+  supply_chain:
+    lockfile_required: true
+    sbom_required: true
+    provenance_required: true
+  compliance:
+    sbom: "CycloneDX"
+    slsa_level: 3
+
+policy:
+  ihsan_threshold_basis_points:
+    dev: 9700
+    ci:  9900
+    prod: 9970
+
+replay_guard:
+  counter:
+    bits: 128
+    rule: "strictly_increasing"
+  nonce:
+    enabled: true
+
+ledger:
+  format: "json"
+  append_only: true
+  fsync: true
+
+performance:
+  budgets:
+    verify_receipt_max_ms: 5
+    verify_10k_receipts_max_s: 2
+
+observability:
+  logs:
+    format: "json"
+    level: "info"
+  snr:
+    signal: "high"
+    noise: "zero"
+
+# Policy Bundle (Elite)
+policy_bundle:
+  required: true
+  bundle_path: "config/policy.bundle.json"
+  root_hash: "e33e88be7f495ee593ee16963eae3ffefbb9a40a0f09a5703ef9254d80995bb2"

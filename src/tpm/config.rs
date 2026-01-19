@@ -48,13 +48,19 @@ impl TpmConfig {
         let config_path = "config/tpm/tpm_config.yaml";
         if std::path::Path::new(config_path).exists() {
             let yaml = std::fs::read_to_string(config_path)?;
-            // Parse and return
-            Ok(Self::default()) // TODO: Parse YAML
+            match serde_yaml::from_str::<Self>(&yaml) {
+                Ok(cfg) => Ok(cfg),
+                Err(err) => {
+                    // Fall back to default but surface context
+                    eprintln!("WARNING: Failed to parse {}: {}. Using defaults.", config_path, err);
+                    Ok(Self::default())
+                }
+            }
         } else {
             Ok(Self::default())
         }
     }
-    
+
     /// Check if real hardware TPM is available
     pub fn is_hardware(&self) -> bool {
         self.tpm_type == TpmType::Hardware && self.available

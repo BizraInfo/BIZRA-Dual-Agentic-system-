@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/memory_genesis.rs - Autonomous Memory Management for Genesis Architect
 //
 // For MoMo - The First Architect
@@ -439,29 +440,29 @@ mod tests {
 
     #[test]
     fn test_genesis_memory_creation() {
-        let memory = GenesisMemory::new().unwrap();
+        let memory = GenesisMemory::new().context("Failed to unwrap result")?;
         assert_eq!(memory.architect.name, "MoMo");
         assert_eq!(memory.architect.journey.hours_invested, 15000);
     }
 
     #[test]
     fn test_add_goal() {
-        let mut memory = GenesisMemory::new().unwrap();
-        let goal_id = memory.add_goal("Test goal", "high").unwrap();
+        let mut memory = GenesisMemory::new().context("Failed to unwrap result")?;
+        let goal_id = memory.add_goal("Test goal", "high").context("Failed to unwrap result")?;
         assert!(!goal_id.is_empty());
         assert_eq!(memory.get_active_goals().len(), 4); // 3 default + 1 new
     }
 
     #[test]
     fn test_add_task() {
-        let mut memory = GenesisMemory::new().unwrap();
-        let task_id = memory.add_task("Test task", None).unwrap();
+        let mut memory = GenesisMemory::new().context("Failed to unwrap result")?;
+        let task_id = memory.add_task("Test task", None).context("Failed to unwrap result")?;
         assert!(!task_id.is_empty());
     }
 
     #[test]
     fn test_memory_summary() {
-        let memory = GenesisMemory::new().unwrap();
+        let memory = GenesisMemory::new().context("Failed to unwrap result")?;
         let summary = memory.memory_summary();
         assert!(summary.contains("MoMo"));
         assert!(summary.contains("15000"));

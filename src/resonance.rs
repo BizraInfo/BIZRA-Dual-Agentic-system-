@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/resonance.rs
 /*
 SOVEREIGN RESONANCE MESH v1.0
@@ -306,7 +307,7 @@ impl ResonanceMesh {
             action: ResonanceAction::Maintained,
             timestamp: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
+                .context("Failed to unwrap result")?
                 .as_secs(),
         };
 
@@ -397,7 +398,7 @@ impl ResonanceMesh {
             action: ResonanceAction::Pruned,
             timestamp: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
+                .context("Failed to unwrap result")?
                 .as_secs(),
         };
 
@@ -438,7 +439,7 @@ impl ResonanceMesh {
             action: ResonanceAction::Amplified,
             timestamp: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
+                .context("Failed to unwrap result")?
                 .as_secs(),
         };
 
@@ -604,7 +605,7 @@ impl ResonanceMesh {
     fn calculate_temporal_decay(&self, last_updated: u64) -> f64 {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
-            .unwrap()
+            .context("Failed to unwrap result")?
             .as_secs();
 
         let age = now.saturating_sub(last_updated) as f64;

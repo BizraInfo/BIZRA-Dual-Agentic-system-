@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/sape.rs - Symbolic-Abstraction Probe Elevation (SAPE) Engine
 //
 // Elevates recurring verification patterns into compiled kernel-level optimizations.
@@ -38,35 +39,35 @@ lazy_static! {
         "bizra_sape_activations_total",
         "Total SAPE pattern activations",
         &["pattern"]
-    ).unwrap();
+    ).context("Failed to unwrap result")?;
 
     /// SAPE elevation events
     pub static ref SAPE_ELEVATIONS: CounterVec = register_counter_vec!(
         "bizra_sape_elevations_total",
         "Total SAPE pattern elevations",
         &["type"]  // manual, auto
-    ).unwrap();
+    ).context("Failed to unwrap result")?;
 
     /// SAPE latency savings (milliseconds saved)
     pub static ref SAPE_LATENCY_SAVED: GaugeVec = register_gauge_vec!(
         "bizra_sape_latency_saved_ms",
         "Estimated latency saved by SAPE optimizations",
         &["pattern"]
-    ).unwrap();
+    ).context("Failed to unwrap result")?;
 
     /// SAPE probe execution time
     pub static ref SAPE_PROBE_LATENCY: Histogram = register_histogram!(
         "bizra_sape_probe_seconds",
         "SAPE probe execution latency",
         vec![0.0001, 0.0005, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1]
-    ).unwrap();
+    ).context("Failed to unwrap result")?;
 
     /// PEAK MASTERPIECE: Rarely Fired Circuits Telemetry
     pub static ref SAPE_CIRCUIT_FAILURES: CounterVec = register_counter_vec!(
         "bizra_sape_circuit_failures_total",
         "Total SAPE circuit-break failures (Rarely Fired Circuits)",
         &["reason"]
-    ).unwrap();
+    ).context("Failed to unwrap result")?;
 }
 
 /// Get the global SAPE engine
@@ -383,7 +384,7 @@ impl SemanticCache {
                 SAPE_CIRCUIT_FAILURES
                     .with_label_values(&["cache_overflow"])
                     .inc();
-                self.cache.get_mut(&dimension).unwrap().clear();
+                self.cache.get_mut(&dimension).context("Failed to unwrap result")?.clear();
             }
         }
     }

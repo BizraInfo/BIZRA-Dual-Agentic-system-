@@ -48,6 +48,19 @@ pub fn verify_golden_topology(node_count: usize) -> bool {
 /// The Causal Drag coefficient (Ω)
 pub const CAUSAL_DRAG_LIMIT: f64 = 0.05;
 
+/// Checks content for deception and harm markers (Parity with Python FATE engine)
+/// Returns (has_harm, has_deception)
+pub fn check_deception_and_harm(content: &str) -> (bool, bool) {
+    let content_lower = content.to_lowercase();
+    let has_harm = content_lower.contains("harm") || 
+                   content_lower.contains("destroy") ||
+                   content_lower.contains("damage");
+    let has_deception = content_lower.contains("deceive") ||
+                       content_lower.contains("trick") ||
+                       content_lower.contains("lie");
+    (has_harm, has_deception)
+}
+
 /// The Harberger Tax on Memory
 /// Enforces Thermodynamic Equilibrium of Adl via Gini Coefficient constraint.
 pub struct MemoryLedger {

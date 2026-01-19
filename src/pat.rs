@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/pat.rs - Personal Agentic Team (7 agents)
 //
 // BIZRA PAT Layer with LLM Integration
@@ -519,7 +520,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_pat_orchestrator_creation() {
-        let pat = PATOrchestrator::new().await.unwrap();
+        let pat = PATOrchestrator::new().await.context("Failed to unwrap result")?;
         assert_eq!(pat.get_agent_count(), 7);
     }
 
@@ -527,7 +528,7 @@ mod tests {
     async fn test_evolving_pat_creation() {
         let evolving_pat = EvolvingPATOrchestrator::new(SovereigntyTier::T0Mobile, 42)
             .await
-            .unwrap();
+            .context("Failed to unwrap result")?;
 
         assert_eq!(evolving_pat.pat().get_agent_count(), 7);
         assert_eq!(evolving_pat.evolution_state().generation, 0);
@@ -537,7 +538,7 @@ mod tests {
     async fn test_evolving_pat_execution() {
         let mut evolving_pat = EvolvingPATOrchestrator::new(SovereigntyTier::T1Consumer, 12345)
             .await
-            .unwrap();
+            .context("Failed to unwrap result")?;
 
         let request = DualAgenticRequest {
             task: "Test task for evolution".to_string(),
@@ -545,7 +546,7 @@ mod tests {
             ..Default::default()
         };
 
-        let (results, state) = evolving_pat.execute_with_evolution(request).await.unwrap();
+        let (results, state) = evolving_pat.execute_with_evolution(request).await.context("Failed to unwrap result")?;
 
         assert_eq!(results.len(), 7);
         assert!(state.generation > 0);

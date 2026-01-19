@@ -10,8 +10,9 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::collections::VecDeque;
-use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 use tracing::{error, info, warn};
 use z3::{ast::Ast, ast::Int, Config, Context, Solver};
@@ -110,6 +111,9 @@ pub enum VerificationStatus {
 pub struct AsyncFateVerifier {
     proof_queue: Arc<Mutex<VecDeque<PendingProof>>>,
     results: Arc<Mutex<HashMap<String, VerificationStatus>>>,
+    shutdown: Arc<AtomicBool>,
+    worker_handle: Option<JoinHandle<()>>,
+    max_results: usize,
 }
 
 pub struct PendingProof {
@@ -125,20 +129,56 @@ impl Default for AsyncFateVerifier {
     }
 }
 
+fn truncate_utf8_with_suffix(value: &str, max_chars: usize, suffix: &str) -> String {
+    let mut iter = value.chars();
+    let truncated: String = iter.by_ref().take(max_chars).collect();
+    if value.chars().count() > max_chars {
+        format!("{truncated}{suffix}")
+    } else {
+        value.to_string()
+    }
+}
+
+fn sanitize_context(context: &HashMap<String, String>) -> HashMap<String, String> {
+    context
+        .iter()
+        .map(|(k, v)| {
+            let key_lower = k.to_lowercase();
+            let sanitized_v = if key_lower.contains("password")
+                || key_lower.contains("secret")
+                || key_lower.contains("key")
+            {
+                "[REDACTED]".to_string()
+            } else if v.chars().count() > 200 {
+                truncate_utf8_with_suffix(v, 200, "...[truncated]")
+            } else {
+                v.clone()
+            };
+            (k.clone(), sanitized_v)
+        })
+        .collect()
+}
+
 impl AsyncFateVerifier {
     pub fn new() -> Self {
         let proof_queue = Arc::new(Mutex::new(VecDeque::<PendingProof>::new()));
         let results = Arc::new(Mutex::new(HashMap::<String, VerificationStatus>::new()));
+        let shutdown = Arc::new(AtomicBool::new(false));
+        let max_results = 1024usize;
 
         let worker_queue = Arc::clone(&proof_queue);
         let worker_results = Arc::clone(&results);
+        let shutdown_flag = Arc::clone(&shutdown);
 
         // Spawn background worker thread
-        std::thread::spawn(move || {
+        let handle = std::thread::spawn(move || {
             let cfg = Config::new();
             let ctx = Context::new(&cfg);
 
             loop {
+                if shutdown_flag.load(Ordering::Relaxed) {
+                    break;
+                }
                 // HARD GATE #2 FIX: Graceful lock poisoning recovery
                 let proof = match worker_queue.lock() {
                     Ok(mut queue) => queue.pop_front(),
@@ -166,6 +206,11 @@ impl AsyncFateVerifier {
                                     None => VerificationStatus::Verified,
                                 },
                             );
+                            if res.len() > max_results {
+                                if let Some(old_key) = res.keys().next().cloned() {
+                                    res.remove(&old_key);
+                                }
+                            }
                         }
                         Err(poisoned) => {
                             warn!("⚠️ FATE results lock poisoned, attempting recovery");
@@ -180,6 +225,11 @@ impl AsyncFateVerifier {
                                     None => VerificationStatus::Verified,
                                 },
                             );
+                            if res.len() > max_results {
+                                if let Some(old_key) = res.keys().next().cloned() {
+                                    res.remove(&old_key);
+                                }
+                            }
                         }
                     }
 
@@ -200,6 +250,9 @@ impl AsyncFateVerifier {
         Self {
             proof_queue,
             results,
+            shutdown,
+            worker_handle: Some(handle),
+            max_results,
         }
     }
 
@@ -300,14 +353,23 @@ impl AsyncFateVerifier {
 
     pub fn get_status(&self, id: &str) -> Option<VerificationStatus> {
         // HARD GATE #2 FIX: Graceful lock poisoning recovery
-        let res = match self.results.lock() {
+        let mut res = match self.results.lock() {
             Ok(r) => r,
             Err(poisoned) => {
                 warn!("⚠️ FATE results lock poisoned in get_status, recovering");
                 poisoned.into_inner()
             }
         };
-        res.get(id).cloned()
+        res.remove(id)
+    }
+}
+
+impl Drop for AsyncFateVerifier {
+    fn drop(&mut self) {
+        self.shutdown.store(true, Ordering::Relaxed);
+        if let Some(handle) = self.worker_handle.take() {
+            let _ = handle.join();
+        }
     }
 }
 
@@ -598,33 +660,15 @@ impl FateEngine {
         );
 
         // Sanitize context (remove potentially sensitive data)
-        let sanitized_context: HashMap<String, String> = context
-            .iter()
-            .map(|(k, v)| {
-                let sanitized_v = if k.to_lowercase().contains("password")
-                    || k.to_lowercase().contains("secret")
-                    || k.to_lowercase().contains("key")
-                {
-                    "[REDACTED]".to_string()
-                } else if v.len() > 200 {
-                    format!("{}...[truncated]", &v[..200])
-                } else {
-                    v.clone()
-                };
-                (k.clone(), sanitized_v)
-            })
-            .collect();
+        let sanitized_context: HashMap<String, String> = sanitize_context(context);
 
         let primary_rejection = rejection_codes
             .first()
             .cloned()
             .unwrap_or_else(|| RejectionCode::ConsistencyFailure("Unknown rejection".to_string()));
 
-        let reason = format!(
-            "Task '{}' rejected by SAT: {}",
-            if task.len() > 100 { &task[..100] } else { task },
-            primary_rejection
-        );
+        let truncated_task = truncate_utf8_with_suffix(task, 100, "...[truncated]");
+        let reason = format!("Task '{}' rejected by SAT: {}", truncated_task, primary_rejection);
 
         let recommended_action = match &primary_rejection {
             RejectionCode::SecurityThreat(_) => {
@@ -765,19 +809,28 @@ impl FateEngine {
                 .await
                 .is_ok()
             {
-                self.pending_escalations.retain(|e| e.id != escalation_id);
-                return true;
+                if let Some(escalation) = self
+                    .pending_escalations
+                    .iter_mut()
+                    .find(|e| e.id == escalation_id)
+                {
+                    escalation.status = if approved {
+                        EscalationStatus::Approved
+                    } else {
+                        EscalationStatus::Blocked
+                    };
+                    return true;
+                }
             }
         }
 
         // Fallback to memory-only resolution
-        if let Some(pos) = self
+        if let Some(escalation) = self
             .pending_escalations
-            .iter()
-            .position(|e| e.id == escalation_id)
+            .iter_mut()
+            .find(|e| e.id == escalation_id)
         {
-            let mut esc = self.pending_escalations.remove(pos);
-            esc.status = if approved {
+            escalation.status = if approved {
                 EscalationStatus::Approved
             } else {
                 EscalationStatus::Blocked
@@ -814,7 +867,7 @@ impl FateEngine {
             source: "IHSAN".to_string(),
             rejection_code: format!("IHSAN_THRESHOLD_FAILURE(score={:.4})", score),
             reason: reason.clone(),
-            context: context.clone(),
+            context: sanitize_context(context),
             status: EscalationStatus::Pending,
             recommended_action: format!(
                 "IMPROVE: Current Ihsān score ({:.4}) below {} threshold ({:.4}). Review quality dimensions.",
@@ -841,6 +894,8 @@ impl FateEngine {
             match code {
                 RejectionCode::SecurityThreat(_) => return EscalationLevel::Critical,
                 RejectionCode::EthicsViolation(_) => return EscalationLevel::Critical,
+                RejectionCode::IhsanUnsat(_) => return EscalationLevel::Critical,
+                RejectionCode::FormalViolation(_) => return EscalationLevel::High,
                 RejectionCode::Quarantine(_) => return EscalationLevel::High,
                 _ => {}
             }

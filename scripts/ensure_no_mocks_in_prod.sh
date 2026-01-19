@@ -10,12 +10,12 @@ EXCLUDE_DIRS="tests examples benches docs demo"
 
 echo "🛡️  BIZRA CI Guard: Auditing for 'Mock' and 'Simulate' artifacts in production paths..."
 
-# Build exclusion lists
-RG_EXCLUDES=""
-GREP_EXCLUDES=""
+# Build exclusion lists as arrays to avoid literal quotes
+RG_EXCLUDES=()
+GREP_EXCLUDES=()
 for dir in $EXCLUDE_DIRS; do
-    RG_EXCLUDES="$RG_EXCLUDES -g '!$dir/*'"
-    GREP_EXCLUDES="$GREP_EXCLUDES --exclude-dir=$dir"
+    RG_EXCLUDES+=( -g "!$dir/*" )
+    GREP_EXCLUDES+=( --exclude-dir="$dir" )
 done
 
 # 1. Search for "Mock" in Rust/Python source, excluding tests
@@ -24,18 +24,18 @@ if command -v rg >/dev/null 2>&1; then
     
     # Check for "Mock" - exclude tests, panic messages, and cfg-gated blocks
     # We use || true to prevent failure if no matches found before filtering, though wc catches it without pipefail.
-    MOCK_COUNT=$(rg "Mock" $AUDIT_DIRS -g '!*test*' $RG_EXCLUDES -t rust -t py 2>/dev/null | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
+    MOCK_COUNT=$(rg "Mock" $AUDIT_DIRS -g '!*test*' "${RG_EXCLUDES[@]}" -t rust -t py 2>/dev/null | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
     
     # Check for "Simulation"
-    SIM_COUNT=$(rg -i "Simulat" $AUDIT_DIRS -g '!*test*' $RG_EXCLUDES -t rust -t py 2>/dev/null | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
+    SIM_COUNT=$(rg -i "Simulat" $AUDIT_DIRS -g '!*test*' "${RG_EXCLUDES[@]}" -t rust -t py 2>/dev/null | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
 
 else
     echo "⚠️  ripgrep not found, falling back to basic grep. Results may be noisy."
     # Basic Grep fallback
     # Note: grep -r supports --exclude-dir (GNU grep).
     
-    MOCK_COUNT=$(grep -r "Mock" $AUDIT_DIRS $GREP_EXCLUDES | grep -v "test" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
-    SIM_COUNT=$(grep -r -i "Simulat" $AUDIT_DIRS $GREP_EXCLUDES | grep -v "test" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
+    MOCK_COUNT=$(grep -r "Mock" $AUDIT_DIRS "${GREP_EXCLUDES[@]}" | grep -v "test" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
+    SIM_COUNT=$(grep -r -i "Simulat" $AUDIT_DIRS "${GREP_EXCLUDES[@]}" | grep -v "test" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
 fi
 
 

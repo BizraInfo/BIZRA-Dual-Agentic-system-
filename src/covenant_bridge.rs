@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/covenant_bridge.rs - COVENANT Integration Layer
 //
 // This module bridges the existing BridgeCoordinator architecture with the
@@ -593,7 +594,7 @@ mod tests {
             ValidationTier::Cheap,
         );
         assert!(result.is_ok());
-        assert!(result.unwrap());
+        assert!(result.context("Failed to unwrap result")?);
     }
 
     #[test]
@@ -608,7 +609,7 @@ mod tests {
             ValidationTier::Cheap,
         );
         assert!(result.is_ok());
-        assert!(!result.unwrap()); // Should be rejected
+        assert!(!result.context("Failed to unwrap result")?); // Should be rejected
     }
 
     #[test]
@@ -620,7 +621,7 @@ mod tests {
         let result = bridge
             .validate_output_adaptive(thought_id, r#"{"status": "success", "data": [1, 2, 3]}"#);
         assert!(result.is_ok());
-        assert!(result.unwrap());
+        assert!(result.context("Failed to unwrap result")?);
     }
 
     #[test]

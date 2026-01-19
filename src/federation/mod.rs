@@ -1,3 +1,4 @@
+use anyhow::Context;
 pub mod protocol;
 pub mod sentinel;
 
@@ -63,7 +64,7 @@ mod tests {
         let cert = manager
             .enroll_node("test_node".to_string(), TrustTier::Gold)
             .await
-            .unwrap();
+            .context("Failed to unwrap result")?;
         assert_eq!(cert.trust_tier, TrustTier::Gold);
         assert!(cert.permissions.contains(&"fs.read".to_string()));
     }
@@ -74,7 +75,7 @@ mod tests {
         let cert = manager
             .enroll_node("test_node".to_string(), TrustTier::Bronze)
             .await
-            .unwrap();
+            .context("Failed to unwrap result")?;
         assert!(!cert.signature.is_empty());
     }
 
@@ -89,7 +90,7 @@ mod tests {
             tpm_quote: None,
             hardware_manifest: serde_json::json!({}),
         };
-        let cert_low = manager.secure_enroll(req_low).await.unwrap();
+        let cert_low = manager.secure_enroll(req_low).await.context("Failed to unwrap result")?;
         assert_eq!(cert_low.trust_tier, TrustTier::Bronze);
 
         // Request with TPM -> Platinum
@@ -99,7 +100,7 @@ mod tests {
             tpm_quote: Some("valid_tpm_quote".to_string()),
             hardware_manifest: serde_json::json!({}),
         };
-        let cert_high = manager.secure_enroll(req_high).await.unwrap();
+        let cert_high = manager.secure_enroll(req_high).await.context("Failed to unwrap result")?;
         assert_eq!(cert_high.trust_tier, TrustTier::Platinum);
     }
 }

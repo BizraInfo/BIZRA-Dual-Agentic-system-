@@ -1,0 +1,22 @@
+{
+  "unsigned": {
+    "schema_version": "1.0",
+    "policy_hash": "89071f55536e5f6cc7118f9cf93dd66c50db5338928924b0c39afd70d1bdf37f",
+    "agent_id": "node0",
+    "session_id": "genesis",
+    "counter": 1,
+    "nonce": "genesis-1768812502",
+    "timestamp_unix_s": 1768812502,
+    "payload": {
+      "manifest": "config/node0.manifest.yaml",
+      "policy_hash": "89071f55536e5f6cc7118f9cf93dd66c50db5338928924b0c39afd70d1bdf37f",
+      "sotg": {
+        "canon": "BIZRA-CANON-INT-1"
+      },
+      "type": "GENESIS"
+    },
+    "prev_hash": "GENESIS"
+  },
+  "hash": "97fb64b04b190d9d5b60b7dc40da30b8cb7f905ea2e29f8e38beea0d8ea113ef",
+  "signature_hex": "f88d4b7fe47d211842e7f305adb4346d3f61b68704ade04ae7a81cb08f1c246427873fe167b41d3203cab43b7a2f459289fc70256ada97a078acd895adb0280c"
+}

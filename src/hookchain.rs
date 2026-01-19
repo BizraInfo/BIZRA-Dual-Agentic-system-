@@ -1,4 +1,5 @@
-#![deny(clippy::unwrap_used)]
+use anyhow::Context;
+#[cfg_attr(not(test), deny(clippy::unwrap_used))]
 // src/hookchain.rs
 // Status: GIANTS_PROTOCOL_V1
 // SAT HookChain - Governance injection point for every capability/tool call
@@ -769,7 +770,7 @@ mod tests {
         let signer = Arc::new(SoftwareSigner::new());
         let mut token = CapabilityToken::new("file_read", "read", CapabilityTier::T1Consumer);
 
-        token.sign(signer.as_ref()).await.unwrap();
+        token.sign(signer.as_ref()).await.context("Failed to unwrap result")?;
 
         assert!(token.is_valid());
         assert!(token.issuer_signature.is_some());
@@ -786,17 +787,17 @@ mod tests {
     async fn test_session_dag_advance() {
         let dag = SessionDAG::new("v1.0.0");
 
-        let head1 = dag.get_head().await.unwrap();
+        let head1 = dag.get_head().await.context("Failed to unwrap result")?;
         assert!(head1.parent_hash.is_none()); // Genesis has no parent
 
         // Use Fixed64 for deterministic impact delta
         let child = dag
             .advance("state1", "receipts1", Fixed64::from_f64(0.05))
             .await
-            .unwrap();
+            .context("Failed to unwrap result")?;
         assert_eq!(child.parent_hash, Some(head1.node_hash));
 
-        let head2 = dag.get_head().await.unwrap();
+        let head2 = dag.get_head().await.context("Failed to unwrap result")?;
         assert_eq!(head2.node_hash, child.node_hash);
     }
 
@@ -813,7 +814,7 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.unwrap();
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
 
         match decision {
             HookDecision::Deny { code, .. } => assert_eq!(code, "BLOCKED_TOOL"),
@@ -834,7 +835,7 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.unwrap();
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
 
         match decision {
             HookDecision::Deny { code, .. } => assert_eq!(code, "SECURITY_THREAT"),
@@ -855,7 +856,7 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.unwrap();
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
 
         match decision {
             HookDecision::Allow { .. } => (),
@@ -883,7 +884,7 @@ mod tests {
             error: None,
         };
 
-        let result = hook_chain.post_capability_use(&executed).await.unwrap();
+        let result = hook_chain.post_capability_use(&executed).await.context("Failed to unwrap result")?;
 
         match result {
             PostHookResult::Commit { receipt_id, .. } => {
@@ -1002,14 +1003,14 @@ mod tests {
         let _child1 = dag
             .advance("state1", "receipts1", Fixed64::from_f64(0.1))
             .await
-            .unwrap();
+            .context("Failed to unwrap result")?;
 
         // Fork from current head
         let fork_result = dag.fork("experimental").await;
         assert!(fork_result.is_ok());
-        let forked = fork_result.unwrap();
+        let forked = fork_result.context("Failed to unwrap result")?;
         assert!(forked.fork_id.is_some());
-        assert_eq!(forked.fork_id.as_ref().unwrap(), "experimental");
+        assert_eq!(forked.fork_id.as_ref().context("Failed to unwrap result")?, "experimental");
         assert!(!forked.merged);
     }
 
@@ -1027,7 +1028,7 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.unwrap();
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
 
         match decision {
             HookDecision::Deny { code, .. } => {
@@ -1048,8 +1049,8 @@ mod tests {
             offload_allowed: false,
         };
 
-        let json = serde_json::to_string(&budget).unwrap();
-        let deserialized: CapabilityBudget = serde_json::from_str(&json).unwrap();
+        let json = serde_json::to_string(&budget).context("Failed to unwrap result")?;
+        let deserialized: CapabilityBudget = serde_json::from_str(&json).context("Failed to unwrap result")?;
 
         assert_eq!(budget.max_tokens, deserialized.max_tokens);
         assert_eq!(budget.max_time_ms, deserialized.max_time_ms);
@@ -1060,8 +1061,8 @@ mod tests {
     fn test_session_node_serialization() {
         let node = SessionNode::genesis("v1.0.0");
 
-        let json = serde_json::to_string(&node).unwrap();
-        let deserialized: SessionNode = serde_json::from_str(&json).unwrap();
+        let json = serde_json::to_string(&node).context("Failed to unwrap result")?;
+        let deserialized: SessionNode = serde_json::from_str(&json).context("Failed to unwrap result")?;
 
         assert_eq!(node.policy_version, deserialized.policy_version);
         assert_eq!(node.parent_hash, deserialized.parent_hash);

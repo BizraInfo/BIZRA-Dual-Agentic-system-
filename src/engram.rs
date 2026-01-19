@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/engram.rs - Sovereign Conditional Memory for Local-First AI
 //
 // PEAK MASTERPIECE v7.1: DeepSeek Engram architecture adapted for BIZRA sovereignty
@@ -815,7 +816,7 @@ mod tests {
         let emb = table.retrieve_aggregated(2, 0);
         assert!(emb.is_some());
         assert_eq!(
-            emb.unwrap().len(),
+            emb.context("Failed to unwrap result")?.len(),
             SovereigntyTier::T0Mobile.embedding_dim()
         );
     }

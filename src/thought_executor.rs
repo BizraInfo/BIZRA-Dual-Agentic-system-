@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/thought_executor.rs - Minimal Thought Executor (COVENANT Article III)
 //
 // This is the "smallest loop that forces truth to pay rent":
@@ -244,7 +245,7 @@ impl ThoughtExecutor {
 
         tracing::info!(
             "🟢 STAGE 6 (LEDGER): Entry hash={}",
-            hex::encode(thought.ledger_entry_hash.as_ref().unwrap())
+            hex::encode(thought.ledger_entry_hash.as_ref().context("Failed to unwrap result")?)
         );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -262,7 +263,7 @@ impl ThoughtExecutor {
 
         tracing::info!(
             "🟢 STAGE 7 (PROOF): Proof hash={}",
-            hex::encode(thought.proof_hash.as_ref().unwrap())
+            hex::encode(thought.proof_hash.as_ref().context("Failed to unwrap result")?)
         );
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -311,7 +312,7 @@ mod tests {
         let result = executor.execute("Test input: safe operation");
 
         assert!(result.is_ok());
-        let (thought, receipt) = result.unwrap();
+        let (thought, receipt) = result.context("Failed to unwrap result")?;
 
         assert_eq!(thought.stage, ThoughtStage::ProofVerified);
         assert!(thought.contributed_to_signal);
@@ -331,7 +332,7 @@ mod tests {
 
         // Stub executor should succeed (FATE gate passes for test_action)
         assert!(result.is_ok());
-        let (thought, _receipt) = result.unwrap();
+        let (thought, _receipt) = result.context("Failed to unwrap result")?;
         assert!(!thought.gates_passed.is_empty());
     }
 
@@ -347,8 +348,8 @@ mod tests {
         assert!(result1.is_ok());
         assert!(result2.is_ok());
 
-        let (thought1, _) = result1.unwrap();
-        let (thought2, _) = result2.unwrap();
+        let (thought1, _) = result1.context("Failed to unwrap result")?;
+        let (thought2, _) = result2.context("Failed to unwrap result")?;
 
         assert!(thought1.contributed_to_signal);
         assert!(thought2.contributed_to_signal);
@@ -364,10 +365,10 @@ mod tests {
         let result = executor.execute("Receipt test");
 
         assert!(result.is_ok());
-        let (_thought, receipt) = result.unwrap();
+        let (_thought, receipt) = result.context("Failed to unwrap result")?;
 
         // Verify receipt contains all required fields
-        let parsed: serde_json::Value = serde_json::from_str(&receipt).unwrap();
+        let parsed: serde_json::Value = serde_json::from_str(&receipt).context("Failed to unwrap result")?;
         assert!(parsed["thought_id"].is_string());
         assert!(parsed["ihsan_score"].is_f64());
         assert!(parsed["current_snr"].is_f64());

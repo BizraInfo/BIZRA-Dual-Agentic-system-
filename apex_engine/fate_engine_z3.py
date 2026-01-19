@@ -155,12 +155,17 @@ class FateEngineZ3:
             
             if params.get("contains_deception", False):
                 violations.append("Action contains deceptive content")
+
+            has_harm = bool(params.get("contains_harm", False))
+            has_deception = bool(params.get("contains_deception", False))
             
             # Calculate Ihsān score for this action
             ihsan = self._calculate_ihsan_score(action, context)
             
             # Add action-specific constraints
             self.solver.add(self.ihsan_score == z3.RealVal(ihsan))
+            self.solver.add(self.has_harm == z3.BoolVal(has_harm))
+            self.solver.add(self.has_deception == z3.BoolVal(has_deception))
             
             # Check satisfiability
             result = self.solver.check()
@@ -170,9 +175,9 @@ class FateEngineZ3:
                 return VerificationResult(
                     verified=True,
                     ihsan_score=ihsan,
-                    constraints_checked=4,  # Core constraints
-                    constraints_satisfied=4,
-                    violations=[],
+                    constraints_checked=7,  # Core constraints + action bindings
+                    constraints_satisfied=7,
+                    violations=violations,
                     proof_script=self._generate_proof_script(action, ihsan)
                 )
             else:
@@ -181,7 +186,7 @@ class FateEngineZ3:
                 return VerificationResult(
                     verified=False,
                     ihsan_score=ihsan,
-                    constraints_checked=4,
+                    constraints_checked=7,
                     constraints_satisfied=0,
                     violations=violations,
                     proof_script=None
@@ -203,7 +208,7 @@ class FateEngineZ3:
         # Score each dimension (default to 1.0 if not specified)
         dimension_scores = {
             "correctness": params.get("correctness_score", 1.0),
-            "safety": 0.0 if params.get("contains_harm") else 1.0,
+            "safety": 0.0 if (params.get("contains_harm") or params.get("contains_deception")) else 1.0,
             "adl_fairness": params.get("fairness_score", 1.0),
             "efficiency": params.get("efficiency_score", 1.0),
             "auditability": 1.0 if params.get("logged") else 0.5,

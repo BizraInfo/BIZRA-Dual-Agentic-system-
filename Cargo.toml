@@ -1,5 +1,5 @@
-[workspace]
-members = ["crates/bizra-jcs", "crates/finance-v1", "crates/bizra-gateway", "bizra-genesis-node/backend", "third_fact_demokit/verifier", "crates/policy_engine", "hypervisor-prototype/minimal-hypervisor", "crates/bizra-sdk-core", "crates/bizra-sdk-cli"]
+workspace.members = ["crates/bizra-synapse-py", "crates/bizra-jcs", "crates/finance-v1", "crates/bizra-gateway", "bizra-genesis-node/backend", "third_fact_demokit/verifier", "crates/policy_engine", "hypervisor-prototype/minimal-hypervisor", "crates/bizra-sdk-core", "crates/bizra-sdk-cli", "bizra-node0", "crates/bizra-synapse"]
+members = ["crates/bizra-jcs", "crates/finance-v1", "crates/bizra-gateway", "bizra-genesis-node/backend", "third_fact_demokit/verifier", "crates/policy_engine", "hypervisor-prototype/minimal-hypervisor", "crates/bizra-sdk-core", "crates/bizra-sdk-cli", "bizra-node0", "crates/bizra-synapse", "crates/bizra-synapse-py"]
 exclude = ["fuzz"]
 
 [package]
@@ -12,10 +12,9 @@ description = "BIZRA Sovereign Kernel v7.0 - Production-Grade Hardware-Rooted AI
 
 [lib]
 name = "meta_alpha_dual_agentic"
-crate-type = ["cdylib", "rlib"]
 
-[dependencies]
 # Async runtime
+[dependencies]
 tokio = { version = "1.41", features = ["full"] }
 async-trait = "0.1"
 futures = "0.3"
@@ -67,7 +66,7 @@ petgraph = "0.6"
 
 # Python FFI Bindings (PyO3)
 # SECURITY: Upgraded to 0.24.1+ to fix CVE-2025-0020 (buffer overflow)
-pyo3 = { version = "0.24.1", optional = true, features = ["extension-module", "macros"] }
+# pyo3 = { version = "0.24.1", optional = true, features = ["extension-module", "macros"] }
 
 # WASM Isolation (Production Sandbox)
 # SECURITY: Upgraded to 24.0.5 to fix CVE-2025-0118 and CVE-2025-0046
@@ -79,8 +78,8 @@ wat = "1.0"
 tss-esapi = { version = "8.0.0-alpha.1", optional = true }
 
 # Post-Quantum Cryptography (Optional - NIST ML-KEM/ML-DSA)
-pqcrypto-kyber = { version = "0.8", optional = true }
-pqcrypto-dilithium = { version = "0.5", optional = true }
+pqcrypto-mlkem = { version = "0.1", optional = true }
+pqcrypto-mldsa = { version = "0.1", optional = true }
 
 # Zero-Knowledge Proof Backend (Optional - Halo2)
 halo2_proofs = { version = "0.3", optional = true }
@@ -108,21 +107,23 @@ default = ["http", "observability", "zk_stub"]
 simulation = []
 http = []
 observability = []
+strict = ["deny-unwrap"]
+deny-unwrap = []
 
 # Production Hardening Features
-python = ["pyo3/extension-module"]
+# python = ["pyo3/extension-module"]
 hardware_tpm = ["tss-esapi"]
 # iceoryx2_ipc = ["iceoryx2"]
 
 # Post-Quantum Cryptography
-post-quantum = ["pqcrypto-kyber", "pqcrypto-dilithium"]
+post-quantum = ["pqcrypto-mlkem", "pqcrypto-mldsa"]
 
 # ZK Proof Backends
 zk_halo2 = ["halo2_proofs"]  # Real Halo2 ZK backend
 
 # CI-safe feature set (all features except hardware_tpm)
 ci = ["http", "observability"]
-all-safe = ["http", "observability", "python"]  # For full testing without hardware
+all-safe = ["http", "observability"]  # For full testing without hardware
 
 # Development features
 prototype_warnings = []  # Enable compile-time warnings for PROTOTYPE/STUB code
@@ -160,3 +161,19 @@ criterion = { version = "0.5", features = ["html_reports"] }
 tokio-test = "0.4"
 bizra-jcs = { path = "crates/bizra-jcs" }
 tempfile = "3.14"
+
+
+
+[package.metadata.deny-unwrap]
+# Critical modules that must not use unwrap
+critical = ["receipts", "hookchain", "sape", "fate", "omega"]
+
+# Optimization for ZK compilation speed
+[profile.dev.package.halo2_proofs]
+opt-level = 0
+
+# Post-quantum cryptography (added by remediation)
+pqcrypto-kyber = { version = "0.7", optional = true }
+pqcrypto-dilithium = { version = "0.5", optional = true }
+
+post-quantum = ["dep:pqcrypto-kyber", "dep:pqcrypto-dilithium"]

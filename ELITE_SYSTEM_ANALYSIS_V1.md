@@ -1,4 +1,5 @@
 # BIZRA ELITE SYSTEM ANALYSIS & MAPTREE v1.0
+
 > **Status**: V&V VERIFIED | **Timestamp**: 2026-01-19 (Dubai GMT+4)
 > **Layer**: L3_APEX | **Mode**: Elite Practitioner | **SNR**: 9.2+
 
@@ -7,6 +8,7 @@
 ## EXECUTIVE SUMMARY
 
 This document represents a **systematic, evidence-based analysis** of the BIZRA Genesis codebase, synthesized from:
+
 1. **Codebase Archaeology**: 30,632 lines of Rust core across 81 modules.
 2. **Session History**: All previous V&V cycles, mock purges, and polish operations.
 3. **Architectural Documents**: ROADMAP v5.0, SAPE Framework, AEON-HIVEMIND research.
@@ -20,7 +22,7 @@ All claims are verified against the **Ihsān Principles** (truth, excellence, ac
 
 ### 1.1 Structural Topology (Graph-of-Thought View)
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            BIZRA SYSTEM GRAPH                                │
 ├─────────────────────────────────────────────────────────────────────────────┤
@@ -61,16 +63,17 @@ All claims are verified against the **Ihsān Principles** (truth, excellence, ac
 ```
 
 **Evidence**:
-- Module count: 81 `.rs` files in `src/`
-- Core modules: `hookchain.rs` (1,072 LoC), `sape/` (6 modules), `fate.rs` (953 LoC)
-- Re-export surface: 50+ public types in `lib.rs`
+
+* Module count: 81 `.rs` files in `src/`
+* Core modules: `hookchain.rs` (1,072 LoC), `sape/` (6 modules), `fate.rs` (953 LoC)
+* Re-export surface: 50+ public types in `lib.rs`
 
 ---
 
 ### 1.2 Layer Classification (SAPE Protocol)
 
 | Layer | Description | Modules | Status |
-|-------|-------------|---------|--------|
+| :--- | :--- | :--- | :--- |
 | **L1 Base** | Hardware Trust, Crypto, Types | `tpm.rs`, `receipts.rs`, `fixed.rs`, `zk.rs` | ⚠️ Partial (TPM simulated) |
 | **L2 Bizra** | Reasoning, Memory, Routing | `hookchain.rs`, `model_fabric.rs`, `unified_memory.rs`, `reasoning.rs` | ✅ Active |
 | **L3 Apex** | Verification, Coordination | `fate.rs`, `omega.rs`, `sape/`, `thought_executor.rs` | ⚠️ Prototype (Stubs) |
@@ -82,7 +85,7 @@ All claims are verified against the **Ihsān Principles** (truth, excellence, ac
 ### 2.1 Quantified Hygiene Metrics
 
 | Metric | Count | Assessment |
-|--------|-------|------------|
+| :--- | :--- | :--- |
 | **`unwrap()` calls** | 136 | ⚠️ ELEVATED RISK (Target: 0 in critical paths) |
 | **`expect()` calls** | 22 | ⚠️ Needs module-level `#![deny()]` |
 | **`panic!` calls** | 7 | ✅ Acceptable (all in guards/stubs) |
@@ -91,15 +94,17 @@ All claims are verified against the **Ihsān Principles** (truth, excellence, ac
 | **`FIXME` markers** | 0 | ✅ Clean |
 
 **Critical Path Analysis**:
-```
+
+```rust
 src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ```
+
 **Recommendation**: Migrate to `#![deny(clippy::unwrap_used)]` in `receipts.rs`, `hookchain.rs`, `sape/`.
 
 ### 2.2 Cryptographic Posture
 
 | Component | Implementation | Status |
-|-----------|---------------|--------|
+| :--- | :--- | :--- |
 | **Hashing** | SHA-256, BLAKE3 | ✅ Production |
 | **Signatures** | Ed25519-Dalek | ✅ Production |
 | **ZK Proofs** | Stub (Groth16) | ❌ **PROTOTYPE** (Feature-gated) |
@@ -107,6 +112,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 | **PQC (Post-Quantum)** | Not Implemented | ❌ **GAP** (Per AEON-HIVEMIND spec) |
 
 **Evidence** (from `src/zk.rs`):
+
 ```rust
 // SIMULATION: This is NOT real elliptic curve cryptography.
 // SECURITY: Do not deploy without real zk-SNARK backend.
@@ -114,7 +120,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 
 ### 2.3 Trust Boundary Map
 
-```
+```text
 ┌───────────────────────────────────────────────────────────────┐
 │ TRUSTED ZONE (Verified)                                       │
 │  • Kernel Core (Rust)                                         │
@@ -140,7 +146,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 3.1 Async Architecture
 
 | Metric | Value | Assessment |
-|--------|-------|------------|
+| :--- | :--- | :--- |
 | **Async functions** | 249 | ✅ Heavily async (Tokio runtime) |
 | **`Result<>` returns** | 261 | ✅ Strong error propagation |
 | **`anyhow` usage** | 202 | ✅ Ergonomic error handling |
@@ -148,7 +154,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 3.2 Concurrency Primitives
 
 | Primitive | Location | Purpose |
-|-----------|----------|---------|
+| :--- | :--- | :--- |
 | `tokio::sync::RwLock` | `hookchain.rs`, `model_fabric.rs` | State protection |
 | `parking_lot` | Hot paths | Low-latency locks |
 | `crossbeam` | Channels | Lock-free messaging |
@@ -167,7 +173,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 4.1 Documentation Quality
 
 | Artifact | Status |
-|----------|--------|
+| :--- | :--- |
 | **Inline `///` docs** | ✅ Present on public APIs |
 | **Module-level `//!` docs** | ✅ Giants Protocol headers |
 | **AEON-HIVEMIND Research** | ✅ 2,725 LoC research doc with `[ASPIRATIONAL]` markers |
@@ -178,7 +184,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 4.2 Scalability Architecture
 
 | Dimension | Design | Status |
-|-----------|--------|--------|
+| :--- | :--- | :--- |
 | **Horizontal (Nodes)** | Federation via `bizra_network/` | ⚠️ In Development (PHASE_4) |
 | **Vertical (Resources)** | Tiered budgets in `CapabilityTier` (T0-T3) | ✅ Implemented |
 | **Cognitive (Agents)** | Multi-agent `pat_enhanced.rs`, Sub-agent spawning | ⚠️ Roadmap (PHASE_2) |
@@ -190,7 +196,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 5.1 Symbolic-Neural Bridge Tensions
 
 | Bridge | Symbolic Side | Neural Side | Tension |
-|--------|---------------|-------------|---------|
+| :--- | :--- | :--- | :--- |
 | **Ihsān Scoring** | `constitution/ihsan_v1.yaml` (weighted dimensions) | LLM output quality | How to ground LLM "excellence" in discrete scores? |
 | **FATE Verification** | Z3 SMT Constraints | Causal AI predictions | Formal proofs vs. probabilistic inference |
 | **Hookchain Gates** | Policy rules (`EvidenceRules`) | Dynamic consent classification | Rigid rules vs. contextual nuance |
@@ -200,7 +206,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 5.2 Logic-Creative Polarity
 
 | Pole | Representation | Evidence |
-|------|----------------|----------|
+| :--- |----------------| :--- |
 | **Logic** | Formal Verification, Z3 SMT, Receipt Hashing | `fate.rs`, `receipts.rs` |
 | **Creative** | "Benign Hallucination Filter" (C-Path), "Graph-of-Thoughts" | `omega.rs:prune_hallucinations()`, `reasoning.rs` |
 
@@ -209,7 +215,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 5.3 Higher-Order Abstractions
 
 | Abstraction | Implementation | Maturity |
-|-------------|----------------|----------|
+| :--- |----------------| :--- |
 | **Engram (Memory Unit)** | `src/engram.rs` (875 LoC) | ✅ Mature |
 | **Thought Object** | `src/thought.rs` (389 LoC) | ✅ Mature |
 | **Covenant (Identity Contract)** | `src/identity.rs` (804 LoC) | ✅ Mature |
@@ -223,7 +229,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 6.1 Constitutional Thresholds (Verified)
 
 | Principle | Threshold | Source | Verified |
-|-----------|-----------|--------|----------|
+| :--- | :--- | :--- | :--- |
 | **Ihsān Floor** | `0.95` | `src/sat.rs:435`, `src/sape/ihsan.rs:76` | ✅ |
 | **Adl Ceiling (Gini)** | `0.35` | `src/omega.rs:73` | ✅ |
 | **Fail-Closed Policy** | Reject if score < threshold | `src/sat.rs` multiple paths | ✅ |
@@ -231,7 +237,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 6.2 Dimension Weights (From Constitution)
 
 | Dimension | Weight | Role |
-|-----------|--------|------|
+| :--- | :--- | :--- |
 | Correctness | 0.20 | Factual accuracy |
 | Safety | 0.20 | Harm prevention |
 | Adl (Fairness) | 0.12 | Justice/equilibrium |
@@ -250,7 +256,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 7.1 Test Inventory
 
 | Metric | Value |
-|--------|-------|
+| :--- | :--- |
 | **Test files** | 16 |
 | **`#[test]` functions** | 99 |
 | **`#[tokio::test]` functions** | 86 |
@@ -259,7 +265,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 7.2 Test Categories
 
 | Category | Files | Purpose |
-|----------|-------|---------|
+| :--- | :--- | :--- |
 | **Security Invariants** | `security_invariants.rs` | Boundary conditions |
 | **Adversarial** | `adversarial_tests.rs` | Attack simulation |
 | **Formal Verification** | `formal_verification_tests.rs` | Property proofs |
@@ -273,7 +279,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 8.1 Critical Dependencies
 
 | Crate | Version | Purpose | CVE Status |
-|-------|---------|---------|------------|
+| :--- | :--- | :--- | :--- |
 | `tokio` | 1.41 | Async runtime | ✅ Clean |
 | `axum` | 0.7 | HTTP server | ✅ Clean |
 | `wasmtime` | 24.0.5 | WASM sandbox | ✅ Patched (CVE-2025-0118) |
@@ -284,7 +290,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 8.2 Optional Features
 
 | Feature | Purpose | Default |
-|---------|---------|---------|
+| :--- | :--- | :--- |
 | `http` | HTTP server | ✅ On |
 | `observability` | Metrics/tracing | ✅ On |
 | `zk_stub` | ZK proof stubs | ✅ On |
@@ -333,7 +339,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 10.1 Critical Gaps (Ordered by Ihsān Impact)
 
 | Gap | Ihsān Dimension | Severity | Recommendation |
-|-----|-----------------|----------|----------------|
+|-----|-----------------| :--- |----------------|
 | **ZK Proofs are stubs** | Auditability | 🔴 HIGH | Integrate `halo2` or `bellman` backend |
 | **TPM is simulated** | Safety, Trust | 🔴 HIGH | Enable `hardware_tpm` feature in production |
 | **PQC not implemented** | Robustness | 🟡 MEDIUM | Add `pqc-kyber` or `dilithium` for quantum resistance |
@@ -343,7 +349,7 @@ src/lib.rs:14  → #![allow(clippy::unwrap_used)]  // CRATE-WIDE ALLOW
 ### 10.2 Strengths (Verified)
 
 | Strength | Evidence |
-|----------|----------|
+| :--- | :--- |
 | **Ihsān Floor Enforced** | `0.95` threshold in `sat.rs`, `sape/ihsan.rs` |
 | **Adl Gini Ceiling** | `0.35` check in `omega.rs` |
 | **Strong Async Architecture** | 249 async functions, Tokio runtime |

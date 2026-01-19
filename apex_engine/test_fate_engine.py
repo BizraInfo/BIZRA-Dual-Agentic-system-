@@ -49,8 +49,7 @@ class TestFateEngineZ3:
         assert result.verified is False
     
     def test_ihsan_floor_enforced(self):
-        """Ihsān floor of 0.95 should be enforced"""
-        # Action with low scores
+        """Ihsān floor of 0.95 should reject low-scoring actions"""
         action = {
             "type": "respond",
             "parameters": {
@@ -59,9 +58,8 @@ class TestFateEngineZ3:
             }
         }
         result = self.engine.verify_action(action)
-        # May or may not pass depending on other defaults
-        assert result.ihsan_score >= 0.0
-        assert result.ihsan_score <= 1.0
+        assert result.ihsan_score < 0.95
+        assert result.verified is False
     
     def test_proof_script_generated(self):
         """Verified actions should have proof scripts (if Z3 available)"""

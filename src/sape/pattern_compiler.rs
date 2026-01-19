@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/sape/pattern_compiler.rs
 // Status: OPTIMIZATION_PIPELINE_V1
 // SAPE Pattern Compilation for recurring symbol chains
@@ -459,7 +460,7 @@ mod tests {
             .iter()
             .find(|p| p.symbol_chain == vec!["A", "B", "C"]);
         assert!(abc_pattern.is_some());
-        assert_eq!(abc_pattern.unwrap().frequency, 3);
+        assert_eq!(abc_pattern.context("Failed to unwrap result")?.frequency, 3);
     }
 
     #[tokio::test]
@@ -468,7 +469,7 @@ mod tests {
         let compiler = PatternCompiler::new(signer);
 
         let pattern = Pattern::new(vec!["TEST".to_string(), "PATTERN".to_string()]);
-        let compiled = compiler.compile_pattern(pattern).await.unwrap();
+        let compiled = compiler.compile_pattern(pattern).await.context("Failed to unwrap result")?;
 
         assert!(compiled.is_compiled());
         assert!(compiled.compiled_wasm.is_some());

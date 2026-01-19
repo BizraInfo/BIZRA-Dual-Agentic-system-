@@ -1,3 +1,4 @@
+use anyhow::Context;
 use anyhow::Result;
 
 const THREAT_TERMS: &[&str] = &[
@@ -68,10 +69,10 @@ mod tests {
 
     #[test]
     fn test_similarity() {
-        let engine = EmbeddingEngine::new().unwrap();
-        let vec1 = engine.embed_text("malicious hack").unwrap();
-        let vec2 = engine.embed_text("cyber attack").unwrap();
-        let vec3 = engine.embed_text("baking cookies").unwrap();
+        let engine = EmbeddingEngine::new().context("Failed to unwrap result")?;
+        let vec1 = engine.embed_text("malicious hack").context("Failed to unwrap result")?;
+        let vec2 = engine.embed_text("cyber attack").context("Failed to unwrap result")?;
+        let vec3 = engine.embed_text("baking cookies").context("Failed to unwrap result")?;
 
         let sim_threat = EmbeddingEngine::cosine_similarity(&vec1, &vec2);
         let sim_safe = EmbeddingEngine::cosine_similarity(&vec1, &vec3);

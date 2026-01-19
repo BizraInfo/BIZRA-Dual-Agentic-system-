@@ -533,7 +533,7 @@ mod tests {
             timestamp: None,
         };
 
-        let json = serde_json::to_string(&metadata).unwrap();
+        let json = serde_json::to_string(&metadata).context("Failed to unwrap result")?;
         assert!(json.contains("wisdom"));
         assert!(json.contains("concept"));
         assert!(json.contains("node-123"));

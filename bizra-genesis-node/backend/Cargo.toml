@@ -1,5 +1,5 @@
 [package]
-name = "bizra-node0"
+name = "bizra-node0-legacy"
 version = "1.0.0"
 edition = "2021"
 authors = ["BIZRA Foundation <dev@bizra.foundation>"]

@@ -1,0 +1,1055 @@
+0meta_alpha_dual_agentic v7.0.0 (/root/bizra-genesis)
+1anyhow v1.0.100
+1async-trait v0.1.89 (proc-macro)
+2proc-macro2 v1.0.105
+3unicode-ident v1.0.22
+2quote v1.0.43
+3proc-macro2 v1.0.105 (*)
+2syn v2.0.114
+3proc-macro2 v1.0.105 (*)
+3quote v1.0.43 (*)
+3unicode-ident v1.0.22
+1axum v0.7.9
+2async-trait v0.1.89 (proc-macro) (*)
+2axum-core v0.4.5
+3async-trait v0.1.89 (proc-macro) (*)
+3bytes v1.11.0
+4serde v1.0.228
+5serde_core v1.0.228
+5serde_derive v1.0.228 (proc-macro)
+6proc-macro2 v1.0.105 (*)
+6quote v1.0.43 (*)
+6syn v2.0.114 (*)
+3futures-util v0.3.31
+4futures-channel v0.3.31
+5futures-core v0.3.31
+5futures-sink v0.3.31
+4futures-core v0.3.31
+4futures-io v0.3.31
+4futures-macro v0.3.31 (proc-macro)
+5proc-macro2 v1.0.105 (*)
+5quote v1.0.43 (*)
+5syn v2.0.114 (*)
+4futures-sink v0.3.31
+4futures-task v0.3.31
+4memchr v2.7.6
+4pin-project-lite v0.2.16
+4pin-utils v0.1.0
+4slab v0.4.11
+3http v1.4.0
+4bytes v1.11.0 (*)
+4itoa v1.0.17
+3http-body v1.0.1
+4bytes v1.11.0 (*)
+4http v1.4.0 (*)
+3http-body-util v0.1.3
+4bytes v1.11.0 (*)
+4futures-core v0.3.31
+4http v1.4.0 (*)
+4http-body v1.0.1 (*)
+4pin-project-lite v0.2.16
+3mime v0.3.17
+3pin-project-lite v0.2.16
+3rustversion v1.0.22 (proc-macro)
+3sync_wrapper v1.0.2
+4futures-core v0.3.31
+3tower-layer v0.3.3
+3tower-service v0.3.3
+3tracing v0.1.44
+4log v0.4.29
+4pin-project-lite v0.2.16
+4tracing-attributes v0.1.31 (proc-macro)
+5proc-macro2 v1.0.105 (*)
+5quote v1.0.43 (*)
+5syn v2.0.114 (*)
+4tracing-core v0.1.36
+5once_cell v1.21.3
+2axum-macros v0.4.2 (proc-macro)
+3proc-macro2 v1.0.105 (*)
+3quote v1.0.43 (*)
+3syn v2.0.114 (*)
+2bytes v1.11.0 (*)
+2futures-util v0.3.31 (*)
+2http v1.4.0 (*)
+2http-body v1.0.1 (*)
+2http-body-util v0.1.3 (*)
+2hyper v1.8.1
+3atomic-waker v1.1.2
+3bytes v1.11.0 (*)
+3futures-channel v0.3.31 (*)
+3futures-core v0.3.31
+3h2 v0.4.13
+4atomic-waker v1.1.2
+4bytes v1.11.0 (*)
+4fnv v1.0.7
+4futures-core v0.3.31
+4futures-sink v0.3.31
+4http v1.4.0 (*)
+4indexmap v2.13.0
+5equivalent v1.0.2
+5hashbrown v0.16.1
+5serde_core v1.0.228
+4slab v0.4.11
+4tokio v1.49.0
+5bytes v1.11.0 (*)
+5libc v0.2.180
+5mio v1.1.1
+6libc v0.2.180
+5parking_lot v0.12.5
+6lock_api v0.4.14
+7scopeguard v1.2.0
+6parking_lot_core v0.9.12
+7cfg-if v1.0.4
+7libc v0.2.180
+7smallvec v1.15.1
+8serde v1.0.228 (*)
+5pin-project-lite v0.2.16
+5signal-hook-registry v1.4.8
+6errno v0.3.14
+7libc v0.2.180
+6libc v0.2.180
+5socket2 v0.6.1
+6libc v0.2.180
+5tokio-macros v2.6.0 (proc-macro)
+6proc-macro2 v1.0.105 (*)
+6quote v1.0.43 (*)
+6syn v2.0.114 (*)
+4tokio-util v0.7.18
+5bytes v1.11.0 (*)
+5futures-core v0.3.31
+5futures-sink v0.3.31
+5pin-project-lite v0.2.16
+5tokio v1.49.0 (*)
+4tracing v0.1.44 (*)
+3http v1.4.0 (*)
+3http-body v1.0.1 (*)
+3httparse v1.10.1
+3httpdate v1.0.3
+3itoa v1.0.17
+3pin-project-lite v0.2.16
+3pin-utils v0.1.0
+3smallvec v1.15.1 (*)
+3tokio v1.49.0 (*)
+3want v0.3.1
+4try-lock v0.2.5
+2hyper-util v0.1.19
+3base64 v0.22.1
+3bytes v1.11.0 (*)
+3futures-channel v0.3.31 (*)
+3futures-core v0.3.31
+3futures-util v0.3.31 (*)
+3http v1.4.0 (*)
+3http-body v1.0.1 (*)
+3hyper v1.8.1 (*)
+3ipnet v2.11.0
+3libc v0.2.180
+3percent-encoding v2.3.2
+3pin-project-lite v0.2.16
+3socket2 v0.6.1 (*)
+3tokio v1.49.0 (*)
+3tower-service v0.3.3
+3tracing v0.1.44 (*)
+2itoa v1.0.17
+2matchit v0.7.3
+2memchr v2.7.6
+2mime v0.3.17
+2percent-encoding v2.3.2
+2pin-project-lite v0.2.16
+2rustversion v1.0.22 (proc-macro)
+2serde v1.0.228 (*)
+2serde_json v1.0.149
+3itoa v1.0.17
+3memchr v2.7.6
+3serde_core v1.0.228
+3zmij v1.0.15
+2serde_path_to_error v0.1.20
+3itoa v1.0.17
+3serde_core v1.0.228
+2serde_urlencoded v0.7.1
+3form_urlencoded v1.2.2
+4percent-encoding v2.3.2
+3itoa v1.0.17
+3ryu v1.0.22
+3serde v1.0.228 (*)
+2sync_wrapper v1.0.2 (*)
+2tokio v1.49.0 (*)
+2tower v0.5.3
+3futures-core v0.3.31
+3futures-util v0.3.31 (*)
+3pin-project-lite v0.2.16
+3sync_wrapper v1.0.2 (*)
+3tokio v1.49.0 (*)
+3tower-layer v0.3.3
+3tower-service v0.3.3
+3tracing v0.1.44 (*)
+2tower-layer v0.3.3
+2tower-service v0.3.3
+2tracing v0.1.44 (*)
+1bizra-jcs v0.1.0 (/root/bizra-genesis/crates/bizra-jcs)
+2base64 v0.21.7
+2serde v1.0.228 (*)
+2serde_jcs v0.1.0
+3ryu-js v0.2.2
+3serde v1.0.228 (*)
+3serde_json v1.0.149 (*)
+2serde_json v1.0.149 (*)
+2sha2 v0.10.9
+3cfg-if v1.0.4
+3cpufeatures v0.2.17
+3digest v0.10.7
+4block-buffer v0.10.4
+5generic-array v0.14.7
+6typenum v1.19.0
+6version_check v0.9.5
+4crypto-common v0.1.7
+5generic-array v0.14.7 (*)
+5typenum v1.19.0
+2thiserror v1.0.69
+3thiserror-impl v1.0.69 (proc-macro)
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4syn v2.0.114 (*)
+1blake3 v1.8.3
+2arrayref v0.3.9
+2arrayvec v0.7.6
+2cfg-if v1.0.4
+2constant_time_eq v0.4.2
+2cpufeatures v0.2.17
+2cc v1.2.53
+3find-msvc-tools v0.1.8
+3jobserver v0.1.34
+4libc v0.2.180
+3libc v0.2.180
+3shlex v1.3.0
+1chrono v0.4.43
+2iana-time-zone v0.1.64
+2num-traits v0.2.19
+3autocfg v1.5.0
+2serde v1.0.228 (*)
+1clap v4.5.54
+2clap_builder v4.5.54
+3anstream v0.6.21
+4anstyle v1.0.13
+4anstyle-parse v0.2.7
+5utf8parse v0.2.2
+4anstyle-query v1.1.5
+4colorchoice v1.0.4
+4is_terminal_polyfill v1.70.2
+4utf8parse v0.2.2
+3anstyle v1.0.13
+3clap_lex v0.7.7
+3strsim v0.11.1
+2clap_derive v4.5.49 (proc-macro)
+3heck v0.5.0
+3proc-macro2 v1.0.105 (*)
+3quote v1.0.43 (*)
+3syn v2.0.114 (*)
+1core_affinity v0.8.3
+2libc v0.2.180
+2num_cpus v1.17.0
+3libc v0.2.180
+1crossbeam v0.8.4
+2crossbeam-channel v0.5.15
+3crossbeam-utils v0.8.21
+2crossbeam-deque v0.8.6
+3crossbeam-epoch v0.9.18
+4crossbeam-utils v0.8.21
+3crossbeam-utils v0.8.21
+2crossbeam-epoch v0.9.18 (*)
+2crossbeam-queue v0.3.12
+3crossbeam-utils v0.8.21
+2crossbeam-utils v0.8.21
+1ed25519-dalek v2.2.0
+2curve25519-dalek v4.1.3
+3cfg-if v1.0.4
+3cpufeatures v0.2.17
+3curve25519-dalek-derive v0.1.1 (proc-macro)
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4syn v2.0.114 (*)
+3digest v0.10.7 (*)
+3subtle v2.6.1
+3zeroize v1.8.2
+3rustc_version v0.4.1
+4semver v1.0.27
+2ed25519 v2.2.3
+3signature v2.2.0
+2rand_core v0.6.4
+3getrandom v0.2.17
+4cfg-if v1.0.4
+4libc v0.2.180
+2sha2 v0.10.9 (*)
+2subtle v2.6.1
+2zeroize v1.8.2
+1futures v0.3.31
+2futures-channel v0.3.31 (*)
+2futures-core v0.3.31
+2futures-executor v0.3.31
+3futures-core v0.3.31
+3futures-task v0.3.31
+3futures-util v0.3.31 (*)
+2futures-io v0.3.31
+2futures-sink v0.3.31
+2futures-task v0.3.31
+2futures-util v0.3.31 (*)
+1hex v0.4.3
+1lazy_static v1.5.0
+1neo4rs v0.8.0
+2async-trait v0.1.89 (proc-macro) (*)
+2backoff v0.4.0
+3futures-core v0.3.31
+3getrandom v0.2.17 (*)
+3instant v0.1.13
+4cfg-if v1.0.4
+3pin-project-lite v0.2.16
+3rand v0.8.5
+4libc v0.2.180
+4rand_chacha v0.3.1
+5ppv-lite86 v0.2.21
+6zerocopy v0.8.33
+7zerocopy-derive v0.8.33 (proc-macro)
+8proc-macro2 v1.0.105 (*)
+8quote v1.0.43 (*)
+8syn v2.0.114 (*)
+5rand_core v0.6.4 (*)
+4rand_core v0.6.4 (*)
+3tokio v1.49.0 (*)
+2bytes v1.11.0 (*)
+2chrono v0.4.43 (*)
+2chrono-tz v0.8.6
+3chrono v0.4.43 (*)
+3phf v0.11.3
+4phf_shared v0.11.3
+5siphasher v1.0.1
+3chrono-tz-build v0.2.1
+4parse-zoneinfo v0.3.1
+5regex v1.12.2
+6regex-automata v0.4.13
+7regex-syntax v0.8.8
+6regex-syntax v0.8.8
+4phf v0.11.3 (*)
+4phf_codegen v0.11.3
+5phf_generator v0.11.3
+6phf_shared v0.11.3 (*)
+6rand v0.8.5
+7rand_core v0.6.4
+5phf_shared v0.11.3 (*)
+2deadpool v0.9.5
+3async-trait v0.1.89 (proc-macro) (*)
+3deadpool-runtime v0.1.4
+3num_cpus v1.17.0 (*)
+3retain_mut v0.1.9
+3tokio v1.49.0 (*)
+2delegate v0.10.0 (proc-macro)
+3proc-macro2 v1.0.105 (*)
+3quote v1.0.43 (*)
+3syn v1.0.109
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4unicode-ident v1.0.22
+2futures v0.3.31 (*)
+2log v0.4.29
+2neo4rs-macros v0.3.0 (proc-macro)
+3quote v1.0.43 (*)
+3syn v2.0.114 (*)
+2paste v1.0.15 (proc-macro)
+2pin-project-lite v0.2.16
+2rustls-native-certs v0.7.3
+3openssl-probe v0.1.6
+3rustls-pemfile v2.2.0
+4rustls-pki-types v1.14.0
+5zeroize v1.8.2
+3rustls-pki-types v1.14.0 (*)
+2rustls-pemfile v2.2.0 (*)
+2serde v1.0.228 (*)
+2thiserror v1.0.69 (*)
+2tokio v1.49.0 (*)
+2tokio-rustls v0.26.4
+3rustls v0.23.36
+4once_cell v1.21.3
+4ring v0.17.14
+5cfg-if v1.0.4
+5getrandom v0.2.17 (*)
+5untrusted v0.9.0
+5cc v1.2.53 (*)
+4rustls-pki-types v1.14.0 (*)
+4rustls-webpki v0.103.9
+5ring v0.17.14 (*)
+5rustls-pki-types v1.14.0 (*)
+5untrusted v0.9.0
+4subtle v2.6.1
+4zeroize v1.8.2
+3tokio v1.49.0 (*)
+2url v2.5.8
+3form_urlencoded v1.2.2 (*)
+3idna v1.1.0
+4idna_adapter v1.2.1
+5icu_normalizer v2.1.1
+6icu_collections v2.1.1
+7displaydoc v0.2.5 (proc-macro)
+8proc-macro2 v1.0.105 (*)
+8quote v1.0.43 (*)
+8syn v2.0.114 (*)
+7potential_utf v0.1.4
+8zerovec v0.11.5
+9yoke v0.8.1
+10stable_deref_trait v1.2.1
+10yoke-derive v0.8.1 (proc-macro)
+11proc-macro2 v1.0.105 (*)
+11quote v1.0.43 (*)
+11syn v2.0.114 (*)
+11synstructure v0.13.2
+12proc-macro2 v1.0.105 (*)
+12quote v1.0.43 (*)
+12syn v2.0.114 (*)
+10zerofrom v0.1.6
+11zerofrom-derive v0.1.6 (proc-macro)
+12proc-macro2 v1.0.105 (*)
+12quote v1.0.43 (*)
+12syn v2.0.114 (*)
+12synstructure v0.13.2 (*)
+9zerofrom v0.1.6 (*)
+9zerovec-derive v0.11.2 (proc-macro)
+10proc-macro2 v1.0.105 (*)
+10quote v1.0.43 (*)
+10syn v2.0.114 (*)
+7yoke v0.8.1 (*)
+7zerofrom v0.1.6 (*)
+7zerovec v0.11.5 (*)
+6icu_normalizer_data v2.1.1
+6icu_provider v2.1.1
+7displaydoc v0.2.5 (proc-macro) (*)
+7icu_locale_core v2.1.1
+8displaydoc v0.2.5 (proc-macro) (*)
+8litemap v0.8.1
+8tinystr v0.8.2
+9displaydoc v0.2.5 (proc-macro) (*)
+9zerovec v0.11.5 (*)
+8writeable v0.6.2
+8zerovec v0.11.5 (*)
+7writeable v0.6.2
+7yoke v0.8.1 (*)
+7zerofrom v0.1.6 (*)
+7zerotrie v0.2.3
+8displaydoc v0.2.5 (proc-macro) (*)
+8yoke v0.8.1 (*)
+8zerofrom v0.1.6 (*)
+7zerovec v0.11.5 (*)
+6smallvec v1.15.1 (*)
+6zerovec v0.11.5 (*)
+5icu_properties v2.1.2
+6icu_collections v2.1.1 (*)
+6icu_locale_core v2.1.1 (*)
+6icu_properties_data v2.1.2
+6icu_provider v2.1.1 (*)
+6zerotrie v0.2.3 (*)
+6zerovec v0.11.5 (*)
+4smallvec v1.15.1 (*)
+4utf8_iter v1.0.4
+3percent-encoding v2.3.2
+2webpki-roots v0.26.11
+3webpki-roots v1.0.5
+4rustls-pki-types v1.14.0 (*)
+1once_cell v1.21.3
+1parking_lot v0.12.5 (*)
+1petgraph v0.6.5
+2fixedbitset v0.4.2
+2indexmap v2.13.0 (*)
+1prometheus v0.14.0
+2cfg-if v1.0.4
+2fnv v1.0.7
+2lazy_static v1.5.0
+2memchr v2.7.6
+2parking_lot v0.12.5 (*)
+2protobuf v3.7.2
+3once_cell v1.21.3
+3protobuf-support v3.7.2
+4thiserror v1.0.69 (*)
+3thiserror v1.0.69 (*)
+2thiserror v2.0.18
+3thiserror-impl v2.0.18 (proc-macro)
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4syn v2.0.114 (*)
+1rand v0.8.5 (*)
+1redis v0.27.6
+2arc-swap v1.8.0
+3rustversion v1.0.22 (proc-macro)
+2async-trait v0.1.89 (proc-macro) (*)
+2backon v1.6.0
+3fastrand v2.3.0
+2bytes v1.11.0 (*)
+2combine v4.6.7
+3bytes v1.11.0 (*)
+3futures-core v0.3.31
+3memchr v2.7.6
+3pin-project-lite v0.2.16
+3tokio v1.49.0 (*)
+3tokio-util v0.7.18 (*)
+2futures v0.3.31 (*)
+2futures-util v0.3.31 (*)
+2itertools v0.13.0
+3either v1.15.0
+2itoa v1.0.17
+2num-bigint v0.4.6
+3num-integer v0.1.46
+4num-traits v0.2.19 (*)
+3num-traits v0.2.19 (*)
+2percent-encoding v2.3.2
+2pin-project-lite v0.2.16
+2ryu v1.0.22
+2sha1_smol v1.0.1
+2socket2 v0.5.10
+3libc v0.2.180
+2tokio v1.49.0 (*)
+2tokio-util v0.7.18 (*)
+2url v2.5.8 (*)
+1reqwest v0.12.28
+2base64 v0.22.1
+2bytes v1.11.0 (*)
+2encoding_rs v0.8.35
+3cfg-if v1.0.4
+2futures-core v0.3.31
+2h2 v0.4.13 (*)
+2http v1.4.0 (*)
+2http-body v1.0.1 (*)
+2http-body-util v0.1.3 (*)
+2hyper v1.8.1 (*)
+2hyper-tls v0.6.0
+3bytes v1.11.0 (*)
+3http-body-util v0.1.3 (*)
+3hyper v1.8.1 (*)
+3hyper-util v0.1.19 (*)
+3native-tls v0.2.14
+4log v0.4.29
+4openssl v0.10.75
+5bitflags v2.10.0
+5cfg-if v1.0.4
+5foreign-types v0.3.2
+6foreign-types-shared v0.1.1
+5libc v0.2.180
+5once_cell v1.21.3
+5openssl-macros v0.1.1 (proc-macro)
+6proc-macro2 v1.0.105 (*)
+6quote v1.0.43 (*)
+6syn v2.0.114 (*)
+5openssl-sys v0.9.111
+6libc v0.2.180
+6cc v1.2.53 (*)
+6pkg-config v0.3.32
+6vcpkg v0.2.15
+4openssl-probe v0.1.6
+4openssl-sys v0.9.111 (*)
+3tokio v1.49.0 (*)
+3tokio-native-tls v0.3.1
+4native-tls v0.2.14 (*)
+4tokio v1.49.0 (*)
+3tower-service v0.3.3
+2hyper-util v0.1.19 (*)
+2log v0.4.29
+2mime v0.3.17
+2native-tls v0.2.14 (*)
+2percent-encoding v2.3.2
+2pin-project-lite v0.2.16
+2rustls-pki-types v1.14.0 (*)
+2serde v1.0.228 (*)
+2serde_json v1.0.149 (*)
+2serde_urlencoded v0.7.1 (*)
+2sync_wrapper v1.0.2 (*)
+2tokio v1.49.0 (*)
+2tokio-native-tls v0.3.1 (*)
+2tower v0.5.3 (*)
+2tower-http v0.6.8
+3bitflags v2.10.0
+3bytes v1.11.0 (*)
+3futures-core v0.3.31
+3futures-util v0.3.31 (*)
+3http v1.4.0 (*)
+3http-body v1.0.1 (*)
+3http-body-util v0.1.3 (*)
+3http-range-header v0.4.2
+3httpdate v1.0.3
+3iri-string v0.7.10
+3mime v0.3.17
+3mime_guess v2.0.5
+4mime v0.3.17
+4unicase v2.9.0
+4unicase v2.9.0
+3percent-encoding v2.3.2
+3pin-project-lite v0.2.16
+3tokio v1.49.0 (*)
+3tokio-util v0.7.18 (*)
+3tower v0.5.3 (*)
+3tower-layer v0.3.3
+3tower-service v0.3.3
+3tracing v0.1.44 (*)
+2tower-service v0.3.3
+2url v2.5.8 (*)
+1serde v1.0.228 (*)
+1serde_json v1.0.149 (*)
+1serde_yaml v0.9.34+deprecated
+2indexmap v2.13.0 (*)
+2itoa v1.0.17
+2ryu v1.0.22
+2serde v1.0.228 (*)
+2unsafe-libyaml v0.2.11
+1sha2 v0.10.9 (*)
+1thiserror v2.0.18 (*)
+1tokio v1.49.0 (*)
+1tower v0.5.3 (*)
+1tower-http v0.6.8 (*)
+1tracing v0.1.44 (*)
+1tracing-subscriber v0.3.22
+2matchers v0.2.0
+3regex-automata v0.4.13
+4regex-syntax v0.8.8
+2nu-ansi-term v0.50.3
+2once_cell v1.21.3
+2regex-automata v0.4.13 (*)
+2sharded-slab v0.1.7
+3lazy_static v1.5.0
+2smallvec v1.15.1 (*)
+2thread_local v1.1.9
+3cfg-if v1.0.4
+2tracing v0.1.44 (*)
+2tracing-core v0.1.36 (*)
+2tracing-log v0.2.0
+3log v0.4.29
+3once_cell v1.21.3
+3tracing-core v0.1.36 (*)
+1uuid v1.19.0
+2getrandom v0.3.4
+3cfg-if v1.0.4
+3libc v0.2.180
+2serde_core v1.0.228
+1wasmtime v24.0.5
+2addr2line v0.22.0
+3gimli v0.29.0
+4indexmap v2.13.0 (*)
+2anyhow v1.0.100
+2async-trait v0.1.89 (proc-macro) (*)
+2bitflags v2.10.0
+2bumpalo v3.19.1
+2cfg-if v1.0.4
+2encoding_rs v0.8.35 (*)
+2fxprof-processed-profile v0.6.0
+3bitflags v2.10.0
+3debugid v0.8.0
+4uuid v1.19.0 (*)
+3fxhash v0.2.1
+4byteorder v1.5.0
+3serde v1.0.228 (*)
+3serde_json v1.0.149 (*)
+2gimli v0.29.0 (*)
+2hashbrown v0.14.5
+3ahash v0.8.12
+4cfg-if v1.0.4
+4once_cell v1.21.3
+4zerocopy v0.8.33 (*)
+4version_check v0.9.5
+3serde v1.0.228 (*)
+2indexmap v2.13.0 (*)
+2ittapi v0.4.0
+3anyhow v1.0.100
+3ittapi-sys v0.4.0
+4cc v1.2.53 (*)
+3log v0.4.29
+2libc v0.2.180
+2libm v0.2.15
+2log v0.4.29
+2memfd v0.6.5
+3rustix v1.1.3
+4bitflags v2.10.0
+4linux-raw-sys v0.11.0
+2object v0.36.7
+3crc32fast v1.5.0
+4cfg-if v1.0.4
+3hashbrown v0.15.5
+4foldhash v0.1.5
+3indexmap v2.13.0 (*)
+3memchr v2.7.6
+2once_cell v1.21.3
+2paste v1.0.15 (proc-macro)
+2postcard v1.1.3
+3cobs v0.3.0
+4thiserror v2.0.18 (*)
+3serde v1.0.228 (*)
+2rayon v1.11.0
+3either v1.15.0
+3rayon-core v1.13.0
+4crossbeam-deque v0.8.6 (*)
+4crossbeam-utils v0.8.21
+2rustix v0.38.44
+3bitflags v2.10.0
+3linux-raw-sys v0.4.15
+2semver v1.0.27
+3serde_core v1.0.228
+2serde v1.0.228 (*)
+2serde_derive v1.0.228 (proc-macro) (*)
+2serde_json v1.0.149 (*)
+2smallvec v1.15.1 (*)
+2sptr v0.3.2
+2target-lexicon v0.12.16
+2wasm-encoder v0.215.0
+3leb128 v0.2.5
+2wasmparser v0.215.0
+3ahash v0.8.12 (*)
+3bitflags v2.10.0
+3hashbrown v0.14.5 (*)
+3indexmap v2.13.0 (*)
+3semver v1.0.27 (*)
+3serde v1.0.228 (*)
+2wasmtime-asm-macros v24.0.5
+3cfg-if v1.0.4
+2wasmtime-cache v24.0.5
+3anyhow v1.0.100
+3base64 v0.21.7
+3directories-next v2.0.0
+4cfg-if v1.0.4
+4dirs-sys-next v0.1.2
+5libc v0.2.180
+3log v0.4.29
+3postcard v1.1.3 (*)
+3rustix v0.38.44 (*)
+3serde v1.0.228 (*)
+3serde_derive v1.0.228 (proc-macro) (*)
+3sha2 v0.10.9 (*)
+3toml v0.8.23
+4serde v1.0.228 (*)
+4serde_spanned v0.6.9
+5serde v1.0.228 (*)
+4toml_datetime v0.6.11
+5serde v1.0.228 (*)
+4toml_edit v0.22.27
+5indexmap v2.13.0 (*)
+5serde v1.0.228 (*)
+5serde_spanned v0.6.9 (*)
+5toml_datetime v0.6.11 (*)
+5toml_write v0.1.2
+5winnow v0.7.14
+3zstd v0.13.3
+4zstd-safe v7.2.4
+5zstd-sys v2.0.16+zstd.1.5.7
+6cc v1.2.53 (*)
+6pkg-config v0.3.32
+2wasmtime-component-macro v24.0.5 (proc-macro)
+3anyhow v1.0.100
+3proc-macro2 v1.0.105 (*)
+3quote v1.0.43 (*)
+3syn v2.0.114 (*)
+3wasmtime-component-util v24.0.5
+3wasmtime-wit-bindgen v24.0.5
+4anyhow v1.0.100
+4heck v0.4.1
+4indexmap v2.13.0
+5equivalent v1.0.2
+5hashbrown v0.16.1
+5serde_core v1.0.228
+4wit-parser v0.215.0
+5anyhow v1.0.100
+5id-arena v2.3.0
+5indexmap v2.13.0 (*)
+5log v0.4.29
+5semver v1.0.27
+5serde v1.0.228
+6serde_core v1.0.228
+5serde_derive v1.0.228 (proc-macro) (*)
+5serde_json v1.0.149
+6itoa v1.0.17
+6memchr v2.7.6
+6serde_core v1.0.228
+6zmij v1.0.15
+5unicode-xid v0.2.6
+5wasmparser v0.215.0
+6ahash v0.8.12 (*)
+6bitflags v2.10.0
+6hashbrown v0.14.5
+7ahash v0.8.12 (*)
+6indexmap v2.13.0 (*)
+6semver v1.0.27
+3wit-parser v0.215.0 (*)
+2wasmtime-component-util v24.0.5
+2wasmtime-cranelift v24.0.5
+3anyhow v1.0.100
+3cfg-if v1.0.4
+3cranelift-codegen v0.111.5
+4bumpalo v3.19.1
+4cranelift-bforest v0.111.5
+5cranelift-entity v0.111.5
+6cranelift-bitset v0.111.5
+7serde v1.0.228 (*)
+7serde_derive v1.0.228 (proc-macro) (*)
+6serde v1.0.228 (*)
+6serde_derive v1.0.228 (proc-macro) (*)
+4cranelift-bitset v0.111.5 (*)
+4cranelift-codegen-shared v0.111.5
+4cranelift-control v0.111.5
+5arbitrary v1.4.2
+4cranelift-entity v0.111.5 (*)
+4gimli v0.29.0 (*)
+4hashbrown v0.14.5 (*)
+4log v0.4.29
+4regalloc2 v0.9.3
+5hashbrown v0.13.2
+6ahash v0.8.12 (*)
+5log v0.4.29
+5rustc-hash v1.1.0
+5slice-group-by v0.3.1
+5smallvec v1.15.1 (*)
+4rustc-hash v1.1.0
+4smallvec v1.15.1 (*)
+4target-lexicon v0.12.16
+4cranelift-codegen-meta v0.111.5
+5cranelift-codegen-shared v0.111.5
+4cranelift-isle v0.111.5
+3cranelift-control v0.111.5 (*)
+3cranelift-entity v0.111.5 (*)
+3cranelift-frontend v0.111.5
+4cranelift-codegen v0.111.5 (*)
+4log v0.4.29
+4smallvec v1.15.1 (*)
+4target-lexicon v0.12.16
+3cranelift-native v0.111.5
+4cranelift-codegen v0.111.5 (*)
+4target-lexicon v0.12.16
+3cranelift-wasm v0.111.5
+4cranelift-codegen v0.111.5 (*)
+4cranelift-entity v0.111.5 (*)
+4cranelift-frontend v0.111.5 (*)
+4itertools v0.12.1
+5either v1.15.0
+4log v0.4.29
+4smallvec v1.15.1 (*)
+4wasmparser v0.215.0 (*)
+4wasmtime-types v24.0.5
+5anyhow v1.0.100
+5cranelift-entity v0.111.5 (*)
+5serde v1.0.228 (*)
+5serde_derive v1.0.228 (proc-macro) (*)
+5smallvec v1.15.1 (*)
+5wasmparser v0.215.0 (*)
+3gimli v0.29.0 (*)
+3log v0.4.29
+3object v0.36.7 (*)
+3target-lexicon v0.12.16
+3thiserror v1.0.69 (*)
+3wasmparser v0.215.0 (*)
+3wasmtime-environ v24.0.5
+4anyhow v1.0.100
+4cpp_demangle v0.4.5
+5cfg-if v1.0.4
+4cranelift-bitset v0.111.5 (*)
+4cranelift-entity v0.111.5 (*)
+4gimli v0.29.0 (*)
+4indexmap v2.13.0 (*)
+4log v0.4.29
+4object v0.36.7 (*)
+4postcard v1.1.3 (*)
+4rustc-demangle v0.1.27
+4semver v1.0.27 (*)
+4serde v1.0.228 (*)
+4serde_derive v1.0.228 (proc-macro) (*)
+4target-lexicon v0.12.16
+4wasm-encoder v0.215.0 (*)
+4wasmparser v0.215.0 (*)
+4wasmprinter v0.215.0
+5anyhow v1.0.100
+5termcolor v1.4.1
+5wasmparser v0.215.0 (*)
+4wasmtime-component-util v24.0.5
+4wasmtime-types v24.0.5 (*)
+3wasmtime-versioned-export-macros v24.0.5 (proc-macro)
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4syn v2.0.114 (*)
+2wasmtime-environ v24.0.5 (*)
+2wasmtime-fiber v24.0.5
+3anyhow v1.0.100
+3cfg-if v1.0.4
+3rustix v0.38.44 (*)
+3wasmtime-asm-macros v24.0.5 (*)
+3wasmtime-versioned-export-macros v24.0.5 (proc-macro) (*)
+3cc v1.2.53 (*)
+3wasmtime-versioned-export-macros v24.0.5 (proc-macro) (*)
+2wasmtime-jit-debug v24.0.5
+3object v0.36.7 (*)
+3once_cell v1.21.3
+3rustix v0.38.44 (*)
+3wasmtime-versioned-export-macros v24.0.5 (proc-macro) (*)
+2wasmtime-jit-icache-coherence v24.0.5
+3anyhow v1.0.100
+3cfg-if v1.0.4
+3libc v0.2.180
+2wasmtime-slab v24.0.5
+2wasmtime-versioned-export-macros v24.0.5 (proc-macro) (*)
+2wat v1.244.0
+3wast v244.0.0
+4bumpalo v3.19.1
+4leb128fmt v0.1.0
+4memchr v2.7.6
+4unicode-width v0.2.2
+4wasm-encoder v0.244.0
+5leb128fmt v0.1.0
+2cc v1.2.53 (*)
+2wasmtime-versioned-export-macros v24.0.5 (proc-macro) (*)
+1wasmtime-wasi v24.0.5
+2anyhow v1.0.100
+2async-trait v0.1.89 (proc-macro) (*)
+2bitflags v2.10.0
+2bytes v1.11.0 (*)
+2cap-fs-ext v3.4.5
+3cap-primitives v3.4.5
+4ambient-authority v0.0.2
+4fs-set-times v0.20.3
+5io-lifetimes v2.0.4
+5rustix v1.1.3 (*)
+4io-extras v0.18.4
+5io-lifetimes v2.0.4
+4io-lifetimes v2.0.4
+4ipnet v2.11.0
+4maybe-owned v0.3.4
+4rustix v1.1.3 (*)
+4rustix-linux-procfs v0.1.1
+5once_cell v1.21.3
+5rustix v1.1.3 (*)
+3cap-std v3.4.5
+4cap-primitives v3.4.5 (*)
+4io-extras v0.18.4 (*)
+4io-lifetimes v2.0.4
+4rustix v1.1.3 (*)
+3io-lifetimes v2.0.4
+2cap-net-ext v3.4.5
+3cap-primitives v3.4.5 (*)
+3cap-std v3.4.5 (*)
+3rustix v1.1.3 (*)
+3smallvec v1.15.1 (*)
+2cap-rand v3.4.5
+3ambient-authority v0.0.2
+3rand v0.8.5 (*)
+2cap-std v3.4.5 (*)
+2cap-time-ext v3.4.5
+3ambient-authority v0.0.2
+3cap-primitives v3.4.5 (*)
+3iana-time-zone v0.1.64
+3rustix v1.1.3 (*)
+2fs-set-times v0.20.3 (*)
+2futures v0.3.31 (*)
+2io-lifetimes v2.0.4
+2once_cell v1.21.3
+2rustix v0.38.44 (*)
+2system-interface v0.27.3
+3bitflags v2.10.0
+3cap-std v3.4.5 (*)
+3io-lifetimes v2.0.4
+3rustix v0.38.44 (*)
+2thiserror v1.0.69 (*)
+2tokio v1.49.0 (*)
+2tracing v0.1.44 (*)
+2url v2.5.8 (*)
+2wasmtime v24.0.5 (*)
+2wiggle v24.0.5
+3anyhow v1.0.100
+3async-trait v0.1.89 (proc-macro) (*)
+3bitflags v2.10.0
+3thiserror v1.0.69 (*)
+3tracing v0.1.44 (*)
+3wasmtime v24.0.5 (*)
+3wiggle-macro v24.0.5 (proc-macro)
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4syn v2.0.114 (*)
+4wiggle-generate v24.0.5
+5anyhow v1.0.100
+5heck v0.4.1
+5proc-macro2 v1.0.105 (*)
+5quote v1.0.43 (*)
+5shellexpand v2.1.2
+6dirs v4.0.0
+7dirs-sys v0.3.7
+8libc v0.2.180
+5syn v2.0.114 (*)
+5witx v0.9.1
+6anyhow v1.0.100
+6log v0.4.29
+6thiserror v1.0.69 (*)
+6wast v35.0.2
+7leb128 v0.2.5
+1wat v1.244.0 (*)
+1z3 v0.12.1
+2log v0.4.29
+2z3-sys v0.8.1
+3bindgen v0.66.1
+4bitflags v2.10.0
+4cexpr v0.6.0
+5nom v7.1.3
+6memchr v2.7.6
+6minimal-lexical v0.2.1
+4clang-sys v1.8.1
+5glob v0.3.3
+5libc v0.2.180
+5libloading v0.8.9
+6cfg-if v1.0.4
+5glob v0.3.3
+4lazy_static v1.5.0
+4lazycell v1.3.0
+4peeking_take_while v0.1.2
+4proc-macro2 v1.0.105 (*)
+4quote v1.0.43 (*)
+4regex v1.12.2 (*)
+4rustc-hash v1.1.0
+4shlex v1.3.0
+4syn v2.0.114 (*)
+1hex v0.4.3
+1sha2 v0.10.9 (*)
+1bizra-jcs v0.1.0 (/root/bizra-genesis/crates/bizra-jcs) (*)
+1criterion v0.5.1
+2anes v0.1.6
+2cast v0.3.0
+2ciborium v0.2.2
+3ciborium-io v0.2.2
+3ciborium-ll v0.2.2
+4ciborium-io v0.2.2
+4half v2.7.1
+5cfg-if v1.0.4
+5zerocopy v0.8.33 (*)
+3serde v1.0.228 (*)
+2clap v4.5.54 (*)
+2criterion-plot v0.5.0
+3cast v0.3.0
+3itertools v0.10.5
+4either v1.15.0
+2is-terminal v0.4.17
+3libc v0.2.180
+2itertools v0.10.5 (*)
+2num-traits v0.2.19 (*)
+2once_cell v1.21.3
+2oorandom v11.1.5
+2plotters v0.3.7
+3num-traits v0.2.19 (*)
+3plotters-backend v0.3.7
+3plotters-svg v0.3.7
+4plotters-backend v0.3.7
+2rayon v1.11.0 (*)
+2regex v1.12.2
+3regex-automata v0.4.13 (*)
+3regex-syntax v0.8.8
+2serde v1.0.228 (*)
+2serde_derive v1.0.228 (proc-macro) (*)
+2serde_json v1.0.149 (*)
+2tinytemplate v1.2.1
+3serde v1.0.228 (*)
+3serde_json v1.0.149 (*)
+2walkdir v2.5.0
+3same-file v1.0.6
+1tempfile v3.24.0
+2fastrand v2.3.0
+2getrandom v0.3.4 (*)
+2once_cell v1.21.3
+2rustix v1.1.3 (*)
+1tokio-test v0.4.5
+2futures-core v0.3.31
+2tokio v1.49.0 (*)
+2tokio-stream v0.1.18
+3futures-core v0.3.31
+3pin-project-lite v0.2.16
+3tokio v1.49.0 (*)

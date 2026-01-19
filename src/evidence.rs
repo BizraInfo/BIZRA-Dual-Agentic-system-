@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/evidence.rs - Evidence Envelope Security
 //
 // Rust-native implementation of the Evidence Envelope protocol,
@@ -323,7 +324,7 @@ mod tests {
             "payload1".to_string(),
         );
 
-        guard.validate_envelope(&env).unwrap();
+        guard.validate_envelope(&env).context("Failed to unwrap result")?;
 
         // After counter 1, next should be 2
         assert_eq!(guard.get_next_counter("session1"), 2);

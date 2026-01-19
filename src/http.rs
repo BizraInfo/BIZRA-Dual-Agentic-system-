@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/http.rs - HTTP API Server
 //
 // BIZRA Security-First HTTP Layer
@@ -1043,12 +1044,12 @@ mod tests {
             "http://127.0.0.1:8080",
             "http://[::1]:3000",
         ] {
-            let hv = header::HeaderValue::from_str(origin).unwrap();
+            let hv = header::HeaderValue::from_str(origin).context("Failed to unwrap result")?;
             assert!(is_loopback_origin(&hv), "expected loopback: {origin}");
         }
 
         for origin in ["https://example.com", "http://10.0.0.1:3000"] {
-            let hv = header::HeaderValue::from_str(origin).unwrap();
+            let hv = header::HeaderValue::from_str(origin).context("Failed to unwrap result")?;
             assert!(!is_loopback_origin(&hv), "expected non-loopback: {origin}");
         }
     }

@@ -1,0 +1,72 @@
+manifest_version: "1.0.0"
+context: "Phase 1: Meta-Council Instantiation"
+
+# The 8-Seat High Table
+# Each agent is a specialized "Lens" that views the same problem differently.
+council_seats:
+  - role: "META_ORCHESTRATOR"
+    id: "agent_001_orch"
+    mandate: "Agenda, Conflict Resolution, Final Merge"
+    lens: "HOLISTIC"
+    permissions: ["root", "merge_pr", "sign_release"]
+    model_tier: "reasoning_pro"
+
+  - role: "SYSTEMS_ARCHITECT"
+    id: "agent_002_arch"
+    mandate: "Interfaces, Topology, Scalability"
+    lens: "STRUCTURAL"
+    permissions: ["write_code", "modify_schema"]
+    model_tier: "coding_specialist"
+
+  - role: "RESEARCH_LIBRARIAN"
+    id: "agent_003_lib"
+    mandate: "Evidence Retrieval, Precedent Search"
+    lens: "EMPIRICAL"
+    permissions: ["read_internet", "read_vector_db"]
+    model_tier: "context_window_max"
+
+  - role: "SKEPTIC"
+    id: "agent_004_skep"
+    mandate: "Adversarial Review, Bias Detection, Threat Modeling"
+    lens: "CRITICAL"
+    permissions: ["veto", "comment_only"]
+    model_tier: "reasoning_max"
+
+  - role: "VERIFIER"
+    id: "agent_005_test"
+    mandate: "Unit Tests, Formal Verification, property-based testing"
+    lens: "LOGICAL"
+    permissions: ["run_ci", "block_merge"]
+    model_tier: "coding_specialist"
+
+  - role: "SECURITY_OFFICER"
+    id: "agent_006_sec"
+    mandate: "Policy Enforcement, Sandboxing, Audit Logs"
+    lens: "DEFENSIVE"
+    permissions: ["audit", "emergency_stop"]
+    model_tier: "security_specialist"
+
+  - role: "OPERATOR"
+    id: "agent_007_ops"
+    mandate: "SRE, Deployment, Telemetry, Cost Opt"
+    lens: "PRAGMATIC"
+    permissions: ["deploy", "restart_pods"]
+    model_tier: "fast_inference"
+
+  - role: "PRODUCT_UX"
+    id: "agent_008_ux"
+    mandate: "User Intent, Clarity, Documentation"
+    lens: "EMPATHIC"
+    permissions: ["write_docs", "approve_ui"]
+    model_tier: "creative_writing"
+
+# The "Cross-Pollination" Rule implementation
+# No artifact can be merged without at least one approval from a specific counter-pod.
+governance_rules:
+  cross_pollination:
+    - producer: "SYSTEMS_ARCHITECT"
+      required_reviewer: "OPERATOR"
+    - producer: "RESEARCH_LIBRARIAN"
+      required_reviewer: "SKEPTIC"
+    - producer: "PRODUCT_UX"
+      required_reviewer: "VERIFIER"

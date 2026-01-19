@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/snr_monitor.rs - SNR Autonomous Engine (COVENANT Article V)
 //
 // Signal-to-Noise Ratio monitoring with autonomous optimization.
@@ -358,39 +359,39 @@ impl SNRMonitor {
 
     /// Record thought event and update metrics
     pub fn record_event(&self, event: ThoughtEvent) {
-        let mut metrics = self.metrics.lock().unwrap();
+        let mut metrics = self.metrics.lock().context("Failed to unwrap result")?;
 
         match event {
             ThoughtEvent::Attempted(id) => {
                 metrics.actions_attempted += 1;
                 metrics.cycles_total += 1000; // Estimate: 1000 cycles per attempt
-                let mut states = self.thought_states.lock().unwrap();
+                let mut states = self.thought_states.lock().context("Failed to unwrap result")?;
                 states.insert(id, ThoughtStage::Sensed);
             }
 
             ThoughtEvent::Committed(id) => {
                 metrics.actions_committed += 1;
-                let mut states = self.thought_states.lock().unwrap();
+                let mut states = self.thought_states.lock().context("Failed to unwrap result")?;
                 states.insert(id, ThoughtStage::Committed);
             }
 
             ThoughtEvent::Rollback(id, _reason) => {
                 metrics.rollbacks += 1;
                 metrics.cycles_total += 500; // Rollback overhead
-                let mut states = self.thought_states.lock().unwrap();
+                let mut states = self.thought_states.lock().context("Failed to unwrap result")?;
                 states.insert(id, ThoughtStage::Rollback);
             }
 
             ThoughtEvent::ProofGenerated(id) => {
                 metrics.proofs_generated += 1;
-                let mut states = self.thought_states.lock().unwrap();
+                let mut states = self.thought_states.lock().context("Failed to unwrap result")?;
                 states.insert(id, ThoughtStage::ProofPending);
             }
 
             ThoughtEvent::ProofVerified(id, success) => {
                 if success {
                     metrics.proofs_verified += 1;
-                    let mut states = self.thought_states.lock().unwrap();
+                    let mut states = self.thought_states.lock().context("Failed to unwrap result")?;
                     states.insert(id, ThoughtStage::ProofVerified);
                 }
             }
@@ -423,13 +424,13 @@ impl SNRMonitor {
 
     /// Get current SNR value
     pub fn current_snr(&self) -> Fixed64 {
-        let metrics = self.metrics.lock().unwrap();
+        let metrics = self.metrics.lock().context("Failed to unwrap result")?;
         metrics.snr
     }
 
     /// Get current metrics snapshot
     pub fn snapshot(&self) -> SNRMetrics {
-        self.metrics.lock().unwrap().clone()
+        self.metrics.lock().context("Failed to unwrap result")?.clone()
     }
 
     /// Autonomous optimization loop (COVENANT Article V)
@@ -438,7 +439,7 @@ impl SNRMonitor {
     /// Uses Kalman filtering for noise reduction in trend detection.
     pub fn optimize(&self) {
         let current = self.snapshot();
-        let mut history = self.history.lock().unwrap();
+        let mut history = self.history.lock().context("Failed to unwrap result")?;
 
         // Store current window in history
         history.push(current.clone());
@@ -477,8 +478,8 @@ impl SNRMonitor {
         }
 
         // Simple slope: (last - first) / count
-        let first_snr = history.first().unwrap().snr;
-        let last_snr = history.last().unwrap().snr;
+        let first_snr = history.first().context("Failed to unwrap result")?.snr;
+        let last_snr = history.last().context("Failed to unwrap result")?.snr;
         let count = Fixed64::from_i64(history.len() as i64);
 
         (last_snr - first_snr) / count

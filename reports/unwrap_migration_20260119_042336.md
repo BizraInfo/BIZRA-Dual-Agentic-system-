@@ -6,17 +6,12 @@
 
 | Module | Unwrap Count | Status |
 |--------|--------------|--------|
-| `src/receipts.rs` | 0
-0 | ✅ CLEAN |
+| `src/receipts.rs` | 0 | ✅ CLEAN |
 | `src/hookchain.rs` | 16 | ⚠️ NEEDS FIX |
-| `src/sape/ihsan.rs` | 0
-0 | ✅ CLEAN |
-| `src/fate.rs` | 0
-0 | ✅ CLEAN |
-| `src/omega.rs` | 0
-0 | ✅ CLEAN |
-| `src/tpm.rs` | 0
-0 | ✅ CLEAN |
+| `src/sape/ihsan.rs` | 0 | ✅ CLEAN |
+| `src/fate.rs` | 0 | ✅ CLEAN |
+| `src/omega.rs` | 0 | ✅ CLEAN |
+| `src/tpm.rs` | 0 | ✅ CLEAN |
 
 ## Recommended Replacements
 

@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/wisdom.rs - House of Wisdom: Neo4j Knowledge Graph + ChromaDB Vectors
 //
 // Connects to Neo4j for HyperGraphRAG (18.7x retrieval advantage) and
@@ -312,7 +313,7 @@ impl HouseOfWisdom {
         }
 
         // Sort by boosted relevance
-        nodes.sort_by(|a, b| b.relevance_score.partial_cmp(&a.relevance_score).unwrap());
+        nodes.sort_by(|a, b| b.relevance_score.partial_cmp(&a.relevance_score).context("Failed to unwrap result")?);
 
         let latency = start.elapsed();
         metrics::record_neo4j_query("knowledge", latency.as_secs_f64(), true);

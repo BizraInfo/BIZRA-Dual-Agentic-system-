@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/model_fabric.rs - Model Fabric for One-Model-Per-Agent Isolation
 //
 // Implements strict isolation where each agent gets its own dedicated model endpoint.
@@ -876,7 +877,7 @@ mod tests {
 
         // Bind agent
         let agent = agents::planner();
-        fabric.bind_agent(&agent, "test-ep").await.unwrap();
+        fabric.bind_agent(&agent, "test-ep").await.context("Failed to unwrap result")?;
 
         // Verify binding
         let binding = fabric.get_binding(&agent).await;
@@ -885,7 +886,7 @@ mod tests {
         // Get endpoint for agent
         let ep = fabric.get_endpoint_for_agent(&agent).await;
         assert!(ep.is_some());
-        assert_eq!(ep.unwrap().endpoint_id, "test-ep");
+        assert_eq!(ep.context("Failed to unwrap result")?.endpoint_id, "test-ep");
     }
 
     #[tokio::test]

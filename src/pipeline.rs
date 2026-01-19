@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/pipeline.rs - Sovereign Cognitive Pipeline
 //
 // PEAK MASTERPIECE v7.1: Unified integration of all BIZRA subsystems
@@ -1049,7 +1050,7 @@ mod tests {
 
         let result = stage.execute(ctx);
 
-        assert!(result.get_stage_output("input").unwrap().success);
+        assert!(result.get_stage_output("input").context("Failed to unwrap result")?.success);
     }
 
     #[test]
@@ -1063,7 +1064,7 @@ mod tests {
 
         let result = stage.execute(ctx);
 
-        assert!(!result.get_stage_output("input").unwrap().success);
+        assert!(!result.get_stage_output("input").context("Failed to unwrap result")?.success);
         assert_eq!(result.state, PipelineState::Rejected);
     }
 
@@ -1075,7 +1076,7 @@ mod tests {
 
         let result = stage.execute(ctx);
 
-        assert!(!result.get_stage_output("input").unwrap().success);
+        assert!(!result.get_stage_output("input").context("Failed to unwrap result")?.success);
     }
 
     #[test]

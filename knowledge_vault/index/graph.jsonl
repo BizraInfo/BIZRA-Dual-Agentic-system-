@@ -1,8 +1,8 @@
 {"type": "node", "id": "03a9ddb719f62641", "label": "Document", "properties": {"title": "APEX Engine - Constitutional AI Governance", "source_type": "chat", "project": "BIZRA-Genesis"}}
 {"type": "node", "id": "b6ac1cfed1109927", "label": "Document", "properties": {"title": "BIZRA Rust Kernel - TPM Attestation Integration", "source_type": "chat", "project": "BIZRA-Genesis"}}
 {"type": "node", "id": "53bb7d90ac393603", "label": "Document", "properties": {"title": "BIZRA Genesis - Peak Masterpiece Implementation", "source_type": "chat", "project": "BIZRA-Genesis"}}
-{"type": "node", "id": "8908f17d6f359ff8", "label": "Document", "properties": {"title": "SAPE Pattern Compiler - Symbolic Execution Engine", "source_type": "chat", "project": "BIZRA-Genesis"}}
-{"type": "node", "id": "7af52f564e45f2b8", "label": "Document", "properties": {"title": "BIZRA Embedding Pipeline - Vector Search Architecture", "source_type": "chat", "project": "BIZRA-Genesis"}}
+{"type": "node", "id": "08161113e69373e3", "label": "Document", "properties": {"title": "SAPE Pattern Compiler - Symbolic Execution Engine", "source_type": "chat", "project": "BIZRA-Genesis"}}
+{"type": "node", "id": "891b51a55ddc5868", "label": "Document", "properties": {"title": "BIZRA Embedding Pipeline - Vector Search Architecture", "source_type": "chat", "project": "BIZRA-Genesis"}}
 {"type": "node", "id": "03a9ddb719f62641-c0", "label": "Chunk", "properties": {"text_preview": "[user]: The APEX engine needs to enforce constitutional constraints on AI agent behavior. How should I structure this?\n\n[assistant]: Constitutional AI governance in APEX requires multiple layers:\n\n1. ", "token_est": 117}}
 {"type": "edge", "source": "03a9ddb719f62641-c0", "target": "03a9ddb719f62641", "label": "PART_OF"}
 {"type": "node", "id": "03a9ddb719f62641-c1", "label": "Chunk", "properties": {"text_preview": "The Python implementation:\n\n```python\nclass ConstitutionalGovernor:\n    def __init__(self, constitution_path: str):\n        self.rules = load_constitution(constitution_path)\n        self.violation_log", "token_est": 167}}
@@ -43,34 +43,40 @@
 {"type": "edge", "source": "53bb7d90ac393603-c4", "target": "53bb7d90ac393603", "label": "PART_OF"}
 {"type": "node", "id": "53bb7d90ac393603-c5", "label": "Chunk", "properties": {"text_preview": "This is represented as an Assertion node with INVOLVES edges:\n\n```cypher\n(assertion:Assertion {text: 'Achieved 0.99 SNR...'})\n(assertion)-[:INVOLVES {role:'context'}]->(project:Project {name:'BIZRA'})", "token_est": 147}}
 {"type": "edge", "source": "53bb7d90ac393603-c5", "target": "53bb7d90ac393603", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c0", "label": "Chunk", "properties": {"text_preview": "[user]: I'm building a Symbolic Agentic Pattern Engine (SAPE). It needs to compile high-level patterns into executable graphs.\n\n[assistant]: SAPE is a powerful concept. The pattern compiler should:\n\n1", "token_est": 107}}
-{"type": "edge", "source": "8908f17d6f359ff8-c0", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c1", "label": "Chunk", "properties": {"text_preview": "The graph structure in Rust:\n\n```rust\npub struct PatternGraph {\n    nodes: Vec<PatternNode>,\n    edges: Vec<PatternEdge>,\n    entry_points: Vec<NodeId>,\n    exit_points: Vec<NodeId>,\n}\n\npub enum Patte", "token_est": 81}}
-{"type": "edge", "source": "8908f17d6f359ff8-c1", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c2", "label": "Chunk", "properties": {"text_preview": "[user]: How do I integrate LLM calls into the pattern execution?\n\n[assistant]: LLM integration in SAPE should be first-class. Create an `LlmNode` type:\n\n```rust\npub struct LlmNode {\n    model: ModelSp", "token_est": 87}}
-{"type": "edge", "source": "8908f17d6f359ff8-c2", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c3", "label": "Chunk", "properties": {"text_preview": "impl Executable for LlmNode {\n    async fn execute(&self, ctx: &mut Context) -> Result<Value> {\n        let prompt = self.render_prompt(ctx)?;\n        let response = ctx.llm_client.complete(&self.mode", "token_est": 133}}
-{"type": "edge", "source": "8908f17d6f359ff8-c3", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c4", "label": "Chunk", "properties": {"text_preview": "[assistant]: SAPE + Knowledge Graph enables RAG (Retrieval-Augmented Generation) patterns:\n\n```rust\npub struct KnowledgeRetrievalNode {\n    query_template: String,\n    kg_connection: KnowledgeGraphCli", "token_est": 178}}
-{"type": "edge", "source": "8908f17d6f359ff8-c4", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c5", "label": "Chunk", "properties": {"text_preview": "This creates a bridge between symbolic patterns and semantic retrieval.\n\n[user]: How does Neo4j fit into this architecture?\n\n[assistant]: Neo4j serves as the Knowledge Graph backend:", "token_est": 45}}
-{"type": "edge", "source": "8908f17d6f359ff8-c5", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c6", "label": "Chunk", "properties": {"text_preview": "1. **Entity Storage**: Nodes for concepts, documents, chunks\n2. **Relationship Traversal**: Cypher queries for multi-hop reasoning\n3. **Vector Index**: Native vector search in Neo4j 5.x+\n\n```rust\npub ", "token_est": 198}}
-{"type": "edge", "source": "8908f17d6f359ff8-c6", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "8908f17d6f359ff8-c7", "label": "Chunk", "properties": {"text_preview": "Combine Cypher for structured queries with vector search for semantic similarity.", "token_est": 20}}
-{"type": "edge", "source": "8908f17d6f359ff8-c7", "target": "8908f17d6f359ff8", "label": "PART_OF"}
-{"type": "node", "id": "7af52f564e45f2b8-c0", "label": "Chunk", "properties": {"text_preview": "[user]: I need to set up an embedding pipeline for the BIZRA knowledge system. What's the best approach?\n\n[assistant]: For BIZRA's embedding pipeline, I recommend a hybrid approach:\n\n1. **Primary Mode", "token_est": 98}}
-{"type": "edge", "source": "7af52f564e45f2b8-c0", "target": "7af52f564e45f2b8", "label": "PART_OF"}
-{"type": "node", "id": "7af52f564e45f2b8-c1", "label": "Chunk", "properties": {"text_preview": "Pipeline architecture:\n\n```python\nclass EmbeddingPipeline:\n    def __init__(self, config: EmbeddingConfig):\n        self.primary = OpenAIEmbedder(config.openai_key)\n        self.fallback = OllamaEmbed", "token_est": 173}}
-{"type": "edge", "source": "7af52f564e45f2b8-c1", "target": "7af52f564e45f2b8", "label": "PART_OF"}
-{"type": "node", "id": "7af52f564e45f2b8-c2", "label": "Chunk", "properties": {"text_preview": "[assistant]: For BIZRA's scale (15k+ hours of content), I recommend **tiered storage**:\n\n1. **Hot Layer**: Qdrant for real-time search (<100ms latency)\n2. **Warm Layer**: PostgreSQL + pgvector for str", "token_est": 275}}
-{"type": "edge", "source": "7af52f564e45f2b8-c2", "target": "7af52f564e45f2b8", "label": "PART_OF"}
-{"type": "node", "id": "7af52f564e45f2b8-c3", "label": "Chunk", "properties": {"text_preview": "[user]: What about hybrid search combining vectors and keywords?\n\n[assistant]: Hybrid search is essential for production RAG. Combine:\n\n1. **Dense Retrieval**: Vector similarity (semantic)\n2. **Sparse", "token_est": 70}}
-{"type": "edge", "source": "7af52f564e45f2b8-c3", "target": "7af52f564e45f2b8", "label": "PART_OF"}
-{"type": "node", "id": "7af52f564e45f2b8-c4", "label": "Chunk", "properties": {"text_preview": "```python\nclass HybridSearcher:\n    def __init__(self, vector_store, bm25_index):\n        self.vector_store = vector_store\n        self.bm25 = bm25_index\n        \n    async def search(self, query: str", "token_est": 288}}
-{"type": "edge", "source": "7af52f564e45f2b8-c4", "target": "7af52f564e45f2b8", "label": "PART_OF"}
-{"type": "node", "id": "7af52f564e45f2b8-c5", "label": "Chunk", "properties": {"text_preview": "[assistant]: Incremental indexing requires change detection and efficient updates:\n\n```python\nclass IncrementalIndexer:\n    def __init__(self, vector_store, checkpoint_path: str):\n        self.vector_", "token_est": 297}}
-{"type": "edge", "source": "7af52f564e45f2b8-c5", "target": "7af52f564e45f2b8", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c0", "label": "Chunk", "properties": {"text_preview": "[user]: I'm building a Symbolic Agentic Pattern Engine (SAPE). It needs to compile high-level patterns into executable graphs.\n\n[assistant]: SAPE is a powerful concept. The pattern compiler should:\n\n1", "token_est": 107}}
+{"type": "edge", "source": "08161113e69373e3-c0", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c1", "label": "Chunk", "properties": {"text_preview": "The graph structure in Rust:\n\n```rust\npub struct PatternGraph {\n    nodes: Vec<PatternNode>,\n    edges: Vec<PatternEdge>,\n    entry_points: Vec<NodeId>,\n    exit_points: Vec<NodeId>,\n}\n\npub enum Patte", "token_est": 81}}
+{"type": "edge", "source": "08161113e69373e3-c1", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c2", "label": "Chunk", "properties": {"text_preview": "[user]: How do I integrate LLM calls into the pattern execution?\n\n[assistant]: LLM integration in SAPE should be first-class. Create an `LlmNode` type:\n\n```rust\npub struct LlmNode {\n    model: ModelSp", "token_est": 87}}
+{"type": "edge", "source": "08161113e69373e3-c2", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c3", "label": "Chunk", "properties": {"text_preview": "impl Executable for LlmNode {\n    async fn execute(&self, ctx: &mut Context) -> Result<Value> {\n        let prompt = self.render_prompt(ctx)?;\n        let response = ctx.llm_client.complete(&self.mode", "token_est": 133}}
+{"type": "edge", "source": "08161113e69373e3-c3", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c4", "label": "Chunk", "properties": {"text_preview": "[assistant]: SAPE + Knowledge Graph enables RAG (Retrieval-Augmented Generation) patterns:\n\n```rust\npub struct KnowledgeRetrievalNode {\n    query_template: String,\n    kg_connection: KnowledgeGraphCli", "token_est": 178}}
+{"type": "edge", "source": "08161113e69373e3-c4", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c5", "label": "Chunk", "properties": {"text_preview": "This creates a bridge between symbolic patterns and semantic retrieval.\n\n[user]: How does Neo4j fit into this architecture?\n\n[assistant]: Neo4j serves as the Knowledge Graph backend:", "token_est": 45}}
+{"type": "edge", "source": "08161113e69373e3-c5", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c6", "label": "Chunk", "properties": {"text_preview": "1. **Entity Storage**: Nodes for concepts, documents, chunks\n2. **Relationship Traversal**: Cypher queries for multi-hop reasoning\n3. **Vector Index**: Native vector search in Neo4j 5.x+\n\n```rust\nuse ", "token_est": 107}}
+{"type": "edge", "source": "08161113e69373e3-c6", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c7", "label": "Chunk", "properties": {"text_preview": "pub struct Neo4jClient {\n    driver: neo4j::Driver,\n    vector_index: String,\n}\n\nimpl Neo4jClient {\n    pub fn new(driver: neo4j::Driver, vector_index: String) -> Result<Self, Neo4jError> {\n        //", "token_est": 363}}
+{"type": "edge", "source": "08161113e69373e3-c7", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "08161113e69373e3-c8", "label": "Chunk", "properties": {"text_preview": "Combine Cypher for structured queries with vector search for semantic similarity.", "token_est": 20}}
+{"type": "edge", "source": "08161113e69373e3-c8", "target": "08161113e69373e3", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c0", "label": "Chunk", "properties": {"text_preview": "[user]: I need to set up an embedding pipeline for the BIZRA knowledge system. What's the best approach?\n\n[assistant]: For BIZRA's embedding pipeline, I recommend a hybrid approach:\n\n1. **Primary Mode", "token_est": 98}}
+{"type": "edge", "source": "891b51a55ddc5868-c0", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c1", "label": "Chunk", "properties": {"text_preview": "Pipeline architecture:\n\n```python\nclass EmbeddingPipeline:\n    def __init__(self, config: EmbeddingConfig):\n        self.primary = OpenAIEmbedder(config.openai_key)\n        self.fallback = OllamaEmbed", "token_est": 173}}
+{"type": "edge", "source": "891b51a55ddc5868-c1", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c2", "label": "Chunk", "properties": {"text_preview": "[assistant]: For BIZRA's scale (15k+ hours of content), I recommend **tiered storage**:\n\n1. **Hot Layer**: Qdrant for real-time search (<100ms latency)\n2. **Warm Layer**: PostgreSQL + pgvector for str", "token_est": 95}}
+{"type": "edge", "source": "891b51a55ddc5868-c2", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c3", "label": "Chunk", "properties": {"text_preview": "@dataclass\nclass SearchResult:\n    id: str\n    score: float\n    content: str\n    metadata: dict\n\nclass VectorStore:\n    def __init__(self):\n        self.qdrant = QdrantClient(url=\"http://localhost:633", "token_est": 351}}
+{"type": "edge", "source": "891b51a55ddc5868-c3", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c4", "label": "Chunk", "properties": {"text_preview": "[assistant]: Hybrid search is essential for production RAG. Combine:\n\n1. **Dense Retrieval**: Vector similarity (semantic)\n2. **Sparse Retrieval**: BM25/TF-IDF (lexical)\n3. **Reciprocal Rank Fusion**:", "token_est": 80}}
+{"type": "edge", "source": "891b51a55ddc5868-c4", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c5", "label": "Chunk", "properties": {"text_preview": "class HybridSearcher:\n    def __init__(self, vector_store, bm25_index, embedder: Callable[[str], Awaitable[List[float]]]):\n        self.vector_store = vector_store\n        self.bm25 = bm25_index\n     ", "token_est": 468}}
+{"type": "edge", "source": "891b51a55ddc5868-c5", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c6", "label": "Chunk", "properties": {"text_preview": "[assistant]: Incremental indexing requires change detection and efficient updates:\n\n```python\nimport hashlib\nfrom typing import Iterable\n\ndef hash_content(content: str) -> str:\n    \"\"\"Generate a stabl", "token_est": 76}}
+{"type": "edge", "source": "891b51a55ddc5868-c6", "target": "891b51a55ddc5868", "label": "PART_OF"}
+{"type": "node", "id": "891b51a55ddc5868-c7", "label": "Chunk", "properties": {"text_preview": "class IncrementalIndexer:\n    def __init__(self, vector_store, checkpoint_path: str):\n        self.vector_store = vector_store\n        self.checkpoint = self.load_checkpoint(checkpoint_path)\n        \n", "token_est": 274}}
+{"type": "edge", "source": "891b51a55ddc5868-c7", "target": "891b51a55ddc5868", "label": "PART_OF"}
 {"type": "node", "id": "e-97a0a656", "label": "Entity", "properties": {"name": "Python", "display_name": "Python", "canonical_key": "python", "entity_type": "Language", "mention_count": 11}}
 {"type": "edge", "source": "03a9ddb719f62641-c1", "target": "e-97a0a656", "label": "MENTIONS"}
 {"type": "edge", "source": "03a9ddb719f62641-c2", "target": "e-97a0a656", "label": "MENTIONS"}
@@ -79,10 +85,10 @@
 {"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-97a0a656", "label": "MENTIONS"}
 {"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-97a0a656", "label": "MENTIONS"}
 {"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-97a0a656", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c1", "target": "e-97a0a656", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c2", "target": "e-97a0a656", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c4", "target": "e-97a0a656", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c5", "target": "e-97a0a656", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c1", "target": "e-97a0a656", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c2", "target": "e-97a0a656", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c4", "target": "e-97a0a656", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c6", "target": "e-97a0a656", "label": "MENTIONS"}
 {"type": "node", "id": "e-4cb7198e", "label": "Entity", "properties": {"name": "Resonance Mesh", "display_name": "Resonance Mesh", "canonical_key": "resonance mesh", "entity_type": "Concept", "mention_count": 5}}
 {"type": "edge", "source": "03a9ddb719f62641-c4", "target": "e-4cb7198e", "label": "MENTIONS"}
 {"type": "edge", "source": "03a9ddb719f62641-c5", "target": "e-4cb7198e", "label": "MENTIONS"}
@@ -106,10 +112,10 @@
 {"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-845c802f", "label": "MENTIONS"}
 {"type": "edge", "source": "53bb7d90ac393603-c4", "target": "e-845c802f", "label": "MENTIONS"}
 {"type": "edge", "source": "53bb7d90ac393603-c5", "target": "e-845c802f", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c1", "target": "e-845c802f", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c2", "target": "e-845c802f", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c4", "target": "e-845c802f", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c6", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c1", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c2", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c4", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c6", "target": "e-845c802f", "label": "MENTIONS"}
 {"type": "node", "id": "e-226ded14", "label": "Entity", "properties": {"name": "PyO3", "display_name": "PyO3", "canonical_key": "pyo3", "entity_type": "Library", "mention_count": 3}}
 {"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-226ded14", "label": "MENTIONS"}
 {"type": "edge", "source": "53bb7d90ac393603-c4", "target": "e-226ded14", "label": "MENTIONS"}
@@ -119,44 +125,46 @@
 {"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-50323aad", "label": "MENTIONS"}
 {"type": "node", "id": "e-e58f8e41", "label": "Entity", "properties": {"name": "embedding", "display_name": "embedding", "canonical_key": "embedding", "entity_type": "Method", "mention_count": 6}}
 {"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-e58f8e41", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c4", "target": "e-e58f8e41", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c6", "target": "e-e58f8e41", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c0", "target": "e-e58f8e41", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c2", "target": "e-e58f8e41", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c4", "target": "e-e58f8e41", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c4", "target": "e-e58f8e41", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c7", "target": "e-e58f8e41", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c0", "target": "e-e58f8e41", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c3", "target": "e-e58f8e41", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c5", "target": "e-e58f8e41", "label": "MENTIONS"}
 {"type": "node", "id": "e-ab3a712d", "label": "Entity", "properties": {"name": "Hypergraph", "display_name": "Hypergraph", "canonical_key": "hypergraph", "entity_type": "Concept", "mention_count": 2}}
 {"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-ab3a712d", "label": "MENTIONS"}
 {"type": "edge", "source": "53bb7d90ac393603-c4", "target": "e-ab3a712d", "label": "MENTIONS"}
 {"type": "node", "id": "e-777c2927", "label": "Entity", "properties": {"name": "RAG", "display_name": "RAG", "canonical_key": "rag", "entity_type": "Concept", "mention_count": 3}}
 {"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-777c2927", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c4", "target": "e-777c2927", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c3", "target": "e-777c2927", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c4", "target": "e-777c2927", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c4", "target": "e-777c2927", "label": "MENTIONS"}
 {"type": "node", "id": "e-aecba96d", "label": "Entity", "properties": {"name": "Knowledge Graph", "display_name": "Knowledge Graph", "canonical_key": "knowledge graph", "entity_type": "Concept", "mention_count": 4}}
 {"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-aecba96d", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c3", "target": "e-aecba96d", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c4", "target": "e-aecba96d", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c5", "target": "e-aecba96d", "label": "MENTIONS"}
-{"type": "node", "id": "e-51d01e84", "label": "Entity", "properties": {"name": "R", "display_name": "R", "canonical_key": "r", "entity_type": "Language", "mention_count": 3}}
-{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-51d01e84", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c4", "target": "e-51d01e84", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c5", "target": "e-51d01e84", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c3", "target": "e-aecba96d", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c4", "target": "e-aecba96d", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c5", "target": "e-aecba96d", "label": "MENTIONS"}
 {"type": "node", "id": "e-79ca4995", "label": "Entity", "properties": {"name": "chunking", "display_name": "chunking", "canonical_key": "chunking", "entity_type": "Method", "mention_count": 1}}
 {"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-79ca4995", "label": "MENTIONS"}
 {"type": "node", "id": "e-2ff40b51", "label": "Entity", "properties": {"name": "AST", "display_name": "AST", "canonical_key": "ast", "entity_type": "Method", "mention_count": 1}}
-{"type": "edge", "source": "8908f17d6f359ff8-c0", "target": "e-2ff40b51", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c0", "target": "e-2ff40b51", "label": "MENTIONS"}
 {"type": "node", "id": "e-b9f544bb", "label": "Entity", "properties": {"name": "GPT-4", "display_name": "GPT-4", "canonical_key": "gpt-4", "entity_type": "Model", "mention_count": 1}}
-{"type": "edge", "source": "8908f17d6f359ff8-c3", "target": "e-b9f544bb", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c3", "target": "e-b9f544bb", "label": "MENTIONS"}
 {"type": "node", "id": "e-d56f6e9e", "label": "Entity", "properties": {"name": "Claude", "display_name": "Claude", "canonical_key": "claude", "entity_type": "Model", "mention_count": 1}}
-{"type": "edge", "source": "8908f17d6f359ff8-c3", "target": "e-d56f6e9e", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c3", "target": "e-d56f6e9e", "label": "MENTIONS"}
 {"type": "node", "id": "e-3584bcd6", "label": "Entity", "properties": {"name": "Llama", "display_name": "Llama", "canonical_key": "llama", "entity_type": "Model", "mention_count": 1}}
-{"type": "edge", "source": "8908f17d6f359ff8-c3", "target": "e-3584bcd6", "label": "MENTIONS"}
-{"type": "node", "id": "e-d65821d5", "label": "Entity", "properties": {"name": "Neo4j", "display_name": "Neo4j", "canonical_key": "neo4j", "entity_type": "Tool", "mention_count": 2}}
-{"type": "edge", "source": "8908f17d6f359ff8-c5", "target": "e-d65821d5", "label": "MENTIONS"}
-{"type": "edge", "source": "8908f17d6f359ff8-c6", "target": "e-d65821d5", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c3", "target": "e-3584bcd6", "label": "MENTIONS"}
+{"type": "node", "id": "e-d65821d5", "label": "Entity", "properties": {"name": "Neo4j", "display_name": "Neo4j", "canonical_key": "neo4j", "entity_type": "Tool", "mention_count": 3}}
+{"type": "edge", "source": "08161113e69373e3-c5", "target": "e-d65821d5", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c6", "target": "e-d65821d5", "label": "MENTIONS"}
+{"type": "edge", "source": "08161113e69373e3-c7", "target": "e-d65821d5", "label": "MENTIONS"}
 {"type": "node", "id": "e-7a3a9a8b", "label": "Entity", "properties": {"name": "text-embedding-3", "display_name": "text-embedding-3", "canonical_key": "text-embedding-3", "entity_type": "Model", "mention_count": 1}}
-{"type": "edge", "source": "7af52f564e45f2b8-c0", "target": "e-7a3a9a8b", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c0", "target": "e-7a3a9a8b", "label": "MENTIONS"}
 {"type": "node", "id": "e-b2c8d9d5", "label": "Entity", "properties": {"name": "PostgreSQL", "display_name": "PostgreSQL", "canonical_key": "postgresql", "entity_type": "Tool", "mention_count": 2}}
-{"type": "edge", "source": "7af52f564e45f2b8-c1", "target": "e-b2c8d9d5", "label": "MENTIONS"}
-{"type": "edge", "source": "7af52f564e45f2b8-c2", "target": "e-b2c8d9d5", "label": "MENTIONS"}
-{"type": "node", "id": "e-fa911d1a", "label": "Entity", "properties": {"name": "Qdrant", "display_name": "Qdrant", "canonical_key": "qdrant", "entity_type": "Tool", "mention_count": 1}}
-{"type": "edge", "source": "7af52f564e45f2b8-c2", "target": "e-fa911d1a", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c1", "target": "e-b2c8d9d5", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c2", "target": "e-b2c8d9d5", "label": "MENTIONS"}
+{"type": "node", "id": "e-cf540656", "label": "Entity", "properties": {"name": "numpy", "display_name": "numpy", "canonical_key": "numpy", "entity_type": "Library", "mention_count": 1}}
+{"type": "edge", "source": "891b51a55ddc5868-c2", "target": "e-cf540656", "label": "MENTIONS"}
+{"type": "node", "id": "e-fa911d1a", "label": "Entity", "properties": {"name": "Qdrant", "display_name": "Qdrant", "canonical_key": "qdrant", "entity_type": "Tool", "mention_count": 2}}
+{"type": "edge", "source": "891b51a55ddc5868-c2", "target": "e-fa911d1a", "label": "MENTIONS"}
+{"type": "edge", "source": "891b51a55ddc5868-c3", "target": "e-fa911d1a", "label": "MENTIONS"}
+{"type": "node", "id": "e-c7793854", "label": "Entity", "properties": {"name": "R (programming language)", "display_name": "R (programming language)", "canonical_key": "r (programming language)", "entity_type": "Language", "mention_count": 1}}
+{"type": "edge", "source": "891b51a55ddc5868-c7", "target": "e-c7793854", "label": "MENTIONS"}

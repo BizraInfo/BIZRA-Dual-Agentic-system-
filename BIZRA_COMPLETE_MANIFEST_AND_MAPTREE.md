@@ -1,38 +1,43 @@
 # BIZRA SYSTEM MANIFEST & MAPTREE
+
 > **Status**: DRAFT | **Version**: OMEGA-9.1 | **Classification**: ELITE OPERATIONAL
 > **Verification Status**: ⚠️ PARTIALLY MOCKED (See Component Status)
 
 ## 1. SYSTEM MANIFEST
 
 ### 1.1 Core Identity
-*   **System Name**: BIZRA (Binary Intelligence Z-Recursive Agent)
-*   **System Version**: 9.0-OMEGA (Per `BIZRA_SOT.md`)
-*   **Kernel Version**: 7.0.0 (Per `Cargo.toml`)
-*   **Operational State**: Invite-Ready / Post-Genesis
-*   **Sovereignty Tier**: Apex Sovereign (L3)
+
+* **System Name**: BIZRA (Binary Intelligence Z-Recursive Agent)
+* **System Version**: 9.0-OMEGA (Per `BIZRA_SOT.md`)
+* **Kernel Version**: 7.0.0 (Per `Cargo.toml`)
+* **Operational State**: Invite-Ready / Post-Genesis
+* **Sovereignty Tier**: Apex Sovereign (L3)
 
 ### 1.2 Constitution & Metrics
-*   **Ihsān Score (Integrity)**: 1.00 (Target) | Floor: 0.95 (Verified in `src/sat.rs`)
-*   **Adl (Justice/Balance)**: Gini Coefficient ≤ 0.35 (Verified in `src/omega.rs`)
-*   **Amānah (Trust)**: ⚠️ **SIMULATED** (3-of-5 HSM Logic is currently a comment in `src/tpm.rs`)
-*   **Formal Verification**: ⚠️ **PROTOTYPE** (FATE Engine uses stubs in `fate_gate.py`)
-*   **Signal-to-Noise Ratio (SNR)**: Optimized (>98.7)
+
+* **Ihsān Score (Integrity)**: 1.00 (Target) | Floor: 0.95 (Verified in `src/sat.rs`)
+* **Adl (Justice/Balance)**: Gini Coefficient ≤ 0.35 (Verified in `src/omega.rs`)
+* **Amānah (Trust)**: ⚠️ **SIMULATED** (3-of-5 HSM Logic is currently a comment in `src/tpm.rs`)
+* **Formal Verification**: ⚠️ **PROTOTYPE** (FATE Engine uses stubs in `fate_gate.py`)
+* **Signal-to-Noise Ratio (SNR)**: Optimized (>98.7)
 
 ### 1.3 Architectural Layers (SAPE Protocol)
-1.  **L1 Base (Foundation)**:
-    *   Rust Kernel (`meta_alpha_dual_agentic`)
-    *   Hardware Interface (WSL2/GPU Passthrough)
-    *   Cryptography Primitives (TPM/HSM)
-2.  **L2 Bizra (Reasoning)**:
-    *   Dual-Agentic Logic (Alpha/Omega)
-    *   Model Fabric (Ollama/vLLM routing)
-    *   Cognitive Plane (Memory/Engrams)
-3.  **L3 Apex (Sovereign)**:
-    *   Omega Controller ("Third Fact" verification)
-    *   Polyglot Spine (Python/Rust FFI)
-    *   Genesis Executor
+
+1. **L1 Base (Foundation)**:
+    * Rust Kernel (`meta_alpha_dual_agentic`)
+    * Hardware Interface (WSL2/GPU Passthrough)
+    * Cryptography Primitives (TPM/HSM)
+2. **L2 Bizra (Reasoning)**:
+    * Dual-Agentic Logic (Alpha/Omega)
+    * Model Fabric (Ollama/vLLM routing)
+    * Cognitive Plane (Memory/Engrams)
+3. **L3 Apex (Sovereign)**:
+    * Omega Controller ("Third Fact" verification)
+    * Polyglot Spine (Python/Rust FFI)
+    * Genesis Executor
 
 ### 1.4 Component Registry
+
 | Component | Technology | Path | Status |
 | :--- | :--- | :--- | :--- |
 | **Kernel** | Rust | `/src` | Compiled / Optimized (v7.0.0) |
@@ -93,14 +98,16 @@ The following tree represents the canonical structure of the BIZRA Genesis works
 ## 3. INFRASTRUCTURE & BUILD TARGETS
 
 ### 3.1 Build Targets
-*   **Production**: `cargo build --release --no-default-features`
-*   **Simulation**: `cargo build --features "simulation"` (Strictly Gated)
-*   **Python Interface**: `maturin develop` (FFI Bridge)
+
+* **Production**: `cargo build --release --no-default-features`
+* **Simulation**: `cargo build --features "simulation"` (Strictly Gated)
+* **Python Interface**: `maturin develop` (FFI Bridge)
 
 ### 3.2 Environment
-*   **OS**: Linux (WSL2 / Ubuntu 24.04 LTS)
-*   **Runtime**: Dual-Stack (Rust 1.84+ / Python 3.12+)
-*   **Hardware**: H100/A100/RTX4090 (Detected)
+
+* **OS**: Linux (WSL2 / Ubuntu 24.04 LTS)
+* **Runtime**: Dual-Stack (Rust 1.84+ / Python 3.12+)
+* **Hardware**: H100/A100/RTX4090 (Detected)
 
 ---
 

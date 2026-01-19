@@ -1,3 +1,4 @@
+use anyhow::Context;
 // src/genesis.rs - Genesis Receipt and Chain Verification
 //
 // PEAK MASTERPIECE v7.1: Priority 0 Implementation
@@ -573,7 +574,7 @@ mod tests {
 
         // I2 invariant: signature must verify
         assert!(
-            genesis.verify().unwrap(),
+            genesis.verify().context("Failed to unwrap result")?,
             "I2 VIOLATION: Valid signature failed verification"
         );
     }
@@ -607,7 +608,7 @@ mod tests {
 
         // I2 invariant: wrong key signature must fail
         assert!(
-            !genesis.verify().unwrap(),
+            !genesis.verify().context("Failed to unwrap result")?,
             "I2 VIOLATION: Wrong key signature should not verify"
         );
     }
@@ -643,7 +644,7 @@ mod tests {
 
         // I2 invariant: tampered data must fail verification
         assert!(
-            !genesis.verify().unwrap(),
+            !genesis.verify().context("Failed to unwrap result")?,
             "I2 VIOLATION: Tampered data should not verify"
         );
     }
@@ -737,7 +738,7 @@ mod tests {
 
     #[test]
     fn test_i5_replay_safety_duplicate_detection() {
-        let temp_dir = TempDir::new().unwrap();
+        let temp_dir = TempDir::new().context("Failed to unwrap result")?;
 
         // Create two receipts with same ID (simulating replay attack)
         let receipt1 = serde_json::json!({
@@ -757,13 +758,13 @@ mod tests {
         // Write receipts
         let path1 = temp_dir.path().join("receipt1.json");
         let path2 = temp_dir.path().join("receipt2.json");
-        fs::write(&path1, serde_json::to_string_pretty(&receipt1).unwrap()).unwrap();
-        fs::write(&path2, serde_json::to_string_pretty(&receipt2).unwrap()).unwrap();
+        fs::write(&path1, serde_json::to_string_pretty(&receipt1).context("Failed to unwrap result")?).context("Failed to unwrap result")?;
+        fs::write(&path2, serde_json::to_string_pretty(&receipt2).context("Failed to unwrap result")?).context("Failed to unwrap result")?;
 
         // I5 invariant: A proper verifier should detect duplicate IDs
         // (Note: Current implementation counts receipts; production would reject duplicates)
         let verifier = ChainVerifier::new();
-        let result = verifier.verify_directory(temp_dir.path()).unwrap();
+        let result = verifier.verify_directory(temp_dir.path()).context("Failed to unwrap result")?;
 
         assert_eq!(
             result.total_receipts, 2,
@@ -883,14 +884,14 @@ mod tests {
 
         assert!(verifier.genesis.is_some());
         assert_eq!(
-            verifier.genesis.as_ref().unwrap().genesis_id,
+            verifier.genesis.as_ref().context("Failed to unwrap result")?.genesis_id,
             "VERIFIER-TEST"
         );
     }
 
     #[test]
     fn test_chain_verifier_verify_directory() {
-        let temp_dir = TempDir::new().unwrap();
+        let temp_dir = TempDir::new().context("Failed to unwrap result")?;
 
         // Create valid test receipts
         for i in 0..3 {
@@ -901,16 +902,16 @@ mod tests {
             });
 
             // Compute integrity hash
-            let canonical = serde_json::to_string(&receipt).unwrap();
+            let canonical = serde_json::to_string(&receipt).context("Failed to unwrap result")?;
             let hash = ChainVerifier::compute_hash(canonical.as_bytes());
             receipt["integrity_hash"] = serde_json::Value::String(hash);
 
             let path = temp_dir.path().join(format!("EXEC-TEST-{:03}.json", i));
-            fs::write(&path, serde_json::to_string_pretty(&receipt).unwrap()).unwrap();
+            fs::write(&path, serde_json::to_string_pretty(&receipt).context("Failed to unwrap result")?).context("Failed to unwrap result")?;
         }
 
         let verifier = ChainVerifier::new();
-        let result = verifier.verify_directory(temp_dir.path()).unwrap();
+        let result = verifier.verify_directory(temp_dir.path()).context("Failed to unwrap result")?;
 
         assert_eq!(result.total_receipts, 3);
         assert_eq!(result.verified, 3);
@@ -919,7 +920,7 @@ mod tests {
 
     #[test]
     fn test_chain_verifier_detects_integrity_mismatch() {
-        let temp_dir = TempDir::new().unwrap();
+        let temp_dir = TempDir::new().context("Failed to unwrap result")?;
 
         // Create a receipt with wrong integrity hash
         let receipt = serde_json::json!({
@@ -930,10 +931,10 @@ mod tests {
         });
 
         let path = temp_dir.path().join("EXEC-TAMPERED-001.json");
-        fs::write(&path, serde_json::to_string_pretty(&receipt).unwrap()).unwrap();
+        fs::write(&path, serde_json::to_string_pretty(&receipt).context("Failed to unwrap result")?).context("Failed to unwrap result")?;
 
         let verifier = ChainVerifier::new();
-        let result = verifier.verify_directory(temp_dir.path()).unwrap();
+        let result = verifier.verify_directory(temp_dir.path()).context("Failed to unwrap result")?;
 
         assert_eq!(result.total_receipts, 1);
         assert_eq!(result.verified, 0);

@@ -177,7 +177,7 @@ impl ExternalAIAdapter {
                             attempt,
                             self.max_retries,
                             backoff_ms,
-                            last_error.as_ref().unwrap()
+                            last_error.as_ref().context("Failed to unwrap result")?
                         );
                         tokio::time::sleep(Duration::from_millis(backoff_ms)).await;
                     }
@@ -479,7 +479,7 @@ mod tests {
         std::env::set_var("EXTERNAL_AI_TIMEOUT", "60");
         std::env::set_var("OPENAI_API_KEY", "test");
 
-        let adapter = ExternalAIAdapter::from_env_openai().unwrap();
+        let adapter = ExternalAIAdapter::from_env_openai().context("Failed to unwrap result")?;
         assert_eq!(adapter.timeout, Duration::from_secs(60));
 
         std::env::remove_var("EXTERNAL_AI_TIMEOUT");

@@ -167,6 +167,11 @@ Five sophisticated reasoning approaches:
 - **ReAct**: Reasoning + Acting with tool use
 - **Reflexion**: Self-improvement through iteration
 
+## Knowledge Vault Indexing Notes (2026-01-19)
+- Chunking now uses fixed windows with configurable overlap (`chunk_by_turns` in `knowledge_vault/pipeline/ingest_py.py`, default `window_size=3`, `overlap=0`) to prevent duplicated text; see regenerated chunks for `doc_id=53bb7d90ac393603` in `knowledge_vault/index/chunks.jsonl`.
+- Document `uri` values are stored repo-relative (e.g., `knowledge_vault/raw/chats/session_2026-01-19_bizra_genesis.json`); use `resolve_uri` in the same module to open files with `REPO_ROOT`.
+- Entities are deduplicated case-insensitively via a lowercase canonical key; aliases retain observed casings. `mention_count` equals the number of exported `MENTIONS` edges (unique chunk references), keeping entity node counts aligned with graph edges in `knowledge_vault/index/graph.jsonl`.
+
 ## 🚀 Installation
 
 ### Prerequisites
