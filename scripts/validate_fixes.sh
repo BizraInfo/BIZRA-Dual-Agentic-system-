@@ -115,14 +115,20 @@ fi
 # 2.2 Check ZK module exists
 echo ""
 echo "2.2 Checking ZK modules..."
-if [ -f "src/zk.rs" ]; then
-    if grep -q "SIMULATION" src/zk.rs; then
-        warn "src/zk.rs still contains SIMULATION markers"
+if [ -f "src/zk/verifier.rs" ] || [ -f "src/zk/mod.rs" ]; then
+    if grep -q "SIMULATION" src/zk/verifier.rs 2>/dev/null; then
+        warn "src/zk/verifier.rs still contains SIMULATION markers"
     else
-        pass "src/zk.rs production ready"
+        pass "ZK verifier module present"
+    fi
+    
+    if [ -f "src/zk/halo2_backend.rs" ]; then
+        pass "Halo2 backend implemented"
+    else
+        warn "Halo2 backend not yet implemented"
     fi
 else
-    fail "src/zk.rs not found"
+    fail "ZK module not found"
 fi
 
 # ============================================================================

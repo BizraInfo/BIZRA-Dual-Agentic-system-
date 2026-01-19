@@ -21,6 +21,7 @@ pub mod a2a_external;
 pub mod bizra_integration;
 pub mod bridge;
 pub mod covenant_bridge; // COVENANT: Integration layer for existing systems
+pub mod crypto;          // Post-Quantum Cryptography (ML-KEM, ML-DSA)
 pub mod embodied;
 pub mod engram;
 pub mod errors;
