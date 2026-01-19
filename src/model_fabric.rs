@@ -47,8 +47,6 @@ impl ModelBackend {
             ModelBackend::OpenAICompatible => "/v1/models",
             #[cfg(any(test, feature = "simulation"))]
             ModelBackend::TestStub => "/health",
-            #[cfg(not(any(test, feature = "simulation")))]
-            _ => panic!("Backend not available in production"),
         }
     }
 
@@ -61,8 +59,6 @@ impl ModelBackend {
             ModelBackend::OpenAICompatible => "/v1/chat/completions",
             #[cfg(any(test, feature = "simulation"))]
             ModelBackend::TestStub => "/completion",
-            #[cfg(not(any(test, feature = "simulation")))]
-            _ => panic!("Backend not available in production"),
         }
     }
 }
@@ -498,14 +494,6 @@ impl ModelFabric {
                     "Stub response for: {}",
                     prompt.chars().take(50).collect::<String>()
                 ))
-            }
-            #[cfg(not(any(test, feature = "simulation")))]
-            _ => {
-                 // Optimization: This branch should be unreachable if TestStub is cfg-gated out of the enum,
-                 // but Rust match exhaustiveness might require it if we don't gate the enum variant perfectly
-                 // everywhere. Since we GATED the enum variant, we don't need to match it if it doesn't exist.
-                 // However, to keep code compiling if usage leaks:
-                 panic!("Unreachable backend state"); 
             }
         }
     }

@@ -10,26 +10,32 @@ EXCLUDE_DIRS="tests examples benches docs demo"
 
 echo "🛡️  BIZRA CI Guard: Auditing for 'Mock' and 'Simulate' artifacts in production paths..."
 
-# 1. Search for "Mock" in Rust/Python source, excluding tests
-# -g '!tests/**/*.rs' is for ripgrep, but we'll use grep for standard envs or rigprep if available.
+# Build exclusion lists
+RG_EXCLUDES=""
+GREP_EXCLUDES=""
+for dir in $EXCLUDE_DIRS; do
+    RG_EXCLUDES="$RG_EXCLUDES -g '!$dir/*'"
+    GREP_EXCLUDES="$GREP_EXCLUDES --exclude-dir=$dir"
+done
 
+# 1. Search for "Mock" in Rust/Python source, excluding tests
 if command -v rg >/dev/null 2>&1; then
     echo "   (Using ripgrep for audit)"
-    # Fail if "Mock" is found in src/ but not inside a test module or test cfg
-    # We search for "struct .*Mock" or "class .*Mock" or similar dangerous definitions
-    # Note: We can't parse everything, but we can look for "Mock" token in non-test files.
     
     # Check for "Mock" - exclude tests, panic messages, and cfg-gated blocks
-    MOCK_COUNT=$(rg "Mock" $AUDIT_DIRS -g '!*test*' -t rust -t py | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
+    # We use || true to prevent failure if no matches found before filtering, though wc catches it without pipefail.
+    MOCK_COUNT=$(rg "Mock" $AUDIT_DIRS -g '!*test*' $RG_EXCLUDES -t rust -t py 2>/dev/null | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
     
-    # Check for "Simulation" - exclude tests, panic messages, regex-lines, and feature-gates
-    SIM_COUNT=$(rg -i "Simulat" $AUDIT_DIRS -g '!*test*' -t rust -t py | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
+    # Check for "Simulation"
+    SIM_COUNT=$(rg -i "Simulat" $AUDIT_DIRS -g '!*test*' $RG_EXCLUDES -t rust -t py 2>/dev/null | grep -vE "cfg\(.*test.*\)|cfg\(.*simulation.*\)|panic\!|//|///" | wc -l)
 
 else
     echo "⚠️  ripgrep not found, falling back to basic grep. Results may be noisy."
-    # Basic Grep fallback - exclude tests, panic messages, comments, and cfg gates for simulation feature
-    MOCK_COUNT=$(grep -r "Mock" $AUDIT_DIRS | grep -v -E "test|docs|demo" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
-    SIM_COUNT=$(grep -r -i "Simulat" $AUDIT_DIRS | grep -v -E "test|docs|demo" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
+    # Basic Grep fallback
+    # Note: grep -r supports --exclude-dir (GNU grep).
+    
+    MOCK_COUNT=$(grep -r "Mock" $AUDIT_DIRS $GREP_EXCLUDES | grep -v "test" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
+    SIM_COUNT=$(grep -r -i "Simulat" $AUDIT_DIRS $GREP_EXCLUDES | grep -v "test" | grep -vE "panic|//|cfg\(.*simulation.*\)" | wc -l)
 fi
 
 

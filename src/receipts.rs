@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 // src/receipts.rs - Rejection and Execution Receipts
 // Machine-verifiable evidence of SAT decisions and FATE escalations
 //

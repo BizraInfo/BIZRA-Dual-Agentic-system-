@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 // src/hookchain.rs
 // Status: GIANTS_PROTOCOL_V1
 // SAT HookChain - Governance injection point for every capability/tool call

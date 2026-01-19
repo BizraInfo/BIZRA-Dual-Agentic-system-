@@ -78,6 +78,13 @@ wat = "1.0"
 # TPM 2.0 Hardware Attestation (Optional)
 tss-esapi = { version = "8.0.0-alpha.1", optional = true }
 
+# Post-Quantum Cryptography (Optional - NIST ML-KEM/ML-DSA)
+pqcrypto-kyber = { version = "0.8", optional = true }
+pqcrypto-dilithium = { version = "0.5", optional = true }
+
+# Zero-Knowledge Proof Backend (Optional - Halo2)
+halo2_proofs = { version = "0.3", optional = true }
+
 # Zero-Copy IPC (Optional - Uncomment for 250ns latency)
 iceoryx2 = { version = "0.4", optional = true }
 
@@ -106,6 +113,12 @@ observability = []
 python = ["pyo3/extension-module"]
 hardware_tpm = ["tss-esapi"]
 # iceoryx2_ipc = ["iceoryx2"]
+
+# Post-Quantum Cryptography
+post-quantum = ["pqcrypto-kyber", "pqcrypto-dilithium"]
+
+# ZK Proof Backends
+zk_halo2 = ["halo2_proofs"]  # Real Halo2 ZK backend
 
 # CI-safe feature set (all features except hardware_tpm)
 ci = ["http", "observability"]

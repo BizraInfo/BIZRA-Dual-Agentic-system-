@@ -1,0 +1,25 @@
+# BIZRA TPM Configuration
+# Generated: 2026-01-19T00:23:56Z
+
+tpm:
+  type: "none"
+  available: false
+  
+  # PCR slots used by BIZRA
+  pcr_slots:
+    sape: 12       # SAPE scoring engine measurements
+    fate: 13       # FATE verification measurements
+    spine: 14      # Polyglot spine measurements
+    sovereign: 15  # Sovereign kernel measurements
+  
+  # Attestation configuration
+  attestation:
+    key_algorithm: "RSA-2048"
+    hash_algorithm: "SHA-256"
+    signing_scheme: "RSASSA-PKCS1-v1_5"
+  
+  # Fallback behavior
+  fallback:
+    enabled: true
+    mode: "software"  # Use software TPM if hardware unavailable
+    warn_on_fallback: true

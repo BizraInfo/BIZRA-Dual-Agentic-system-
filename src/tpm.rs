@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 // src/tpm.rs - TPM 2.0 Hardware Root of Trust
 // "Diamond Hardness at Silicon Level"
 //

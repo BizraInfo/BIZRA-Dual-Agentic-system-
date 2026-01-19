@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 //! SAPE v1.∞: THE BIZRA AEON OMEGA SYNTHESIS
 //!
 //! This module implements the "Third Fact" verification engine and the "Polyglot Spine"
@@ -145,3 +146,9 @@ pub fn generate_seal() -> OmegaSeal {
         timestamp: "Dubai: Monday, Jan 12, 2026 — 00:55:12 (GMT+4)".to_string(),
     }
 }
+
+/// The BIZRA Omega Controller.
+///
+/// See Omega Protocol v2.
+pub struct Omega;
+

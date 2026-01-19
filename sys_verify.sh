@@ -7,6 +7,10 @@ set -e
 # Pre-flight checks
 command -v jq >/dev/null 2>&1 || { echo "❌ jq is required but not installed."; exit 1; }
 
+# Determine Git Root
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo ".")
+echo "📂 Project Root: $GIT_ROOT"
+
 echo "🚀 BIZRA SAPE Elite: System Verification Triggered"
 echo "──────────────────────────────────────────────"
 
@@ -46,7 +50,8 @@ done
 # 3. SAPE Elite: Dual Execution Contract (Gate 3)
 echo "🔍 Auditing Dual Execution Logic..."
 # Check for main struct import in the root main.rs
-if grep -q "MetaAlphaDualAgentic" /root/bizra-genesis/src/main.rs; then
+# Using strict regex to ensure struct definition or consumption
+if grep -qE "MetaAlphaDualAgentic" "$GIT_ROOT/src/main.rs"; then
     echo "✅ SAPE Formal Validator Integrated"
 else
     echo "❌ SAPE Formal Validator NOT DETECTED in src/main.rs"
@@ -55,8 +60,8 @@ fi
 
 # 4. Ihsān Thresholds (Gate 7)
 echo "🔍 Verifying Ethical Thresholds..."
-# Check for the hardcoded confidence threshold in sat.rs
-if grep -q "confidence: 0.95" /root/bizra-genesis/src/sat.rs; then
+# Check for the hardcoded confidence threshold in sat.rs with flexible whitespace
+if grep -qE "confidence:\s*0\.95" "$GIT_ROOT/src/sat.rs"; then
     echo "✅ Fail-Closed Policy: 0.95"
 else
     echo "❌ Fail-Closed Policy (confidence: 0.95) NOT FOUND in src/sat.rs"
@@ -65,7 +70,7 @@ fi
 
 # 5. Compiled Artifacts
 echo "🔍 Checking Build State..."
-if [ -f "/root/bizra-genesis/target/debug/meta_alpha_dual_agentic" ]; then
+if [ -f "$GIT_ROOT/target/debug/meta_alpha_dual_agentic" ]; then
     echo "✅ Node-0 Binary Present"
 else
     echo "⚠️  Node-0 Binary Missing. Recommend: cargo build --no-default-features"

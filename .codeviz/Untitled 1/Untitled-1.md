@@ -1,4 +1,4 @@
-# Unnamed CodeViz Diagram
+# BIZRA System Architecture Overview
 
 ```mermaid
 graph TD

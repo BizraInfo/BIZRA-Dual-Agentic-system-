@@ -1,3 +1,4 @@
+#![deny(clippy::unwrap_used)]
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::fs;
