@@ -1,0 +1,77 @@
+{"type": "node", "id": "53bb7d90ac393603", "label": "Document", "properties": {"title": "BIZRA Genesis - Peak Masterpiece Implementation", "source_type": "chat", "project": "BIZRA-Genesis"}}
+{"type": "node", "id": "53bb7d90ac393603-c0", "label": "Chunk", "properties": {"text_preview": "[user]: Proceed with the peak masterpiece implementation. We need to activate the production orchestrator with the Rust FFI bridge.\n\n[assistant]: I'll activate the BIZRA v7.0 production orchestrator. ", "token_est": 110}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c1", "label": "Chunk", "properties": {"text_preview": "The FFI bridge exposes ResonanceMesh and BizraFfiBridge classes from Rust to Python via PyO3.\n\n[user]: The FFI needs to support async operations. The Python code uses await on add_node and optimize_re", "token_est": 78}}
+{"type": "edge", "source": "53bb7d90ac393603-c1", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c2", "label": "Chunk", "properties": {"text_preview": "[assistant]: I'll implement async compatibility in Rust by returning asyncio.Future objects. The pattern:\n\n```rust\nfn add_node<'py>(&self, py: Python<'py>, content: String, embedding: Vec<f64>, metada", "token_est": 118}}
+{"type": "edge", "source": "53bb7d90ac393603-c2", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c3", "label": "Chunk", "properties": {"text_preview": "This allows Python to await the Rust function calls.\n\n[user]: Build the Knowledge Vault architecture for Hypergraph RAG + Knowledge Graph\n\n[assistant]: I'll create a complete Knowledge Vault with thre", "token_est": 52}}
+{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c4", "label": "Chunk", "properties": {"text_preview": "[assistant]: I'll create a complete Knowledge Vault with three layers:\n\n1. **Canonical Storage (Data Lake)**: documents.parquet as the spine\n2. **Semantic Indexing**: Context-aware chunking + embeddin", "token_est": 86}}
+{"type": "edge", "source": "53bb7d90ac393603-c4", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c5", "label": "Chunk", "properties": {"text_preview": "Key innovation: Assertions as hyperedge nodes linking multiple entities in single facts.\n\nThe pipeline uses R's `targets` package for incremental, parallel, reproducible builds.\n\n[user]: What's the hy", "token_est": 63}}
+{"type": "edge", "source": "53bb7d90ac393603-c5", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c6", "label": "Chunk", "properties": {"text_preview": "[user]: What's the hypergraph pattern for representing multi-entity facts?\n\n[assistant]: Hyperedges link more than two things in one relation. Example:\n\n> \"In Project BIZRA, using Rust+PyO3, we achiev", "token_est": 57}}
+{"type": "edge", "source": "53bb7d90ac393603-c6", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c7", "label": "Chunk", "properties": {"text_preview": "> \"In Project BIZRA, using Rust+PyO3, we achieved 0.99 SNR on Resonance Mesh\"\n\nThis is represented as an Assertion node with INVOLVES edges:\n\n```cypher\n(assertion:Assertion {text: 'Achieved 0.99 SNR..", "token_est": 153}}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "53bb7d90ac393603-c8", "label": "Chunk", "properties": {"text_preview": "```cypher\n(assertion:Assertion {text: 'Achieved 0.99 SNR...'})\n(assertion)-[:INVOLVES {role:'context'}]->(project:Project {name:'BIZRA'})\n(assertion)-[:INVOLVES {role:'tool'}]->(rust:Entity {name:'Rus", "token_est": 132}}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "53bb7d90ac393603", "label": "PART_OF"}
+{"type": "node", "id": "e-b2ca5d0e", "label": "Entity", "properties": {"name": "Rust", "entity_type": "Language", "mention_count": 12}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c6", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-b2ca5d0e", "label": "MENTIONS"}
+{"type": "node", "id": "e-7df5cce7", "label": "Entity", "properties": {"name": "Python", "entity_type": "Language", "mention_count": 6}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-7df5cce7", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-7df5cce7", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-7df5cce7", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-7df5cce7", "label": "MENTIONS"}
+{"type": "node", "id": "e-1cd8c3a0", "label": "Entity", "properties": {"name": "PyO3", "entity_type": "Library", "mention_count": 6}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-1cd8c3a0", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-1cd8c3a0", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c6", "target": "e-1cd8c3a0", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-1cd8c3a0", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-1cd8c3a0", "label": "MENTIONS"}
+{"type": "node", "id": "e-81a71534", "label": "Entity", "properties": {"name": "FFI", "entity_type": "Concept", "mention_count": 5}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-81a71534", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c1", "target": "e-81a71534", "label": "MENTIONS"}
+{"type": "node", "id": "e-50323aad", "label": "Entity", "properties": {"name": "ffi", "entity_type": "Concept", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-50323aad", "label": "MENTIONS"}
+{"type": "node", "id": "e-003ab616", "label": "Entity", "properties": {"name": "Resonance Mesh", "entity_type": "Concept", "mention_count": 5}}
+{"type": "edge", "source": "53bb7d90ac393603-c0", "target": "e-003ab616", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c6", "target": "e-003ab616", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-003ab616", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-003ab616", "label": "MENTIONS"}
+{"type": "node", "id": "e-845c802f", "label": "Entity", "properties": {"name": "rust", "entity_type": "Language", "mention_count": 3}}
+{"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-845c802f", "label": "MENTIONS"}
+{"type": "node", "id": "e-e58f8e41", "label": "Entity", "properties": {"name": "embedding", "entity_type": "Method", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c2", "target": "e-e58f8e41", "label": "MENTIONS"}
+{"type": "node", "id": "e-0362179c", "label": "Entity", "properties": {"name": "Hypergraph", "entity_type": "Concept", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-0362179c", "label": "MENTIONS"}
+{"type": "node", "id": "e-3a2cd978", "label": "Entity", "properties": {"name": "RAG", "entity_type": "Concept", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-3a2cd978", "label": "MENTIONS"}
+{"type": "node", "id": "e-ae165fa1", "label": "Entity", "properties": {"name": "Knowledge Graph", "entity_type": "Concept", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c3", "target": "e-ae165fa1", "label": "MENTIONS"}
+{"type": "node", "id": "e-79ca4995", "label": "Entity", "properties": {"name": "chunking", "entity_type": "Method", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c4", "target": "e-79ca4995", "label": "MENTIONS"}
+{"type": "node", "id": "e-7bdf3a0f", "label": "Entity", "properties": {"name": "R", "entity_type": "Language", "mention_count": 1}}
+{"type": "edge", "source": "53bb7d90ac393603-c5", "target": "e-7bdf3a0f", "label": "MENTIONS"}
+{"type": "node", "id": "e-ab3a712d", "label": "Entity", "properties": {"name": "hypergraph", "entity_type": "Concept", "mention_count": 2}}
+{"type": "edge", "source": "53bb7d90ac393603-c5", "target": "e-ab3a712d", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c6", "target": "e-ab3a712d", "label": "MENTIONS"}
+{"type": "node", "id": "e-959729b9", "label": "Entity", "properties": {"name": "SNR", "entity_type": "Concept", "mention_count": 6}}
+{"type": "edge", "source": "53bb7d90ac393603-c6", "target": "e-959729b9", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-959729b9", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-959729b9", "label": "MENTIONS"}
+{"type": "node", "id": "e-226ded14", "label": "Entity", "properties": {"name": "pyo3", "entity_type": "Library", "mention_count": 2}}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-226ded14", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-226ded14", "label": "MENTIONS"}
+{"type": "node", "id": "e-a536d515", "label": "Entity", "properties": {"name": "snr", "entity_type": "Concept", "mention_count": 2}}
+{"type": "edge", "source": "53bb7d90ac393603-c7", "target": "e-a536d515", "label": "MENTIONS"}
+{"type": "edge", "source": "53bb7d90ac393603-c8", "target": "e-a536d515", "label": "MENTIONS"}
