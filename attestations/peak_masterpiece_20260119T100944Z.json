@@ -1,0 +1,23 @@
+{
+  "build_info": {
+    "git_sha": "e79fcfe8a9d5a3e373f9b0ba394971fd5337cd5b",
+    "python_version": "3.12.3",
+    "numpy_version": "1.26.4",
+    "timestamp": "2026-01-19T10:09:44Z"
+  },
+  "config_hash": "b22d864d59075b8cda29acd52aca027e05e7a94a75f4af834a6b0cbec17df5e7",
+  "resonance_stats": {
+    "nodes": 4,
+    "edges": 3,
+    "avg_confidence": 0.95,
+    "execution_mode": "simulated_ffi"
+  },
+  "optimization_result": {
+    "pruned_nodes": 0,
+    "amplified_nodes": 4,
+    "mesh_size": 4,
+    "average_snr": 0.99,
+    "new_threshold": 0.4
+  },
+  "seed": 42
+}

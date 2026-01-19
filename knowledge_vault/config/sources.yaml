@@ -1,0 +1,167 @@
+# BIZRA Knowledge Vault - Source Configuration
+# Version: 1.0.0
+
+sources:
+  # ============================================
+  # GIT REPOSITORIES
+  # ============================================
+  repos:
+    enabled: true
+    paths:
+      - path: "/root/bizra-genesis"
+        project: "BIZRA-Genesis"
+        tags: ["core", "rust", "python", "kernel"]
+        include_patterns: ["*.rs", "*.py", "*.md", "*.yaml", "*.toml"]
+        exclude_patterns: ["target/", "node_modules/", ".git/", "__pycache__/", "knowledge_vault/"]
+        
+      - path: "/root/bizra-genesis/apex_engine"
+        project: "BIZRA-Apex"
+        tags: ["apex", "engine", "core"]
+        
+      - path: "/root/bizra-genesis/bizra_kernel"
+        project: "BIZRA-Kernel"
+        tags: ["kernel", "python"]
+        
+    chunking:
+      strategy: "ast"  # abstract syntax tree for code
+      fallback: "sliding_window"
+      window_size: 512
+      overlap: 64
+      
+    metadata:
+      extract_git_history: true
+      max_commits: 100
+      include_blame: false
+
+  # ============================================
+  # CHAT HISTORIES
+  # ============================================
+  chats:
+    enabled: true
+    paths:
+      - path: "/root/bizra-genesis/knowledge_vault/raw/chats/*.json"
+        source_type: "claude_chat"
+        project: "BIZRA-Development"
+        
+      - path: "/root/bizra-genesis/knowledge_vault/raw/chats/*.jsonl"
+        source_type: "copilot_chat"
+        project: "BIZRA-Development"
+        
+    chunking:
+      strategy: "conversation_turn"
+      window_size: 3  # turns per chunk
+      overlap: 1
+      create_summaries: true
+      summary_every: 10  # turns
+      
+    metadata:
+      extract_participants: true
+      extract_tools_used: true
+      extract_code_blocks: true
+
+  # ============================================
+  # PDFs & DOCUMENTS
+  # ============================================
+  pdfs:
+    enabled: true
+    paths:
+      - path: "/root/bizra-genesis/knowledge_vault/raw/pdfs/**/*.pdf"
+        project: "Documentation"
+        tags: ["papers", "docs"]
+        
+    chunking:
+      strategy: "heading_aware"
+      fallback: "page"
+      target_tokens: 512
+      overlap_tokens: 64
+      
+    extraction:
+      ocr_if_needed: true
+      ocr_engine: "tesseract"
+      ocr_languages: ["eng", "ara"]
+      extract_tables: true
+      extract_figures: true
+
+  # ============================================
+  # NOTES (Obsidian, Markdown)
+  # ============================================
+  notes:
+    enabled: true
+    paths:
+      - path: "/root/bizra-genesis/knowledge_vault/raw/notes/**/*.md"
+        project: "Notes"
+        tags: ["notes"]
+        
+      - path: "/root/bizra-genesis/*.md"
+        project: "BIZRA-Docs"
+        tags: ["documentation", "readme"]
+        
+    chunking:
+      strategy: "heading_aware"
+      respect_frontmatter: true
+      extract_wikilinks: true
+      extract_tags: true
+      
+    metadata:
+      parse_yaml_frontmatter: true
+      extract_backlinks: true
+
+  # ============================================
+  # MEDIA (Images, Videos, Audio)
+  # ============================================
+  media:
+    enabled: true
+    
+    images:
+      paths:
+        - path: "~/screenshots/**/*.{png,jpg,jpeg}"
+          project: "Screenshots"
+        - path: "~/diagrams/**/*.{png,svg}"
+          project: "Diagrams"
+      extraction:
+        generate_caption: true
+        caption_model: "gpt-4o"
+        detect_entities: true
+        ocr_if_text: true
+        
+    videos:
+      paths:
+        - path: "~/recordings/**/*.{mp4,mov,webm}"
+          project: "Recordings"
+      extraction:
+        transcribe: true
+        transcription_model: "whisper-large-v3"
+        extract_frames: true
+        frame_interval: 60  # seconds
+        
+    audio:
+      paths:
+        - path: "~/voice-notes/**/*.{mp3,m4a,wav}"
+          project: "Voice-Notes"
+      extraction:
+        transcribe: true
+        transcription_model: "whisper-large-v3"
+
+# ============================================
+# GLOBAL SETTINGS
+# ============================================
+defaults:
+  language: "en"
+  confidentiality: "private"
+  
+processing:
+  parallel_workers: 8
+  batch_size: 100
+  retry_failed: 3
+  timeout_seconds: 300
+  
+embedding:
+  model: "text-embedding-3-large"
+  dimensions: 3072
+  batch_size: 100
+  
+extraction:
+  llm_model: "claude-sonnet-4-20250514"
+  temperature: 0.0
+  max_tokens: 4096
+  schema_strict: true

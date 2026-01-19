@@ -1,0 +1,18 @@
+# Raw data (too large for git)
+raw/
+
+# Derived data (reproducible)
+derived/
+index/
+graph/
+
+# Logs
+logs/*.log
+
+# R pipeline cache
+pipeline/_targets/
+pipeline/.Rproj.user/
+
+# Secrets
+.env
+*.key

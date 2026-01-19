@@ -1,0 +1,272 @@
+# BIZRA Knowledge Vault - LLM Extraction Configuration
+# Version: 1.0.0
+
+# ============================================
+# ENTITY EXTRACTION SCHEMA
+# ============================================
+entity_extraction:
+  model: "claude-sonnet-4-20250514"
+  temperature: 0.0
+  
+  system_prompt: |
+    You are a precise entity extraction system. Extract entities from the given text
+    following the exact schema. Be conservative - only extract entities you are confident about.
+    Normalize names to canonical forms (e.g., "PyTorch" not "pytorch" or "Pytorch").
+    
+  output_schema:
+    entities:
+      type: array
+      items:
+        name:
+          type: string
+          description: "Canonical name of the entity"
+        type:
+          type: string
+          enum:
+            - Person
+            - Organization
+            - Concept
+            - Tool
+            - Method
+            - Algorithm
+            - Paper
+            - Dataset
+            - Repository
+            - Function
+            - Class
+            - Library
+            - Framework
+            - Language
+            - Model
+            - Metric
+            - Hardware
+            - Service
+            - API
+            - Protocol
+        aliases:
+          type: array
+          items:
+            type: string
+          description: "Alternative names or abbreviations"
+        confidence:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+        span:
+          type: object
+          properties:
+            start: { type: integer }
+            end: { type: integer }
+
+  # Entity type hints by source
+  type_hints:
+    repo_file:
+      - Function
+      - Class
+      - Library
+      - Framework
+      - Language
+    pdf:
+      - Paper
+      - Person
+      - Method
+      - Dataset
+      - Organization
+    chat:
+      - Tool
+      - Concept
+      - Method
+      - Model
+
+# ============================================
+# RELATION EXTRACTION SCHEMA
+# ============================================
+relation_extraction:
+  model: "claude-sonnet-4-20250514"
+  temperature: 0.0
+  
+  system_prompt: |
+    Extract relationships between entities in the text. Each relation must have
+    a source entity, target entity, relation type, and evidence span.
+    Only extract relations explicitly stated or strongly implied.
+    
+  output_schema:
+    relations:
+      type: array
+      items:
+        source:
+          type: string
+          description: "Canonical name of source entity"
+        relation:
+          type: string
+          enum:
+            - IMPLEMENTS      # X implements Y (code/method)
+            - EXTENDS         # X extends/builds on Y
+            - USES            # X uses Y (tool/library)
+            - CITES           # X cites Y (papers)
+            - CONTRADICTS     # X contradicts Y (claims)
+            - SUPPORTS        # X supports Y (claims)
+            - DERIVES_FROM    # X is derived from Y
+            - AUTHORED_BY     # X authored by Y
+            - DEVELOPED_BY    # X developed by Y (org)
+            - TRAINED_ON      # Model trained on dataset
+            - EVALUATES       # X evaluates Y
+            - OUTPERFORMS     # X outperforms Y
+            - REQUIRES        # X requires Y (dependency)
+            - PART_OF         # X is part of Y
+            - INSTANCE_OF     # X is instance of Y (type)
+        target:
+          type: string
+          description: "Canonical name of target entity"
+        confidence:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+        evidence:
+          type: string
+          description: "The text span supporting this relation"
+
+# ============================================
+# ASSERTION EXTRACTION SCHEMA (HYPEREDGES)
+# ============================================
+assertion_extraction:
+  model: "claude-sonnet-4-20250514"
+  temperature: 0.0
+  
+  system_prompt: |
+    Extract factual assertions from the text. An assertion is a claim, finding,
+    decision, or observation that links multiple entities together.
+    Each assertion should be a complete, verifiable statement.
+    
+  output_schema:
+    assertions:
+      type: array
+      items:
+        type:
+          type: string
+          enum:
+            - experiment      # "We tested X with Y and got Z"
+            - claim           # "X is better than Y for Z"
+            - decision        # "We chose X over Y because Z"
+            - definition      # "X is defined as Y"
+            - observation     # "We noticed that X"
+            - recipe          # "To achieve X, do Y then Z"
+            - finding         # "We found that X"
+            - limitation      # "X does not work when Y"
+        text:
+          type: string
+          description: "The assertion as a complete statement"
+        entities_involved:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              role:
+                type: string
+                enum:
+                  - subject
+                  - object
+                  - method
+                  - dataset
+                  - result
+                  - tool
+                  - context
+                  - comparison
+        confidence:
+          type: number
+          minimum: 0.0
+          maximum: 1.0
+        evidence_span:
+          type: string
+
+# ============================================
+# CODE-SPECIFIC EXTRACTION
+# ============================================
+code_extraction:
+  enabled: true
+  
+  # Use AST parsing first (deterministic), LLM for docstrings/comments
+  ast_languages:
+    - python
+    - rust
+    - javascript
+    - typescript
+    - r
+    
+  extract:
+    - functions
+    - classes
+    - methods
+    - imports
+    - exports
+    - docstrings
+    - type_hints
+    - decorators
+    - constants
+    
+  # LLM for semantic understanding of code
+  llm_extraction:
+    enabled: true
+    extract:
+      - function_purpose
+      - algorithm_type
+      - complexity_notes
+      - dependencies_used
+
+# ============================================
+# CHAT-SPECIFIC EXTRACTION
+# ============================================
+chat_extraction:
+  enabled: true
+  
+  extract:
+    - user_intent
+    - ai_response_type
+    - tools_invoked
+    - code_blocks
+    - decisions_made
+    - errors_encountered
+    - solutions_provided
+    
+  create_summaries:
+    enabled: true
+    every_n_turns: 10
+    summary_model: "claude-sonnet-4-20250514"
+    
+  detect_patterns:
+    - debugging_session
+    - architecture_discussion
+    - code_review
+    - learning_explanation
+    - brainstorming
+    - implementation
+
+# ============================================
+# POST-PROCESSING
+# ============================================
+post_processing:
+  # Entity normalization
+  normalize:
+    enabled: true
+    rules:
+      - pattern: "(?i)pytorch"
+        canonical: "PyTorch"
+      - pattern: "(?i)tensorflow|tf"
+        canonical: "TensorFlow"
+      - pattern: "(?i)gpt-?4"
+        canonical: "GPT-4"
+      - pattern: "(?i)claude-?(3|opus|sonnet)"
+        canonical: "Claude 3"
+        
+  # Deduplication
+  dedupe:
+    enabled: true
+    similarity_threshold: 0.85
+    prefer_longer_name: true
+    
+  # Confidence filtering
+  min_confidence:
+    entities: 0.7
+    relations: 0.8
+    assertions: 0.75

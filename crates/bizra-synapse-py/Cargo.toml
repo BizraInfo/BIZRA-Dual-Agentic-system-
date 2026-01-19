@@ -1,0 +1,11 @@
+[package]
+name = "bizra-ffi"
+version = "0.7.0"
+edition = "2021"
+
+[lib]
+name = "bizra_ffi"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.24.1", features = ["extension-module"] }
