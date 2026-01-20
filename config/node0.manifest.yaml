@@ -58,4 +58,4 @@ observability:
 policy_bundle:
   required: true
   bundle_path: "config/policy.bundle.json"
-  root_hash: "e33e88be7f495ee593ee16963eae3ffefbb9a40a0f09a5703ef9254d80995bb2"
+  root_hash: "7c02b016e99f26c2f1286d8af3f879d483aa2cac6fe78b5724e37d0f2ba431e5"
