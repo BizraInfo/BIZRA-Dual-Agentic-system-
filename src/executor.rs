@@ -28,9 +28,9 @@ pub struct SignedModule {
 }
 
 impl SignedModule {
-    pub fn verify_signature(&self, root_key_provider: &dyn SignerProvider) -> bool {
+    pub async fn verify_signature(&self, root_key_provider: &dyn SignerProvider) -> bool {
         // Verification must happen against the exact WASM bytes
-        root_key_provider.verify(&self.wasm, &self.signature)
+        root_key_provider.verify(&self.wasm, &self.signature).await.unwrap_or(false)
     }
 }
 
@@ -201,7 +201,7 @@ impl ThoughtExecutor {
         }
 
         // 1. GATE: Verify Module Signature (Fail-Close)
-        if !module.verify_signature(&*self.signer) {
+        if !module.verify_signature(&*self.signer).await {
             return Err(anyhow::anyhow!(
                 "⛔ Security Violation: Module signature invalid"
             ));

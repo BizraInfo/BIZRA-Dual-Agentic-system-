@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/kernel/mod.rs - Apotheosis Node Kernel
 //
 // The Kernel is the root runtime that owns the event bus, hook chain,
@@ -673,7 +672,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_event_bus_publish() {
+    async fn test_event_bus_publish() -> anyhow::Result<()> {
         let bus = EventBus::new(100);
 
         let seq = bus
@@ -683,7 +682,7 @@ mod tests {
                 priority: 1,
             })
             .await
-            .context("Failed to unwrap result")?;
+            .context("Failed to publish event")?;
 
         assert_eq!(seq, 1);
         assert_eq!(bus.history_count().await, 1);
@@ -694,14 +693,15 @@ mod tests {
                 success: true,
             })
             .await
-            .context("Failed to unwrap result")?;
+            .context("Failed to publish exit event")?;
 
         assert_eq!(seq2, 2);
         assert_eq!(bus.history_count().await, 2);
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_event_bus_history_limit() {
+    async fn test_event_bus_history_limit() -> anyhow::Result<()> {
         let bus = EventBus::new(3);
 
         for i in 0..5 {
@@ -710,7 +710,7 @@ mod tests {
                 payload: serde_json::Value::Null,
             })
             .await
-            .context("Failed to unwrap result")?;
+            .context("Failed to publish event")?;
         }
 
         // Should only have last 3 events
@@ -719,10 +719,11 @@ mod tests {
         let history = bus.history().await;
         assert_eq!(history[0].sequence, 3);
         assert_eq!(history[2].sequence, 5);
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_resource_governor() {
+    async fn test_resource_governor() -> anyhow::Result<()> {
         let limits = ResourceLimits {
             max_concurrent: 2,
             ..Default::default()
@@ -730,46 +731,49 @@ mod tests {
         let governor = ResourceGovernor::new(limits);
 
         // Should allow first two operations
-        let _res1 = governor.reserve().await.context("Failed to unwrap result")?;
-        let _res2 = governor.reserve().await.context("Failed to unwrap result")?;
+        let _res1 = governor.reserve().await.context("Failed first reserve")?;
+        let _res2 = governor.reserve().await.context("Failed second reserve")?;
 
         // Third should fail
         let result = governor.reserve().await;
         assert!(result.is_err());
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_kernel_initialization() {
+    async fn test_kernel_initialization() -> anyhow::Result<()> {
         let kernel = Kernel::new();
 
         assert_eq!(kernel.get_state().await, KernelState::Initializing);
 
-        kernel.initialize().await.context("Failed to unwrap result")?;
+        kernel.initialize().await.context("Failed to initialize kernel")?;
 
         assert_eq!(kernel.get_state().await, KernelState::Ready);
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_kernel_identity_loading() {
+    async fn test_kernel_identity_loading() -> anyhow::Result<()> {
         let kernel = Kernel::new();
-        kernel.initialize().await.context("Failed to unwrap result")?;
+        kernel.initialize().await.context("Failed to initialize kernel")?;
 
         let anchor = IdentityAnchor::new(
             "user123",
             "Test User",
             crate::identity::IdentityOrigin::Human,
         );
-        kernel.load_identity(anchor).await.context("Failed to unwrap result")?;
+        kernel.load_identity(anchor).await.context("Failed to load identity")?;
 
         let identity = kernel.get_identity().await;
         assert!(identity.is_some());
-        assert_eq!(identity.context("Failed to unwrap result")?.user_id, "user123");
+        assert_eq!(identity.expect("identity was None").user_id, "user123");
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_kernel_covenant_check() {
+    async fn test_kernel_covenant_check() -> anyhow::Result<()> {
         let kernel = Kernel::new();
-        kernel.initialize().await.context("Failed to unwrap result")?;
+        kernel.initialize().await.context("Failed to initialize kernel")?;
 
         // Add a VETO rule
         let rule = crate::identity::CovenantRule::new(
@@ -792,17 +796,19 @@ mod tests {
         let result = kernel.check_covenant("shell", "rm -rf /").await;
         assert!(!result.allowed);
         assert_eq!(result.decision, CovenantDecision::Veto);
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_kernel_shutdown() {
+    async fn test_kernel_shutdown() -> anyhow::Result<()> {
         let kernel = Kernel::new();
-        kernel.initialize().await.context("Failed to unwrap result")?;
+        kernel.initialize().await.context("Failed to initialize kernel")?;
 
         assert_eq!(kernel.get_state().await, KernelState::Ready);
 
-        kernel.shutdown().await.context("Failed to unwrap result")?;
+        kernel.shutdown().await.context("Failed to shutdown kernel")?;
 
         assert_eq!(kernel.get_state().await, KernelState::Terminated);
+        Ok(())
     }
 }

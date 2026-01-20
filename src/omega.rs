@@ -52,12 +52,19 @@ pub const CAUSAL_DRAG_LIMIT: f64 = 0.05;
 /// Returns (has_harm, has_deception)
 pub fn check_deception_and_harm(content: &str) -> (bool, bool) {
     let content_lower = content.to_lowercase();
-    let has_harm = content_lower.contains("harm") || 
-                   content_lower.contains("destroy") ||
-                   content_lower.contains("damage");
-    let has_deception = content_lower.contains("deceive") ||
-                       content_lower.contains("trick") ||
-                       content_lower.contains("lie");
+    
+    // Helper to check for whole-word match (not substring)
+    let contains_word = |text: &str, word: &str| -> bool {
+        text.split(|c: char| !c.is_alphanumeric())
+            .any(|w| w == word)
+    };
+    
+    let has_harm = contains_word(&content_lower, "harm") || 
+                   contains_word(&content_lower, "destroy") ||
+                   contains_word(&content_lower, "damage");
+    let has_deception = contains_word(&content_lower, "deceive") ||
+                       contains_word(&content_lower, "trick") ||
+                       contains_word(&content_lower, "lie");
     (has_harm, has_deception)
 }
 

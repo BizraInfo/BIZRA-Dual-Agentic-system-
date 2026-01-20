@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/covenant_bridge.rs - COVENANT Integration Layer
 //
 // This module bridges the existing BridgeCoordinator architecture with the

@@ -63,6 +63,14 @@ def verify_chain_continuity(receipts_dir: str):
         unsigned = data.get('unsigned', {})
         claimed_prev = unsigned.get('prev_hash')
 
+        # Guard against missing fields
+        if not current_hash:
+            eprint(f"❌ MISSING HASH in {os.path.basename(fpath)}")
+            sys.exit(1)
+        if claimed_prev is None:
+            eprint(f"❌ MISSING prev_hash in {os.path.basename(fpath)}")
+            sys.exit(1)
+
         # Check anchor for first block
         if verified_count == 0:
              if claimed_prev != prev_hash_1 and claimed_prev != prev_hash_2:
@@ -74,7 +82,7 @@ def verify_chain_continuity(receipts_dir: str):
              if claimed_prev != prev_hash_1:
                 eprint(f"❌ BROKEN CHAIN: {os.path.basename(fpath)}")
                 eprint(f"   Expected Prev: {prev_hash_1[:16]}...")
-                eprint(f"   Claimed Prev:  {claimed_prev[:16]}...")
+                eprint(f"   Claimed Prev:  {claimed_prev[:16] if claimed_prev else 'None'}...")
                 sys.exit(1)
         
         # TODO: Here we could strictly re-hash the 'unsigned' block to verify 'hash' matches

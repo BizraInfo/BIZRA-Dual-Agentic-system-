@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/engram.rs - Sovereign Conditional Memory for Local-First AI
 //
 // PEAK MASTERPIECE v7.1: DeepSeek Engram architecture adapted for BIZRA sovereignty

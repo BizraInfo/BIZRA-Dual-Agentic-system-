@@ -249,7 +249,7 @@ impl WasmSandbox {
 
         // 0. VERIFY CODE SIGNATURE (Fortress Security Gate)
         // The signature must be over the module hash, not the raw bytes
-        if !self.verify_signature(wasm_module, signature) {
+        if !self.verify_signature(wasm_module, signature).await {
             self.status = SandboxStatus::Violated("Invalid Code Signature".to_string());
             warn!("⛔ BLOCKED: Attempted to execute unsigned/tampered WASM code");
             metrics::WASM_SIGNATURE_FAILURES.inc();
@@ -425,8 +425,8 @@ impl WasmSandbox {
     }
 
     /// Verify code signature against Hardware Root of Trust
-    pub fn verify_signature(&self, module_bytes: &[u8], signature: &[u8]) -> bool {
-        self.root_verifier.verify(module_bytes, signature)
+    pub async fn verify_signature(&self, module_bytes: &[u8], signature: &[u8]) -> bool {
+        self.root_verifier.verify(module_bytes, signature).await.unwrap_or(false)
     }
 
     /// Compile a WASM module from WAT source

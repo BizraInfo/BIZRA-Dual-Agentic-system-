@@ -48,8 +48,30 @@ impl ThoughtNode {
     pub fn compute_hash(&self) -> String {
         let mut hasher = Sha256::new();
         hasher.update(&self.author_role);
-        hasher.update(format!("{:?}", self.thought_type));
+        // Use stable string representation for thought_type
+        let type_str = match &self.thought_type {
+            ThoughtType::Goal => "Goal",
+            ThoughtType::Hypothesis => "Hypothesis",
+            ThoughtType::Plan => "Plan",
+            ThoughtType::Action => "Action",
+            ThoughtType::Evidence => "Evidence",
+            ThoughtType::Decision => "Decision",
+            ThoughtType::Result => "Result",
+        };
+        hasher.update(type_str);
         hasher.update(&self.content);
+        // Include confidence in hash - normalized to ensure determinism
+        // Canonicalize: NaN -> 0.0, -0.0 -> 0.0, then convert to fixed-precision integer
+        let normalized_conf = if self.confidence.is_nan() {
+            0.0_f32
+        } else if self.confidence == 0.0 {
+            0.0_f32  // Handles -0.0 -> 0.0
+        } else {
+            self.confidence.clamp(0.0, 1.0)
+        };
+        // Convert to fixed-precision integer (3 decimal places) for deterministic hashing
+        let conf_int = (normalized_conf * 1000.0).round() as u32;
+        hasher.update(&conf_int.to_le_bytes());
         // Sort parents to ensure deterministic hash regardless of order
         let mut parents_sorted = self.parents.clone();
         parents_sorted.sort();
@@ -116,7 +138,7 @@ impl SynapticGraph {
 
     /// Validate the graph integrity
     pub fn validate(&self) -> Result<(), String> {
-        // Basic check: all parents exist (invariant enforced by add_thought, but good to re-check)
+        // Check: all parents exist and id matches key
         for (id, node) in &self.nodes {
             for p in &node.parents {
                  if !self.nodes.contains_key(p) {
@@ -125,6 +147,14 @@ impl SynapticGraph {
             }
             if node.id != *id {
                 return Err(format!("Node ID mismatch for {}", id));
+            }
+            // Recompute content hash and verify integrity
+            let expected_hash = node.compute_hash();
+            if node.id != expected_hash {
+                return Err(format!(
+                    "Node {} has invalid content hash: expected {}, found {}",
+                    id, expected_hash, node.id
+                ));
             }
         }
         Ok(())
@@ -156,13 +186,26 @@ impl SynapticGraph {
     }
 
     /// Retrieve the full lineage of a thought (Traceability)
-    pub fn get_lineage(&self, node_id: &str) -> Vec<&ThoughtNode> {
+    /// Returns None if the node_id doesn't exist or if a cycle is detected.
+    pub fn get_lineage(&self, node_id: &str) -> Option<Vec<&ThoughtNode>> {
+        // Check if node exists
+        if !self.nodes.contains_key(node_id) {
+            return None;
+        }
+        
         let mut path = Vec::new();
+        let mut visited = std::collections::HashSet::new();
         let mut current_opt = self.nodes.get(node_id);
         
         // Simple linear walk up the first parent (simplification)
         while let Some(node) = current_opt {
+            // Cycle detection
+            if visited.contains(&node.id) {
+                return None; // Cycle detected
+            }
+            visited.insert(node.id.clone());
             path.push(node);
+            
             if node.parents.is_empty() {
                 break;
             }
@@ -171,6 +214,6 @@ impl SynapticGraph {
             current_opt = self.nodes.get(&node.parents[0]);
         }
         path.reverse(); // Root -> Leaf
-        path
+        Some(path)
     }
 }

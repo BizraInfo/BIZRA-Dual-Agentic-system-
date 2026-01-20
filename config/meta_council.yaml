@@ -29,7 +29,7 @@ council_seats:
     id: "agent_004_skep"
     mandate: "Adversarial Review, Bias Detection, Threat Modeling"
     lens: "CRITICAL"
-    permissions: ["veto", "comment_only"]
+    permissions: ["comment_only", "request_review"]
     model_tier: "reasoning_max"
 
   - role: "VERIFIER"
@@ -59,6 +59,13 @@ council_seats:
     lens: "EMPATHIC"
     permissions: ["write_docs", "approve_ui"]
     model_tier: "creative_writing"
+
+# Composite Pods - Groups of agents for specific workflow phases
+composite_pods:
+  - pod: "EXECUTION_PODS"
+    description: "Drafting composite - agents responsible for generating draft artifacts"
+    members: ["agent_002_arch", "agent_003_lib", "agent_008_ux"]  # SYSTEMS_ARCHITECT, RESEARCH_LIBRARIAN, PRODUCT_UX
+    permissions: ["write_code", "write_docs", "read_internet", "read_vector_db"]
 
 # The "Cross-Pollination" Rule implementation
 # No artifact can be merged without at least one approval from a specific counter-pod.

@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/mcp.rs - Model Context Protocol (MCP) Integration
 //
 // Full JSON-RPC 2.0 implementation for Claude-compatible tool execution.
@@ -30,7 +29,7 @@ lazy_static! {
         "bizra_mcp_calls_total",
         "Total MCP tool calls",
         &["tool", "result"]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// MCP latency histogram
     pub static ref MCP_LATENCY: HistogramVec = register_histogram_vec!(
@@ -38,14 +37,14 @@ lazy_static! {
         "MCP tool call latency",
         &["tool"],
         vec![0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// SAPE-gated MCP tool rejections
     pub static ref MCP_SAPE_REJECTIONS: CounterVec = register_counter_vec!(
         "bizra_mcp_sape_rejections_total",
         "MCP tool calls rejected by SAPE/Ihsan gate",
         &["tool"]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 }
 
 /// Global MCP client singleton
@@ -1287,7 +1286,7 @@ mod tests {
         assert!(response.result.is_none());
         assert!(response.error.is_some());
         assert_eq!(
-            response.error.as_ref().context("Failed to unwrap result")?.code,
+            response.error.as_ref().expect("Failed to register metric").code,
             JsonRpcError::TOOL_BLOCKED
         );
     }
@@ -1340,9 +1339,9 @@ mod tests {
         let response = client.handle_jsonrpc(request).await;
         assert!(response.result.is_some());
 
-        let result = response.result.context("Failed to unwrap result")?;
+        let result = response.result.expect("Failed to register metric");
         let tools = result.get("tools").and_then(|t| t.as_array());
         assert!(tools.is_some());
-        assert!(!tools.context("Failed to unwrap result")?.is_empty());
+        assert!(!tools.expect("Failed to register metric").is_empty());
     }
 }

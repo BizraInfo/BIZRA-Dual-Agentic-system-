@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/pipeline.rs - Sovereign Cognitive Pipeline
 //
 // PEAK MASTERPIECE v7.1: Unified integration of all BIZRA subsystems

@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/metrics.rs - Glass Cockpit Prometheus Metrics Exporter
 // Provides real-time observability into BIZRA's PAT↔SAT↔FATE flow
 
@@ -21,21 +20,21 @@ lazy_static! {
         "bizra_sat_requests_total",
         "Total number of SAT validation requests",
         &["result"]  // approved, rejected, quarantine
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// SAT rejections by rejection code
     pub static ref SAT_REJECTIONS_BY_CODE: CounterVec = register_counter_vec!(
         "bizra_sat_rejections_total",
         "Total SAT rejections by rejection code",
         &["code"]  // security_threat, ethics_violation, performance_exceeded, etc.
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// SAT validation latency histogram
     pub static ref SAT_VALIDATION_LATENCY: Histogram = register_histogram!(
         "bizra_sat_validation_seconds",
         "SAT validation latency in seconds",
         vec![0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// SAT consensus approvals (last request)
     /// PERFORMANCE FIX (PERF-001): Removed unbounded request_id label to prevent memory leak
@@ -44,14 +43,14 @@ lazy_static! {
     pub static ref SAT_CONSENSUS_APPROVALS: Gauge = register_gauge!(
         "bizra_sat_consensus_approvals",
         "Number of SAT validators that approved (last request)"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// SAT consensus approval histogram (distribution)
     pub static ref SAT_CONSENSUS_APPROVALS_HISTOGRAM: Histogram = register_histogram!(
         "bizra_sat_consensus_approvals_distribution",
         "Distribution of SAT validator approval counts",
         vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0]  // 6 validators max
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // FATE Metrics - Escalation layer observability
@@ -62,13 +61,13 @@ lazy_static! {
         "bizra_fate_escalations_total",
         "Total FATE escalations by severity level",
         &["level"]  // low, medium, high, critical
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// FATE pending escalations (queue depth)
     pub static ref FATE_PENDING_ESCALATIONS: Gauge = register_gauge!(
         "bizra_fate_pending_escalations",
         "Number of FATE escalations pending human review"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // Ihsān Metrics - Ethics/Quality gate observability
@@ -79,21 +78,21 @@ lazy_static! {
         "bizra_ihsan_score",
         "Ihsān score distribution",
         vec![0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.92, 0.95, 0.98, 1.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// Ihsān dimension scores (last request)
     pub static ref IHSAN_DIMENSION_SCORES: GaugeVec = register_gauge_vec!(
         "bizra_ihsan_dimension_score",
         "Ihsān score by dimension (last request)",
         &["dimension"]  // correctness, safety, user_benefit, etc.
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// Ihsān gate pass/fail
     pub static ref IHSAN_GATE_RESULTS: CounterVec = register_counter_vec!(
         "bizra_ihsan_gate_total",
         "Ihsān gate results",
         &["result", "env"]  // passed/failed, dev/ci/prod
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // Request Lifecycle Metrics
@@ -105,21 +104,21 @@ lazy_static! {
         "End-to-end request latency in seconds",
         &["outcome"],  // success, sat_rejected, ihsan_failed
         vec![0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// PAT execution latency
     pub static ref PAT_EXECUTION_LATENCY: Histogram = register_histogram!(
         "bizra_pat_execution_seconds",
         "PAT agent execution latency in seconds",
         vec![0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// Synergy score histogram
     pub static ref SYNERGY_SCORE_HISTOGRAM: Histogram = register_histogram!(
         "bizra_synergy_score",
         "PAT-SAT synergy score distribution",
         vec![0.5, 0.6, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // Receipt Metrics
@@ -130,7 +129,7 @@ lazy_static! {
         "bizra_receipts_emitted_total",
         "Total receipts emitted by type",
         &["type"]  // rejection, execution, quarantine
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // Neo4j/HyperGraph Metrics
@@ -142,13 +141,13 @@ lazy_static! {
         "Neo4j query latency in seconds",
         &["query_type"],  // evidence_retrieval, graph_traversal, etc.
         vec![0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// Neo4j connection status (1 = connected, 0 = disconnected)
     pub static ref NEO4J_CONNECTED: Gauge = register_gauge!(
         "bizra_neo4j_connected",
         "Neo4j connection status (1=connected, 0=disconnected)"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // MCP/A2A Metrics
@@ -159,20 +158,20 @@ lazy_static! {
         "bizra_mcp_tool_calls_total",
         "Total MCP tool calls by tool name",
         &["tool", "result"]  // tool name, success/failure/timeout
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// A2A delegations by agent
     pub static ref A2A_DELEGATIONS_TOTAL: CounterVec = register_counter_vec!(
         "bizra_a2a_delegations_total",
         "Total A2A delegations by agent",
         &["agent", "result"]  // agent name, success/failure/blocked
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// A2A delegation depth (current max)
     pub static ref A2A_DELEGATION_DEPTH: Gauge = register_gauge!(
         "bizra_a2a_delegation_depth_max",
         "Maximum A2A delegation depth observed"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // External AI Metrics (OpenAI, Gemini, etc.)
@@ -183,7 +182,7 @@ lazy_static! {
         "bizra_external_ai_calls_total",
         "Total external AI API calls by provider",
         &["provider", "model", "result"]  // openai/gemini, model name, success/error/rejected
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// External AI API call latency
     pub static ref EXTERNAL_AI_LATENCY: HistogramVec = register_histogram_vec!(
@@ -191,14 +190,14 @@ lazy_static! {
         "External AI API call latency in seconds",
         &["provider", "model"],
         vec![0.1, 0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0]
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// External AI token usage
     pub static ref EXTERNAL_AI_TOKENS: CounterVec = register_counter_vec!(
         "bizra_external_ai_tokens_total",
         "Total tokens used by external AI APIs",
         &["provider", "model", "type"]  // type: prompt/completion
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // HTTP Security Metrics
@@ -208,19 +207,19 @@ lazy_static! {
     pub static ref HTTP_REQUESTS_ALLOWED: prometheus::Counter = prometheus::register_counter!(
         "bizra_http_requests_allowed_total",
         "Total HTTP requests that passed rate limiting"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// HTTP requests rate limited (rejected)
     pub static ref HTTP_REQUESTS_RATE_LIMITED: prometheus::Counter = prometheus::register_counter!(
         "bizra_http_requests_rate_limited_total",
         "Total HTTP requests rejected due to rate limiting"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// HTTP requests rejected for missing/invalid authentication
     pub static ref HTTP_REQUESTS_UNAUTHORIZED: prometheus::Counter = prometheus::register_counter!(
         "bizra_http_requests_unauthorized_total",
         "Total HTTP requests rejected due to missing/invalid authentication"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     // ============================================================
     // WASM Sandbox Security Metrics
@@ -231,19 +230,19 @@ lazy_static! {
     pub static ref WASM_SIGNATURE_FAILURES: prometheus::Counter = prometheus::register_counter!(
         "bizra_wasm_signature_failures_total",
         "Total WASM modules rejected due to invalid signature"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// WASM TOCTOU attack attempts detected
     pub static ref WASM_TOCTOU_ATTEMPTS: prometheus::Counter = prometheus::register_counter!(
         "bizra_wasm_toctou_attempts_total",
         "Total WASM TOCTOU attack attempts detected (module tampering between verify and compile)"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 
     /// WASM modules successfully executed
     pub static ref WASM_EXECUTIONS_SUCCESS: prometheus::Counter = prometheus::register_counter!(
         "bizra_wasm_executions_success_total",
         "Total WASM modules successfully executed in sandbox"
-    ).context("Failed to unwrap result")?;
+    ).expect("Failed to register metric");
 }
 
 /// Timer guard for measuring operation duration
@@ -342,8 +341,8 @@ pub fn gather_metrics() -> String {
     let encoder = TextEncoder::new();
     let metric_families = prometheus::gather();
     let mut buffer = Vec::new();
-    encoder.encode(&metric_families, &mut buffer).context("Failed to unwrap result")?;
-    String::from_utf8(buffer).context("Failed to unwrap result")?
+    encoder.encode(&metric_families, &mut buffer).expect("Failed to register metric");
+    String::from_utf8(buffer).expect("Failed to register metric")
 }
 
 /// Initialize metrics (call once at startup)

@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/model_fabric.rs - Model Fabric for One-Model-Per-Agent Isolation
 //
 // Implements strict isolation where each agent gets its own dedicated model endpoint.

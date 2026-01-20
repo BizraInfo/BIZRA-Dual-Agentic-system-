@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/sape/pattern_compiler.rs
 // Status: OPTIMIZATION_PIPELINE_V1
 // SAPE Pattern Compilation for recurring symbol chains
@@ -359,7 +358,10 @@ impl PatternCompiler {
     /// Verify pattern signature
     async fn verify_pattern_signature(&self, pattern: &Pattern) -> Result<bool, PatternError> {
         match (&pattern.compiled_wasm, &pattern.signature) {
-            (Some(wasm), Some(sig)) => Ok(self.signer.verify(wasm, sig)),
+            (Some(wasm), Some(sig)) => {
+                self.signer.verify(wasm, sig).await
+                    .map_err(|e| PatternError::CompilationFailed(e.to_string()))
+            }
             _ => Ok(false),
         }
     }
@@ -460,20 +462,21 @@ mod tests {
             .iter()
             .find(|p| p.symbol_chain == vec!["A", "B", "C"]);
         assert!(abc_pattern.is_some());
-        assert_eq!(abc_pattern.context("Failed to unwrap result")?.frequency, 3);
+        assert_eq!(abc_pattern.expect("abc_pattern was None").frequency, 3);
     }
 
     #[tokio::test]
-    async fn test_pattern_compilation() {
+    async fn test_pattern_compilation() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let compiler = PatternCompiler::new(signer);
 
         let pattern = Pattern::new(vec!["TEST".to_string(), "PATTERN".to_string()]);
-        let compiled = compiler.compile_pattern(pattern).await.context("Failed to unwrap result")?;
+        let compiled = compiler.compile_pattern(pattern).await.context("Failed to compile pattern")?;
 
         assert!(compiled.is_compiled());
         assert!(compiled.compiled_wasm.is_some());
         assert!(compiled.signature.is_some());
+        Ok(())
     }
 
     #[test]

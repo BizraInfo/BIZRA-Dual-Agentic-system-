@@ -1,4 +1,3 @@
-use anyhow::Context;
 //! BIZRA Halo2 ZK Proof Backend
 //!
 //! Giants Protocol Citation:
@@ -11,6 +10,7 @@ use anyhow::Context;
 //!
 //! This replaces the simulation stub with real cryptographic proofs.
 
+use anyhow::Context;
 use halo2_proofs::{
     arithmetic::Field,
     circuit::{AssignedCell, Chip, Layouter, SimpleFloorPlanner, Value},

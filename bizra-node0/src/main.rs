@@ -269,6 +269,9 @@ fn load_or_create_signing_key(keys_dir: &Path, passphrase: &str) -> Result<Signi
         let mut sk_bytes = [0u8; 32];
         sk_bytes.copy_from_slice(&plaintext);
         let sk = SigningKey::from_bytes(&sk_bytes);
+        
+        // Zeroize secret key bytes from stack
+        sk_bytes.zeroize();
 
         // wipe plaintext
         let mut pt = plaintext;
@@ -276,7 +279,7 @@ fn load_or_create_signing_key(keys_dir: &Path, passphrase: &str) -> Result<Signi
         Ok(sk)
     } else {
         let sk = SigningKey::generate(&mut OsRng);
-        let sk_bytes = sk.to_bytes();
+        let mut sk_bytes = sk.to_bytes();
 
         let mut salt = [0u8; 16];
         let mut nonce = [0u8; 24];
@@ -287,6 +290,9 @@ fn load_or_create_signing_key(keys_dir: &Path, passphrase: &str) -> Result<Signi
         let aead = XChaCha20Poly1305::new((&key).into());
         let ciphertext = aead.encrypt((&nonce).into(), sk_bytes.as_slice())
             .map_err(|_| anyhow!("key encrypt failed"))?;
+
+        // Zeroize secret key bytes from stack after encryption
+        sk_bytes.zeroize();
 
         let mut out = Vec::with_capacity(9 + 16 + 24 + ciphertext.len());
         out.extend_from_slice(KEY_MAGIC);
@@ -352,6 +358,30 @@ fn write_receipt(m: &Manifest, r: &Receipt) -> Result<()> {
     let bytes = serde_json::to_vec_pretty(r)?;
     fs::write(receipt_path(m, r.unsigned.counter), bytes)?;
     Ok(())
+}
+
+/// Scan ledger directory for highest existing receipt counter.
+/// Returns 0 if no receipts exist (genesis not yet written).
+fn get_last_counter(m: &Manifest) -> Result<u128> {
+    let ledger_dir = Path::new(&m.node.ledger_dir);
+    if !ledger_dir.exists() {
+        return Ok(0);
+    }
+    let mut max_counter: u128 = 0;
+    for entry in fs::read_dir(ledger_dir)? {
+        let entry = entry?;
+        let fname = entry.file_name();
+        let fname_str = fname.to_string_lossy();
+        // Receipt files are named like: 00000000000000000000000000000001.json
+        if fname_str.ends_with(".json") {
+            if let Some(stem) = fname_str.strip_suffix(".json") {
+                if let Ok(counter) = stem.parse::<u128>() {
+                    max_counter = max_counter.max(counter);
+                }
+            }
+        }
+    }
+    Ok(max_counter)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -530,11 +560,15 @@ fn run_cmd(manifest_path: &Path) -> Result<()> {
     verify_ledger(&m, &policy_hash)?;
 
     let mut pass = std::env::var("BIZRA_KEY_PASSPHRASE").unwrap_or_default();
-    if pass.is_empty() { pass = "dev-insecure".to_string(); }
+    if pass.is_empty() {
+        // In production mode, require the passphrase - no fallback to dev-insecure
+        return Err(anyhow!("BIZRA_KEY_PASSPHRASE environment variable is required. Set it to unlock the signing key."));
+    }
     let sk = load_or_create_signing_key(Path::new(&m.node.keys_dir), &pass)?;
     pass.zeroize();
 
-    let mut counter: u128 = 2; // after genesis
+    // Initialize counter by scanning existing receipts
+    let mut counter: u128 = get_last_counter(&m)? + 1;
     loop {
         let prev_hash = read_tail(&m)?;
         let unsigned = ReceiptUnsigned {

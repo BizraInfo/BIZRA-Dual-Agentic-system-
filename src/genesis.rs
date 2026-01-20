@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/genesis.rs - Genesis Receipt and Chain Verification
 //
 // PEAK MASTERPIECE v7.1: Priority 0 Implementation

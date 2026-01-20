@@ -1,9 +1,9 @@
-use anyhow::Context;
-#[cfg_attr(not(test), deny(clippy::unwrap_used))]
 // src/hookchain.rs
 // Status: GIANTS_PROTOCOL_V1
 // SAT HookChain - Governance injection point for every capability/tool call
 // Based on "Shoulder of Giants" pattern from Claude Code hooks
+
+#![cfg_attr(not(test), deny(clippy::unwrap_used))]
 
 use crate::fixed::Fixed64;
 use crate::tpm::SignerProvider;
@@ -766,14 +766,15 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_capability_token_signing() {
+    async fn test_capability_token_signing() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let mut token = CapabilityToken::new("file_read", "read", CapabilityTier::T1Consumer);
 
-        token.sign(signer.as_ref()).await.context("Failed to unwrap result")?;
+        token.sign(signer.as_ref()).await.context("Failed to sign token")?;
 
         assert!(token.is_valid());
         assert!(token.issuer_signature.is_some());
+        Ok(())
     }
 
     #[test]
@@ -784,25 +785,26 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_session_dag_advance() {
+    async fn test_session_dag_advance() -> anyhow::Result<()> {
         let dag = SessionDAG::new("v1.0.0");
 
-        let head1 = dag.get_head().await.context("Failed to unwrap result")?;
+        let head1 = dag.get_head().await.context("Failed to get head")?;
         assert!(head1.parent_hash.is_none()); // Genesis has no parent
 
         // Use Fixed64 for deterministic impact delta
         let child = dag
             .advance("state1", "receipts1", Fixed64::from_f64(0.05))
             .await
-            .context("Failed to unwrap result")?;
+            .context("Failed to advance")?;
         assert_eq!(child.parent_hash, Some(head1.node_hash));
 
-        let head2 = dag.get_head().await.context("Failed to unwrap result")?;
+        let head2 = dag.get_head().await.context("Failed to get head 2")?;
         assert_eq!(head2.node_hash, child.node_hash);
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_hook_chain_blocked_tool() {
+    async fn test_hook_chain_blocked_tool() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let hook_chain = SATHookChain::new(signer, "v1.0.0");
 
@@ -814,16 +816,17 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to check capability")?;
 
         match decision {
             HookDecision::Deny { code, .. } => assert_eq!(code, "BLOCKED_TOOL"),
             _ => panic!("Expected Deny decision"),
         }
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_hook_chain_security_scan() {
+    async fn test_hook_chain_security_scan() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let hook_chain = SATHookChain::new(signer, "v1.0.0");
 
@@ -835,16 +838,17 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to check capability")?;
 
         match decision {
             HookDecision::Deny { code, .. } => assert_eq!(code, "SECURITY_THREAT"),
             _ => panic!("Expected Deny decision for SQL injection"),
         }
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_hook_chain_allow() {
+    async fn test_hook_chain_allow() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let hook_chain = SATHookChain::new(signer, "v1.0.0");
 
@@ -856,16 +860,17 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to check capability")?;
 
         match decision {
             HookDecision::Allow { .. } => (),
             _ => panic!("Expected Allow decision"),
         }
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_post_hook_commit() {
+    async fn test_post_hook_commit() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let hook_chain = SATHookChain::new(signer, "v1.0.0");
 
@@ -884,7 +889,7 @@ mod tests {
             error: None,
         };
 
-        let result = hook_chain.post_capability_use(&executed).await.context("Failed to unwrap result")?;
+        let result = hook_chain.post_capability_use(&executed).await.context("Failed to post hook")?;
 
         match result {
             PostHookResult::Commit { receipt_id, .. } => {
@@ -892,6 +897,7 @@ mod tests {
             }
             _ => panic!("Expected Commit result"),
         }
+        Ok(())
     }
 
     // ========================================================================
@@ -996,26 +1002,27 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_session_dag_fork_and_merge() {
+    async fn test_session_dag_fork_and_merge() -> anyhow::Result<()> {
         let dag = SessionDAG::new("v1.0.0");
 
         // Advance once
         let _child1 = dag
             .advance("state1", "receipts1", Fixed64::from_f64(0.1))
             .await
-            .context("Failed to unwrap result")?;
+            .context("Failed to advance")?;
 
         // Fork from current head
         let fork_result = dag.fork("experimental").await;
         assert!(fork_result.is_ok());
-        let forked = fork_result.context("Failed to unwrap result")?;
+        let forked = fork_result.context("Failed to fork")?;
         assert!(forked.fork_id.is_some());
-        assert_eq!(forked.fork_id.as_ref().context("Failed to unwrap result")?, "experimental");
+        assert_eq!(forked.fork_id.as_ref().expect("fork_id was None"), "experimental");
         assert!(!forked.merged);
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_hook_chain_ethics_violation() {
+    async fn test_hook_chain_ethics_violation() -> anyhow::Result<()> {
         let signer = Arc::new(SoftwareSigner::new());
         let hook_chain = SATHookChain::new(signer, "v1.0.0");
 
@@ -1028,7 +1035,7 @@ mod tests {
             timestamp: 0,
         };
 
-        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to unwrap result")?;
+        let decision = hook_chain.pre_capability_use(&draft).await.context("Failed to check capability")?;
 
         match decision {
             HookDecision::Deny { code, .. } => {
@@ -1037,10 +1044,11 @@ mod tests {
             }
             _ => panic!("Expected Deny decision for security threat"),
         }
+        Ok(())
     }
 
     #[test]
-    fn test_capability_budget_serialization() {
+    fn test_capability_budget_serialization() -> anyhow::Result<()> {
         let budget = CapabilityBudget {
             max_tokens: 1000,
             max_time_ms: 5000,
@@ -1049,20 +1057,21 @@ mod tests {
             offload_allowed: false,
         };
 
-        let json = serde_json::to_string(&budget).context("Failed to unwrap result")?;
-        let deserialized: CapabilityBudget = serde_json::from_str(&json).context("Failed to unwrap result")?;
+        let json = serde_json::to_string(&budget).context("Failed to serialize")?;
+        let deserialized: CapabilityBudget = serde_json::from_str(&json).context("Failed to deserialize")?;
 
         assert_eq!(budget.max_tokens, deserialized.max_tokens);
         assert_eq!(budget.max_time_ms, deserialized.max_time_ms);
         assert_eq!(budget.offload_allowed, deserialized.offload_allowed);
+        Ok(())
     }
 
     #[test]
-    fn test_session_node_serialization() {
+    fn test_session_node_serialization() -> anyhow::Result<()> {
         let node = SessionNode::genesis("v1.0.0");
 
-        let json = serde_json::to_string(&node).context("Failed to unwrap result")?;
-        let deserialized: SessionNode = serde_json::from_str(&json).context("Failed to unwrap result")?;
+        let json = serde_json::to_string(&node).context("Failed to serialize")?;
+        let deserialized: SessionNode = serde_json::from_str(&json).context("Failed to deserialize")?;
 
         assert_eq!(node.policy_version, deserialized.policy_version);
         assert_eq!(node.parent_hash, deserialized.parent_hash);
@@ -1070,5 +1079,6 @@ mod tests {
             node.impact_delta.to_bits(),
             deserialized.impact_delta.to_bits()
         );
+        Ok(())
     }
 }

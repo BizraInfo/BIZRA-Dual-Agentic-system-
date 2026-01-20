@@ -18,4 +18,4 @@
 {"entity_id": "e-b2c8d9d5", "entity_type": "Tool", "canonical_name": "PostgreSQL", "aliases": [], "confidence": 0.9, "mention_count": 2, "source_chunks": ["891b51a55ddc5868-c1", "891b51a55ddc5868-c2"]}
 {"entity_id": "e-cf540656", "entity_type": "Library", "canonical_name": "numpy", "aliases": [], "confidence": 0.9, "mention_count": 1, "source_chunks": ["891b51a55ddc5868-c2"]}
 {"entity_id": "e-fa911d1a", "entity_type": "Tool", "canonical_name": "Qdrant", "aliases": ["qdrant"], "confidence": 0.9, "mention_count": 2, "source_chunks": ["891b51a55ddc5868-c2", "891b51a55ddc5868-c3"]}
-{"entity_id": "e-c7793854", "entity_type": "Language", "canonical_name": "R (programming language)", "aliases": ["R language", "R package", "targets R"], "confidence": 0.7, "mention_count": 1, "source_chunks": ["891b51a55ddc5868-c7"]}
+{"entity_id": "e-c7793854", "entity_type": "Language", "canonical_name": "R (programming language)", "aliases": ["R", "R language"], "confidence": 0.7, "mention_count": 1, "source_chunks": ["891b51a55ddc5868-c7"]}

@@ -32,5 +32,14 @@ cargo run -p bizra-node0 --bin bizra-node0 -- verify --manifest "${MANIFEST}"
 
 echo "[7/7] Run (fail-closed runtime loop)"
 # Run for a few seconds then kill it to demonstrate success
-timeout 10s cargo run -p bizra-node0 --bin bizra-node0 -- run --manifest "${MANIFEST}" || true
+# Handle exit codes properly: 124 = timeout (OK), other non-zero = failure
+timeout 10s cargo run -p bizra-node0 --bin bizra-node0 -- run --manifest "${MANIFEST}"
+rc=$?
+if [ $rc -eq 124 ]; then
+    echo "   (Timeout reached - expected for demo)"
+elif [ $rc -ne 0 ]; then
+    echo "❌ Runtime failed with exit code $rc"
+    exit $rc
+fi
 echo "✅ Activation sequence completed successfully."
+

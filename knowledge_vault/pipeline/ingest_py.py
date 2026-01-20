@@ -71,8 +71,23 @@ def _to_repo_relative(path: Path) -> str:
 
 
 def resolve_uri(uri: str, repo_root: Path = REPO_ROOT) -> Path:
-    """Resolve a repo-relative document URI to an absolute path."""
-    return (repo_root / uri).resolve()
+    """Resolve a repo-relative document URI to an absolute path.
+    
+    Raises:
+        ValueError: If the resolved path escapes the repository root (path traversal).
+    """
+    resolved_root = repo_root.resolve()
+    resolved_path = (repo_root / uri).resolve()
+    
+    # Security: Prevent path traversal attacks
+    try:
+        resolved_path.relative_to(resolved_root)
+    except ValueError:
+        raise ValueError(
+            f"Path traversal detected: '{uri}' resolves outside repository root"
+        )
+    
+    return resolved_path
 
 
 def load_chat_export(path: Path) -> Document:
@@ -364,7 +379,7 @@ def ingest_chats(window_size: int = 3, overlap: int = 0):
             for alias in e.aliases:
                 if alias not in existing.aliases and alias != existing.canonical_name:
                     existing.aliases.append(alias)
-            existing.mention_count += e.mention_count
+            # Note: mention_count will be recomputed from source_chunks below
             for chunk_id in e.source_chunks:
                 if chunk_id not in existing.source_chunks:
                     existing.source_chunks.append(chunk_id)

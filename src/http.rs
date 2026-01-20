@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/http.rs - HTTP API Server
 //
 // BIZRA Security-First HTTP Layer

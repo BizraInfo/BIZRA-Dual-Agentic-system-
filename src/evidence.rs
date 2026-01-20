@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/evidence.rs - Evidence Envelope Security
 //
 // Rust-native implementation of the Evidence Envelope protocol,
@@ -309,7 +308,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_next_counter() {
+    fn test_get_next_counter() -> anyhow::Result<()> {
         let mut guard = ReplayGuard::new();
 
         // Session doesn't exist yet
@@ -324,10 +323,11 @@ mod tests {
             "payload1".to_string(),
         );
 
-        guard.validate_envelope(&env).context("Failed to unwrap result")?;
+        guard.validate_envelope(&env).context("Failed to validate envelope")?;
 
         // After counter 1, next should be 2
         assert_eq!(guard.get_next_counter("session1"), 2);
+        Ok(())
     }
 
     #[test]

@@ -1,4 +1,3 @@
-use anyhow::Context;
 pub mod protocol;
 pub mod sentinel;
 

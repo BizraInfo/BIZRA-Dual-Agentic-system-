@@ -13,21 +13,24 @@ if [ -z "$COMMAND" ]; then
 fi
 
 # Security blocklist - VETO power patterns
+# Note: These are regex patterns for grep -E
 BLOCKLIST=(
-    "rm -rf /"
-    "rm -rf /*"
-    "> /dev/sd"
-    "mkfs"
-    "dd if=/dev/zero"
-    ":(){ :|:& };:"
-    "chmod -R 777 /"
-    "curl.*|.*sh"
-    "wget.*|.*sh"
+    "rm[[:space:]]+-rf[[:space:]]+/($|[[:space:]])"
+    "rm[[:space:]]+-rf[[:space:]]+/\\*"
+    ">[[:space:]]*/dev/sd"
+    "\\bmkfs\\b"
+    "dd[[:space:]]+if=/dev/zero"
+    ":\\(\\)\\{[[:space:]]*:\\|:&[[:space:]]*\\};:"
+    "chmod[[:space:]]+-R[[:space:]]+777[[:space:]]+/"
+    "curl[[:space:]].*\\|[[:space:]]*sh"
+    "curl[[:space:]].*\\|[[:space:]]*bash"
+    "wget[[:space:]].*\\|[[:space:]]*sh"
+    "wget[[:space:]].*\\|[[:space:]]*bash"
 )
 
 for pattern in "${BLOCKLIST[@]}"; do
     if echo "$COMMAND" | grep -qE "$pattern"; then
-        echo "SAT Security Sentinel VETO: Blocked dangerous pattern '$pattern'" >&2
+        echo "SAT Security Sentinel VETO: Blocked dangerous pattern" >&2
         exit 2
     fi
 done

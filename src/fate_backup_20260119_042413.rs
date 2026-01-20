@@ -353,14 +353,14 @@ impl AsyncFateVerifier {
 
     pub fn get_status(&self, id: &str) -> Option<VerificationStatus> {
         // HARD GATE #2 FIX: Graceful lock poisoning recovery
-        let mut res = match self.results.lock() {
+        let res = match self.results.lock() {
             Ok(r) => r,
             Err(poisoned) => {
                 warn!("⚠️ FATE results lock poisoned in get_status, recovering");
                 poisoned.into_inner()
             }
         };
-        res.remove(id)
+        res.get(id).cloned()
     }
 }
 
@@ -797,7 +797,12 @@ impl FateEngine {
                 }
             }
         }
-        self.pending_escalations.pop()
+        // Use FIFO order - remove from front, not back
+        if self.pending_escalations.is_empty() {
+            None
+        } else {
+            Some(self.pending_escalations.remove(0))
+        }
     }
 
     /// Resolve an escalation with Redis persistence (async)

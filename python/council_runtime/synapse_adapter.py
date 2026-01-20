@@ -7,8 +7,10 @@ class CouncilSynapse:
 
     def propose(self, content: str, parents=None, meta=None) -> str:
         parents = parents or []
-        # Support passing role in meta for now if needed, or expand API
-        role = meta.get("role") if meta else None
+        # Type guard: only call .get() if meta is dict-like
+        role = None
+        if meta is not None and hasattr(meta, 'get'):
+            role = meta.get("role")
         
         tid = self.g.add_thought(content, parents, role)
         # Gate: no skipping validation

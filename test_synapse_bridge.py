@@ -1,4 +1,3 @@
-
 import sys
 import os
 
@@ -17,3 +16,4 @@ except ImportError as e:
     print(f"❌ FAIL: Could not import synapse_py: {e}")
     print("Checking search path...")
     print(sys.path)
+    sys.exit(1)  # Exit with non-zero to fail CI

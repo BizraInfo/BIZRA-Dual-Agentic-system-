@@ -42,6 +42,11 @@ PROJECT_STRUCTURE.md
 !*.pub
 .vercel
 
+# Encrypted secrets (should never be committed - rotate if found in history!)
+state/keys/*.enc
+**/*.sk
+**/*.sk.enc
+
 # Embedded git repositories (external dependencies)
 bizra_data_vault/roots/hadith_data/
 bizra_data_vault/roots/kais_dukes/

@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/logic_envelope.rs - Logic Envelope Validation System
 //
 // Priority 1: Tiered validation between LLM output and execution

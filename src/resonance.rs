@@ -1,4 +1,3 @@
-use anyhow::Context;
 // src/resonance.rs
 /*
 SOVEREIGN RESONANCE MESH v1.0
@@ -307,7 +306,7 @@ impl ResonanceMesh {
             action: ResonanceAction::Maintained,
             timestamp: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .context("Failed to unwrap result")?
+                .map_err(|e| ResonanceError::SystemTimeError(e.to_string()))?
                 .as_secs(),
         };
 
@@ -398,7 +397,7 @@ impl ResonanceMesh {
             action: ResonanceAction::Pruned,
             timestamp: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .context("Failed to unwrap result")?
+                .map_err(|e| ResonanceError::SystemTimeError(e.to_string()))?
                 .as_secs(),
         };
 
@@ -439,7 +438,7 @@ impl ResonanceMesh {
             action: ResonanceAction::Amplified,
             timestamp: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
-                .context("Failed to unwrap result")?
+                .map_err(|e| ResonanceError::SystemTimeError(e.to_string()))?
                 .as_secs(),
         };
 
@@ -605,7 +604,7 @@ impl ResonanceMesh {
     fn calculate_temporal_decay(&self, last_updated: u64) -> f64 {
         let now = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
-            .context("Failed to unwrap result")?
+            .expect("System clock before UNIX epoch during temporal decay calculation")
             .as_secs();
 
         let age = now.saturating_sub(last_updated) as f64;
@@ -652,6 +651,9 @@ pub enum ResonanceError {
 
     #[error("Constitutional drift detected: {0}")]
     ConstitutionalDrift(String),
+
+    #[error("System time error: {0}")]
+    SystemTimeError(String),
 }
 
 impl ResonanceMesh {

@@ -50,7 +50,8 @@ impl PySynapticGraph {
         let snap: Value = self.inner
             .snapshot_json()
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("snapshot failed: {e}")))?;
-        Ok(serde_json::to_string(&snap).unwrap())
+        serde_json::to_string(&snap)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("serialize failed: {e}")))
     }
 
     /// Return a receipt-ready payload fragment (no secrets, deterministic).
@@ -58,7 +59,8 @@ impl PySynapticGraph {
         let payload: Value = self.inner
             .receipt_payload()
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("payload failed: {e}")))?;
-        Ok(serde_json::to_string(&payload).unwrap())
+        serde_json::to_string(&payload)
+            .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("serialize failed: {e}")))
     }
 }
 
