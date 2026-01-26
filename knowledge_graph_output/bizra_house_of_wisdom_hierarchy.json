@@ -1,0 +1,1093 @@
+{
+  "metadata": {
+    "name": "BIZRA House of Wisdom",
+    "description": "Complete hierarchical knowledge structure from Quran to human knowledge",
+    "created_at": "2026-01-13T02:05:29.730467",
+    "total_domains": 44,
+    "philosophy": "From divine revelation to human knowledge - all paths lead to Truth"
+  },
+  "hierarchy": {
+    "domain_id": "quran",
+    "name": "Quran",
+    "description": "Divine Revelation - The absolute foundation of truth and wisdom",
+    "level": 0,
+    "tags": [
+      "divine",
+      "revelation",
+      "root",
+      "unchanging",
+      "absolute_truth"
+    ],
+    "node_count": 0,
+    "children": [
+      {
+        "domain_id": "hadith",
+        "name": "Hadith (Prophetic Tradition)",
+        "description": "Authentic narrations contextualizing and elaborating the Quran",
+        "level": 1,
+        "tags": [
+          "prophetic",
+          "sunnah",
+          "authentication",
+          "contextual"
+        ],
+        "node_count": 0,
+        "children": []
+      },
+      {
+        "domain_id": "human_knowledge",
+        "name": "Human Knowledge",
+        "description": "All human knowledge built upon divine guidance",
+        "level": 1,
+        "tags": [
+          "human",
+          "empirical",
+          "growing",
+          "dynamic"
+        ],
+        "node_count": 0,
+        "children": [
+          {
+            "domain_id": "arts_humanities",
+            "name": "Arts & Humanities",
+            "description": "Study of human culture, creativity, and expression",
+            "level": 2,
+            "tags": [
+              "arts",
+              "humanities",
+              "culture",
+              "philosophy"
+            ],
+            "node_count": 0,
+            "children": [
+              {
+                "domain_id": "hum_ethics",
+                "name": "Ethics",
+                "description": "Study of moral principles and values",
+                "level": 3,
+                "tags": [
+                  "humanities",
+                  "ethics"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "hum_history",
+                "name": "History",
+                "description": "Study of past events and human societies",
+                "level": 3,
+                "tags": [
+                  "humanities",
+                  "history"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "hum_linguistics",
+                "name": "Linguistics",
+                "description": "Scientific study of language",
+                "level": 3,
+                "tags": [
+                  "humanities",
+                  "linguistics"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "hum_literature",
+                "name": "Literature",
+                "description": "Written works of artistic or intellectual value",
+                "level": 3,
+                "tags": [
+                  "humanities",
+                  "literature"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "hum_philosophy",
+                "name": "Philosophy",
+                "description": "Study of fundamental questions about existence and knowledge",
+                "level": 3,
+                "tags": [
+                  "humanities",
+                  "philosophy"
+                ],
+                "node_count": 0,
+                "children": []
+              }
+            ]
+          },
+          {
+            "domain_id": "bizra_self",
+            "name": "BIZRA Self-Knowledge",
+            "description": "BIZRA's own codebase, architecture, and learnings",
+            "level": 2,
+            "tags": [
+              "self_knowledge",
+              "meta",
+              "bizra",
+              "evolving"
+            ],
+            "node_count": 0,
+            "children": [
+              {
+                "domain_id": "bizra_architecture",
+                "name": "Architecture",
+                "description": "System design and patterns",
+                "level": 3,
+                "tags": [
+                  "bizra",
+                  "self_knowledge",
+                  "architecture"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "bizra_benchmarks",
+                "name": "Benchmarks",
+                "description": "Performance measurements and tests",
+                "level": 3,
+                "tags": [
+                  "bizra",
+                  "self_knowledge",
+                  "benchmarks"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "bizra_codebase",
+                "name": "Codebase",
+                "description": "BIZRA's source code and implementation",
+                "level": 3,
+                "tags": [
+                  "bizra",
+                  "self_knowledge",
+                  "codebase"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "bizra_documentation",
+                "name": "Documentation",
+                "description": "Technical documentation and guides",
+                "level": 3,
+                "tags": [
+                  "bizra",
+                  "self_knowledge",
+                  "documentation"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "bizra_learnings",
+                "name": "Learnings & Insights",
+                "description": "Discoveries and optimizations",
+                "level": 3,
+                "tags": [
+                  "bizra",
+                  "self_knowledge",
+                  "learnings"
+                ],
+                "node_count": 0,
+                "children": []
+              }
+            ]
+          },
+          {
+            "domain_id": "mathematics",
+            "name": "Mathematics",
+            "description": "The language of patterns, structures, and quantitative reasoning",
+            "level": 2,
+            "tags": [
+              "math",
+              "logic",
+              "abstract",
+              "foundational"
+            ],
+            "node_count": 0,
+            "children": [
+              {
+                "domain_id": "math_algebra",
+                "name": "Algebra",
+                "description": "Study of mathematical symbols and rules",
+                "level": 3,
+                "tags": [
+                  "mathematics",
+                  "algebra"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "math_calculus",
+                "name": "Calculus",
+                "description": "Study of change and continuous functions",
+                "level": 3,
+                "tags": [
+                  "mathematics",
+                  "calculus"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "math_discrete_math",
+                "name": "Discrete Mathematics",
+                "description": "Study of discrete structures",
+                "level": 3,
+                "tags": [
+                  "mathematics",
+                  "discrete_math"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "math_geometry",
+                "name": "Geometry",
+                "description": "Study of shapes, sizes, and spatial properties",
+                "level": 3,
+                "tags": [
+                  "mathematics",
+                  "geometry"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "math_number_theory",
+                "name": "Number Theory",
+                "description": "Study of integers and their properties",
+                "level": 3,
+                "tags": [
+                  "mathematics",
+                  "number_theory"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "math_statistics",
+                "name": "Statistics",
+                "description": "Analysis and interpretation of data",
+                "level": 3,
+                "tags": [
+                  "mathematics",
+                  "statistics"
+                ],
+                "node_count": 0,
+                "children": []
+              }
+            ]
+          },
+          {
+            "domain_id": "sciences",
+            "name": "Natural Sciences",
+            "description": "Systematic study of the natural world through observation and experiment",
+            "level": 2,
+            "tags": [
+              "science",
+              "empirical",
+              "natural_world"
+            ],
+            "node_count": 0,
+            "children": [
+              {
+                "domain_id": "sci_astronomy",
+                "name": "Astronomy",
+                "description": "Study of celestial objects and the universe",
+                "level": 3,
+                "tags": [
+                  "science",
+                  "astronomy"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "sci_biology",
+                "name": "Biology",
+                "description": "Study of living organisms and life",
+                "level": 3,
+                "tags": [
+                  "science",
+                  "biology"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "sci_chemistry",
+                "name": "Chemistry",
+                "description": "Study of matter and its transformations",
+                "level": 3,
+                "tags": [
+                  "science",
+                  "chemistry"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "sci_geology",
+                "name": "Geology",
+                "description": "Study of Earth's physical structure and substance",
+                "level": 3,
+                "tags": [
+                  "science",
+                  "geology"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "sci_physics",
+                "name": "Physics",
+                "description": "Study of matter, energy, space, and time",
+                "level": 3,
+                "tags": [
+                  "science",
+                  "physics"
+                ],
+                "node_count": 0,
+                "children": []
+              }
+            ]
+          },
+          {
+            "domain_id": "technology",
+            "name": "Technology & Engineering",
+            "description": "Application of scientific knowledge for practical purposes",
+            "level": 2,
+            "tags": [
+              "technology",
+              "engineering",
+              "applied",
+              "innovation"
+            ],
+            "node_count": 0,
+            "children": [
+              {
+                "domain_id": "tech_algorithms",
+                "name": "Algorithms & Data Structures",
+                "description": "Efficient problem-solving methods",
+                "level": 3,
+                "tags": [
+                  "technology",
+                  "algorithms"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "tech_artificial_intelligence",
+                "name": "Artificial Intelligence",
+                "description": "Machines that simulate human intelligence",
+                "level": 3,
+                "tags": [
+                  "technology",
+                  "artificial_intelligence"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "tech_computer_science",
+                "name": "Computer Science",
+                "description": "Study of computation, information, and automation",
+                "level": 3,
+                "tags": [
+                  "technology",
+                  "computer_science"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "tech_cryptography",
+                "name": "Cryptography",
+                "description": "Secure communication and data protection",
+                "level": 3,
+                "tags": [
+                  "technology",
+                  "cryptography"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "tech_distributed_systems",
+                "name": "Distributed Systems",
+                "description": "Computing across multiple machines",
+                "level": 3,
+                "tags": [
+                  "technology",
+                  "distributed_systems"
+                ],
+                "node_count": 0,
+                "children": []
+              },
+              {
+                "domain_id": "tech_software_engineering",
+                "name": "Software Engineering",
+                "description": "Design and development of software systems",
+                "level": 3,
+                "tags": [
+                  "technology",
+                  "software_engineering"
+                ],
+                "node_count": 0,
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "domain_id": "quranic_themes",
+        "name": "Quranic Themes & Concepts",
+        "description": "Core themes and concepts extracted from divine revelation",
+        "level": 1,
+        "tags": [
+          "themes",
+          "concepts",
+          "principles",
+          "values"
+        ],
+        "node_count": 0,
+        "children": [
+          {
+            "domain_id": "theme_taqwa",
+            "name": "Consciousness (Taqwa)",
+            "description": "God-consciousness and piety",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_ihsan",
+            "name": "Excellence (Ihsan)",
+            "description": "Perfection in worship and action",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_shukr",
+            "name": "Gratitude (Shukr)",
+            "description": "Thankfulness and appreciation",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_adl",
+            "name": "Justice (Adl)",
+            "description": "Divine justice and fairness",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_ilm",
+            "name": "Knowledge (Ilm)",
+            "description": "Pursuit of knowledge and understanding",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_rahma",
+            "name": "Mercy (Rahma)",
+            "description": "Divine mercy and compassion",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_sabr",
+            "name": "Patience (Sabr)",
+            "description": "Steadfastness and perseverance",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          },
+          {
+            "domain_id": "theme_hikma",
+            "name": "Wisdom (Hikma)",
+            "description": "Divine wisdom and discernment",
+            "level": 2,
+            "tags": [
+              "theme",
+              "principle",
+              "quranic_value"
+            ],
+            "node_count": 0,
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "domains": {
+    "quran": {
+      "name": "Quran",
+      "description": "Divine Revelation - The absolute foundation of truth and wisdom",
+      "parent": null,
+      "level": 0,
+      "tags": [
+        "divine",
+        "revelation",
+        "root",
+        "unchanging",
+        "absolute_truth"
+      ],
+      "node_count": 0
+    },
+    "hadith": {
+      "name": "Hadith (Prophetic Tradition)",
+      "description": "Authentic narrations contextualizing and elaborating the Quran",
+      "parent": "quran",
+      "level": 1,
+      "tags": [
+        "prophetic",
+        "sunnah",
+        "authentication",
+        "contextual"
+      ],
+      "node_count": 0
+    },
+    "quranic_themes": {
+      "name": "Quranic Themes & Concepts",
+      "description": "Core themes and concepts extracted from divine revelation",
+      "parent": "quran",
+      "level": 1,
+      "tags": [
+        "themes",
+        "concepts",
+        "principles",
+        "values"
+      ],
+      "node_count": 0
+    },
+    "theme_adl": {
+      "name": "Justice (Adl)",
+      "description": "Divine justice and fairness",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_rahma": {
+      "name": "Mercy (Rahma)",
+      "description": "Divine mercy and compassion",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_ilm": {
+      "name": "Knowledge (Ilm)",
+      "description": "Pursuit of knowledge and understanding",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_hikma": {
+      "name": "Wisdom (Hikma)",
+      "description": "Divine wisdom and discernment",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_ihsan": {
+      "name": "Excellence (Ihsan)",
+      "description": "Perfection in worship and action",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_taqwa": {
+      "name": "Consciousness (Taqwa)",
+      "description": "God-consciousness and piety",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_sabr": {
+      "name": "Patience (Sabr)",
+      "description": "Steadfastness and perseverance",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "theme_shukr": {
+      "name": "Gratitude (Shukr)",
+      "description": "Thankfulness and appreciation",
+      "parent": "quranic_themes",
+      "level": 2,
+      "tags": [
+        "theme",
+        "principle",
+        "quranic_value"
+      ],
+      "node_count": 0
+    },
+    "human_knowledge": {
+      "name": "Human Knowledge",
+      "description": "All human knowledge built upon divine guidance",
+      "parent": "quran",
+      "level": 1,
+      "tags": [
+        "human",
+        "empirical",
+        "growing",
+        "dynamic"
+      ],
+      "node_count": 0
+    },
+    "mathematics": {
+      "name": "Mathematics",
+      "description": "The language of patterns, structures, and quantitative reasoning",
+      "parent": "human_knowledge",
+      "level": 2,
+      "tags": [
+        "math",
+        "logic",
+        "abstract",
+        "foundational"
+      ],
+      "node_count": 0
+    },
+    "math_algebra": {
+      "name": "Algebra",
+      "description": "Study of mathematical symbols and rules",
+      "parent": "mathematics",
+      "level": 3,
+      "tags": [
+        "mathematics",
+        "algebra"
+      ],
+      "node_count": 0
+    },
+    "math_geometry": {
+      "name": "Geometry",
+      "description": "Study of shapes, sizes, and spatial properties",
+      "parent": "mathematics",
+      "level": 3,
+      "tags": [
+        "mathematics",
+        "geometry"
+      ],
+      "node_count": 0
+    },
+    "math_calculus": {
+      "name": "Calculus",
+      "description": "Study of change and continuous functions",
+      "parent": "mathematics",
+      "level": 3,
+      "tags": [
+        "mathematics",
+        "calculus"
+      ],
+      "node_count": 0
+    },
+    "math_number_theory": {
+      "name": "Number Theory",
+      "description": "Study of integers and their properties",
+      "parent": "mathematics",
+      "level": 3,
+      "tags": [
+        "mathematics",
+        "number_theory"
+      ],
+      "node_count": 0
+    },
+    "math_statistics": {
+      "name": "Statistics",
+      "description": "Analysis and interpretation of data",
+      "parent": "mathematics",
+      "level": 3,
+      "tags": [
+        "mathematics",
+        "statistics"
+      ],
+      "node_count": 0
+    },
+    "math_discrete_math": {
+      "name": "Discrete Mathematics",
+      "description": "Study of discrete structures",
+      "parent": "mathematics",
+      "level": 3,
+      "tags": [
+        "mathematics",
+        "discrete_math"
+      ],
+      "node_count": 0
+    },
+    "sciences": {
+      "name": "Natural Sciences",
+      "description": "Systematic study of the natural world through observation and experiment",
+      "parent": "human_knowledge",
+      "level": 2,
+      "tags": [
+        "science",
+        "empirical",
+        "natural_world"
+      ],
+      "node_count": 0
+    },
+    "sci_physics": {
+      "name": "Physics",
+      "description": "Study of matter, energy, space, and time",
+      "parent": "sciences",
+      "level": 3,
+      "tags": [
+        "science",
+        "physics"
+      ],
+      "node_count": 0
+    },
+    "sci_chemistry": {
+      "name": "Chemistry",
+      "description": "Study of matter and its transformations",
+      "parent": "sciences",
+      "level": 3,
+      "tags": [
+        "science",
+        "chemistry"
+      ],
+      "node_count": 0
+    },
+    "sci_biology": {
+      "name": "Biology",
+      "description": "Study of living organisms and life",
+      "parent": "sciences",
+      "level": 3,
+      "tags": [
+        "science",
+        "biology"
+      ],
+      "node_count": 0
+    },
+    "sci_astronomy": {
+      "name": "Astronomy",
+      "description": "Study of celestial objects and the universe",
+      "parent": "sciences",
+      "level": 3,
+      "tags": [
+        "science",
+        "astronomy"
+      ],
+      "node_count": 0
+    },
+    "sci_geology": {
+      "name": "Geology",
+      "description": "Study of Earth's physical structure and substance",
+      "parent": "sciences",
+      "level": 3,
+      "tags": [
+        "science",
+        "geology"
+      ],
+      "node_count": 0
+    },
+    "technology": {
+      "name": "Technology & Engineering",
+      "description": "Application of scientific knowledge for practical purposes",
+      "parent": "human_knowledge",
+      "level": 2,
+      "tags": [
+        "technology",
+        "engineering",
+        "applied",
+        "innovation"
+      ],
+      "node_count": 0
+    },
+    "tech_computer_science": {
+      "name": "Computer Science",
+      "description": "Study of computation, information, and automation",
+      "parent": "technology",
+      "level": 3,
+      "tags": [
+        "technology",
+        "computer_science"
+      ],
+      "node_count": 0
+    },
+    "tech_artificial_intelligence": {
+      "name": "Artificial Intelligence",
+      "description": "Machines that simulate human intelligence",
+      "parent": "technology",
+      "level": 3,
+      "tags": [
+        "technology",
+        "artificial_intelligence"
+      ],
+      "node_count": 0
+    },
+    "tech_software_engineering": {
+      "name": "Software Engineering",
+      "description": "Design and development of software systems",
+      "parent": "technology",
+      "level": 3,
+      "tags": [
+        "technology",
+        "software_engineering"
+      ],
+      "node_count": 0
+    },
+    "tech_algorithms": {
+      "name": "Algorithms & Data Structures",
+      "description": "Efficient problem-solving methods",
+      "parent": "technology",
+      "level": 3,
+      "tags": [
+        "technology",
+        "algorithms"
+      ],
+      "node_count": 0
+    },
+    "tech_distributed_systems": {
+      "name": "Distributed Systems",
+      "description": "Computing across multiple machines",
+      "parent": "technology",
+      "level": 3,
+      "tags": [
+        "technology",
+        "distributed_systems"
+      ],
+      "node_count": 0
+    },
+    "tech_cryptography": {
+      "name": "Cryptography",
+      "description": "Secure communication and data protection",
+      "parent": "technology",
+      "level": 3,
+      "tags": [
+        "technology",
+        "cryptography"
+      ],
+      "node_count": 0
+    },
+    "arts_humanities": {
+      "name": "Arts & Humanities",
+      "description": "Study of human culture, creativity, and expression",
+      "parent": "human_knowledge",
+      "level": 2,
+      "tags": [
+        "arts",
+        "humanities",
+        "culture",
+        "philosophy"
+      ],
+      "node_count": 0
+    },
+    "hum_philosophy": {
+      "name": "Philosophy",
+      "description": "Study of fundamental questions about existence and knowledge",
+      "parent": "arts_humanities",
+      "level": 3,
+      "tags": [
+        "humanities",
+        "philosophy"
+      ],
+      "node_count": 0
+    },
+    "hum_history": {
+      "name": "History",
+      "description": "Study of past events and human societies",
+      "parent": "arts_humanities",
+      "level": 3,
+      "tags": [
+        "humanities",
+        "history"
+      ],
+      "node_count": 0
+    },
+    "hum_literature": {
+      "name": "Literature",
+      "description": "Written works of artistic or intellectual value",
+      "parent": "arts_humanities",
+      "level": 3,
+      "tags": [
+        "humanities",
+        "literature"
+      ],
+      "node_count": 0
+    },
+    "hum_linguistics": {
+      "name": "Linguistics",
+      "description": "Scientific study of language",
+      "parent": "arts_humanities",
+      "level": 3,
+      "tags": [
+        "humanities",
+        "linguistics"
+      ],
+      "node_count": 0
+    },
+    "hum_ethics": {
+      "name": "Ethics",
+      "description": "Study of moral principles and values",
+      "parent": "arts_humanities",
+      "level": 3,
+      "tags": [
+        "humanities",
+        "ethics"
+      ],
+      "node_count": 0
+    },
+    "bizra_self": {
+      "name": "BIZRA Self-Knowledge",
+      "description": "BIZRA's own codebase, architecture, and learnings",
+      "parent": "human_knowledge",
+      "level": 2,
+      "tags": [
+        "self_knowledge",
+        "meta",
+        "bizra",
+        "evolving"
+      ],
+      "node_count": 0
+    },
+    "bizra_codebase": {
+      "name": "Codebase",
+      "description": "BIZRA's source code and implementation",
+      "parent": "bizra_self",
+      "level": 3,
+      "tags": [
+        "bizra",
+        "self_knowledge",
+        "codebase"
+      ],
+      "node_count": 0
+    },
+    "bizra_architecture": {
+      "name": "Architecture",
+      "description": "System design and patterns",
+      "parent": "bizra_self",
+      "level": 3,
+      "tags": [
+        "bizra",
+        "self_knowledge",
+        "architecture"
+      ],
+      "node_count": 0
+    },
+    "bizra_documentation": {
+      "name": "Documentation",
+      "description": "Technical documentation and guides",
+      "parent": "bizra_self",
+      "level": 3,
+      "tags": [
+        "bizra",
+        "self_knowledge",
+        "documentation"
+      ],
+      "node_count": 0
+    },
+    "bizra_learnings": {
+      "name": "Learnings & Insights",
+      "description": "Discoveries and optimizations",
+      "parent": "bizra_self",
+      "level": 3,
+      "tags": [
+        "bizra",
+        "self_knowledge",
+        "learnings"
+      ],
+      "node_count": 0
+    },
+    "bizra_benchmarks": {
+      "name": "Benchmarks",
+      "description": "Performance measurements and tests",
+      "parent": "bizra_self",
+      "level": 3,
+      "tags": [
+        "bizra",
+        "self_knowledge",
+        "benchmarks"
+      ],
+      "node_count": 0
+    }
+  }
+}

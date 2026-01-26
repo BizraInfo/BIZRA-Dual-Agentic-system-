@@ -1,0 +1,30 @@
+{
+  "receipt_id": "2e0f3e3f-e283-4b31-9a16-890a37e2c18e",
+  "timestamp": "2026-01-06T12:46:03Z",
+  "type": "execution",
+  "evidence_hash": "b90626839c6e6a86aaa41d9714d023d8ce2a692e9b6ff0afcbec16d8bee347aa",
+  "ihsan_score": 0.9970,
+  "snr_ratio": 11.32,
+  "consensus": {
+    "quorum_reached": true,
+    "approval_weight": 0.85,
+    "total_weight": 1.0
+  },
+  "genesis_hash": "618dc2ddd57baec52aa2070b3bd39700490da83e9446a233e3b3c4eb0a1bbcda",
+  "metadata": {
+    "commit_sha": "2c76cdedfb600f40a267dc09d7676a05f10fff29",
+    "branch": "local",
+    "actor": "root",
+    "runner_os": "Linux",
+    "workflow": "manual",
+    "run_id": "0",
+    "run_number": "0"
+  },
+  "verification": {
+    "schema": "receipt_v1",
+    "version": "1.0.0",
+    "signed": false,
+    "signature_algorithm": "ed25519",
+    "keyless_oidc": "null"
+  }
+}

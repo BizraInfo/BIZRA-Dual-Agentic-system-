@@ -1,0 +1,17 @@
+{
+  "receipt_id": "genesis-000",
+  "ihsan_score": 1.0,
+  "threshold": 0.95,
+  "is_compliant": true,
+  "dimensions": {
+    "adl": 1.0,
+    "ihsan": 1.0,
+    "amanah": 1.0,
+    "hikmah": 1.0,
+    "sidq": 1.0,
+    "sabr": 1.0,
+    "tawadu": 1.0,
+    "shukr": 1.0
+  },
+  "violations": []
+}

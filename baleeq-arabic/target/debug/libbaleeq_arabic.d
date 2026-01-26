@@ -1,0 +1,1 @@
+/root/bizra-genesis/baleeq-arabic/target/debug/libbaleeq_arabic.so: /root/bizra-genesis/baleeq-arabic/src/lexer/arabic_tokenizer.rs /root/bizra-genesis/baleeq-arabic/src/lexer/mod.rs /root/bizra-genesis/baleeq-arabic/src/lib.rs

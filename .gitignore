@@ -1,67 +1,28 @@
-# Build artifacts
-target/
-*/target/
-**/target/
-
-# Node
-node_modules/
-*/node_modules/
-**/node_modules/
-*.node
-
-# Python
-__pycache__/
-*.pyc
-.venv/
-venv/
-
-# Large binaries
-*.so
-*.rlib
-*.rmeta
-*.bin
-*.pack
-*.idx
+# Rust build artifacts
+/target/
+**/*.rs.bk
 *.pdb
-*.exe
-*.dll
+Cargo.lock
 
-# Large data
-chat data sample/
-PROJECT_STRUCTURE.md
-**/20_secret_scan_rg.txt
-
-# IDE
-.idea/
+# IDE files
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# Secrets
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
 .env.local
-*.key
-*.pem
-!*.pub
-.vercel
 
-# Encrypted secrets (should never be committed - rotate if found in history!)
-state/keys/*.enc
-**/*.sk
-**/*.sk.enc
-
-# Embedded git repositories (external dependencies)
-bizra_data_vault/roots/hadith_data/
-bizra_data_vault/roots/kais_dukes/
-crates/ralph-claude-code/
-crates/ralph-orchestrator/
-
-# Archive (large legacy content)
-archive/
-
-# Large data files (should not be in git)
-knowledge_graph_output/
-islamic_knowledge_graph/
-evidence-pack/
+# Log files
 *.log
 
-# Large generated JSON
-**/control_plane_state.json
-**/islamic_knowledge_graph.json
+# Temporary files
+/tmp/
+*.tmp
+

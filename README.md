@@ -1,72 +1,25 @@
-# 🚀 BIZRA APOTHEOSIS - Node₀ Genesis [V10.0.0]
+# 🚀 BIZRA META ALPHA ELITE - Complete Unified Production System
 
-**Architect/Owner**: "Momo" (First Bizra Architect)  
-**Status**: ELITE FLAGSHIP NODE | NORTH STAR | **VERIFIED MASTERPIECE**  
-**Mission**: Empowerment of 8 Billion Sovereign Human Nodes via Verified Excellence.
+[![Rust](https://img.shields.io/badge/rust-1.90%2B-orange.svg)](https://www.rust-lang.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-production-success.svg)](https://github.com/BizraInfo/BIZRA-Dual-Agentic-system-)
 
----
-
-### 🏆 MASTERPIECE INDEX (V10.0-PEAK)
-The ultimate synthesis of engineering, ethics, and performance.
-- **Master Synthesis**: [BIZRA_ULTIMATE_MASTERPIECE_SYNTHESIS.md](delivery/BIZRA_ULTIMATE_MASTERPIECE_SYNTHESIS.md)
-- **Framework SOP**: [FRAMEWORK_SOP.md](delivery/FRAMEWORK_SOP.md)
-- **CI/CD Apotheosis**: [.github/workflows/bizra_ci_cd_apotheosis.yml](.github/workflows/bizra_ci_cd_apotheosis.yml)
-- **SNR Scoring (Last Audit: 1.0000)**: `python3 scripts/final_snr_scoring.py`
-
----
-
-## 🌌 The North Star: APOTHEOSIS v10
-BIZRA has achieved the **Pinnacle of Implementation**. Node₀ is no longer a research prototype; it is a functional, self-evolving, logic-verified flagship system.
-
-- **Current SOT**: Version 10.0.0-APOTHEOSIS
-- **Primary Report**: [NODE0_FLAGSHIP_REPORT.md](NODE0_FLAGSHIP_REPORT.md)
-- **Engine**: Magnificent 7 (Mag7) DDAGI
-
----
+**The complete Rust-based dual-agentic orchestrator with full arsenal of advanced capabilities.**
 
 ## 📋 Table of Contents
-- [The Flagship State](#-the-flagship-state)
-- [The Brain: Mag7 Architecture](#-the-brain-mag7-architecture)
-- [The Law: Ihsān Metrics](#-the-law-ihsān-metrics)
-- [The Proof: SAPE-E Verification](#-the-proof-sape-e-verification)
-- [Installation & Ignition](#-installation--ignition)
 
-## 🛡️ The Flagship State
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
+- [Examples](#examples)
+- [Performance](#performance)
 
-![Sovereign Badge](https://img.shields.io/badge/Status-APOTHEOSIS-blueviolet)
-![Ihsan Score](https://img.shields.io/badge/Ihsan-0.95-brightgreen)
-![Logic](https://img.shields.io/badge/Verification-SAPE--E%20(Z3)-orange)
+## 🌟 Overview
 
-BIZRA v10.0.0 is a technical manifestation of **Ihsān (Divine Excellence)**. It is rooted in two foundational pillars:
-- **The Seed (Al-Bidhrah)**: The potential for perpetual growth.
-- **The Message (Al-Risalah)**: The command for armored, precise execution.
-
-### 🧠 The Mag7 Architecture (V10.0)
-
-1. **PRIME**: Orchestrates strategy via Graph-of-Thought (GoT).
-2. **GNOSTIC**: Manages 3-Layer Golden Ratio Memory (φ-condensed).
-3. **TEKNE**: Implements AlphaEvolve recursive self-improvement.
-4. **LOGOS**: Enforces SNR and logical consistency.
-5. **AXON**: Synthesizes cross-role insights.
-6. **AESTHETE**: Refines output to "Masterpiece" standards.
-7. **KAIROS**: Executes and seals verified artifacts.
-
-## 🚀 Quick Start (Ignition)
-
-Run the unified APOTHEOSIS system:
-
-```bash
-cd /root/bizra-genesis
-python3 scripts/ddagi_system.py
-```
-python3 scripts/ignite_sovereignty.py
-```
-
-## Professional Elite Features
-
-- **Zero-Copy IPC**: Simulated via shared POD structures (`VerifiedFrame`).
-- **Formal Verification**: Every thought is checked against a Z3-backed FATE Sidecar before execution.
-- **Self-Correction**: The system includes a `scripts/sape_deep_probe.py` that recursively tests and patches its own cognitive circuits.
+BIZRA META ALPHA ELITE is a production-ready dual-agentic system that combines:
 
 - **PAT (Personal Agentic Team)**: 7 specialized agents for task execution
 - **SAT (System Agentic Team)**: 5 guardian agents for validation and quality assurance
@@ -76,7 +29,7 @@ python3 scripts/ignite_sovereignty.py
 
 - **Sub-100ms P99 Latency**: Blazingly fast execution
 - **95%+ إحسان Score**: Excellence in quality (Islamic concept of perfection)
-- **Fail-Safe Veto Consensus**: all 5 SAT validators must approve
+- **Byzantine Fault Tolerance**: 3/5 consensus for robustness
 - **Production-Ready**: Comprehensive observability and monitoring
 
 ## 🏗️ Architecture
@@ -142,35 +95,25 @@ python3 scripts/ignite_sovereignty.py
 ### Enhanced Capabilities
 
 #### 🔧 MCP Integration (Model Context Protocol)
-
 Access to 100+ tools including:
-
 - Filesystem operations
 - Web search
 - Database queries
 - Code analysis
 
 #### 🤝 A2A Protocol (Agent-to-Agent)
-
 - Agent capability discovery
 - Task delegation
 - Consensus voting
 - Broadcast messaging
 
 #### 🧠 Multi-Method Reasoning
-
 Five sophisticated reasoning approaches:
-
 - **Chain-of-Thought (CoT)**: Step-by-step linear reasoning
 - **Tree-of-Thought (ToT)**: Explore multiple branches
 - **Graph-of-Thought (GoT)**: Multi-dimensional synthesis
 - **ReAct**: Reasoning + Acting with tool use
 - **Reflexion**: Self-improvement through iteration
-
-## Knowledge Vault Indexing Notes (2026-01-19)
-- Chunking now uses fixed windows with configurable overlap (`chunk_by_turns` in `knowledge_vault/pipeline/ingest_py.py`, default `window_size=3`, `overlap=0`) to prevent duplicated text; see regenerated chunks for `doc_id=53bb7d90ac393603` in `knowledge_vault/index/chunks.jsonl`.
-- Document `uri` values are stored repo-relative (e.g., `knowledge_vault/raw/chats/session_2026-01-19_bizra_genesis.json`); use `resolve_uri` in the same module to open files with `REPO_ROOT`.
-- Entities are deduplicated case-insensitively via a lowercase canonical key; aliases retain observed casings. `mention_count` equals the number of exported `MENTIONS` edges (unique chunk references), keeping entity node counts aligned with graph edges in `knowledge_vault/index/graph.jsonl`.
 
 ## 🚀 Installation
 
@@ -194,17 +137,6 @@ cargo run --release
 ```
 
 ## 🎯 Quick Start
-
-### Personal Agentic Team (Evidence Run)
-
-Runs a safe, evidence-first activation that produces receipts under `docs/evidence/receipts/` and indexes into your Data Lake (no deletions).
-
-```powershell
-powershell -ExecutionPolicy Bypass -File tools\\run_master.ps1 `
-  -IngestCrashReports `
-  -RunLLMTeam `
-  -ModelTarget qwen2.5:7b
-```
 
 ### HTTP API Usage
 
@@ -262,7 +194,7 @@ curl -X POST http://localhost:8080/enhanced/execute \
 - **Horizontal Scaling**: Ready for Kubernetes deployment
 - **Sub-Agent Pool**: Up to 100 concurrent sub-agents
 - **Connection Pool**: Efficient resource management
-- **Fail-Safe Veto Consensus**: all 5 SAT validators must approve
+- **Byzantine Fault Tolerance**: 3/5 consensus ensures reliability
 
 ---
 

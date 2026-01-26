@@ -1,0 +1,50 @@
+{
+  "project_name": "BIZRA Sovereign Intelligence OS",
+  "framework": "Pinnacle v9.0-GENESIS",
+  "pm_methodology": "Hybrid Elite (Agile + PMBOK + SRE)",
+  "guardian": "Mumu",
+  "status": "OPERATIONAL",
+  
+  "columns": {
+    "backlog": {
+      "title": "Strategy & Ideation",
+      "items": [
+        { "id": "STRAT-001", "title": "DePIN Tokenomics Simulation", "priority": "Low" },
+        { "id": "STRAT-002", "title": "Global Federation Protocol", "priority": "Medium" }
+      ]
+    },
+    "todo": {
+      "title": "Ready for Implementation",
+      "items": [
+        { "id": "DEV-101", "title": "Upgrade SAPE to Graph-of-Thoughts (GoT)", "priority": "High", "lens": "Cognitive" },
+        { "id": "DEV-102", "title": "Local Vector Store Integration (Qdrant)", "priority": "Medium", "lens": "Memory" },
+        { "id": "OPS-103", "title": "Continuous Sovereignty Monitor Script", "priority": "Critical", "lens": "Security" }
+      ]
+    },
+    "in_progress": {
+      "title": "Building / Optimizing",
+      "items": []
+    },
+    "review": {
+      "title": "Guardian Audit (Ihsān Check)",
+      "items": [
+        { "id": "AUDIT-001", "title": "Genesis Activation Script Verification", "status": "Passed (1.0)" }
+      ]
+    },
+    "done": {
+      "title": "Sealed & Sovereign",
+      "items": [
+        { "id": "GEN-001", "title": "Panic Airlock Implementation (src/py.rs)", "completed": "2026-01-12" },
+        { "id": "GEN-002", "title": "VETO Logic Hardening (src/sat.rs)", "completed": "2026-01-12" },
+        { "id": "GEN-003", "title": "Genesis Activation (v5.1.2)", "completed": "2026-01-12" }
+      ]
+    }
+  },
+  
+  "metrics": {
+    "snr_score": 0.95,
+    "ihsan_rating": 1.0,
+    "ffi_safety": "SECURED",
+    "genesis_hash": "8a3c2d4f..."
+  }
+}

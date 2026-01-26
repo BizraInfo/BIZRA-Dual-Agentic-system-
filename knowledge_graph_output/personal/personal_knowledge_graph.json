@@ -1,0 +1,19 @@
+{
+  "metadata": {
+    "name": "Personal Knowledge Graph",
+    "description": "3 years of BIZRA development - messages, chats, insights",
+    "created_at": "2026-01-13T02:48:53.843946",
+    "philosophy": "Growing the tree from strong roots"
+  },
+  "stats": {
+    "files_discovered": 2385,
+    "messages_extracted": 0,
+    "chats_extracted": 0,
+    "notes_extracted": 0,
+    "insights_extracted": 0,
+    "total_nodes": 0,
+    "total_relationships": 0
+  },
+  "nodes": [],
+  "relationships": []
+}
