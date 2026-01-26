@@ -538,6 +538,273 @@ pub fn global_monitor() -> &'static SNRMonitor {
     SNR_MONITOR.get_or_init(SNRMonitor::new)
 }
 
+// ============================================================================
+// PEAK MASTERPIECE: APEX SNR OPTIMIZER
+// ============================================================================
+// Giants Protocol Integration:
+// - Al-Khwarizmi: Systematic algorithmic optimization
+// - Al-Biruni: Precise measurement and calibration
+// - Ibn Khaldun: Pattern detection across temporal cycles
+// ============================================================================
+
+/// Apex SNR Configuration: Elite-tier optimization parameters
+#[derive(Debug, Clone)]
+pub struct ApexSNRConfig {
+    /// Kalman filter process noise (Q)
+    pub kalman_process_noise: f64,
+    /// Kalman filter measurement noise (R)
+    pub kalman_measurement_noise: f64,
+    /// Trend detection sensitivity
+    pub trend_sensitivity: f64,
+    /// Apex threshold (above this = Peak Masterpiece)
+    pub apex_threshold: Fixed64,
+    /// Window size for multi-scale analysis
+    pub window_sizes: Vec<usize>,
+}
+
+impl Default for ApexSNRConfig {
+    fn default() -> Self {
+        Self {
+            kalman_process_noise: 0.01,
+            kalman_measurement_noise: 0.1,
+            trend_sensitivity: 0.005,
+            apex_threshold: Fixed64::from_f64(0.98),
+            window_sizes: vec![3, 5, 10, 24], // Multi-scale windows
+        }
+    }
+}
+
+/// Kalman State: Optimal state estimation for SNR tracking
+#[derive(Debug, Clone)]
+pub struct KalmanSNRState {
+    /// Estimated SNR value
+    pub estimate: f64,
+    /// Estimation error covariance
+    pub error_covariance: f64,
+    /// Kalman gain
+    pub gain: f64,
+}
+
+impl Default for KalmanSNRState {
+    fn default() -> Self {
+        Self {
+            estimate: 0.5,
+            error_covariance: 1.0,
+            gain: 0.0,
+        }
+    }
+}
+
+impl KalmanSNRState {
+    /// Update Kalman filter with new measurement
+    pub fn update(&mut self, measurement: f64, config: &ApexSNRConfig) {
+        // Prediction step
+        let predicted_error = self.error_covariance + config.kalman_process_noise;
+        
+        // Update step
+        self.gain = predicted_error / (predicted_error + config.kalman_measurement_noise);
+        self.estimate = self.estimate + self.gain * (measurement - self.estimate);
+        self.error_covariance = (1.0 - self.gain) * predicted_error;
+    }
+}
+
+/// Apex SNR Optimizer: Peak Masterpiece autonomous optimization engine
+pub struct ApexSNROptimizer {
+    config: ApexSNRConfig,
+    kalman_state: KalmanSNRState,
+    multi_scale_trends: Vec<Fixed64>,
+    apex_status: ApexStatus,
+}
+
+/// Apex Status: Current state of Peak Masterpiece achievement
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ApexStatus {
+    /// Below production threshold
+    Developing,
+    /// Meeting production threshold (0.95+)
+    Production,
+    /// Approaching apex (0.97+)
+    NearApex,
+    /// Peak Masterpiece achieved (0.98+)
+    Apex,
+    /// Transcendent performance (0.99+)
+    Transcendent,
+}
+
+impl ApexStatus {
+    pub fn from_snr(snr: Fixed64) -> Self {
+        let value = snr.to_f64();
+        if value >= 0.99 {
+            ApexStatus::Transcendent
+        } else if value >= 0.98 {
+            ApexStatus::Apex
+        } else if value >= 0.97 {
+            ApexStatus::NearApex
+        } else if value >= 0.95 {
+            ApexStatus::Production
+        } else {
+            ApexStatus::Developing
+        }
+    }
+    
+    pub fn symbol(&self) -> &'static str {
+        match self {
+            ApexStatus::Developing => "🔧",
+            ApexStatus::Production => "✅",
+            ApexStatus::NearApex => "📈",
+            ApexStatus::Apex => "🏔️",
+            ApexStatus::Transcendent => "⚡",
+        }
+    }
+}
+
+impl ApexSNROptimizer {
+    /// Create new Apex optimizer with default configuration
+    pub fn new() -> Self {
+        Self {
+            config: ApexSNRConfig::default(),
+            kalman_state: KalmanSNRState::default(),
+            multi_scale_trends: Vec::new(),
+            apex_status: ApexStatus::Developing,
+        }
+    }
+    
+    /// Create with custom configuration
+    pub fn with_config(config: ApexSNRConfig) -> Self {
+        Self {
+            config,
+            kalman_state: KalmanSNRState::default(),
+            multi_scale_trends: Vec::new(),
+            apex_status: ApexStatus::Developing,
+        }
+    }
+    
+    /// Process new SNR measurement with Kalman filtering
+    pub fn process_measurement(&mut self, raw_snr: Fixed64) -> Fixed64 {
+        let raw = raw_snr.to_f64();
+        self.kalman_state.update(raw, &self.config);
+        
+        let filtered = Fixed64::from_f64(self.kalman_state.estimate);
+        self.apex_status = ApexStatus::from_snr(filtered);
+        
+        filtered
+    }
+    
+    /// Compute multi-scale trend analysis
+    pub fn compute_multi_scale_trends(&mut self, history: &[SNRMetrics]) -> Vec<(usize, Fixed64)> {
+        let mut results = Vec::new();
+        
+        for &window_size in &self.config.window_sizes {
+            if history.len() >= window_size {
+                let recent: Vec<_> = history.iter().rev().take(window_size).collect();
+                let trend = self.compute_window_trend(&recent);
+                results.push((window_size, trend));
+            }
+        }
+        
+        self.multi_scale_trends = results.iter().map(|(_, t)| *t).collect();
+        results
+    }
+    
+    /// Compute trend for a specific window
+    fn compute_window_trend(&self, window: &[&SNRMetrics]) -> Fixed64 {
+        if window.len() < 2 {
+            return Fixed64::ZERO;
+        }
+        
+        // Linear regression using least squares
+        let n = window.len() as f64;
+        let mut sum_x = 0.0;
+        let mut sum_y = 0.0;
+        let mut sum_xy = 0.0;
+        let mut sum_xx = 0.0;
+        
+        for (i, metrics) in window.iter().enumerate() {
+            let x = i as f64;
+            let y = metrics.snr.to_f64();
+            sum_x += x;
+            sum_y += y;
+            sum_xy += x * y;
+            sum_xx += x * x;
+        }
+        
+        let denominator = n * sum_xx - sum_x * sum_x;
+        if denominator.abs() < 1e-10 {
+            return Fixed64::ZERO;
+        }
+        
+        let slope = (n * sum_xy - sum_x * sum_y) / denominator;
+        Fixed64::from_f64(slope)
+    }
+    
+    /// Get apex status
+    pub fn status(&self) -> ApexStatus {
+        self.apex_status
+    }
+    
+    /// Get filtered SNR estimate
+    pub fn filtered_snr(&self) -> Fixed64 {
+        Fixed64::from_f64(self.kalman_state.estimate)
+    }
+    
+    /// Generate Apex Report
+    pub fn apex_report(&self, current: &SNRMetrics) -> String {
+        let status = self.apex_status;
+        let filtered = self.filtered_snr();
+        let trend_summary: String = self.multi_scale_trends
+            .iter()
+            .enumerate()
+            .map(|(i, t)| {
+                let window = self.config.window_sizes.get(i).unwrap_or(&0);
+                format!("  W{}: {:+.6}", window, t.to_f64())
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+        
+        format!(
+            r#"
+╔══════════════════════════════════════════════════════════════╗
+║           APEX SNR OPTIMIZER - PEAK MASTERPIECE              ║
+╠══════════════════════════════════════════════════════════════╣
+║ Status:          {} {:?}                              ║
+║ Raw SNR:         {:>10.6}                                ║
+║ Filtered SNR:    {:>10.6}                                ║
+║ Kalman Gain:     {:>10.6}                                ║
+║                                                              ║
+║ MULTI-SCALE TRENDS:                                          ║
+{}
+║                                                              ║
+║ APEX THRESHOLDS:                                             ║
+║   Production:    0.9500 ✓                                   ║
+║   Near-Apex:     0.9700                                     ║
+║   Apex:          0.9800                                     ║
+║   Transcendent:  0.9900                                     ║
+╚══════════════════════════════════════════════════════════════╝
+"#,
+            status.symbol(),
+            status,
+            current.snr.to_f64(),
+            filtered.to_f64(),
+            self.kalman_state.gain,
+            trend_summary
+        )
+    }
+}
+
+impl Default for ApexSNROptimizer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// Global Apex optimizer singleton
+static APEX_OPTIMIZER: std::sync::OnceLock<std::sync::Mutex<ApexSNROptimizer>> = std::sync::OnceLock::new();
+
+/// Get global Apex optimizer instance
+pub fn apex_optimizer() -> &'static std::sync::Mutex<ApexSNROptimizer> {
+    APEX_OPTIMIZER.get_or_init(|| std::sync::Mutex::new(ApexSNROptimizer::new()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

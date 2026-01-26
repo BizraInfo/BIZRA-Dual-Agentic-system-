@@ -467,6 +467,7 @@ impl Default for CovenantBridge {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_covenant_bridge_lifecycle() {
@@ -582,7 +583,7 @@ mod tests {
     }
 
     #[test]
-    fn test_logic_envelope_integration_clean_output() {
+    fn test_logic_envelope_integration_clean_output() -> anyhow::Result<()> {
         let bridge = CovenantBridge::new(true);
         let thought_id = ThoughtId::new();
 
@@ -593,11 +594,12 @@ mod tests {
             ValidationTier::Cheap,
         );
         assert!(result.is_ok());
-        assert!(result.context("Failed to unwrap result")?);
+        assert!(result.map_err(|e| anyhow::anyhow!(e))?);
+        Ok(())
     }
 
     #[test]
-    fn test_logic_envelope_integration_blocked_output() {
+    fn test_logic_envelope_integration_blocked_output() -> anyhow::Result<()> {
         let bridge = CovenantBridge::new(true);
         let thought_id = ThoughtId::new();
 
@@ -608,11 +610,12 @@ mod tests {
             ValidationTier::Cheap,
         );
         assert!(result.is_ok());
-        assert!(!result.context("Failed to unwrap result")?); // Should be rejected
+        assert!(!result.map_err(|e| anyhow::anyhow!(e))?); // Should be rejected
+        Ok(())
     }
 
     #[test]
-    fn test_logic_envelope_adaptive_json_escalation() {
+    fn test_logic_envelope_adaptive_json_escalation() -> anyhow::Result<()> {
         let bridge = CovenantBridge::new(true);
         let thought_id = ThoughtId::new();
 
@@ -620,7 +623,8 @@ mod tests {
         let result = bridge
             .validate_output_adaptive(thought_id, r#"{"status": "success", "data": [1, 2, 3]}"#);
         assert!(result.is_ok());
-        assert!(result.context("Failed to unwrap result")?);
+        assert!(result.map_err(|e| anyhow::anyhow!(e))?);
+        Ok(())
     }
 
     #[test]

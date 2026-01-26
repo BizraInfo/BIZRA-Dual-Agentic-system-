@@ -203,6 +203,7 @@ impl Default for ReplayGuard {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_envelope_hash_deterministic() {
@@ -323,7 +324,7 @@ mod tests {
             "payload1".to_string(),
         );
 
-        guard.validate_envelope(&env).context("Failed to validate envelope")?;
+        guard.validate_envelope(&env).map_err(|e| anyhow::anyhow!(e))?;
 
         // After counter 1, next should be 2
         assert_eq!(guard.get_next_counter("session1"), 2);

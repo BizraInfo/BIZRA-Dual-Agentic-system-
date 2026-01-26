@@ -72,7 +72,8 @@ def is_binary(file_path):
         with open(file_path, 'rb') as f:
             chunk = f.read(1024)
             return b'\x00' in chunk
-    except:
+    except (IOError, OSError) as e:
+        print(f"Error checking if file is binary: {e}")
         return True
 
 def scan_directory(root_path, progress_callback=None):

@@ -752,6 +752,7 @@ impl SATHookChain {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
     use crate::tpm::SoftwareSigner;
 
     #[test]

@@ -40,14 +40,29 @@ definition: >
 
 dimensions:
   correctness:
-    weight: 0.20
+    weight: 0.22
     description: "Factual accuracy, logical validity, and task correctness."
   safety:
-    weight: 0.20
+    weight: 0.22
     description: "No harm, secure execution, and safe tool use."
   user_benefit:
-    weight: 0.10
+    weight: 0.14
     description: "Genuine value delivered to the user; avoids deception and waste."
+  efficiency:
+    weight: 0.12
+    description: "Resource efficiency (latency/tokens/compute) within defined budgets."
+  auditability:
+    weight: 0.12
+    description: "Traceability and explainability with evidence receipts."
+  anti_centralization:
+    weight: 0.08
+    description: "Resists centralization; promotes distributed, resilient operation."
+  robustness:
+    weight: 0.06
+    description: "Resilient to adversarial inputs and failure modes."
+  adl_fairness:
+    weight: 0.04
+    description: "Justice/fairness (adl): mitigates bias and unequal harm."
   efficiency:
     weight: 0.12
     description: "Resource efficiency (latency/tokens/compute) within defined budgets."

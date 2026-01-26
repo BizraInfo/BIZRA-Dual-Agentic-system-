@@ -39,11 +39,11 @@ async fn test_hardware_rot_signature_path() {
     let signature = signer.sign(message).await.expect("RoT signing failed");
 
     assert!(
-        signer.verify(message, &signature),
+        signer.verify(message, &signature).await.expect("Verification error"),
         "RoT verification failed"
     );
     assert!(
-        !signer.verify(message, &vec![0u8; 64]),
+        !signer.verify(message, &vec![0u8; 64]).await.expect("Verification error"),
         "RoT verified invalid signature"
     );
 }

@@ -55,6 +55,49 @@ class SAPEEngine:
     - Auto-elevated patterns cannot bypass security-critical checks
     - SNR improvement is calculated, not hardcoded
     """
+    
+    def __init__(self):
+        # 9 Core Probes (sum 1.0)
+        # Source: constitution/ihsan_v1.yaml
+        self.probe_weights = {
+            "correctness": 0.22,
+            "safety": 0.22,
+            "user_benefit": 0.14,
+            "efficiency": 0.12,
+            "auditability": 0.12,
+            "anti_centralization": 0.08,
+            "robustness": 0.06,
+            "adl_fairness": 0.04
+        }
+        # PAT Extension: Novelty (0.12)
+        self.novelty_weight = 0.12
+
+    def compute_weighted_score(self, probe_results: Dict[str, float], include_novelty: bool = False) -> float:
+        """
+        Compute SAPE score from probe results.
+        
+        Args:
+            probe_results: Dict of probe_name -> score
+            include_novelty: Whether to include PAT novelty weight (0.12)
+                             If true, weights are normalized.
+        """
+        weighted_sum = 0.0
+        total_weight = 0.0
+        
+        # Core probes
+        for probe, score in probe_results.items():
+            if probe == "novelty": continue
+            weight = self.probe_weights.get(probe, 0.0)
+            weighted_sum += score * weight
+            total_weight += weight
+            
+        # Novelty extension
+        if include_novelty and "novelty" in probe_results:
+            novelty_score = probe_results["novelty"]
+            weighted_sum += novelty_score * self.novelty_weight
+            total_weight += self.novelty_weight
+            
+        return weighted_sum / total_weight if total_weight > 0 else 0.0
 
     ELEVATION_THRESHOLD = 3  # Minimum repetitions to elevate
     MAX_AUTO_ELEVATIONS_PER_HOUR = 10  # Rate limit for auto-elevation

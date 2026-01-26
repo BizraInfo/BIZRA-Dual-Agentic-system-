@@ -135,7 +135,9 @@ class ThreeLayerMemory:
             with open(self.warm_path, "r") as f:
                 data = json.load(f)
                 return {k: MemoryNode(**v) for k, v in data.items()}
-        except: return {}
+        except (json.JSONDecodeError, IOError, TypeError) as e:
+            print(f"Error loading warm memory: {e}")
+            return {}
 
     def _save_warm(self):
         with open(self.warm_path, "w") as f:

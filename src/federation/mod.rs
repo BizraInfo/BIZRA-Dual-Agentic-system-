@@ -56,9 +56,10 @@ impl FederationManager {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[tokio::test]
-    async fn test_enroll_node_tier_assignment() {
+    async fn test_enroll_node_tier_assignment() -> anyhow::Result<()> {
         let manager = FederationManager::new();
         let cert = manager
             .enroll_node("test_node".to_string(), TrustTier::Gold)
@@ -66,20 +67,22 @@ mod tests {
             .context("Failed to unwrap result")?;
         assert_eq!(cert.trust_tier, TrustTier::Gold);
         assert!(cert.permissions.contains(&"fs.read".to_string()));
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_enrollment_signature_not_empty() {
+    async fn test_enrollment_signature_not_empty() -> anyhow::Result<()> {
         let manager = FederationManager::new();
         let cert = manager
             .enroll_node("test_node".to_string(), TrustTier::Bronze)
             .await
             .context("Failed to unwrap result")?;
         assert!(!cert.signature.is_empty());
+        Ok(())
     }
 
     #[tokio::test]
-    async fn test_secure_enroll_tpm_elevation() {
+    async fn test_secure_enroll_tpm_elevation() -> anyhow::Result<()> {
         let manager = FederationManager::new();
 
         // Request without TPM -> Bronze
@@ -101,5 +104,6 @@ mod tests {
         };
         let cert_high = manager.secure_enroll(req_high).await.context("Failed to unwrap result")?;
         assert_eq!(cert_high.trust_tier, TrustTier::Platinum);
+        Ok(())
     }
 }

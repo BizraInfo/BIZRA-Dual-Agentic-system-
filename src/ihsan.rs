@@ -6,7 +6,7 @@ use std::{collections::BTreeMap, fs, sync::OnceLock};
 const IHSAN_CONSTITUTION_PATH: &str = "constitution/ihsan_v1.yaml";
 const GENESIS_MANIFEST_PATH: &str = "evidence/genesis/GENESIS_MANIFEST.json";
 const SEALED_GENESIS_HASH: &str =
-    "0b3a9faf1e8c34c1fe5a63a6a70b9bd158eca058b755d188e11ff367602ac7a1";
+    "175bbe161be13a0458fd0f51a9271a191de7b50b4cf799c9acecbebeb365edf2";
 
 // BIZRA CORE CONSTANTS (Single Source of Truth)
 // Used by genesis_activation.sh to verify FFI alignment

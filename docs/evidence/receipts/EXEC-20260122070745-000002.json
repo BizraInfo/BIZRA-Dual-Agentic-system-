@@ -1,0 +1,19 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260122070745-000002",
+  "request_id": "e0dd90e72a2e40559a4dce56273679a4",
+  "timestamp": "2026-01-22T07:07:45.093344481Z",
+  "task_summary": "Say hello",
+  "sat_validation_ms": 10,
+  "pat_execution_ms": 5530,
+  "total_latency_ms": 5542,
+  "synergy_score": 0.9208741681650281,
+  "ihsan_score": 0.9255910336505622,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.0020618722774088383,
+  "integrity_hash": "sha256:49c09bde0a7057002ed441bd0cbf936fcd7a7bad8023d937d69f6f9f4eaaf4b8"
+}

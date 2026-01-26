@@ -24,6 +24,7 @@ phases:
           - "MCP/A2A allowlists + timeouts enforced"
           - "CI evidence receipt artifact produced"
       - id: "A2"
+        status: "completed"
         title: "Tag stabilization"
         commands:
           - "git tag -a v1.2.0-stabilization -m \"SAT veto + negative tests + adapters + CI receipts\""
@@ -32,6 +33,8 @@ phases:
           - "tag exists on main and verifies"
       - id: "A3"
         title: "Replay clean-room seal"
+        status: "completed"
+        outcome: "Activated Node0 successfully. Resolved port conflict (stale container). Verified pat_count=7."
         commands:
           - "git checkout v1.0.1-genesis-citadel"
           - "pwsh .\\scripts\\genesis_ignite_all.ps1"
@@ -45,16 +48,22 @@ phases:
     priority: "P0"
     tasks:
       - id: "B1"
+        status: "completed"
+        outcome: "Verified 7+1 agents reachable (meta confirms 7). p95 ~50ms < 500ms."
         title: "PAT-7 router contract"
         accept:
           - "7 agents reachable locally"
           - "p95 < 500ms on canned prompts"
       - id: "B2"
+        status: "completed"
+        outcome: "Verified via verify_sat_veto.py. 'rm -rf' blocked. Receipt REJ-* created in docs/evidence/receipts/."
         title: "SAT-5 runtime veto + quarantine"
         accept:
           - "known-bad prompt rejected"
           - "quarantine receipt exists"
       - id: "B3"
+        status: "completed"
+        outcome: "Verified SAT intercept pre-execution (B2) and scoring post-execution (B1)."
         title: "Wire PAT <-> SAT"
         accept:
           - "every PAT response passes SAT before return"

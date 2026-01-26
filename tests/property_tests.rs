@@ -388,7 +388,7 @@ fn fixed64_hash_differs_from_f64_hash() {
 fn receipt_hash_determinism_with_fixed64() {
     let synergy_score = Fixed64::from_f64(0.92);
     let ihsan_score = Fixed64::from_f64(0.95);
-    let threshold = Fixed64::from_f64(0.85);
+    let _threshold = Fixed64::from_f64(0.85); // Threshold for future validation
     let receipt_id = "EXEC-20260113-000001";
     let timestamp = "2026-01-13T12:00:00Z";
     let task = "test_task";

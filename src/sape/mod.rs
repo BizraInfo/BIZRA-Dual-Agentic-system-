@@ -14,4 +14,4 @@ pub use harness::SymbolicHarness;
 pub use pattern_compiler::{
     OptimizationLevel, Pattern, PatternCompiler, PatternError, PatternStats,
 };
-pub use tension::TensionStudio;
+pub use tension::{TensionStudio, TensionResolution};

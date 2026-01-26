@@ -1,10 +1,10 @@
 {
   "version": "1.0",
-  "policy_hash": "89071f55536e5f6cc7118f9cf93dd66c50db5338928924b0c39afd70d1bdf37f",
+  "policy_hash": "2dda61f276fc8aa03b5a8af986c4d4fe57e56a6b20484a92b1137e8e59a0333a",
   "entries": [
     {
       "agent_id": "node0",
-      "pubkey_hex": "4589163ce725deb12004eb01f4d9f05e643fedf9c92a7e262d80c142a85b47eb",
+      "pubkey_hex": "066e4a30edcf62282b6929b0973de46281689b584f10bd32910f421e0a442284",
       "status": "active"
     }
   ]

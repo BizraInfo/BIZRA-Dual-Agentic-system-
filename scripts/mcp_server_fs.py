@@ -14,14 +14,15 @@ except ImportError:
     sys.exit(1)
 
 # --- CONFIG ---
-# Default to current workspace if not set
-DEFAULT_DIR = r"C:\BIZRA-Dual-Agentic-system--main"
+# Use WSL mount paths for cross-platform compatibility
+DEFAULT_DIR = "/mnt/c/BIZRA-Dual-Agentic-system--main"
+DATA_LAKE_DIR = "/mnt/c/BIZRA-DATA-LAKE"
 ENV_DIRS = os.getenv("ALLOWED_DIRS", "")
 
 if ENV_DIRS:
     ALLOWED_DIRS = [p.strip() for p in ENV_DIRS.split(";") if p.strip()]
 else:
-    ALLOWED_DIRS = [DEFAULT_DIR]
+    ALLOWED_DIRS = [DEFAULT_DIR, DATA_LAKE_DIR, "/root/bizra-genesis"]
 
 MAX_READ_BYTES = int(os.getenv("MAX_READ_BYTES", "2000000"))  # 2MB
 MAX_GREP_HITS = int(os.getenv("MAX_GREP_HITS", "100"))

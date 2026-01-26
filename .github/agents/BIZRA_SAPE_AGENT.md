@@ -37,6 +37,25 @@ toolchain:
   maturin: 1.11.4
   git: 2.43.0
 
+production_services:
+  dual_agentic:
+    port: 9091
+    host: "127.0.0.1"
+    protocol: "http"
+  mcp_bridge:
+    port: 8443
+    host: "0.0.0.0"
+    protocol: "https"
+    nodes: 61827
+  lm_studio:
+    url: "http://192.168.56.1:1234"
+    model: "qwen2.5-0.5b-instruct"
+    api_type: "lmstudio"
+  data_lake:
+    path: "/mnt/c/BIZRA-DATA-LAKE"
+    nodes: 56358
+    edges: 88649
+
 ffi_bridge:
   module: bizra_ffi
   version: 0.7.0

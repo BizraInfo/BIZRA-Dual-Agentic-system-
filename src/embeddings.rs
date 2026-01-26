@@ -65,9 +65,10 @@ fn score_terms(text: &str, terms: &[&str]) -> f32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
-    fn test_similarity() {
+    fn test_similarity() -> anyhow::Result<()> {
         let engine = EmbeddingEngine::new().context("Failed to unwrap result")?;
         let vec1 = engine.embed_text("malicious hack").context("Failed to unwrap result")?;
         let vec2 = engine.embed_text("cyber attack").context("Failed to unwrap result")?;
@@ -81,5 +82,6 @@ mod tests {
 
         assert!(sim_threat > sim_safe);
         assert!(sim_threat > 0.6); // Should be semantically close
+        Ok(())
     }
 }

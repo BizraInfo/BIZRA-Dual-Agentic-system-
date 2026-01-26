@@ -523,9 +523,10 @@ impl ChromaClient {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
-    fn test_vector_metadata_serialization() {
+    fn test_vector_metadata_serialization() -> anyhow::Result<()> {
         let metadata = VectorMetadata {
             source: "wisdom".to_string(),
             node_type: "concept".to_string(),
@@ -538,6 +539,7 @@ mod tests {
         assert!(json.contains("concept"));
         assert!(json.contains("node-123"));
         assert!(!json.contains("timestamp")); // skipped when None
+        Ok(())
     }
 
     #[test]

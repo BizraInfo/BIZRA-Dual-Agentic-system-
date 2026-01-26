@@ -239,7 +239,8 @@ class E2BSandboxExecutor:
         if self.sandbox:
             try:
                 self.sandbox.kill()
-            except:
+            except ProcessLookupError:
+                # Process already terminated
                 pass
                 
     def execute(self, code: str, timeout: int = 30) -> dict:

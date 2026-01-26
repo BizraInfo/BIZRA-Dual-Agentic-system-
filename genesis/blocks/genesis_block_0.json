@@ -11,5 +11,40 @@
       "amount": 5000
     }
   ],
-  "block_hash": "aeebad4a796fcc2e15dc4c6061b45ed9b373f26adfc798ca7d2d8cc58182718e"
+  "block_hash": "aeebad4a796fcc2e15dc4c6061b45ed9b373f26adfc798ca7d2d8cc58182718e",
+  "hardware_covenant": {
+    "type": "HARDWARE_COVENANT",
+    "version": "1.0",
+    "sovereign_intent": "NODE0_ORIGIN",
+    "covenant": {
+      "tier_1_root": {
+        "cpu_fingerprint": "Intel(R) Core(TM) i9-14900HX",
+        "gpu_fingerprint": "NVIDIA GeForce RTX 4090 Laptop GPU",
+        "platform_signature": "MSI",
+        "strict": "TRUE"
+      },
+      "tier_2_mutable": {
+        "ram_signature": "63GB",
+        "storage_signature": "ROOT_1006GB",
+        "mac_address": "00:15:5D:37:34:80"
+      },
+      "tier_3_contextual": {
+        "os_fingerprint": "Linux 6.6.87.2-microsoft-standard-WSL2",
+        "arch": "x86_64",
+        "python_version": "3.12.3"
+      }
+    },
+    "crown_hash": "c2b2f8e38a72cda7f67bd6eb6008b5d809df8877bcbaa65fb137b27eb98ab8c5"
+  },
+  "sovereign_identity": {
+    "status": "Autonomous",
+    "consensus_mode": "Unanimous Veto",
+    "dna_signature": "7-3-6-9-00",
+    "trust_anchor_hash": "7227d41d827a8bac91ed128018844c450641be8f2436d05a3439287fec709fce",
+    "authority_rules": {
+      "mode": "ORIGIN_ONLY",
+      "delegation": true,
+      "transfer": false
+    }
+  }
 }

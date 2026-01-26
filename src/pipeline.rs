@@ -1019,6 +1019,7 @@ impl PipelineResult {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_pipeline_context_creation() {
@@ -1042,7 +1043,7 @@ mod tests {
     }
 
     #[test]
-    fn test_input_stage_validation() {
+    fn test_input_stage_validation() -> anyhow::Result<()> {
         let mut stage = InputStage::new(100);
         let ctx = PipelineContext::new("safe input".to_string(), SovereigntyTier::T0Mobile)
             .with_state(PipelineState::Running);
@@ -1050,10 +1051,11 @@ mod tests {
         let result = stage.execute(ctx);
 
         assert!(result.get_stage_output("input").context("Failed to unwrap result")?.success);
+        Ok(())
     }
 
     #[test]
-    fn test_input_stage_rejects_long_input() {
+    fn test_input_stage_rejects_long_input() -> anyhow::Result<()> {
         let mut stage = InputStage::new(10);
         let ctx = PipelineContext::new(
             "this input is too long".to_string(),
@@ -1065,10 +1067,11 @@ mod tests {
 
         assert!(!result.get_stage_output("input").context("Failed to unwrap result")?.success);
         assert_eq!(result.state, PipelineState::Rejected);
+        Ok(())
     }
 
     #[test]
-    fn test_input_stage_rejects_blocked_pattern() {
+    fn test_input_stage_rejects_blocked_pattern() -> anyhow::Result<()> {
         let mut stage = InputStage::new(1000);
         let ctx = PipelineContext::new("DROP TABLE users".to_string(), SovereigntyTier::T0Mobile)
             .with_state(PipelineState::Ready);
@@ -1076,6 +1079,7 @@ mod tests {
         let result = stage.execute(ctx);
 
         assert!(!result.get_stage_output("input").context("Failed to unwrap result")?.success);
+        Ok(())
     }
 
     #[test]

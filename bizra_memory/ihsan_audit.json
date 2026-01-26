@@ -3125,3 +3125,7 @@
 {"time": "2026-01-01T16:20:10.637246", "task_id": "unknown", "prompt_sample": "Finalize masterpiece with high truthfulness and di", "score": 0.0, "result": "FAIL"}
 {"time": "2026-01-01T16:20:10.717217", "task_id": "unknown", "prompt_sample": "", "score": 0.0, "result": "FAIL"}
 {"time": "2026-01-01T16:20:10.717805", "task_id": "unknown", "prompt_sample": "", "score": 0.0, "result": "FAIL"}
+{"time": "2026-01-22T22:42:57.253999", "task_id": "unknown", "prompt_sample": "Sovereign Unification Pulse", "score": 1.0, "result": "PASS"}
+{"time": "2026-01-22T22:44:15.322018", "task_id": "unknown", "prompt_sample": "Sovereign Unification Pulse", "score": 1.0, "result": "PASS"}
+{"time": "2026-01-26T01:13:56.819093", "task_id": "default", "prompt_sample": "", "composite_score": 0.95, "dimension_scores": {"correctness": 0.95, "safety": 0.95, "user_benefit": 0.95, "efficiency": 0.95, "auditability": 0.95, "anti_centralization": 0.95, "robustness": 0.95, "adl_fairness": 0.95}, "result": "PASS", "reason": "APPROVED"}
+{"time": "2026-01-26T01:24:30.118163", "task_id": "default", "prompt_sample": "", "composite_score": 0.95, "dimension_scores": {"correctness": 0.95, "safety": 0.95, "user_benefit": 0.95, "efficiency": 0.95, "auditability": 0.95, "anti_centralization": 0.95, "robustness": 0.95, "adl_fairness": 0.95}, "result": "PASS", "reason": "APPROVED"}

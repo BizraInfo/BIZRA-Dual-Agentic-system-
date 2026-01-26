@@ -1,15 +1,15 @@
 {
   "unsigned": {
     "schema_version": "1.0",
-    "policy_hash": "89071f55536e5f6cc7118f9cf93dd66c50db5338928924b0c39afd70d1bdf37f",
+    "policy_hash": "2dda61f276fc8aa03b5a8af986c4d4fe57e56a6b20484a92b1137e8e59a0333a",
     "agent_id": "node0",
     "session_id": "genesis",
     "counter": 1,
-    "nonce": "genesis-1768812502",
-    "timestamp_unix_s": 1768812502,
+    "nonce": "genesis-1768882091",
+    "timestamp_unix_s": 1768882091,
     "payload": {
       "manifest": "config/node0.manifest.yaml",
-      "policy_hash": "89071f55536e5f6cc7118f9cf93dd66c50db5338928924b0c39afd70d1bdf37f",
+      "policy_hash": "2dda61f276fc8aa03b5a8af986c4d4fe57e56a6b20484a92b1137e8e59a0333a",
       "sotg": {
         "canon": "BIZRA-CANON-INT-1"
       },
@@ -17,6 +17,6 @@
     },
     "prev_hash": "GENESIS"
   },
-  "hash": "97fb64b04b190d9d5b60b7dc40da30b8cb7f905ea2e29f8e38beea0d8ea113ef",
-  "signature_hex": "f88d4b7fe47d211842e7f305adb4346d3f61b68704ade04ae7a81cb08f1c246427873fe167b41d3203cab43b7a2f459289fc70256ada97a078acd895adb0280c"
+  "hash": "0d8818ca31b642998bba5eb8a1a945a54ec5da60736e9ed0229dbf49506317fd",
+  "signature_hex": "bf03daf4e88ed16c12ed44c9044c3dcafed1858dbd631f4b097a8da24ec054e03f786fa91c9324713518cde1f53f1d59f733470c6b88073e91edf9606cb9bd08"
 }

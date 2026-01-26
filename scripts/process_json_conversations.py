@@ -33,22 +33,8 @@ def stream_conversations_ijson(json_path: Path) -> Iterator[Dict[str, Any]]:
                 yield conv
             if count > 0:
                 return
-        except Exception as e:
-            pass
-        
-        # Try as object with nested array
-        f.seek(0)
-        try:
-            for key in ['conversations', 'data', 'items', 'chats']:
-                f.seek(0)
-                parser = ijson.items(f, f'{key}.item')
-                count = 0
-                for conv in parser:
-                    count += 1
-                    yield conv
-                if count > 0:
-                    return
-        except:
+        except (IOError, OSError, ValueError) as e:
+            print(f"Error parsing JSON stream: {e}")
             pass
 
 
@@ -79,7 +65,8 @@ def extract_conversation_text(conv: Dict[str, Any]) -> str:
             try:
                 dt = datetime.fromtimestamp(created, tz=timezone.utc)
                 texts.append(f"Date: {dt.isoformat()}")
-            except:
+            except (ValueError, OSError, OverflowError) as e:
+                print(f"Error converting timestamp: {e}")
                 pass
         elif isinstance(created, str):
             texts.append(f"Date: {created}")

@@ -173,18 +173,21 @@ class OmegaOrchestrator:
         # Initialize components
         try:
             self.snr_tracker = SNRTracker()
-        except:
+        except Exception as e:
+            print(f"Failed to initialize SNR tracker: {e}")
             self.snr_tracker = None
 
         try:
             self.ihsan_gate = IhsanGate(threshold=0.997)
-        except:
+        except Exception as e:
+            print(f"Failed to initialize Ihsan gate: {e}")
             self.ihsan_gate = None
 
         if enable_federation:
             try:
                 self.federation = FederationManager()
-            except:
+            except Exception as e:
+                print(f"Failed to initialize Federation manager: {e}")
                 self.federation = None
         else:
             self.federation = None

@@ -468,7 +468,7 @@ class BIZRAHyperGraphOffline:
                     try:
                         content = filepath.read_text(encoding=enc)
                         break
-                    except:
+                    except UnicodeDecodeError:
                         continue
                 else:
                     continue

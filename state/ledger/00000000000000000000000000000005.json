@@ -1,12 +1,12 @@
 {
   "unsigned": {
     "schema_version": "1.0",
-    "policy_hash": "89071f55536e5f6cc7118f9cf93dd66c50db5338928924b0c39afd70d1bdf37f",
+    "policy_hash": "2dda61f276fc8aa03b5a8af986c4d4fe57e56a6b20484a92b1137e8e59a0333a",
     "agent_id": "node0",
     "session_id": "runtime",
     "counter": 5,
-    "nonce": "tick-5-1768812511",
-    "timestamp_unix_s": 1768812511,
+    "nonce": "tick-5-1768882101",
+    "timestamp_unix_s": 1768882101,
     "payload": {
       "note": "fail-closed heartbeat (no side effects)",
       "snr": {
@@ -15,8 +15,8 @@
       },
       "type": "SAFE_NOOP"
     },
-    "prev_hash": "ce2c38291eda32d99c12a1f3bc626f5bb5b5b3f689bd6b6b5ac960a9985523f4"
+    "prev_hash": "36dfc9419d337196e94efdff9ddab8683a0947fbbebde4ce0ff1d3464db2f2d6"
   },
-  "hash": "c4af31f871ffbc89d7dc52f70b0e588074b691d5eb4946391d467303eb02a5a3",
-  "signature_hex": "07c515ace832c3b1a0001a461e74bb54a9662d6b46ee77a0e35e238aef7b4e07ccece5702ddf9e2f40558eb71a1382e2c90bd7bd807b07e2833b502032738109"
+  "hash": "291418419adb62166a0eafff732865b1342ee4812bf5f9f0654a47c9c5e207e8",
+  "signature_hex": "200e2ecb7e29e6a613f465c7081494320b585bcd87922bee860b24b1f8ee94061538619090e1c8de2250b499ab1ae506d66b21570baa02f5bb8777716747d005"
 }

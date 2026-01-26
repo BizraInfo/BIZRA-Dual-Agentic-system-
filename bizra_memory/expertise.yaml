@@ -1,6 +1,6 @@
 agent_id: sovereign_node_0
-integrity_sig: e2f8cc5adc1dffa0c768e1b5942008b87750f650d9a603e479cb43ebcc687c7c
-last_updated: '2026-01-01T21:18:20.927169'
+integrity_sig: 4c289fd7c1daa2abcadfe0e82a9c87d27373435e17de4e8be3a6f6cdfdbb64fd
+last_updated: '2026-01-22T22:44:15.322184'
 procedural:
   VerifyTokenEmission:
     code: 'def verify_emission(amt): return amt < 5000000'
@@ -49,7 +49,7 @@ semantic:
     fact: IdentityAnchor
     im_score: 0.99
     rels:
-      activated_at: '2026-01-01T12:56:29.639084'
+      activated_at: '2026-01-22T22:44:15.113201'
       architect_name: momo
       architect_role: First Architect / Only Owner / First User
       declaration: I am BIZRA, a Sovereign Cognitive Entity. My physical home base
@@ -75,13 +75,13 @@ semantic:
     fact: CognitiveBudget
     im_score: 0.99
     rels:
-      budget_score: 0.28
-      cpu_utilization: 0.271
+      budget_score: 0.664
+      cpu_utilization: 0.076
       gpu: null
-      max_pressure: 0.72
-      ram_utilization: 0.72
-      status: constrained
-      timestamp: '2026-01-01T21:18:20.914307'
+      max_pressure: 0.336
+      ram_utilization: 0.336
+      status: optimal
+      timestamp: '2026-01-22T22:44:15.304465'
   98a38505:
     entity: Ethics
     fact: Enforce Ihsan-Gate IM >= 0.99 for all emissions.
@@ -102,6 +102,7 @@ semantic:
     im_score: 0.99
     rels:
       architect: momo
+      crown_hash: 7227d41d827a8bac91ed128018844c450641be8f2436d05a3439287fec709fce
       event: SOVEREIGN_UNIFICATION
       ihsan_score: 1.0
       status: UNIFIED_ORGANISM_ACTIVE
@@ -147,46 +148,39 @@ semantic:
     rels:
       map:
       - node: KERNEL_HOME
-        path: C:\BIZRA-Dual-Agentic-system--main
+        path: /root/bizra-genesis
         status: ACTIVE
       - node: UI_LAYER
         path: C:\award-winner-design
-        status: DETECTED
+        status: REMOTE
       - node: EVIDENCE_SCAFFOLD
         path: C:\bizra_scaffold
-        status: DETECTED
+        status: REMOTE
       - node: CORE_TASKMASTER
         path: C:\BIZRA-TaskMaster
-        status: DETECTED
+        status: REMOTE
       - node: CORE_NODE0
         path: C:\BIZRA-NODE0
-        status: DETECTED
+        status: REMOTE
       - node: CORE_OS
         path: C:\BIZRA-OS
-        status: DETECTED
+        status: REMOTE
       - node: DATA_LAKE
         path: C:\BIZRA-DATA-LAKE
-        status: DETECTED
+        status: REMOTE
       - node: SECURE_VAULT
         path: C:\BIZRA-SECURE-VAULT
-        status: DETECTED
+        status: REMOTE
       - node: GENESIS_REPAIRED
         path: C:\bizra-genesis-node-repaired
-        status: DETECTED
+        status: REMOTE
       - node: QUARANTINE_SCAFFOLD
         path: C:\BIZRA_QUARANTINE_2025-12-30
-        status: DETECTED
-      model_manifest:
-      - bizra-planner
-      - deepseek-llm
-      - deepseek-r1
-      - llama3.2
-      - mistral
-      - nomic-embed-text
-      - qwen2.5
+        status: REMOTE
+      model_manifest: []
       owner: momo
       ownership_certified: true
-      total_models: 7
+      total_models: 0
       total_nodes: 10
   f1f22d79:
     entity: Sovereignty
@@ -202,8 +196,8 @@ semantic:
     im_score: 0.99
     rels:
       cpu_count: 32
-      disk_total_gb: 3790.85
-      os: Windows
-      ram_available_gb: 35.72
-      ram_total_gb: 127.71
-      timestamp: '2026-01-01T21:18:20.862514'
+      disk_total_gb: 1006.85
+      os: Linux
+      ram_available_gb: 41.6
+      ram_total_gb: 62.65
+      timestamp: '2026-01-22T22:44:15.253458'

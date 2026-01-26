@@ -804,6 +804,7 @@ pub mod lm_studio {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_model_endpoint_creation() {
@@ -862,7 +863,7 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_model_fabric_bindings() {
+    async fn test_model_fabric_bindings() -> anyhow::Result<()> {
         let fabric = ModelFabric::new();
 
         // Add endpoint
@@ -886,6 +887,7 @@ mod tests {
         let ep = fabric.get_endpoint_for_agent(&agent).await;
         assert!(ep.is_some());
         assert_eq!(ep.context("Failed to unwrap result")?.endpoint_id, "test-ep");
+        Ok(())
     }
 
     #[tokio::test]

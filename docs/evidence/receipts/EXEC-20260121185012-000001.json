@@ -1,0 +1,19 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260121185012-000001",
+  "request_id": "c9cff59a23d3464d902f0d841e64193d",
+  "timestamp": "2026-01-21T18:50:12.513262833Z",
+  "task_summary": "Test metric spine debugging",
+  "sat_validation_ms": 28,
+  "pat_execution_ms": 7,
+  "total_latency_ms": 37,
+  "synergy_score": 0.9196248466614634,
+  "ihsan_score": 0.9223862034268677,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00009999983012676239,
+  "integrity_hash": "sha256:7215c8c34dc07119663768ec5d7f6ec86ac61b2708c77ec4a265682af5d89c76"
+}

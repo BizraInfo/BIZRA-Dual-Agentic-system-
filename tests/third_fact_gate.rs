@@ -4,7 +4,6 @@
 
 use meta_alpha_dual_agentic::executor::{SignedModule, ThoughtExecutor};
 use meta_alpha_dual_agentic::storage::InMemoryReceiptStore;
-use meta_alpha_dual_agentic::tpm::SignerProvider;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 use std::sync::Arc;
@@ -52,7 +51,7 @@ async fn test_thought_executor_signed_only_gate() {
         gas_limit: 100_000,
     };
 
-    let (result, receipt) = executor
+    let (_result, receipt) = executor
         .execute(&valid_module, "test input")
         .await
         .expect("Valid module execution failed");

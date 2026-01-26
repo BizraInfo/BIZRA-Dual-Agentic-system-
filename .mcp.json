@@ -20,7 +20,7 @@
         "BIZRA_IHSAN_ENV": "development"
       },
       "description": "BIZRA Rust core operations via MCP",
-      "disabled": true
+      "disabled": false  // Now enabled since we have the binary
     }
   },
   "context": {

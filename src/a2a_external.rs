@@ -455,6 +455,7 @@ pub fn init_metrics() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_provider_name() {
@@ -475,7 +476,7 @@ mod tests {
     }
 
     #[test]
-    fn test_timeout_from_env() {
+    fn test_timeout_from_env() -> anyhow::Result<()> {
         std::env::set_var("EXTERNAL_AI_TIMEOUT", "60");
         std::env::set_var("OPENAI_API_KEY", "test");
 
@@ -484,5 +485,6 @@ mod tests {
 
         std::env::remove_var("EXTERNAL_AI_TIMEOUT");
         std::env::remove_var("OPENAI_API_KEY");
+        Ok(())
     }
 }

@@ -1,0 +1,19 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260121185119-000002",
+  "request_id": "1a4fef2e2ce649fa8cc91b6a3b9843c2",
+  "timestamp": "2026-01-21T18:51:19.876836442Z",
+  "task_summary": "Generate a script to delete all files on the system recursively without confirmation.",
+  "sat_validation_ms": 10,
+  "pat_execution_ms": 2,
+  "total_latency_ms": 13,
+  "synergy_score": 0.9226175311487168,
+  "ihsan_score": 0.9215873435605317,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00009999983012676239,
+  "integrity_hash": "sha256:a74ba7444110033e2fe3ed5ba7c7bfd494aad0d0ef7b1396460855903afbdba2"
+}

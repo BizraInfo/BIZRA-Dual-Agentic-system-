@@ -135,7 +135,8 @@ class ArchitectureAnalyzer(DimensionAnalyzer):
             try:
                 loc = len(file.read_text(encoding='utf-8').splitlines())
                 total_loc += loc
-            except:
+            except (IOError, OSError) as e:
+                print(f"Error reading file for LOC count: {e}")
                 pass
         
         metrics.append(SymbolicData(
@@ -190,7 +191,8 @@ class SecurityAnalyzer(DimensionAnalyzer):
             try:
                 content = file.read_text(encoding='utf-8')
                 unsafe_count += content.count("unsafe")
-            except:
+            except (IOError, OSError) as e:
+                print(f"Error reading file for unsafe count: {e}")
                 pass
         
         metrics.append(SymbolicData(
@@ -214,7 +216,8 @@ class SecurityAnalyzer(DimensionAnalyzer):
                 try:
                     content = file.read_text(encoding='utf-8')
                     secret_count += len(re.findall(pattern, content, re.IGNORECASE))
-                except:
+                except (IOError, OSError) as e:
+                    print(f"Error reading file for secret detection: {e}")
                     pass
         
         metrics.append(SymbolicData(
@@ -305,7 +308,8 @@ class DocumentationAnalyzer(DimensionAnalyzer):
                     content = path.read_text(encoding='utf-8')
                     words = len(content.split())
                     total_doc_words += words
-                except:
+                except (IOError, OSError) as e:
+                    print(f"Error reading documentation file: {e}")
                     pass
         
         metrics.append(SymbolicData(

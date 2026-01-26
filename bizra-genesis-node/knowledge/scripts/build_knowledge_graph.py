@@ -281,7 +281,8 @@ class KnowledgeGraphBuilder:
             created_at = None
             try:
                 created_at = datetime.fromtimestamp(stat.st_ctime).isoformat()
-            except:
+            except (ValueError, OSError) as e:
+                print(f"Error converting creation timestamp: {e}")
                 pass
             
             node = KnowledgeNode(

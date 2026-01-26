@@ -16,6 +16,9 @@ KERNEL_SOURCE="/root/bizra-genesis/bizra_kernel"
 KERNEL_TARGET="/mnt/c/BIZRA-Dual-Agentic-system--main/bizra_kernel"
 BACKUP_DIR="/root/bizra-genesis/.kernel_backups"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+SOURCE_HASH=""
+TARGET_HASH=""
+NEW_TARGET_HASH=""
 
 # Colors for output
 RED='\033[0;31m'
@@ -63,7 +66,7 @@ backup_target() {
 # Compute hash of directory for comparison
 compute_hash() {
     local dir="$1"
-    find "$dir" -type f -name "*.py" -exec sha256sum {} \; 2>/dev/null | sort | sha256sum | cut -d' ' -f1
+    find "$dir" -type f -exec sha256sum {} \; 2>/dev/null | sort | sha256sum | cut -d' ' -f1
 }
 
 # Perform synchronization
@@ -78,6 +81,7 @@ sync_kernel() {
     
     if [[ "$SOURCE_HASH" == "$TARGET_HASH" ]]; then
         log_success "Kernels are already in sync. No action needed."
+        NEW_TARGET_HASH="$TARGET_HASH"
         return 0
     fi
     
@@ -113,7 +117,7 @@ generate_receipt() {
     "target": "$KERNEL_TARGET",
     "source_hash": "$SOURCE_HASH",
     "target_hash_before": "$TARGET_HASH",
-    "target_hash_after": "$(compute_hash "$KERNEL_TARGET")",
+    "target_hash_after": "$NEW_TARGET_HASH",
     "status": "SUCCESS",
     "protocol": "StandingOnShouldersOfGiants"
 }

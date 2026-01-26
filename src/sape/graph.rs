@@ -8,12 +8,22 @@ use uuid::Uuid;
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum NodeType {
     Initial,
-    Divergent,  // Generating alternatives
-    Convergent, // Synthesizing
-    Probing,    // Analyzing specific aspect
-    Final,      // Conclusion
-    Evidence,   // The Third Fact (Trusted Proof)
-    Axiom,      // Foundational Truth (e.g. Constitutional Constraint)
+    Divergent,        // Generating alternatives
+    Convergent,       // Synthesizing
+    Probing,          // Analyzing specific aspect
+    Final,            // Conclusion
+    Evidence,         // The Third Fact (Trusted Proof)
+    Axiom,            // Foundational Truth (e.g. Constitutional Constraint)
+    /// PEAK MASTERPIECE: Cross-domain bridge node
+    /// Giants Citation: Nicolescu Transdisciplinary Research, Fauconnier Concept Blending
+    CrossDomainBridge {
+        /// Source domain
+        source_domain: String,
+        /// Target domain
+        target_domain: String,
+        /// Synergy strength (0.0-1.0)
+        synergy_strength: f64,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -23,8 +33,18 @@ pub enum EdgeType {
     Contradicts,
     Refines,
     Alternatives,
-    CausalLink, // Strong dependency: Target cannot exist without Source
-    Provenance, // Traceability to Evidence
+    CausalLink,  // Strong dependency: Target cannot exist without Source
+    Provenance,  // Traceability to Evidence
+    /// PEAK MASTERPIECE: Synergy link for cross-domain connections
+    /// Giants Citation: Usul al-Fiqh, Fauconnier Concept Blending
+    SynergyLink {
+        /// Domains being bridged
+        domains: Vec<String>,
+        /// Blended concept (if applicable)
+        blended_concept: Option<String>,
+        /// Grounding verified
+        grounded: bool,
+    },
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -434,6 +434,7 @@ pub enum PatternError {
 mod tests {
     use super::*;
     use crate::tpm::SoftwareSigner;
+    use anyhow::Context;
 
     #[tokio::test]
     async fn test_pattern_analysis() {

@@ -314,11 +314,70 @@ pub struct ElevatedPattern {
     pub activation_count: u64,
     pub wasm_binary: Option<Vec<u8>>, // Elevated "Masterpiece" Binary
     pub created_at: chrono::DateTime<chrono::Utc>,
+    /// PEAK MASTERPIECE: Temporal weight for power law intensity
+    /// Higher values indicate patterns discovered during peak creativity windows
+    pub temporal_weight: f64,
+}
+
+/// PEAK MASTERPIECE: Temporal weighting configuration
+/// Giants Citation: Simonton Power Law, Nonaka Knowledge Crystallization
+#[derive(Debug, Clone)]
+pub struct TemporalWeightConfig {
+    /// Power law exponent (default: 2.0 per Simonton)
+    pub power_law_exponent: f64,
+    /// Window start (days from epoch)
+    pub window_start_days: u64,
+    /// Window duration in days
+    pub window_duration_days: u64,
+    /// Minimum weight for out-of-window patterns
+    pub baseline_weight: f64,
+}
+
+impl Default for TemporalWeightConfig {
+    fn default() -> Self {
+        Self {
+            power_law_exponent: 2.0,
+            // October 2025 window: Oct 1 - Oct 31
+            window_start_days: 20363, // Days from Unix epoch to Oct 1, 2025
+            window_duration_days: 31,
+            baseline_weight: 0.5,
+        }
+    }
+}
+
+impl TemporalWeightConfig {
+    /// Calculate temporal weight for a given timestamp
+    pub fn calculate_weight(&self, timestamp: chrono::DateTime<chrono::Utc>) -> f64 {
+        let days_since_epoch = timestamp.timestamp() / 86400;
+        let days_since_epoch = days_since_epoch as u64;
+
+        // Check if within window
+        if days_since_epoch < self.window_start_days
+            || days_since_epoch >= self.window_start_days + self.window_duration_days
+        {
+            return self.baseline_weight;
+        }
+
+        // Days from window start
+        let days_in_window = days_since_epoch - self.window_start_days;
+        let mid_point = self.window_duration_days as f64 / 2.0;
+        let distance_from_mid = ((days_in_window as f64) - mid_point).abs();
+        let normalized_distance = distance_from_mid / mid_point;
+
+        // Power law intensity: 1 - (distance/max)^exponent
+        let intensity = 1.0 - normalized_distance.powf(self.power_law_exponent);
+
+        intensity.clamp(0.0, 1.0)
+    }
 }
 
 impl ElevatedPattern {
     /// Create new elevated pattern
     fn new(id: String, name: String, trigger: Vec<String>, optimization: String) -> Self {
+        // Calculate temporal weight for current timestamp
+        let temporal_config = TemporalWeightConfig::default();
+        let temporal_weight = temporal_config.calculate_weight(chrono::Utc::now());
+
         Self {
             id,
             name,
@@ -330,7 +389,36 @@ impl ElevatedPattern {
             activation_count: 0,
             wasm_binary: None,
             created_at: chrono::Utc::now(),
+            temporal_weight,
         }
+    }
+
+    /// Create new elevated pattern with explicit temporal weight
+    fn new_with_temporal(
+        id: String,
+        name: String,
+        trigger: Vec<String>,
+        optimization: String,
+        temporal_weight: f64,
+    ) -> Self {
+        Self {
+            id,
+            name,
+            trigger_sequence: trigger,
+            optimization,
+            snr_improvement: 0.05,
+            latency_reduction_ms: 30,
+            token_savings_percent: 20.0,
+            activation_count: 0,
+            wasm_binary: None,
+            created_at: chrono::Utc::now(),
+            temporal_weight,
+        }
+    }
+
+    /// Get temporal-weighted SNR improvement
+    pub fn weighted_snr_improvement(&self) -> f64 {
+        self.snr_improvement * (1.0 + self.temporal_weight * 0.5)
     }
 
     /// Mark pattern as activated
@@ -441,6 +529,10 @@ impl SAPEEngine {
 
     /// Register patterns from the BIZRA Blueprint
     fn register_blueprint_patterns(&mut self) {
+        // Calculate temporal weight for blueprint patterns (baseline high)
+        let temporal_config = TemporalWeightConfig::default();
+        let baseline_temporal = temporal_config.calculate_weight(chrono::Utc::now()).max(0.8);
+
         // Pattern 1: Ethical Shadow Stack
         self.register_pattern(ElevatedPattern {
             id: "ethical_shadow_stack".to_string(),
@@ -457,6 +549,7 @@ impl SAPEEngine {
             activation_count: 0,
             wasm_binary: None,
             created_at: chrono::Utc::now(),
+            temporal_weight: baseline_temporal,
         });
 
         // Pattern 2: Benevolence Cache
@@ -475,6 +568,7 @@ impl SAPEEngine {
             activation_count: 0,
             wasm_binary: None,
             created_at: chrono::Utc::now(),
+            temporal_weight: baseline_temporal,
         });
 
         // Pattern 3: Consensus Shortcut
@@ -493,6 +587,7 @@ impl SAPEEngine {
             activation_count: 0,
             wasm_binary: None,
             created_at: chrono::Utc::now(),
+            temporal_weight: baseline_temporal,
         });
 
         // Pattern 4: RAG Grounding Fast-Path
@@ -511,6 +606,7 @@ impl SAPEEngine {
             activation_count: 0,
             wasm_binary: None,
             created_at: chrono::Utc::now(),
+            temporal_weight: baseline_temporal,
         });
 
         // Pattern 5: Full Ihsān Sweep
@@ -528,6 +624,7 @@ impl SAPEEngine {
             activation_count: 0,
             wasm_binary: None,
             created_at: chrono::Utc::now(),
+            temporal_weight: baseline_temporal,
         });
 
         info!(

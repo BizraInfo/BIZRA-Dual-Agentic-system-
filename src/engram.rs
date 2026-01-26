@@ -783,6 +783,7 @@ impl EngramProfile {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
     fn test_sovereignty_tier_budgets() {
@@ -808,7 +809,7 @@ mod tests {
     }
 
     #[test]
-    fn test_embedding_retrieval() {
+    fn test_embedding_retrieval() -> anyhow::Result<()> {
         let table = MultiHeadEmbeddingTable::new(SovereigntyTier::T0Mobile);
 
         // Should be able to retrieve for valid indices
@@ -818,6 +819,7 @@ mod tests {
             emb.context("Failed to unwrap result")?.len(),
             SovereigntyTier::T0Mobile.embedding_dim()
         );
+        Ok(())
     }
 
     #[test]

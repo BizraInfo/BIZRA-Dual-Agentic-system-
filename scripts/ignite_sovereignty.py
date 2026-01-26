@@ -25,8 +25,8 @@ def check_env():
     try:
         subprocess.run(["cargo", "--version"], stdout=subprocess.DEVNULL, check=True)
         logger.info("✅ Rust (Cargo) detected")
-    except:
-        logger.error("❌ Rust not found. Install from rustup.rs")
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        logger.error(f"❌ Rust not found. Install from rustup.rs: {e}")
         return False
         
     # Check other deps if feasible

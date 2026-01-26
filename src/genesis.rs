@@ -457,6 +457,7 @@ impl Default for ChainVerifier {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
     use ed25519_dalek::SigningKey;
     use rand::rngs::OsRng;
     use tempfile::TempDir;
@@ -546,7 +547,7 @@ mod tests {
     // ========================================================================
 
     #[test]
-    fn test_i2_signature_validity_correct_key() {
+    fn test_i2_signature_validity_correct_key() -> anyhow::Result<()> {
         let signing_key = SigningKey::generate(&mut OsRng);
         let pk_hex = hex::encode(signing_key.verifying_key().as_bytes());
         let fingerprint = ChainVerifier::compute_hash(signing_key.verifying_key().as_bytes());
@@ -576,10 +577,11 @@ mod tests {
             genesis.verify().context("Failed to unwrap result")?,
             "I2 VIOLATION: Valid signature failed verification"
         );
+        Ok(())
     }
 
     #[test]
-    fn test_i2_signature_validity_wrong_key_rejected() {
+    fn test_i2_signature_validity_wrong_key_rejected() -> anyhow::Result<()> {
         let signing_key1 = SigningKey::generate(&mut OsRng);
         let signing_key2 = SigningKey::generate(&mut OsRng);
         let pk_hex = hex::encode(signing_key1.verifying_key().as_bytes());
@@ -610,10 +612,11 @@ mod tests {
             !genesis.verify().context("Failed to unwrap result")?,
             "I2 VIOLATION: Wrong key signature should not verify"
         );
+        Ok(())
     }
 
     #[test]
-    fn test_i2_signature_validity_tampered_data_rejected() {
+    fn test_i2_signature_validity_tampered_data_rejected() -> anyhow::Result<()> {
         let signing_key = SigningKey::generate(&mut OsRng);
         let pk_hex = hex::encode(signing_key.verifying_key().as_bytes());
         let fingerprint = ChainVerifier::compute_hash(signing_key.verifying_key().as_bytes());
@@ -646,6 +649,7 @@ mod tests {
             !genesis.verify().context("Failed to unwrap result")?,
             "I2 VIOLATION: Tampered data should not verify"
         );
+        Ok(())
     }
 
     // ========================================================================
@@ -736,7 +740,7 @@ mod tests {
     // ========================================================================
 
     #[test]
-    fn test_i5_replay_safety_duplicate_detection() {
+    fn test_i5_replay_safety_duplicate_detection() -> anyhow::Result<()> {
         let temp_dir = TempDir::new().context("Failed to unwrap result")?;
 
         // Create two receipts with same ID (simulating replay attack)
@@ -770,6 +774,7 @@ mod tests {
             "Should have loaded 2 receipt files"
         );
         // In production, duplicate IDs would be flagged as failures
+        Ok(())
     }
 
     // ========================================================================
@@ -855,7 +860,7 @@ mod tests {
     }
 
     #[test]
-    fn test_chain_verifier_with_genesis() {
+    fn test_chain_verifier_with_genesis() -> anyhow::Result<()> {
         let signing_key = SigningKey::generate(&mut OsRng);
         let pk_hex = hex::encode(signing_key.verifying_key().as_bytes());
         let fingerprint = ChainVerifier::compute_hash(signing_key.verifying_key().as_bytes());
@@ -886,10 +891,11 @@ mod tests {
             verifier.genesis.as_ref().context("Failed to unwrap result")?.genesis_id,
             "VERIFIER-TEST"
         );
+        Ok(())
     }
 
     #[test]
-    fn test_chain_verifier_verify_directory() {
+    fn test_chain_verifier_verify_directory() -> anyhow::Result<()> {
         let temp_dir = TempDir::new().context("Failed to unwrap result")?;
 
         // Create valid test receipts
@@ -915,10 +921,11 @@ mod tests {
         assert_eq!(result.total_receipts, 3);
         assert_eq!(result.verified, 3);
         assert!(result.failures.is_empty());
+        Ok(())
     }
 
     #[test]
-    fn test_chain_verifier_detects_integrity_mismatch() {
+    fn test_chain_verifier_detects_integrity_mismatch() -> anyhow::Result<()> {
         let temp_dir = TempDir::new().context("Failed to unwrap result")?;
 
         // Create a receipt with wrong integrity hash
@@ -941,6 +948,7 @@ mod tests {
         assert!(result.failures[0]
             .reason
             .contains("Integrity hash mismatch"));
+        Ok(())
     }
 
     #[test]

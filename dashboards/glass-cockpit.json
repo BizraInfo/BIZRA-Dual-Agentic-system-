@@ -461,7 +461,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum by(code) (increase(bizra_sat_rejections_by_code_total[24h]))",
+          "expr": "sum by(code) (increase(bizra_sat_rejections_total[24h]))",
           "legendFormat": "{{code}}",
           "refId": "A"
         }

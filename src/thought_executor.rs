@@ -8,7 +8,9 @@ use anyhow::Context;
 // - Hard Gate #1: All metrics use Fixed64
 // - Article III: 8-stage thought lifecycle enforced
 // - Article V: SNR metrics tracked for every thought
+// - PEAK MASTERPIECE: ARTE stage tracking for attention-retention-tension-execution
 
+use crate::arte::ARTEStage;
 use crate::fixed::Fixed64;
 use crate::ihsan::{compute_ihsan_score, IhsanConstitution, IhsanDimensions};
 use crate::snr_monitor::{global_monitor, ThoughtEvent};
@@ -83,11 +85,14 @@ impl StubFateGate {
 }
 
 /// Thought Executor: Orchestrates the 8-stage COVENANT pipeline
+/// PEAK MASTERPIECE: Includes ARTE stage tracking
 #[allow(dead_code)] // Reserved fields for future expansion
 pub struct ThoughtExecutor {
     reasoner: StubReasoner,
     fate_gate: StubFateGate,
     constitution: &'static IhsanConstitution,
+    /// PEAK MASTERPIECE: Current ARTE stage for lifecycle tracking
+    arte_stage: ARTEStage,
 }
 
 impl ThoughtExecutor {
@@ -97,6 +102,19 @@ impl ThoughtExecutor {
             reasoner: StubReasoner::new("stub-v1"),
             fate_gate: StubFateGate,
             constitution: crate::ihsan::constitution(),
+            arte_stage: ARTEStage::Attention, // Start at Attention stage
+        }
+    }
+
+    /// Get current ARTE stage
+    pub fn arte_stage(&self) -> ARTEStage {
+        self.arte_stage
+    }
+
+    /// Advance ARTE stage
+    fn advance_arte_stage(&mut self) {
+        if let Some(next) = self.arte_stage.next() {
+            self.arte_stage = next;
         }
     }
 
@@ -305,9 +323,10 @@ impl Default for ThoughtExecutor {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use anyhow::Context;
 
     #[test]
-    fn test_full_pipeline_success() {
+    fn test_full_pipeline_success() -> anyhow::Result<()> {
         let executor = ThoughtExecutor::new_stub();
         let result = executor.execute("Test input: safe operation");
 
@@ -319,10 +338,11 @@ mod tests {
         assert!(thought.ledger_entry_hash.is_some());
         assert!(thought.proof_hash.is_some());
         assert!(!receipt.is_empty());
+        Ok(())
     }
 
     #[test]
-    fn test_pipeline_fate_rejection() {
+    fn test_pipeline_fate_rejection() -> anyhow::Result<()> {
         // Note: The stub FATE gate checks action_type for "UNSAFE", not input text.
         // Since new_stub() creates actions with action_type="test_action",
         // it always passes. This test verifies the pipeline completes successfully.
@@ -334,10 +354,11 @@ mod tests {
         assert!(result.is_ok());
         let (thought, _receipt) = result.context("Failed to unwrap result")?;
         assert!(!thought.gates_passed.is_empty());
+        Ok(())
     }
 
     #[test]
-    fn test_snr_increments() {
+    fn test_snr_increments() -> anyhow::Result<()> {
         let monitor = global_monitor();
 
         let executor = ThoughtExecutor::new_stub();
@@ -357,10 +378,11 @@ mod tests {
         // Verify SNR is valid (non-negative)
         let snr = monitor.current_snr();
         assert!(snr.to_f64() >= 0.0);
+        Ok(())
     }
 
     #[test]
-    fn test_receipt_generation() {
+    fn test_receipt_generation() -> anyhow::Result<()> {
         let executor = ThoughtExecutor::new_stub();
         let result = executor.execute("Receipt test");
 
@@ -373,5 +395,6 @@ mod tests {
         assert!(parsed["ihsan_score"].is_f64());
         assert!(parsed["current_snr"].is_f64());
         assert!(parsed["contributed_to_signal"].is_boolean());
+        Ok(())
     }
 }
