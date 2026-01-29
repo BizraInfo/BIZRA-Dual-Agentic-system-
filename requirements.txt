@@ -1,0 +1,21 @@
+# Python Dependencies for BIZRA Dual Agentic System
+# ===================================================
+
+# Neo4j Graph Database Driver
+# ----------------------------
+# SECURITY: SEC-003 - Pinned to version < 5.0 to avoid compatibility issues
+# with NumPy 2.x. Versions 5.20-5.28 have breaking changes due to deprecated
+# np.bool_ usage in neo4j/_codec/packstream/v1/types.py:38
+# Issue: https://github.com/neo4j/neo4j-python-driver/issues
+# Affects: core/wisdom.py imports, test_kernel_receipt_integrity.py (2 tests)
+neo4j<5.0
+
+# NumPy - Numerical Computing
+# ----------------------------
+# SECURITY: SEC-003 - Pinned to version < 2.0 for compatibility with neo4j < 5.0
+# NumPy 2.x removed the deprecated np.bool_ attribute which causes
+# AttributeError in older neo4j driver versions
+numpy<2.0
+
+# Additional core dependencies can be added below
+# Format: package_name==version or package_name<version
