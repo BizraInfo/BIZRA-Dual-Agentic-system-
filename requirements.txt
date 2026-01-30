@@ -7,7 +7,7 @@
 # with NumPy 2.x. Versions 5.20-5.28 have breaking changes due to deprecated
 # np.bool_ usage in neo4j/_codec/packstream/v1/types.py:38
 # Issue: https://github.com/neo4j/neo4j-python-driver/issues
-# Affects: core/wisdom.py imports, test_kernel_receipt_integrity.py (2 tests)
+# Affects: Future Python components (core/wisdom.py, test_kernel_receipt_integrity.py)
 neo4j<5.0
 
 # NumPy - Numerical Computing

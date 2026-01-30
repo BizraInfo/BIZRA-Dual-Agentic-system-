@@ -23,7 +23,7 @@ AttributeError: module 'numpy' has no attribute 'bool_'
 **Option 1: Pin older neo4j and numpy versions (Recommended)**
 
 We have implemented version constraints in `requirements.txt`:
-```python
+```txt
 neo4j<5.0      # Avoid versions 5.20-5.28 with NumPy 2.x incompatibility
 numpy<2.0      # Use NumPy 1.x for compatibility with neo4j < 5.0
 ```
@@ -41,7 +41,7 @@ numpy<2.0      # Use NumPy 1.x for compatibility with neo4j < 5.0
 
 ### Future Resolution
 Once the neo4j Python driver is updated to support NumPy 2.x, the version constraints can be relaxed:
-```python
+```txt
 neo4j>=5.30  # Hypothetical fixed version
 numpy>=2.0   # Can use NumPy 2.x once neo4j is compatible
 ```

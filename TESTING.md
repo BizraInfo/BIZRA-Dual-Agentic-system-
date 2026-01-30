@@ -83,15 +83,17 @@ numpy.bool_ available: True
 
 ## Python Tests (Future)
 
-Once Python components are added (`core/wisdom.py`, `test_kernel_receipt_integrity.py`), run:
+Once Python components are added (`core/wisdom.py`, `test_kernel_receipt_integrity.py`), you can run tests with:
 
 ```bash
-# Using pytest
+# Using pytest (requires: pip install pytest)
 pytest tests/
 
 # Using unittest
 python3 -m unittest discover tests/
 ```
+
+**Note**: Python test infrastructure does not exist yet. The above commands are for future use.
 
 ## Security Testing
 
@@ -103,7 +105,7 @@ cat SECURITY.md
 
 ## Integration Testing
 
-For full integration tests including both Rust and Python components:
+For full integration tests including both Rust and Python components (once Python components exist):
 
 ```bash
 # Build Rust components
@@ -112,9 +114,14 @@ cargo build --release
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Run all tests
-cargo test && python3 -m pytest tests/
+# Run Rust tests
+cargo test
+
+# Run Python tests (once they exist - requires pytest: pip install pytest)
+# python3 -m pytest tests/
 ```
+
+**Note**: Currently only Rust tests exist. Python integration will be available once Python components are added.
 
 ## Continuous Integration
 

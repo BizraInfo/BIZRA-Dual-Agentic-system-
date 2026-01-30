@@ -55,7 +55,7 @@ def check_version_constraint(package_name, constraint):
     """Check if the installed version meets the constraint."""
     version = get_package_version(package_name)
     
-    if version in ["not installed", "error parsing version"]:
+    if version == "not installed":
         print(f"⚠️  {package_name}: {version}")
         return False
     
@@ -73,6 +73,13 @@ def check_version_constraint(package_name, constraint):
         max_version = parse_version(max_version_str)
         
         if max_version and parsed_version >= max_version:
+            print(f"  ❌ FAILED: Version {version} violates constraint {constraint}")
+            return False
+    elif constraint.startswith('>'):
+        min_version_str = constraint[1:]
+        min_version = parse_version(min_version_str)
+        
+        if min_version and parsed_version <= min_version:
             print(f"  ❌ FAILED: Version {version} violates constraint {constraint}")
             return False
     
