@@ -121,6 +121,8 @@ Five sophisticated reasoning approaches:
 
 - Rust 1.90 or later
 - Cargo package manager
+- Python 3.11+ (for optional Python integrations)
+- pip (Python package manager, for optional Python dependencies)
 
 ### Build from Source
 
@@ -131,6 +133,9 @@ cd BIZRA-Dual-Agentic-system-
 
 # Build release version
 cargo build --release
+
+# Install Python dependencies (optional, for future Python integrations)
+pip install -r requirements.txt
 
 # Run the system
 cargo run --release
@@ -195,6 +200,18 @@ curl -X POST http://localhost:8080/enhanced/execute \
 - **Sub-Agent Pool**: Up to 100 concurrent sub-agents
 - **Connection Pool**: Efficient resource management
 - **Byzantine Fault Tolerance**: 3/5 consensus ensures reliability
+
+---
+
+## 🔒 Security
+
+For security advisories and compatibility issues, please see [SECURITY.md](SECURITY.md).
+
+Key security measures:
+- Proactive dependency version management
+- Byzantine fault tolerance (3/5 consensus)
+- Input validation through SAT agents
+- Type-safe Rust core
 
 ---
 
