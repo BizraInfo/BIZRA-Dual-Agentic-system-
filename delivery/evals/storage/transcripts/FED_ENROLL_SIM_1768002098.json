@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-01-10T03:41:38.191800",
+  "task_id": "FED_ENROLL_SIM",
+  "command": "python3 /root/bizra-genesis/federation/governance/enrollment_officer.py",
+  "stdout": "{\n  \"status\": \"APPROVED\",\n  \"visa_token\": \"VISA_node_15b3ee344c355cce_1768002098\",\n  \"expires_in\": 3600,\n  \"permissions\": [\n    \"READ_PUBLIC_LEDGER\",\n    \"SUBMIT_PROOF\"\n  ]\n}\n",
+  "stderr": "2026-01-10 03:41:38,183 | ENROLLMENT | INFO | Processing Enrollment Request...\n2026-01-10 03:41:38,183 | ENROLLMENT | INFO | ACCEPTED: Node node_15b3ee344c355cce enrolled as IRON.\n",
+  "return_code": 0,
+  "grading": {
+    "status": "PASS",
+    "score": 1.0
+  }
+}

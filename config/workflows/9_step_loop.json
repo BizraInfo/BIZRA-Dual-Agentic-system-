@@ -1,0 +1,66 @@
+{
+  "workflow_name": "ELITE_EXECUTION_LOOP_V1",
+  "description": "The 9-step rigid state machine for all High-Stakes Missions.",
+  "states": {
+    "1_INTAKE": {
+      "owner": "PRODUCT_UX",
+      "input": "User Request",
+      "output": "Structured Intent Spec",
+      "next": "2_DECOMPOSE"
+    },
+    "2_DECOMPOSE": {
+      "owner": "SYSTEMS_ARCHITECT",
+      "input": "Intent Spec",
+      "output": "Architecture & Task Breakdown",
+      "next": "3_ALLOCATE"
+    },
+    "3_ALLOCATE": {
+      "owner": "META_ORCHESTRATOR",
+      "input": "Task Breakdown",
+      "output": "Agent Assignments",
+      "next": "4_DRAFT"
+    },
+    "4_DRAFT": {
+      "owner": "EXECUTION_PODS",
+      "input": "Assignments",
+      "output": "Draft Artifacts (Code/Docs)",
+      "next": "5_CRITIQUE"
+    },
+    "5_CRITIQUE": {
+      "owner": "SKEPTIC",
+      "input": "Draft Artifacts",
+      "output": "Vulnerability Report",
+      "quality_gate": true,
+      "next_pass": "6_VERIFY",
+      "next_fail": "4_DRAFT"
+    },
+    "6_VERIFY": {
+      "owner": "VERIFIER",
+      "input": "Draft Artifacts + Skeptic Report",
+      "output": "Test Results / Proofs",
+      "quality_gate": true,
+      "next_pass": "7_HARDEN",
+      "next_fail": "4_DRAFT"
+    },
+    "7_HARDEN": {
+      "owner": "SECURITY_OFFICER",
+      "input": "Verified Artifacts",
+      "output": "Signed & Sandboxed Artifacts",
+      "quality_gate": true,
+      "next_pass": "8_INTEGRATE",
+      "next_fail": "4_DRAFT"
+    },
+    "8_INTEGRATE": {
+      "owner": "OPERATOR",
+      "input": "Hardened Artifacts",
+      "output": "Deployed System",
+      "next": "9_POST_MORTEM"
+    },
+    "9_POST_MORTEM": {
+      "owner": "RESEARCH_LIBRARIAN",
+      "input": "Deployment Telemetry",
+      "output": "Knowledge Kernel Update",
+      "next": "END"
+    }
+  }
+}

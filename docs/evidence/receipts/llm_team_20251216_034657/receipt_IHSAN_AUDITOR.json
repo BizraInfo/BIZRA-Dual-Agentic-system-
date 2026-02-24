@@ -1,0 +1,31 @@
+{
+  "receipt_version": 1,
+  "type": "llm_task",
+  "generated_at": "2025-12-16T03:47:30.827Z",
+  "truth_label": "MEASURED",
+  "role": "IHSAN_AUDITOR",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "prompt_sha256": "feae7ac21495d09cb233cb24da3770fbbd96e5e7b9a8fb58ad2af78df617e8fa",
+  "response_sha256": "37ecea206bb3eb985047c5faf8775bd674d4a88a9953bb800b494cd4e6769fa8",
+  "files": {
+    "prompt": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_034657\\prompt_IHSAN_AUDITOR.txt",
+      "sha256": "feae7ac21495d09cb233cb24da3770fbbd96e5e7b9a8fb58ad2af78df617e8fa"
+    },
+    "response": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_034657\\response_IHSAN_AUDITOR.json",
+      "sha256": "37ecea206bb3eb985047c5faf8775bd674d4a88a9953bb800b494cd4e6769fa8"
+    },
+    "result": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_034657\\result_IHSAN_AUDITOR.json",
+      "sha256": "2bcb36f091eddc04ed9e9fbf00594142d3dcc2a35a1bc596b92b30e0e57f4f91"
+    }
+  },
+  "inputs": [
+    {
+      "path": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074648\\aggregate.json",
+      "sha256": "1e22d9df278a147ac080178e116104436c2481d7fb1ef8fbdc0fe129eb6a08cc"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "location": "dubai",
+  "key_type": "ed25519",
+  "public_key": "sim_pub_dubai_2026-01-12T12:06:07.673986",
+  "created": "2026-01-12T12:06:07.674078",
+  "purpose": "ephemeral_wrapping_genesis"
+}

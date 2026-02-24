@@ -1,0 +1,19 @@
+target/
+node_modules/
+.git/
+.venv/
+data/
+bizra_data_vault/
+archive/
+# Keep requirements.txt and other critical .txt files if needed
+# Excluding specific logs/txt but keeping requirements
+!requirements*.txt
+*.log
+# *.txt (Commenting out broad exclusion)
+receipts/
+evidence/
+dist/
+build/
+.vscode/
+.claude/
+.bizra/

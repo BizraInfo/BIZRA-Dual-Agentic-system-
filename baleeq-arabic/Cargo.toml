@@ -1,0 +1,23 @@
+[package]
+name = "baleeq-arabic"
+version = "0.1.0"
+edition = "2021"
+authors = ["Airis-Node0", "GitHub Copilot Frontier"]
+description = "Quranic-verified Arabic linguistic engine for BIZRA"
+
+[workspace]
+
+[dependencies]
+unicode-normalization = "0.1.22"
+thiserror = "1.0"
+log = "0.4"
+pyo3 = { version = "0.20", features = ["extension-module"] }
+
+[lib]
+name = "baleeq_arabic"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+
+[[test]]
+name = "probe_triliteral_root"
+path = "tests/probe_triliteral_root.rs"

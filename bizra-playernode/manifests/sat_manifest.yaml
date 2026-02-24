@@ -1,0 +1,50 @@
+# bizra-playernode/manifests/sat_manifest.yaml
+# Sovereign Authority Token (SAT) - The Mandate
+# Specifies the boundaries of the Personal Agentic Team's authority.
+
+meta:
+  version: "1.0.0"
+  security_level: "HIGH_ASSURANCE"
+  jurisdiction: "PLAYER_NODE_LOCAL"
+
+authority_boundaries:
+  can_modify_filesystem:
+    scope: "SANDBOX_ONLY"
+    path_root: "/data/sape/workspace"
+    max_file_size_mb: 50
+  
+  can_access_network:
+    scope: "WHITELIST"
+    domains: ["api.bizra.network", "p2p.bizra.network"]
+    protocols: ["https", "libp2p"]
+
+  can_spend_resources:
+    max_cpu_percent: 80
+    max_ram_mb: 4096
+    max_storage_gb: 10
+
+capability_model:
+  default_policy: "DENY_ALL"
+  escalation_path: "USER_CONSENT_REQUIRED"
+  delegated_capabilities:
+    - "READ_PUBLIC_LEDGER"
+    - "SIGN_LOCAL_RECEIPTS"
+    - "GENERATE_PROOF_OF_WORK"
+
+decision_pipeline:
+  steps:
+    1_intent_formation:
+      actor: "PRIME"
+      check: "SAPE_ALIGNMENT"
+    2_safety_review:
+      actor: "AESTHETE"
+      check: "SAFETY_POLICY"
+    3_resource_check:
+      actor: "SAPE_KERNEL"
+      check: "BUDGET_AVAILABILITY"
+    4_execution:
+      actor: "TEKNE"
+      check: "SANDBOX_CONFINEMENT"
+    5_receipt_generation:
+      actor: "SAPE_KERNEL"
+      check: "CRYPTO_SIGNATURE"

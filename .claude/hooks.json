@@ -1,0 +1,60 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/security-gate.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/determinism-check.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-edit.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "You are validating if Claude should stop working on a BIZRA task.\n\nContext: $ARGUMENTS\n\nBIZRA SAT Consensus requires:\n1. Security - No vulnerabilities introduced\n2. Formal - Logic consistent, no contradictions\n3. Ethics - No violations of Ihsān principles\n4. Resource - Within constraints\n5. Context - Fits system coherently\n\nTHE LAW: 'We don't assume. If we must, we do it with Ihsān.'\n\nCheck if stop_hook_active is true (already continuing from hook) - if so, allow stop.\n\nRespond: {\"ok\": true} to stop, or {\"ok\": false, \"reason\": \"[validator]: [issue]\"} to continue.",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'BIZRA Context: THE LAW - We do not assume. If we must, we do it with Ihsān. Targets: Ihsān >= 0.95, SNR >= 1.5. SAT requires 5/5 approval.'",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}

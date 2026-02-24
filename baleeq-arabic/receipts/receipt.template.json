@@ -1,0 +1,13 @@
+{
+  "component_id": "",
+  "agent": "github_copilot_frontier",
+  "timestamp": "",
+  "parent_hash": "",
+  "ihsan_score": 0.0,
+  "formal_spec": "",
+  "resource_budget": { "time": "", "memory": "", "binary_size": "" },
+  "adversarial_probe": [],
+  "arabic_keyword": "",
+  "quranic_root": "",
+  "signature": ""
+}

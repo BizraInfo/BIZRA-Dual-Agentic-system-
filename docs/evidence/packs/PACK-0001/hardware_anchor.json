@@ -1,0 +1,9 @@
+{
+  "secure_boot": true,
+  "tpm_pcr_active": [0, 1, 2, 7],
+  "firmware_vendor": "BIZRA-OVMF/2026",
+  "cpu_microcode": "BZN-0.3.0",
+  "mp_topology_hash": "Cores:16",
+  "tsc_drift": 0,
+  "timestamp_ns": 1736185560
+}

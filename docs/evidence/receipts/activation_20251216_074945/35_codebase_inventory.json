@@ -1,0 +1,486 @@
+{
+  "generated_at": "2025-12-16T03:49:47.154282+00:00",
+  "repo_root": "C:\\BIZRA-Dual-Agentic-system--main",
+  "truth_label": "MEASURED",
+  "git": {
+    "head": "24d743681be2141fe4b73a31159a47e2863a3b55",
+    "branch": "main",
+    "dirty": true,
+    "status_lines": 44,
+    "truth_label": "MEASURED"
+  },
+  "files": {
+    "total_files": 471,
+    "total_bytes": 4043739144,
+    "by_extension": [
+      {
+        "ext": ".txt",
+        "files": 193,
+        "bytes": 3874904336,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".zip",
+        "files": 7,
+        "bytes": 158481427,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".json",
+        "files": 154,
+        "bytes": 6808036,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".pdf",
+        "files": 3,
+        "bytes": 2663372,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".md",
+        "files": 45,
+        "bytes": 503275,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".rs",
+        "files": 16,
+        "bytes": 88438,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".yaml",
+        "files": 14,
+        "bytes": 63755,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".ps1",
+        "files": 9,
+        "bytes": 54953,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".py",
+        "files": 12,
+        "bytes": 53438,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".html",
+        "files": 1,
+        "bytes": 36733,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".lock",
+        "files": 1,
+        "bytes": 27665,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".ts",
+        "files": 5,
+        "bytes": 22946,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".js",
+        "files": 4,
+        "bytes": 16704,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".bat",
+        "files": 2,
+        "bytes": 10127,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".toml",
+        "files": 3,
+        "bytes": 3540,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": "(none)",
+        "files": 2,
+        "bytes": 399,
+        "truth_label": "MEASURED"
+      }
+    ],
+    "largest_files": [
+      {
+        "bytes": 2640663032,
+        "path": "docs\\evidence\\receipts\\activation_20251216_072706\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 827777006,
+        "path": "docs\\evidence\\receipts\\activation_20251216_072631\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 267351115,
+        "path": "docs\\evidence\\receipts\\activation_20251216_072452\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 90058152,
+        "path": "docs\\evidence\\receipts\\activation_20251216_072311\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 42483301,
+        "path": "chat data sample\\2025-12-15-conversations (2).zip",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 41637777,
+        "path": "chat data sample\\data-2025-12-15-17-59-21-batch-0000.zip",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 40592154,
+        "path": "chat data sample\\2025-12-15-conversations (1).zip",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 31231603,
+        "path": "docs\\evidence\\receipts\\activation_20251216_072045\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 18947270,
+        "path": "chat data sample\\2025-12-15-conversations (3).zip",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 14798903,
+        "path": "chat data sample\\deepseek_data-2025-12-16.zip",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 10976357,
+        "path": "docs\\evidence\\receipts\\activation_20251216_072015\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 4239219,
+        "path": "docs\\evidence\\receipts\\activation_20251216_071928\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 3388375,
+        "path": ".bizra-kernel\\memory\\knowledge_graph.json",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 2494712,
+        "path": ".bizra-kernel\\memory\\history_index.json",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 1893501,
+        "path": "========================================_   BIZRA.pdf",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 1768926,
+        "path": "docs\\evidence\\receipts\\activation_20251216_071752\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 645695,
+        "path": "__Yes. The Blueprint is Already in Your Hands.__.pdf",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 394957,
+        "path": "docs\\evidence\\receipts\\activation_20251216_070902\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 124176,
+        "path": "__Unified Elite BIZRA System Optimization Blueprint__.pdf",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 90402,
+        "path": "docs\\evidence\\receipts\\activation_20251216_062451\\20_secret_scan_rg.txt",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 82284,
+        "path": ".bizra-kernel\\memory\\evidence_index.json",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 45490,
+        "path": "BIZRA-Lexicon-Ledger-v0.1.md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 44357,
+        "path": "IMPLEMENTATION_BLUEPRINT.md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 42798,
+        "path": "BIZRA-Lexicon-Ledger-v0.1 (2).md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 42798,
+        "path": "BIZRA-Lexicon-Ledger-v0.1 (1).md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 39097,
+        "path": "BIZRA-Node0-Repository-Structure.md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 37748,
+        "path": "BIZRA-Model-Family-8B-Humans.md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 36733,
+        "path": "index (3).html",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 34328,
+        "path": "🌱 PRIMORDIAL ACTIVATION BLUEPRINT (PAB) v4.1.md",
+        "truth_label": "MEASURED"
+      },
+      {
+        "bytes": 29917,
+        "path": "BIZRA-Elite-Implementation-Blueprint-v4.0.md",
+        "truth_label": "MEASURED"
+      }
+    ],
+    "truth_label": "MEASURED"
+  },
+  "loc": {
+    "scanned_files": 449,
+    "by_extension": [
+      {
+        "ext": ".json",
+        "loc": 137620,
+        "files": 154,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".txt",
+        "loc": 19766,
+        "files": 185,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".md",
+        "loc": 13773,
+        "files": 45,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".rs",
+        "loc": 2808,
+        "files": 16,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".yaml",
+        "loc": 2232,
+        "files": 14,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".py",
+        "loc": 1617,
+        "files": 12,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".ps1",
+        "loc": 1391,
+        "files": 9,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".lock",
+        "loc": 1089,
+        "files": 1,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".html",
+        "loc": 1039,
+        "files": 1,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".ts",
+        "loc": 668,
+        "files": 5,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".js",
+        "loc": 503,
+        "files": 4,
+        "truth_label": "MEASURED"
+      },
+      {
+        "ext": ".toml",
+        "loc": 162,
+        "files": 3,
+        "truth_label": "MEASURED"
+      }
+    ],
+    "truth_label": "MEASURED",
+    "notes": [
+      "Counts only files <= 5242880 bytes; binary/large files skipped."
+    ]
+  },
+  "dependencies": {
+    "cargo": {
+      "present": true,
+      "package": {
+        "name": "meta_alpha_dual_agentic",
+        "version": "2.0.0",
+        "edition": "2021"
+      },
+      "dependencies": [
+        {
+          "name": "anyhow",
+          "version": "1.0"
+        },
+        {
+          "name": "async-trait",
+          "version": "0.1"
+        },
+        {
+          "name": "axum",
+          "version": "0.7"
+        },
+        {
+          "name": "chrono",
+          "version": "0.4"
+        },
+        {
+          "name": "serde",
+          "version": "1.0"
+        },
+        {
+          "name": "serde_json",
+          "version": "1.0"
+        },
+        {
+          "name": "thiserror",
+          "version": "2.0"
+        },
+        {
+          "name": "tokio",
+          "version": "1.41"
+        },
+        {
+          "name": "tower",
+          "version": "0.5"
+        },
+        {
+          "name": "tower-http",
+          "version": "0.6"
+        },
+        {
+          "name": "tracing",
+          "version": "0.1"
+        },
+        {
+          "name": "tracing-subscriber",
+          "version": "0.3"
+        },
+        {
+          "name": "uuid",
+          "version": "1.11"
+        }
+      ],
+      "counts": {
+        "dependencies": 13
+      },
+      "truth_label": "MEASURED",
+      "inputs": [
+        {
+          "path": "C:\\BIZRA-Dual-Agentic-system--main\\Cargo.toml",
+          "note": "Cargo.toml parsed"
+        }
+      ]
+    },
+    "npm": {
+      "packages": [
+        {
+          "path": "ace-framework\\package.json",
+          "name": "ace-framework",
+          "version": "1.0.0",
+          "dependencies_count": 2,
+          "dev_dependencies_count": 0
+        }
+      ],
+      "counts": {
+        "packages": 1
+      },
+      "truth_label": "MEASURED"
+    },
+    "truth_label": "MEASURED"
+  },
+  "security_signals": {
+    "counts": {
+      "ps_invoke_expression": 1,
+      "rust_unsafe": 0,
+      "rust_unwrap": 3,
+      "rust_expect": 1,
+      "node_eval": 0,
+      "node_child_exec": 0,
+      "node_spawn": 0
+    },
+    "scanned_files": 449,
+    "truth_label": "DERIVED",
+    "notes": [
+      "Heuristic scan for high-risk constructs; use as a prioritization signal, not a proof of vulnerability.",
+      "Skipped files > 5242880 bytes."
+    ]
+  },
+  "docs": {
+    "markdown_files": 45,
+    "top_docs": [
+      ".bizra-kernel\\QUICK-REFERENCE.md",
+      ".bizra-kernel\\README.md",
+      ".bizra-kernel\\SYSTEM-OVERVIEW.md",
+      ".bizra-kernel\\context\\agent_manifest.md",
+      "ARCHITECTURE.md",
+      "BIZRA-Elite-Implementation-Blueprint-v4.0.md",
+      "BIZRA-Lexicon-Ledger-v0.1 (1).md",
+      "BIZRA-Lexicon-Ledger-v0.1 (2).md",
+      "BIZRA-Lexicon-Ledger-v0.1.md",
+      "BIZRA-Model-Family-8B-Humans.md",
+      "BIZRA-Node0-Repository-Structure.md",
+      "BIZRA_Integrated_Excellence_Framework_v4.1.1_Corrected.md",
+      "BIZRA_Lexicon_Ledger_v0.1.1.md",
+      "BIZRA_Lexicon_Ledger_v0.2.0_SEALED.md",
+      "BIZRA_Sovereign_Survivor_Annex_Audit_Grade.md",
+      "BIZRA_Sovereign_Survivor_Manifesto_Sealed.md",
+      "EVIDENCE_SEALING_PACK_README.md",
+      "EXAMPLES.md",
+      "Executive-Synthesis-Action-Brief.md",
+      "IMPLEMENTATION_BLUEPRINT.md",
+      "PHASE0_WEEK1_README.md",
+      "README.md",
+      "SUMMARY.md",
+      "based on all the previous data and knowledge base.md",
+      "docs\\accessibility\\wcag_2_1_aa.md"
+    ],
+    "truth_label": "MEASURED"
+  }
+}

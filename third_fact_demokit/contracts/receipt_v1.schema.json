@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BIZRA Receipt v1.0 (RFC8785 JCS)",
+  "type": "object",
+  "required": [
+    "@context",
+    "receipt_id",
+    "type",
+    "timestamp",
+    "evidence_hash",
+    "signatures",
+    "metadata"
+  ],
+  "properties": {
+    "prev_hash": {
+       "type": "string",
+       "pattern": "^rec_[A-Za-z0-9_-]{43}$",
+       "description": "Receipt ID of the immediately preceding event (or genesis zeros)"
+    },
+    "@context": {
+      "type": "string",
+      "const": "https://bizra.ai/contexts/receipt/v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^rec_[A-Za-z0-9_-]{43}$"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "pcr_attestation",
+        "fate_block",
+        "economic_eviction",
+        "rebirth",
+        "treasury_summary",
+        "adl_invariant",
+        "demo_failure"
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "signer_id",
+          "algorithm",
+          "value",
+          "timestamp"
+        ],
+        "properties": {
+          "signer_id": {
+            "type": "string"
+          },
+          "algorithm": {
+            "type": "string",
+            "enum": [
+              "ED25519",
+              "DILITHIUM5",
+              "BLS12-381",
+              "DEMO_NULL"
+            ]
+          },
+          "value": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

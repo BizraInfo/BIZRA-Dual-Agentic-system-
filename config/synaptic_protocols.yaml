@@ -1,0 +1,20 @@
+protocol: "BIZRA-SYNAPSE-V1"
+description: "Graph of Thoughts (GoT) invariants and parameters."
+
+invariants:
+  no_orphan_thoughts: true
+  deterministic_hashing: "sha256"
+  causal_linkage: "explicit"
+
+thought_types:
+  - Goal
+  - Hypothesis
+  - Plan
+  - Action
+  - Evidence
+  - Decision
+  - Result
+
+conformance:
+  serialization: "JCS"
+  encoding: "UTF-8"

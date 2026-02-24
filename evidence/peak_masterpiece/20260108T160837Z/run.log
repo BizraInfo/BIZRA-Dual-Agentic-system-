@@ -1,0 +1,18 @@
+2026-01-08 20:08:37,806 - BIZRAv7 - INFO - 🧬 Reproducibility locked with seed: 42
+2026-01-08 20:08:37,807 - BIZRAv7 - INFO - 🚀 Initializing BIZRA v7.0 with Resonance Mesh...
+Traceback (most recent call last):
+  File "/root/bizra-genesis/bizra_production.py", line 265, in <module>
+    asyncio.run(orchestrator.initialize())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/root/bizra-genesis/bizra_production.py", line 134, in initialize
+    resonance_config=self.config.resonance
+                     ^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'resonance'

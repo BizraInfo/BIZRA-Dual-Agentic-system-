@@ -1,0 +1,7 @@
+cargo:rerun-if-changed=/root/bizra-genesis/bizra-zero-hv/Cargo.toml
+cargo:rustc-link-search=native=/root/bizra-genesis/bizra-zero-hv/target/bootimage/bootloader/x86_64-bootloader/release/build/bootloader-d98835b7fbec257c/out
+cargo:rustc-link-lib=static=kernel_bin-bizra-zero-hv
+cargo:rerun-if-env-changed=KERNEL
+cargo:rerun-if-env-changed=KERNEL_MANIFEST
+cargo:rerun-if-changed=/root/bizra-genesis/bizra-zero-hv/target/x86_64-unknown-none/debug/bizra-zero-hv
+cargo:rerun-if-changed=build.rs

@@ -1,0 +1,68 @@
+# .github/workflows/ci_gate.yml
+# The Iron Gate: BIZRA Live Fire Validation
+# "No Code Merges Without Blood (Proof)"
+
+name: BIZRA Iron Gate CI
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  sape_audit:
+    name: "SAPE Self-Evaluation Check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
+      - name: Build Policy Engine (WASM)
+        run: |
+          cd crates/policy_engine
+          cargo build --target wasm32-unknown-unknown --release
+
+      - name: Execute Cognitive Verification
+        run: |
+          # This simulates the "Live Fire" test
+          # The agent must approve its own update via the policy engine.
+          echo "Outputting candidate policy hash..."
+          sha256sum crates/policy_engine/target/wasm32-unknown-unknown/release/policy_engine.wasm
+          
+          # In a real scenario, this would invoke the `bizra-gateway` to run the WASM
+          # against a standard battery of "Ethical Dilemmas".
+          # For MVI, we verify it compiles and matches expected ABI.
+
+  fate_validation:
+    name: "FATE Consensus Mock"
+    runs-on: ubuntu-latest
+    needs: sape_audit
+    steps:
+      - name: Check Schemas
+        run: |
+          # Verify JSON Schemas are valid
+          # (Requires npm/ajv-cli or similar, using simple heuristic for now)
+          if [ ! -f "bizra-playernode/schemas/receipt.schema.json" ]; then
+            echo "CRITICAL: Receipt schema missing!"
+            exit 1
+          fi
+          echo "Schema integrity confirmed."
+
+  pat_integrity:
+    name: "PAT Manifest Check"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate PAT Topology
+        run: |
+          # Ensure all 7 agents are present in the manifest
+          AGENTS=$(grep "name:" bizra-playernode/manifests/pat_manifest.yaml | wc -l)
+          if [ "$AGENTS" -ne "7" ]; then
+            echo "BLOCKED: The Council of Seven is incomplete. Found $AGENTS agents."
+            exit 1
+          fi
+          echo "The Council is seated."

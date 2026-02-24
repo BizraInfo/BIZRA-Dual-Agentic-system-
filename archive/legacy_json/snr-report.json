@@ -1,0 +1,9 @@
+{
+  "metrics": {
+    "signal_power": 1.0,
+    "noise_power": 0.0,
+    "snr_linear": 1.0,
+    "snr_db": 100.0,
+    "is_elite": true
+  }
+}

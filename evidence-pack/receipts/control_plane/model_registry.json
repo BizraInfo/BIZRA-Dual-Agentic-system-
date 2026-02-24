@@ -1,0 +1,252 @@
+{
+  "generated_at": "2026-01-09T19:22:31.537977Z",
+  "node_id": "NODE0-TITAN-14900HX",
+  "total_models": 34,
+  "total_size_bytes": 157031510632,
+  "models": [
+    {
+      "name": "nomic-embed-text:latest",
+      "id": "0a109f422b47",
+      "size": "274",
+      "source": "ollama-api",
+      "quantization": "latest"
+    },
+    {
+      "name": "llama3.1:8b",
+      "id": "46e0c10c039e",
+      "size": "4.9",
+      "source": "ollama-api",
+      "quantization": "8b"
+    },
+    {
+      "name": "deepseek-r1:14b",
+      "id": "c333b7232bdb",
+      "size": "9.0",
+      "source": "ollama-api",
+      "quantization": "14b"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-16d0f011ff8bbf4216ad2dba0f5274aa2a1eb88a49c08ca2776c566cdb58b68d",
+      "name": "sha256-16d0f011ff8bbf4216ad2dba0f5274aa2a1eb88a49c08ca2776c566cdb58b68d",
+      "size_bytes": 6254199360,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730",
+      "name": "sha256-2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730",
+      "size_bytes": 4683073952,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-60cfdbde0472c3b850493551288a152f0858a0d1974964d6925c2b908035db76",
+      "name": "sha256-60cfdbde0472c3b850493551288a152f0858a0d1974964d6925c2b908035db76",
+      "size_bytes": 4000472864,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-970aa74c0a90ef7482477cf803618e776e173c007bf957f635f1015bfcfef0e6",
+      "name": "sha256-970aa74c0a90ef7482477cf803618e776e173c007bf957f635f1015bfcfef0e6",
+      "size_bytes": 274290656,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff",
+      "name": "sha256-dde5aa3fc5ffc17176b5e8bdc82f587b24b2678c6c66101bf7da77af9f7ccdff",
+      "size_bytes": 2019377376,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-e6a7edc1a4d7d9b2de136a221a57336b76316cfe53a252aeba814496c5ae439d",
+      "name": "sha256-e6a7edc1a4d7d9b2de136a221a57336b76316cfe53a252aeba814496c5ae439d",
+      "size_bytes": 5225373760,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.ollama/models/blobs/sha256-f5074b1221da0f5a2910d33b642efa5b9eb58cfdddca1c79e16d7ad28aa2b31f",
+      "name": "sha256-f5074b1221da0f5a2910d33b642efa5b9eb58cfdddca1c79e16d7ad28aa2b31f",
+      "size_bytes": 4372811712,
+      "source": "ollama-fs"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/bartowski/Qwen2.5-14B_Uncensored_Instruct-GGUF/Qwen2.5-14B_Uncensored_Instruct-Q4_K_S.gguf",
+      "name": "Qwen2.5-14B_Uncensored_Instruct-Q4_K_S",
+      "size_bytes": 8573431552,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q4_K"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/granite-4.0-h-tiny-GGUF/granite-4.0-h-tiny-Q8_0.gguf",
+      "name": "granite-4.0-h-tiny-Q8_0",
+      "size_bytes": 7390331328,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/LFM2.5-1.2B-Instruct-GGUF/LFM2.5-1.2B-Instruct-Q8_0.gguf",
+      "name": "LFM2.5-1.2B-Instruct-Q8_0",
+      "size_bytes": 1246255456,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Ministral-3-14B-Reasoning-2512-GGUF/Ministral-3-14B-Reasoning-2512-Q8_0.gguf",
+      "name": "Ministral-3-14B-Reasoning-2512-Q8_0",
+      "size_bytes": 14359309344,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Ministral-3-14B-Reasoning-2512-GGUF/mmproj-Ministral-3-14B-Reasoning-2512-F16.gguf",
+      "name": "mmproj-Ministral-3-14B-Reasoning-2512-F16",
+      "size_bytes": 878053440,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "F16"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/NVIDIA-Nemotron-3-Nano-30B-A3B-GGUF/NVIDIA-Nemotron-3-Nano-30B-A3B-Q6_K.gguf",
+      "name": "NVIDIA-Nemotron-3-Nano-30B-A3B-Q6_K",
+      "size_bytes": 33508166944,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q6_K"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Qwen2.5-0.5B-Instruct-GGUF/Qwen2.5-0.5B-Instruct-Q8_0.gguf",
+      "name": "Qwen2.5-0.5B-Instruct-Q8_0",
+      "size_bytes": 531068224,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Qwen3-4B-Thinking-2507-GGUF/Qwen3-4B-Thinking-2507-Q8_0.gguf",
+      "name": "Qwen3-4B-Thinking-2507-Q8_0",
+      "size_bytes": 4280404928,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Qwen3-VL-4B-Instruct-GGUF/mmproj-Qwen3-VL-4B-Instruct-F16.gguf",
+      "name": "mmproj-Qwen3-VL-4B-Instruct-F16",
+      "size_bytes": 836180160,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "F16"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Qwen3-VL-4B-Instruct-GGUF/Qwen3-VL-4B-Instruct-Q8_0.gguf",
+      "name": "Qwen3-VL-4B-Instruct-Q8_0",
+      "size_bytes": 4280406048,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Qwen3-VL-8B-Instruct-GGUF/mmproj-Qwen3-VL-8B-Instruct-F16.gguf",
+      "name": "mmproj-Qwen3-VL-8B-Instruct-F16",
+      "size_bytes": 1159029824,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "F16"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/lmstudio-community/Qwen3-VL-8B-Instruct-GGUF/Qwen3-VL-8B-Instruct-Q8_0.gguf",
+      "name": "Qwen3-VL-8B-Instruct-Q8_0",
+      "size_bytes": 8709519456,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q8_0"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.lmstudio/models/mradermacher/AgentFlow-Planner-7B-i1-GGUF/AgentFlow-Planner-7B.i1-Q6_K.gguf",
+      "name": "AgentFlow-Planner-7B.i1-Q6_K",
+      "size_bytes": 6254199360,
+      "format": "GGUF",
+      "source": "lm-studio",
+      "quantization": "Q6_K"
+    },
+    {
+      "path": "/root/.cache/huggingface/hub/models--microsoft--Phi-3-mini-4k-instruct/snapshots/0a67737cc96d2554230f90338b163bc6380a2a85/model-00001-of-00002.safetensors",
+      "name": "0a67737cc96d2554230f90338b163bc6380a2a85",
+      "size_bytes": 4972489328,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/root/.cache/huggingface/hub/models--microsoft--Phi-3-mini-4k-instruct/snapshots/0a67737cc96d2554230f90338b163bc6380a2a85/model-00002-of-00002.safetensors",
+      "name": "0a67737cc96d2554230f90338b163bc6380a2a85",
+      "size_bytes": 2669692552,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/.no_exist/b8b07b0eff8d3b4285c200838d54a19b9949e527/model.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 0,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00001-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 4976687216,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00002-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 4778622352,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00003-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 4932743960,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00004-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 4932743992,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00005-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 4998852296,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00006-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 3662865184,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--AgentFlow--agentflow-planner-7b/snapshots/b8b07b0eff8d3b4285c200838d54a19b9949e527/model-00007-of-00007.safetensors",
+      "name": "b8b07b0eff8d3b4285c200838d54a19b9949e527",
+      "size_bytes": 2179989632,
+      "format": "safetensors",
+      "source": "huggingface"
+    },
+    {
+      "path": "/mnt/c/Users/BIZRA-OS/.cache/huggingface/hub/models--sentence-transformers--all-MiniLM-L6-v2/snapshots/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/model.safetensors",
+      "name": "c9745ed1d9f207416be6d2e6f8de32d1f16199bf",
+      "size_bytes": 90868376,
+      "format": "safetensors",
+      "source": "huggingface"
+    }
+  ]
+}

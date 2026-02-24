@@ -1,0 +1,14 @@
+{
+  "receipt_id": "EXEC-20260106082848-REPLAY",
+  "timestamp": "2026-01-06T04:28:48Z",
+  "commit_sha": "82032e4c5dd0e354b84274ece47368cf1d872727",
+  "test_result": "PASSED",
+  "integration_tests": 6,
+  "adversarial_tests": 4,
+  "total_passed": 10,
+  "environment": {
+    "os": "Linux",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "arch": "x86_64"
+  }
+}

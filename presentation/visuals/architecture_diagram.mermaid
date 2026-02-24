@@ -1,0 +1,40 @@
+graph TD
+    user((User / Family)) -->|Invests Time| sweat[Sweat Equity]
+    sweat -->|Mints| token(BIZRA Token)
+    
+    subgraph "SAPE v1.∞ Core"
+        gateway[Gateway Node (Rust)]
+        wisdom[Wisdom Engine (Rust)]
+        fate[Fate Engine (Rust)]
+        
+        gateway -->|Routes| wisdom
+        gateway -->|Routes| fate
+    end
+
+    subgraph "Verification Layer (Python)"
+        snr[SNR Athlete Harness]
+        ihsan[Ihsān Ethical Engine]
+        cascade[Cascade Preventer]
+
+        snr -->|Monitors| gateway
+        ihsan -->|Audits| wisdom
+        ihsan -->|Audits| fate
+        cascade -->|Protects| SAPE v1.∞ Core
+    end
+
+    subgraph "Value Output"
+        dashboard[Omega Dashboard]
+        trust[Family Trust Fund]
+    end
+
+    token -->|Funds| trust
+    SAPE v1.∞ Core -->|Feeds Data| dashboard
+    ihsan -->|Score: 1.0| dashboard
+    snr -->|SNR: 100dB| dashboard
+
+    style user fill:#fff,stroke:#333
+    style sweat fill:#00b8ff,stroke:#333
+    style token fill:#00ff9d,stroke:#333
+    style SAPE v1.∞ Core fill:#14161f,stroke:#fff,color:#fff
+    style Verification Layer (Python) fill:#2a2d3a,stroke:#fff,color:#fff
+    style dashboard fill:#ff0055,stroke:#fff,color:#fff

@@ -1,0 +1,79 @@
+services:
+  # -------------------------
+  # Database Layer
+  # -------------------------
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: bizra
+      POSTGRES_PASSWORD: bizra_secure_2025
+      POSTGRES_DB: bizra_omega
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U bizra -d bizra_omega" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # -------------------------
+  # Logic Layer (Elite++ Kernel)
+  # -------------------------
+  backend:
+    build:
+      context: ./bizra-genesis-node/backend
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      DATABASE_URL: postgres://bizra:bizra_secure_2025@postgres:5432/bizra_omega
+      API_PORT: 33333
+      API_HOST: 0.0.0.0
+      NODE_ENV: production
+      CORS_ORIGINS: "https://bizra.ai,https://www.bizra.ai,https://bizra.info,https://www.bizra.info"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+
+  # -------------------------
+  # Presentation Layer (Sovereign UI)
+  # -------------------------
+  ui-sovereign:
+    build:
+      context: ./bizra-genesis-node/apps/ui-sovereign
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.bizra.ai
+      NODE_ENV: production
+    networks:
+      - internal
+
+  # -------------------------
+  # Ingress Layer (Nginx)
+  # -------------------------
+  nginx:
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      # SSL Certs would go here in real production
+      # - ./certs:/etc/nginx/certs:ro 
+    depends_on:
+      - backend
+      - ui-sovereign
+    networks:
+      - internal
+
+volumes:
+  pgdata_prod:
+
+
+networks:
+  internal:
+    driver: bridge

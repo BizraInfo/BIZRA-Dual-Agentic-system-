@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:53:11.653Z",
+  "role": "IHSAN_AUDITOR",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": true,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "IHSAN_AUDITOR",
+    "summary": "This action plan is designed to ensure high-SNR (Signal-to-Noise Ratio) in the Bizra system, focusing on verifying claims and increasing trust through evidence mapping.",
+    "insights": [
+      {
+        "claim": "The codebase context indicates a Rust-based project with dependencies managed by Cargo.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Rust/Cargo section in CODEBASE_CONTEXT (MEASURED/DERIVED, high-SNR)"
+        ],
+        "risk": "low",
+        "action": "Verify the presence of necessary crates and dependencies using `cargo tree` command."
+      },
+      {
+        "claim": "The top paths include important directories such as AutoHotkey scripts and Bizra Genesis Node.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Top paths section in EVIDENCE_CONTEXT (DERIVED, SNR-focused)"
+        ],
+        "risk": "low",
+        "action": "Ensure these directories are backed up regularly."
+      },
+      {
+        "claim": "The Git repository is dirty, indicating uncommitted changes.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "Git section in CODEBASE_CONTEXT (MEASURED/DERIVED, high-SNR)"
+        ],
+        "risk": "low",
+        "action": "Commit and push the current state of the Git repository to ensure version control."
+      },
+      {
+        "claim": "There are potential security risks associated with Rust code using `expect` and `unwrap` functions.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Security signals section in CODEBASE_CONTEXT (MEASURED/DERIVED, high-SNR)"
+        ],
+        "risk": "medium",
+        "action": "Refactor the code to use `Result` types and handle errors gracefully."
+      },
+      {
+        "claim": "The top terms include 'performance', 'block', and 'data' which suggest ongoing work on performance optimization and data management.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top terms section in EVIDENCE_CONTEXT (DERIVED, SNR-focused)"
+        ],
+        "risk": "low",
+        "action": "Monitor performance metrics and optimize code where necessary."
+      },
+      {
+        "claim": "Markdown files are extensively used for documentation.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "Docs section in CODEBASE_CONTEXT (MEASURED/DERIVED, high-SNR)"
+        ],
+        "risk": "low",
+        "action": "Regularly update and maintain the documentation to ensure clarity and completeness."
+      }
+    ],
+    "next_7_days": [
+      "Review and address any security risks identified.",
+      "Implement version control best practices for all projects.",
+      "Schedule a code review session to identify potential improvements."
+    ],
+    "blocked_by": []
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

@@ -1,0 +1,49 @@
+﻿{
+    "repo_root":  "C:\\BIZRA-Dual-Agentic-system--main",
+    "generated_at":  "2025-12-16T06:25:01.8121222+04:00",
+    "files":  [
+                  {
+                      "sha256":  "7cd655192074d6b746d0804be7fdebbd5eedd76e057e4bf84d5c8d6e7a92878a",
+                      "name":  "00_env.txt",
+                      "bytes":  2757
+                  },
+                  {
+                      "sha256":  "919ef047d5ecd82ac92a2311dd0785ab4853733a3259683c906876a1504a7f49",
+                      "name":  "10_git_status.txt",
+                      "bytes":  773
+                  },
+                  {
+                      "sha256":  "73b2e4099cfef2c1686ed722b3ad9085c45761fe2e8996a4a3168649958e6a31",
+                      "name":  "11_git_branch.txt",
+                      "bytes":  9
+                  },
+                  {
+                      "sha256":  "50d38dfbf253b2a8222238c043681830a4e1be70376f23e3a5821278a5d702ae",
+                      "name":  "12_git_head.txt",
+                      "bytes":  45
+                  },
+                  {
+                      "sha256":  "61fa825c30aa2b1f6fc495da0d55e58b0ab65c60a2245796587463a171ee9628",
+                      "name":  "20_secret_scan_rg.txt",
+                      "bytes":  90402
+                  },
+                  {
+                      "sha256":  "fab3ddbda99ce5cc509f9984a47bea9136bccf803270f5e2cf3d72fd56cc692c",
+                      "name":  "30_cargo_test.txt",
+                      "bytes":  3719
+                  },
+                  {
+                      "sha256":  "ce228a8b708b317c83f9f69102021b01f4ff664c96ee6161dbaa24a747aa571b",
+                      "name":  "40_chat_ingest_summary.json",
+                      "bytes":  374
+                  },
+                  {
+                      "sha256":  "6032b723c202bcc404aba9018f389238a0e227b2e70f79fb2d19b52211b25491",
+                      "name":  "41_chat_ingest_receipt.json",
+                      "bytes":  2241
+                  }
+              ],
+    "truth_label":  "MEASURED",
+    "run_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\docs\\\\evidence\\\\receipts\\\\activation_20251216_062451",
+    "run_type":  "activate_team"
+}

@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-01-26T02:21:46.001167+00:00",
+  "hostname": "MSI",
+  "network_identity": "127.0.1.1",
+  "state": "unified",
+  "unification_coefficient": 1.0,
+  "ihsan_score": 1.0,
+  "components": [
+    {
+      "role": "kernel",
+      "path": "/root/bizra-genesis",
+      "accessible": true,
+      "identity_present": true,
+      "identity_valid": true,
+      "canonical_alignment": 1.0,
+      "coherence_score": 1.0,
+      "encumbrances": []
+    },
+    {
+      "role": "node",
+      "path": "/mnt/c/BIZRA-Dual-Agentic-system--main",
+      "accessible": true,
+      "identity_present": true,
+      "identity_valid": true,
+      "canonical_alignment": 1.0,
+      "coherence_score": 1.0,
+      "encumbrances": []
+    },
+    {
+      "role": "vault",
+      "path": "/mnt/c/BIZRA-DATA-LAKE",
+      "accessible": true,
+      "identity_present": true,
+      "identity_valid": true,
+      "canonical_alignment": 1.0,
+      "coherence_score": 1.0,
+      "encumbrances": []
+    },
+    {
+      "role": "scaffold",
+      "path": "/mnt/c/bizra_scaffold",
+      "accessible": true,
+      "identity_present": true,
+      "identity_valid": true,
+      "canonical_alignment": 1.0,
+      "coherence_score": 1.0,
+      "encumbrances": []
+    },
+    {
+      "role": "taskmaster",
+      "path": "/mnt/c/BIZRA-TaskMaster",
+      "accessible": true,
+      "identity_present": true,
+      "identity_valid": true,
+      "canonical_alignment": 1.0,
+      "coherence_score": 1.0,
+      "encumbrances": []
+    },
+    {
+      "role": "os",
+      "path": "/mnt/c/BIZRA-OS",
+      "accessible": true,
+      "identity_present": true,
+      "identity_valid": true,
+      "canonical_alignment": 1.0,
+      "coherence_score": 1.0,
+      "encumbrances": []
+    }
+  ],
+  "hardware_substrate": {
+    "hostname": "MSI",
+    "platform": "Linux",
+    "architecture": "x86_64",
+    "cpu_count": 32,
+    "memory_total_gb": 62.65,
+    "memory_available_gb": 45.78,
+    "disk_total_gb": 1006.85,
+    "disk_used_percent": 12.8
+  },
+  "software_layers": {
+    "python_version": "3.12.3",
+    "execution_context": "wsl",
+    "docker_version": "29.1.3"
+  },
+  "encumbrances": [],
+  "recommendations": []
+}

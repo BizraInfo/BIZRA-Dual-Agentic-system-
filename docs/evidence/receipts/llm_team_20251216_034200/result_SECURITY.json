@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:42:12.793Z",
+  "role": "SECURITY",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "SECURITY",
+    "summary": "This action plan identifies potential security risks based on the provided context and evidence, focusing on high Signal-to-Noise Ratio (SNR) claims.",
+    "insights": [
+      {
+        "claim": "Potential for unauthorized access through Desktop files",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-30.md",
+          "C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-31.md",
+          "C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\status.md",
+          "C:\\Users\\bizra\\Desktop\\control-panel-summary.md"
+        ],
+        "risk": "medium",
+        "action": "Restrict access to these files, encrypt sensitive content, and monitor for unauthorized modifications."
+      },
+      {
+        "claim": "Use of AutoHotkey script potentially exposing system vulnerabilities",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey64.exe"
+        ],
+        "risk": "high",
+        "action": "Review and verify the integrity of the AutoHotkey scripts, disable or remove any suspicious ones."
+      },
+      {
+        "claim": "Potential for data leakage from git operations",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "git"
+        ],
+        "risk": "medium",
+        "action": "Ensure all sensitive information is excluded from version control repositories and implement strict access controls."
+      }
+    ],
+    "next_7_days": [
+      "Review and update security policies related to desktop file management.",
+      "Conduct a thorough review of AutoHotkey scripts for any potential risks.",
+      "Implement stricter access controls for git operations and sensitive data handling."
+    ],
+    "blocked_by": []
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

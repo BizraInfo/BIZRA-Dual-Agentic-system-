@@ -1,0 +1,89 @@
+﻿{
+    "repo_root":  "C:\\BIZRA-Dual-Agentic-system--main",
+    "generated_at":  "2025-12-16T07:42:34.6463619+04:00",
+    "files":  [
+                  {
+                      "sha256":  "975170962661d1307166de4a9ac0e1e0ca35c9e98ac3ee816a215cc50d6ca56f",
+                      "name":  "00_env.txt",
+                      "bytes":  2757
+                  },
+                  {
+                      "sha256":  "d617bc268020914a1b7ff9f2554198dc05ba461106b87f2f9cf41ed1e32a8b6b",
+                      "name":  "01_params.txt",
+                      "bytes":  103
+                  },
+                  {
+                      "sha256":  "c511f307d5b460865b2cbff706140f8bfecabb8717ba55dc26d7258778314d87",
+                      "name":  "10_git_status.txt",
+                      "bytes":  1051
+                  },
+                  {
+                      "sha256":  "73b2e4099cfef2c1686ed722b3ad9085c45761fe2e8996a4a3168649958e6a31",
+                      "name":  "11_git_branch.txt",
+                      "bytes":  9
+                  },
+                  {
+                      "sha256":  "50d38dfbf253b2a8222238c043681830a4e1be70376f23e3a5821278a5d702ae",
+                      "name":  "12_git_head.txt",
+                      "bytes":  45
+                  },
+                  {
+                      "sha256":  "474899a9269b22e6af9a49a04ad7765315336f7dca9b6d06be919c76f1a915d4",
+                      "name":  "20_secret_scan_files.txt",
+                      "bytes":  471
+                  },
+                  {
+                      "sha256":  "b9ffd4bd6f011aeef16f3a454ed6d6b2db11fd0557687746e463b9e8b7004984",
+                      "name":  "21_secret_scan_snippet.txt",
+                      "bytes":  7482
+                  },
+                  {
+                      "sha256":  "caadcb0c996081b7e49897fdbb4c6ce88a579ed8353be7976f975d35b034d363",
+                      "name":  "30_cargo_test.txt",
+                      "bytes":  3720
+                  },
+                  {
+                      "sha256":  "8f956a64dc11f140ffc4bb37059b155ec6adcf7a6a0510b16cd5b98e3d3c0280",
+                      "name":  "35_codebase_inventory_run.txt",
+                      "bytes":  2093
+                  },
+                  {
+                      "sha256":  "c3e479a9c45c7ba556fb0f7602c18d1b01c8eabbed307e4d138784d4c616594e",
+                      "name":  "40_chat_aggregate_path.txt",
+                      "bytes":  78
+                  },
+                  {
+                      "sha256":  "707feb38a08b8804d8ecd58b19012f8686686f3b75565c5cd3601bb8c5f14576",
+                      "name":  "40_chat_ingest_summary.json",
+                      "bytes":  374
+                  },
+                  {
+                      "sha256":  "a343390ed7b467ceb13024d6563d1225ffcc0d9c4eca15585ac267b269aaa1e8",
+                      "name":  "41_chat_ingest_receipt.json",
+                      "bytes":  2515
+                  },
+                  {
+                      "sha256":  "e026c75f5a3090de27e58a0eea7bfddf5342c534a2bb92a9ee71f90896998be6",
+                      "name":  "45_windows_crash_ingest_summary.json",
+                      "bytes":  283
+                  },
+                  {
+                      "sha256":  "d16da41b03edd3b990ab09bd8d2917ef125f91041363e8e37f2b72db32022a6a",
+                      "name":  "46_windows_crash_ingest_receipt.json",
+                      "bytes":  895
+                  },
+                  {
+                      "sha256":  "96c5583396fcd9b6564bdfd28cebd2636223b668336f3f3df8b329e3c4dbe63e",
+                      "name":  "49_llm_team_preflight.txt",
+                      "bytes":  249
+                  },
+                  {
+                      "sha256":  "c2c771478309bf9273e6805889fe50cb9fc1b46ef97a6bc526d86a801e8ba26a",
+                      "name":  "50_llm_team_out_dir.txt",
+                      "bytes":  87
+                  }
+              ],
+    "truth_label":  "MEASURED",
+    "run_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\docs\\\\evidence\\\\receipts\\\\activation_20251216_074150",
+    "run_type":  "activate_team"
+}

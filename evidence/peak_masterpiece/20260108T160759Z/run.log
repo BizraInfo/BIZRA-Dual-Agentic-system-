@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/root/bizra-genesis/bizra_production.py", line 14, in <module>
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:42:34.609Z",
+  "role": "IHSAN_AUDITOR",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "IHSAN_AUDITOR",
+    "summary": "This action plan identifies key insights from the provided context, focusing on the high Signal-to-Noise Ratio (SNR) areas to increase trust and ensure benevolence in operations.",
+    "insights": [
+      {
+        "claim": "The AUTOHOTKEY and OUTLOOK paths are frequently used but lack specific evidence of their operational necessity or risks.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top paths: C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey64.exe (convs=2)",
+          "Top paths: C:\\\\...\\\\OUTLOOK.EXE (convs=2)"
+        ],
+        "risk": "low",
+        "action": "Verify the necessity of these applications in the operational environment and document their usage."
+      },
+      {
+        "claim": "The Bizra-Genesis Node application shows frequent activity but does not provide clear evidence of its critical role.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top paths: C:\\bizra-genesis-node (convs=2)",
+          "Top paths: C:\\bizra-genesis-node\\docker-compose.database.yml (convs=1)"
+        ],
+        "risk": "low",
+        "action": "Assess the importance of Bizra-Genesis Node for core system operations and document its criticality."
+      },
+      {
+        "claim": "The presence of multiple directories suggests diverse activities but lacks specific context.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top paths: C:\\BIZRA-PROJECTS\\bizra-frontend-mvp (convs=1)",
+          "Top paths: C:\\BIZRA-PROJECTS\\synthesis_orchestrator (convs=1)"
+        ],
+        "risk": "low",
+        "action": "Map the usage of these directories to specific projects and document their roles."
+      },
+      {
+        "claim": "The command 'docker' is frequently used, indicating active container management but lacks detailed evidence of its impact.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top commands: docker (convs=164)"
+        ],
+        "risk": "medium",
+        "action": "Analyze the Docker usage logs to understand its impact on system performance and document findings."
+      },
+      {
+        "claim": "There is a high frequency of command-line interactions, but specific scripts or configurations are not detailed.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top commands: powershell (convs=99)",
+          "Top commands: cmd (convs=53)"
+        ],
+        "risk": "medium",
+        "action": "Review the command-line interactions for scripting best practices and document any security or performance issues."
+      },
+      {
+        "claim": "The codebase is rich with various modules but lacks specific evidence of their critical functions.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "Top terms: agents (convs=107)",
+          "Top paths: C:\\bizra-genesis-node\\src\\rewards\\mod.rs (convs=1)"
+        ],
+        "risk": "medium",
+        "action": "Perform code reviews to understand the functionality of these modules and document their roles."
+      }
+    ],
+    "next_7_days": [
+      "Complete the verification of critical application paths and document findings.",
+      "Review command-line interactions for scripting best practices.",
+      "Analyze Docker usage logs for performance insights."
+    ],
+    "blocked_by": []
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

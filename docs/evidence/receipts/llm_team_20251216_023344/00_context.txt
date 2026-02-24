@@ -1,0 +1,46 @@
+EVIDENCE_CONTEXT (DERIVED, SNR-focused):
+generated_at: 2025-12-16T02:27:38.628833+00:00
+inputs: [{"path":"C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_062453\\topics.json","sha256":"ce787b1dd3698912edd8bf43197d1477f4d9de6e245c06c181d7bcf12bacb5c0"}]
+
+Top terms:
+- system: total=15243, convs=527
+- self: total=12848, convs=180
+- bizra: total=8863, convs=296
+- current: total=4641, convs=147
+- agent: total=4345, convs=160
+- let: total=4217, convs=132
+- block: total=3407, convs=122
+- performance: total=3380, convs=131
+- data: total=3356, convs=109
+- supported: total=3298, convs=110
+- yet: total=3239, convs=102
+- can: total=3079, convs=161
+- device: total=2910, convs=94
+- def: total=2665, convs=96
+- agents: total=2659, convs=105
+- user: total=2557, convs=114
+- analysis: total=2514, convs=154
+- architecture: total=2480, convs=126
+- code: total=2460, convs=95
+- address: total=2411, convs=44
+- echo: total=2284, convs=13
+- const: total=2040, convs=36
+- all: total=2026, convs=117
+- file: total=1965, convs=62
+- cite: total=1956, convs=52
+
+Top paths:
+- C:\\U (convs=7)
+- C:\\bizra-gene (convs=5)
+- C:\\Program File (convs=3)
+- C:\\BIZRA-PROJECTS (convs=2)
+
+Top commands:
+- docker (convs=164)
+- git (convs=140)
+- npm (convs=121)
+- powershell (convs=99)
+- cargo (convs=76)
+- cmd (convs=53)
+- ollama (convs=45)
+- robocopy (convs=1)

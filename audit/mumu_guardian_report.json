@@ -1,0 +1,63 @@
+{
+  "guardian_certificate": {
+    "audit_date": "2026-01-12T04:04:12Z",
+    "certificate_id": "GUARDIAN-CERT-b9747cfd9916",
+    "commit_hash": "b9747cfd9916b771d730b6c9b8935b7c371e4519",
+    "findings": {
+      "critical_no_unwrap_expect": {
+        "confidence": 0.9,
+        "files_checked": [
+          "src/py.rs",
+          "src/tpm.rs",
+          "src/wasm.rs"
+        ],
+        "note": "No unwrap/expect found in critical modules.",
+        "status": "PASS"
+      },
+      "ffi_panic_airlock": {
+        "confidence": 0.9,
+        "count": 8,
+        "note": "All #[pyfunction] sites show panic-guard patterns (heuristic).",
+        "status": "PASS"
+      },
+      "force_state_gating": {
+        "confidence": 0.9,
+        "files": [
+          "bizra-genesis-node/backend/src/core/circuit_breaker.rs"
+        ],
+        "note": "force_state is absent or appears gated (heuristic).",
+        "status": "PASS"
+      },
+      "ihsan_single_source": {
+        "confidence": 0.75,
+        "files": {
+          "ihsan_rs": [
+            "fuzz/fuzz_targets/fuzz_ihsan.rs",
+            "src/ihsan.rs"
+          ],
+          "py_rs": [
+            "src/py.rs"
+          ]
+        },
+        "note": "No obvious duplicated hard-coded weight triplet found in py.rs.",
+        "status": "PASS"
+      },
+      "receipt_hashing": {
+        "confidence": 0.8,
+        "files": [
+          "bizra-genesis-node/bizra_kernel/session_manager.py",
+          "bizra_kernel/session_manager.py",
+          "kg/receipts.py",
+          "tests/test_kg_receipts.py"
+        ],
+        "note": "No obvious truncation/weak-hash patterns found in python receipt code.",
+        "status": "PASS"
+      }
+    },
+    "hard_failures": [],
+    "issuer": "BIZRA Guardian (machine-generated)",
+    "target_system": "BIZRA repo checkout",
+    "unknowns": [],
+    "verdict": "GENESIS_INTEGRITY_CONFIRMED"
+  }
+}

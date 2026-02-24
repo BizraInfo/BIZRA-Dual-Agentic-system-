@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: bizra-ffi
+Version: 0.7.0
+Summary: BIZRA Sovereign Kernel FFI Bridge
+Classifier: Programming Language :: Rust
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Requires-Python: >=3.8

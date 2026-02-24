@@ -1,0 +1,12 @@
+﻿{
+    "truth_label":  "MEASURED",
+    "receipt_version":  1,
+    "generated_at":  "2025-12-16T07:50:37.7920092+04:00",
+    "context_files":  [
+                          "C:\\BIZRA-Dual-Agentic-system--main\\docs\\\\evidence\\\\receipts\\\\activation_20251216_074945\\35_codebase_context.txt",
+                          "C:\\BIZRA-Dual-Agentic-system--main\\docs\\\\evidence\\\\receipts\\\\activation_20251216_074945\\45_windows_crash_ingest_summary.json"
+                      ],
+    "aggregate":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_074947\\aggregate.json",
+    "type":  "llm_team_run",
+    "out_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_034956"
+}

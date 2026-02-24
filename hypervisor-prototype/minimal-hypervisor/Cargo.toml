@@ -1,0 +1,12 @@
+[package]
+name = "minimal-hypervisor"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+uefi = "0.28.0"
+uefi-services = "0.25.0"
+log = "0.4"
+
+# Note: Profile settings (panic=abort, lto=true) moved to workspace root
+# See /root/bizra-genesis/Cargo.toml [profile.release] section

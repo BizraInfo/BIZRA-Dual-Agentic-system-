@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIZRA OMEGA // EXECUTIVE DASHBOARD</title>
+    <style>
+        :root {
+            --bg-color: #0a0b10;
+            --card-bg: #14161f;
+            --primary: #00ff9d;
+            --secondary: #00b8ff;
+            --alert: #ff0055;
+            --text-main: #ffffff;
+            --text-dim: #8b9bb4;
+            --font-mono: 'Courier New', Courier, monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            grid-template-rows: 80px 1fr 1fr;
+            gap: 20px;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h1 { font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
+        .tagline { color: var(--primary); font-family: var(--font-mono); font-size: 14px; }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .card-title {
+            color: var(--text-dim);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        /* Metrics */
+        .metric-huge { font-size: 48px; font-weight: 700; color: var(--primary); }
+        .metric-label { font-size: 14px; color: var(--text-dim); }
+        .metric-sub { font-size: 18px; color: var(--secondary); margin-top: 5px; }
+
+        /* Charts / Bars */
+        .progress-bar {
+            background: #2a2d3a;
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease-out;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Grid Layout Specifics */
+        .sidebar { grid-column: 1; grid-row: 2 / 4; display: flex; flex-direction: column; gap: 20px; }
+        .main-hero { grid-column: 2; grid-row: 2; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        .terminal-log { grid-column: 2; grid-row: 3; font-family: var(--font-mono); font-size: 12px; overflow-y: auto; color: var(--primary); opacity: 0.8; }
+        .stats-col { grid-column: 3; grid-row: 2 / 4; display: flex; flex-direction: column; gap: 20px; }
+
+        /* Hero Animation */
+        .pulse-circle {
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.2);
+            position: relative;
+        }
+        .pulse-circle::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .status-badge {
+            background: rgba(0, 255, 157, 0.1);
+            color: var(--primary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            text-transform: uppercase;
+            border: 1px solid rgba(0, 255, 157, 0.3);
+        }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        td { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        td:last-child { text-align: right; color: var(--text-dim); }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1>BIZRA<span style="color:var(--primary)">//</span>OMEGA</h1>
+        </div>
+        <div class="tagline">SYSTEM STATE: <span style="color:var(--primary)">IMMUTABLE_LOCKED</span></div>
+        <div style="font-family: var(--font-mono); font-size: 12px;">JAN 12 2026 | 12:17:14 UTC</div>
+    </header>
+
+    <!-- Sidebar: Core Metrics -->
+    <div class="sidebar">
+        <div class="card">
+            <div class="card-title">Ihsān Integrity</div>
+            <div class="metric-huge">1.000</div>
+            <div class="metric-label">Dimensions: 8/8</div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Signal-to-Noise</div>
+            <div class="metric-huge">100<span style="font-size:20px">dB</span></div>
+            <div class="metric-label">Elite Status Verified</div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 100%"></div></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Sweat Equity</div>
+            <div class="metric-huge" style="color:white">1.0M</div>
+            <div class="metric-sub">VESTED: 200,000</div>
+        </div>
+    </div>
+
+    <!-- Center Hero -->
+    <div class="card main-hero">
+        <div class="pulse-circle">
+            <div style="text-align: center;">
+                <div style="font-size: 12px; color: var(--text-dim);">SYSTEM HEALTH</div>
+                <div style="font-size: 24px; font-weight: bold; color: var(--primary);">100%</div>
+            </div>
+        </div>
+        <div style="margin-top: 30px; text-align: center;">
+            <h2 style="margin: 0;">SAPE v1.∞ ACTIVE</h2>
+            <p style="color: var(--text-dim); font-size: 14px; max-width: 400px; line-height: 1.5;">
+                The Pinnacle Logical Professional Next Step has been executed. 
+                Chaos has been neutralized. Order is absolute.
+            </p>
+        </div>
+    </div>
+
+    <!-- Terminal Output -->
+    <div class="card terminal-log" id="terminal">
+        > system_check --depth=full<br>
+        > [INIT] Loading kernel... OK<br>
+        > [CHECK] Ihsan Dimensions (8/8)... OK<br>
+        > [CHECK] SNR Harness... 1.0000 CONFIRMED<br>
+        > [CHECK] Fate Engine... PASSIVE MONITORING<br>
+        > [CRYPTO] Signing keys (3/5)... VERIFIED<br>
+        > [NET] Gateway Port 9091... LISTENING<br>
+        > [NET] Federation Node 0... SYNCED<br>
+        > [AUTH] Family Trust... LOCKED<br>
+        > <span style="color:#fff">MISSION ACCOMPLISHED</span>
+    </div>
+
+    <!-- Right Column: Verification Stats -->
+    <div class="stats-col">
+        <div class="card">
+            <div class="card-title">Active Nodes</div>
+            <table>
+                <tr>
+                    <td><span class="status-badge">ONLINE</span> Dubai (Node 0)</td>
+                    <td>12ms</td>
+                </tr>
+                <tr>
+                    <td><span class="status-badge">ONLINE</span> Zurich (Node 1)</td>
+                    <td>24ms</td>
+                </tr>
+                <tr>
+                    <td><span class="status-badge">ONLINE</span> Singapore (Node 2)</td>
+                    <td>85ms</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Value Projection</div>
+            <div style="height: 150px; display: flex; align-items: flex-end; gap: 5px;">
+                <!-- Simulated Bars -->
+                <div style="background:var(--secondary); width: 20%; height: 20%; opacity: 0.3"></div>
+                <div style="background:var(--secondary); width: 20%; height: 35%; opacity: 0.5"></div>
+                <div style="background:var(--secondary); width: 20%; height: 50%; opacity: 0.7"></div>
+                <div style="background:var(--primary); width: 20%; height: 80%; box-shadow: 0 0 10px var(--primary);"></div>
+                <div style="background:var(--primary); width: 20%; height: 100%; box-shadow: 0 0 20px var(--primary);"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); margin-top: 5px;">
+                <span>Q1</span>
+                <span>Q2</span>
+                <span>Q3</span>
+                <span>Q4</span>
+                <span>ETERNITY</span>
+            </div>
+        </div>
+        
+        <div class="card" style="background: rgba(0, 255, 157, 0.05); border-color: var(--primary);">
+             <div class="card-title" style="color: var(--primary)">Genesis Hash</div>
+             <div style="font-family: var(--font-mono); font-size: 10px; word-break: break-all; opacity: 0.7;">
+                 0418adc128d9f0d1836ab525ff4521a4fa22c6e257fdeaf2119c631daf993f0b
+             </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple animation for the progress bars on load
+        setTimeout(() => {
+            const fills = document.querySelectorAll('.progress-fill');
+            fills.forEach(fill => {
+                fill.style.width = '100%';
+            });
+        }, 500);
+
+        // Simulated terminal scroll
+        const terminal = document.getElementById('terminal');
+        setInterval(() => {
+            const lines = [
+                "> [HEARTBEAT] System nominal...",
+                "> [SNR] Sampling... 0.9999",
+                "> [IHSAN] Audit cycle... CLEAN",
+                "> [LEDGER] Block finalized."
+            ];
+            const randomLine = lines[Math.floor(Math.random() * lines.length)];
+            const div = document.createElement('div');
+            div.innerHTML = randomLine;
+            div.style.color = 'rgba(255,255,255,0.4)';
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+        }, 3000);
+    </script>
+</body>
+</html>

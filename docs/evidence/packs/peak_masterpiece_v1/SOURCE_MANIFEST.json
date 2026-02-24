@@ -1,0 +1,16 @@
+{
+  "manifest_type": "source_hashes",
+  "timestamp_utc": "2026-01-13T18:30:00Z",
+  "hash_algorithm": "SHA-256",
+  "files": {
+    "src/lib.rs": "ea21c9cafe580867f98b6e5d3e139e6dae034860e1273ab9ba7567bc2c7167de",
+    "src/fixed.rs": "00ad88a7911833ca717cd904c76752f0df3961fe2a151178f43fd6e99d07d34f",
+    "src/receipts.rs": "77e4ff118050fdf97a328d23570ac35aa16ce39e843dfeee166cf495f4c6b01a",
+    "src/hookchain.rs": "0be58f8f7d68ad94e28beb98557641609b0b08d19f0e6dcbc8fe3d0e2617ebae",
+    "src/sape/base.rs": "775460ad8f244b8ea4f3ee9eaa265e5b0c02ebe788f246f64c16c269d0f46a2a",
+    "src/http.rs": "084e1f0139a30aaf4063247150779a5b995ca40937a8669b51f66c21d574cb4d",
+    "src/py.rs": "578dd24d997d3563a393b267c7cfefb7c908d33f62aabafbfceb696e825d570e",
+    "tests/property_tests.rs": "457a1aa5a7f586ba241ddbb2d86e4fb9f7ace3cb8c58d7a2af847a071f2e07ec",
+    "_generated": "true"
+  }
+}

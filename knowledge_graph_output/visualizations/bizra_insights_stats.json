@@ -1,0 +1,67 @@
+{
+  "total_nodes": 221,
+  "total_relationships": 201,
+  "categories": {
+    "vision_document": 8,
+    "technical": 8,
+    "insight": 174,
+    "documentation": 12,
+    "learning": 1,
+    "vision": 9,
+    "philosophy": 9
+  },
+  "labels": {
+    "Document": 20,
+    "Vision": 29,
+    "Insight": 201,
+    "Technical": 8,
+    "Learning": 1,
+    "Philosophy": 9
+  },
+  "relationship_types": {
+    "PART_OF": 201
+  },
+  "top_nodes": [
+    {
+      "id": "doc:7f0c16ebbb3ec1f9",
+      "degree": 39
+    },
+    {
+      "id": "doc:820dcdcf856d012b",
+      "degree": 27
+    },
+    {
+      "id": "doc:d6ba47d429c8666f",
+      "degree": 20
+    },
+    {
+      "id": "doc:861541f16fe23518",
+      "degree": 18
+    },
+    {
+      "id": "doc:e8a64cc3616e05f3",
+      "degree": 18
+    },
+    {
+      "id": "doc:eb4080afc847731c",
+      "degree": 13
+    },
+    {
+      "id": "doc:bdbb1b6d1496b214",
+      "degree": 10
+    },
+    {
+      "id": "doc:9367ca5ac054a26e",
+      "degree": 9
+    },
+    {
+      "id": "doc:257326d29b274a30",
+      "degree": 8
+    },
+    {
+      "id": "doc:8cfaeb2abb60c270",
+      "degree": 6
+    }
+  ],
+  "network_density": 0.0041341011929247225
+}

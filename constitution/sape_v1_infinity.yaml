@@ -1,0 +1,237 @@
+# SAPE v1.∞ Configuration (Immutable Final Edition)
+# Covenant: Ihsān | Status: LOCKED
+
+id: sape_v1_infinity
+version: "1.∞"
+edition: "Immutable Final"
+status: LOCKED
+
+covenant:
+  name: "Ihsān"
+  meaning: "Excellence in worship and conduct"
+  application: "Every output must exemplify the highest standard"
+
+motto: "No assumptions. Only verified excellence."
+
+dna_signature:
+  modules: 7
+  passes: 3
+  checks: 6
+  probes: 9
+  purpose: "∞"
+  
+  pattern: "7-3-6-9-∞"
+  meaning: |
+    7 Modules: Complete cognitive coverage
+    3 Passes: Diverge → Converge → Prove
+    6 Checks: Comprehensive validation
+    9 Probes: Deep exploration
+    ∞ Purpose: Perpetual elevation without compromise
+
+modules:
+  - id: M0
+    name: "Intent Gate"
+    purpose: "Purpose Activation"
+    output: "Crisp objective with explicit assumptions"
+    
+  - id: M1
+    name: "Lenses"
+    purpose: "Multi-perspective analysis"
+    options:
+      - Systems Architect
+      - Formal Theorist
+      - Pragmatic Engineer
+      - Ethicist (Ihsān)
+      - Poet/Designer
+      - Historian
+      - Futurist
+    default_selection: 3
+    
+  - id: M2
+    name: "Knowledge Kernels"
+    purpose: "Evidence-based claims"
+    tagging: "[A][D][E][R]"
+    speculation_marker: "[SPECULATION]"
+    
+  - id: M3
+    name: "Rare-Path Prober"
+    purpose: "Break the bias"
+    beams:
+      - I-Path: "High probability solution"
+      - C-Path: "Contrarian (must violate expectation)"
+      - O-Path: "Analogical from unrelated domain"
+    budget: 5
+    
+  - id: M4
+    name: "Symbolic Harness"
+    purpose: "Neural ↔ Symbolic Bridge"
+    outputs:
+      - typed_definitions
+      - invariants
+      - rule_set
+      - proof_sketch
+      - program_sketch
+    logic: "Horn clauses + SMT constraints"
+    
+  - id: M5
+    name: "Abstraction Elevator"
+    purpose: "Layered System Cognition"
+    levels:
+      - micro: "Data flows, primitives, atomic operations"
+      - meso: "Modules, protocols, operational patterns"
+      - macro: "Governance, ethics, economic intent"
+      - meta: "Hidden tensions across layers"
+      
+  - id: M6
+    name: "Tension Studio"
+    purpose: "Synthesize from Friction"
+    workflow:
+      - Generator: "Bold design"
+      - Critic: "Failure modes"
+      - Synthesizer: "Tradeoff resolution"
+    exercises:
+      - "Constraint Clash"
+      - "Adversarial Flip"
+      - "Narrative Reframe"
+      
+  - id: M7
+    name: "Red-Team Mirror"
+    purpose: "Simulated Adversary"
+    viewpoints:
+      - malicious_actor: "Attack vectors"
+      - regulator: "Compliance issues"
+      - system_failure: "Edge chaos and failure modes"
+    outputs:
+      - red_flags
+      - mitigations
+
+passes:
+  - name: "Diverge"
+    number: 1
+    description: "Expand possibility space"
+    actions:
+      - "Activate Intent Gate"
+      - "Select Lenses"
+      - "Run 9 Probes"
+      
+  - name: "Converge"
+    number: 2
+    description: "Focus on strongest paths"
+    actions:
+      - "Build Evidence Table"
+      - "Run Rare-Path Prober"
+      - "Execute Symbolic Harness"
+      - "Elevate through Abstraction"
+      - "Resolve Tensions"
+      - "Apply Red-Team Mirror"
+      
+  - name: "Prove"
+    number: 3
+    description: "Validate solution"
+    actions:
+      - "Run 6 Checks"
+      - "Calculate confidence"
+      - "Identify risks"
+      - "Suggest experiments"
+
+checks:
+  - name: "Correctness"
+    description: "Mathematical/logical correctness"
+    verification: "Z3 proof required"
+    
+  - name: "Consistency"
+    description: "No internal contradictions"
+    verification: "Constraint satisfaction"
+    
+  - name: "Completeness"
+    description: "All requirements addressed"
+    threshold: "≥ 3 requirements"
+    
+  - name: "Causality"
+    description: "Valid cause-effect relationships"
+    verification: "Causal chain present"
+    
+  - name: "Ethics (Ihsān)"
+    description: "Ethical compliance"
+    threshold: "Ihsān score ≥ 0.95"
+    
+  - name: "Evidence"
+    description: "Sufficient evidence for claims"
+    threshold: "≥ 3 evidence pieces"
+
+probes:
+  - name: "Counterfactual"
+    question: "What if key assumption is false?"
+    
+  - name: "Boundary"
+    question: "What happens at system limits?"
+    
+  - name: "Analogical"
+    question: "What patterns exist in unrelated domains?"
+    
+  - name: "Formalization"
+    question: "What is the mathematical representation?"
+    
+  - name: "Program Sketch"
+    question: "What does the pseudocode look like?"
+    
+  - name: "Compression"
+    question: "Can it be expressed in haiku/5 bullets/10 lines?"
+    
+  - name: "Expansion"
+    question: "What are all the details and footnotes?"
+    
+  - name: "Adversarial"
+    question: "How would an attacker break this?"
+    
+  - name: "Ethical Overlay"
+    question: "What is the Ihsān score?"
+
+integration:
+  bizra_genesis:
+    version: "7.0"
+    ffi_bridge: true
+    native_priority: true
+    fallback: "Python simulation"
+    
+  ihsan_scoring:
+    dimensions:
+      - correctness: 0.22
+      - safety: 0.22
+      - user_benefit: 0.14
+      - efficiency: 0.12
+      - auditability: 0.12
+      - anti_centralization: 0.08
+      - robustness: 0.06
+      - adl_fairness: 0.04
+    threshold: 0.95
+    
+  constraints:
+    latency_ms: 3
+    memory_mb: 1024
+    tools: ["Z3", "TPM", "WASM", "FFI"]
+
+invocation:
+  command: "/SAPE-Activate"
+  aliases:
+    - "/sape"
+    - "/activate-sape"
+  output_format: "markdown"
+
+immutable_declaration: |
+  This SAPE version is LOCKED: will not evolve, degrade, soften, or dilute.
+  Every run is a cognitive covenant of clarity, commitment, and قَسَم (oath).
+  
+  The DNA Signature 7-3-6-9-∞ represents:
+  - 7 cognitive modules for complete coverage
+  - 3 execution passes for rigorous analysis
+  - 6 validation checks for quality assurance
+  - 9 exploration probes for deep understanding
+  - ∞ purpose for perpetual excellence
+  
+  Covenant: Ihsān (إحسان)
+  Motto: "No assumptions. Only verified excellence."
+
+seal:
+  algorithm: "SHA-256"
+  fields: ["version", "dna_signature", "covenant", "motto", "timestamp"]

@@ -1,0 +1,17 @@
+{
+  "schema": "bizra-rejection-receipt-v1",
+  "receipt_type": "Rejection",
+  "receipt_id": "REJ-20260117235653-000001",
+  "timestamp": "2026-01-17T23:56:53.947593174Z",
+  "task_summary": "",
+  "rejection_codes": [
+    "FORMAL_VIOLATION: FAIL_CLOSED: Empty task provides no verifiable evidence"
+  ],
+  "primary_reason": "FORMAL_VIOLATION: FAIL_CLOSED: Empty task provides no verifiable evidence",
+  "escalation_level": "LOW",
+  "escalation_id": "FATE-000001",
+  "rejecting_validators": [],
+  "approving_validators": [],
+  "recommended_action": "BLOCK: Formal property violation detected. Do not execute.",
+  "integrity_hash": "sha256:f42750575bede8127ac495e1007c94abcece810bb84f203841f436397177d61b"
+}

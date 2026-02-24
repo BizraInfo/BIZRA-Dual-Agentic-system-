@@ -1,0 +1,21 @@
+{
+  "head": {
+    "receipt_id": "rec_INTERNAL_DASHBOARD_317c8176e2164beda88a82825e505082",
+    "timestamp": "2026-01-12T11:41:03Z",
+    "merkle_root": "0xbe2128d39c75fdc01e1c7be5603bb0b301263362967ef09c9fac0b7ff63b0a2c"
+  },
+  "body": {
+  "receipt_id": "rec_INTERNAL_DASHBOARD_317c8176e2164beda88a82825e505082",
+  "timestamp": "2026-01-12T11:41:03Z",
+  "metrics": {
+    "internal_snr": 1.00,
+    "avg_commit_ihsan": 0.98,
+    "avg_commit_latency_ms": 55,
+    "mutation_kill_rate": 0.97,
+    "tpm_attestation_failures": 0,
+    "burn_events_last_24h": 0
+0,
+    "total_compute_burned": 0.05
+  }
+}
+}

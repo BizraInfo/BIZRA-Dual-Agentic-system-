@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bizra.ai/schemas/receipt_v1.json",
+  "title": "BIZRA Constitutional Receipt v1",
+  "description": "Evidence receipt schema for institutional-grade audit trails",
+  "type": "object",
+  "required": ["receipt_id", "timestamp", "type", "evidence_hash", "ihsan_score"],
+  "properties": {
+    "receipt_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique receipt identifier"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["execution", "rejection", "escalation", "impact"],
+      "description": "Receipt type classification"
+    },
+    "evidence_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of evidence payload"
+    },
+    "ihsan_score": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Ihsan compliance score (must be >= 0.99 for approval)"
+    },
+    "snr_ratio": {
+      "type": "number",
+      "minimum": 0.0,
+      "description": "Signal-to-Noise ratio (must be >= 1.5 for acceptance)"
+    },
+    "consensus": {
+      "type": "object",
+      "properties": {
+        "quorum_reached": { "type": "boolean" },
+        "approval_weight": { "type": "number" },
+        "total_weight": { "type": "number" }
+      }
+    },
+    "genesis_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Constitutional genesis hash binding"
+    }
+  }
+}

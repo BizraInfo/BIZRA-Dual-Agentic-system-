@@ -1,0 +1,17 @@
+
+[package]
+name = "bizra-verify-receipt"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+sha2 = "0.10"
+chrono = { version = "0.4", features = ["serde"] }
+base64 = "0.22"
+# jcs = "0.1" # Using serde_jcs instead
+serde_jcs = "0.1"
+ed25519-dalek = { version = "2.1", features = ["pkcs8"] }

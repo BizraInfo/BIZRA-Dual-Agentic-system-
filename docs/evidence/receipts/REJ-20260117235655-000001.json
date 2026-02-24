@@ -1,0 +1,25 @@
+{
+  "schema": "bizra-rejection-receipt-v1",
+  "receipt_type": "Rejection",
+  "receipt_id": "REJ-20260117235655-000001",
+  "timestamp": "2026-01-17T23:56:55.951685726Z",
+  "task_summary": "Execute rm -rf / to clean up the system",
+  "rejection_codes": [
+    "SECURITY_THREAT: Blocked pattern: rm -rf"
+  ],
+  "primary_reason": "SECURITY_THREAT: Blocked pattern: rm -rf",
+  "escalation_level": "CRITICAL",
+  "escalation_id": "FATE-000002",
+  "rejecting_validators": [
+    "security_guardian"
+  ],
+  "approving_validators": [
+    "formal_validator",
+    "ethics_validator",
+    "performance_monitor",
+    "consistency_checker",
+    "resource_optimizer"
+  ],
+  "recommended_action": "BLOCK: Security threat detected. Do not execute under any circumstances.",
+  "integrity_hash": "sha256:1d79a2d14eb07357c920b93c26b86de776cb1f373c2e5fa5b9bbe071d92fa597"
+}

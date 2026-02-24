@@ -1,0 +1,93 @@
+name: BIZRA OMEGA - Apotheosis Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+env:
+  CARGO_TERM_COLOR: always
+  BIZRA_IHSAN_CONSTITUTION: constitution/ihsan_v1.yaml
+  FATE_LEVEL: strict
+
+jobs:
+  kernel-integrity:
+    name: 🦀 Rust Kernel Integrity (Plane 7)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cache Cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build Backend
+        run: cd bizra-genesis-node/backend && cargo build --verbose
+      - name: Run Backend Tests
+        run: cd bizra-genesis-node/backend && cargo test --verbose
+
+  linguistic-verification:
+    name: 📜 Quranic Linguistic Provenance (Z3)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python_version: '3.11'
+      - name: Install Z3
+        run: sudo apt-get update && sudo apt-get install -y z3
+      - name: Install Maturin & Bridge
+        run: |
+          pip install maturin
+          cd baleeq-arabic && maturin develop
+      - name: Verify Arabic Invariants
+        run: |
+          z3 /root/bizra-genesis/baleeq-arabic/specs/arabic_ground_truth.smt2
+          python scripts/verify_baleeq.py
+
+  ethical-audit:
+    name: ⚖️ Ethical Integrity Scoping (SAPE)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Constitutional Compliance
+        run: |
+          # Verify ADL weight hasn't been regressed below 0.10
+          if [ $(grep "adl_fairness" -A 1 constitution/ihsan_v1.yaml | grep "weight" | awk '{print $2}') < "0.10" ]; then
+            echo "❌ CONSTITUTIONAL REGRESSION DETECTED: ADL weight too low."
+            exit 1
+          fi
+      - name: Run SAPE "Rare Circuit" Scrip
+        run: python scripts/sape_audit_orchestrator.py --full-audit --fail-on-bypass
+
+  performance-snr:
+    name: 🚀 High-Fidelity SNR Verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zero-Copy Latency Mock Check
+        run: |
+          # Verify Iceoryx2 and Zerocopy are present in Cargo.toml
+          grep "iceoryx2" bizra-genesis-node/backend/Cargo.toml && grep "zerocopy" bizra-genesis-node/backend/Cargo.toml
+      - name: Calculate SNR Convergence
+        run: python scripts/final_snr_scoring.py
+
+  apotheosis-seal:
+    name: 💠 Apotheosis Sealing
+    needs: [kernel-integrity, linguistic-verification, ethical-audit, performance-snr]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate Genesis Seal
+        run: |
+          echo "All checks passed. BIZRA state is Synchronized."
+          # Capture build hash
+          git rev-parse HEAD > BIZRA_PEAK_MASTERPIECE.hash

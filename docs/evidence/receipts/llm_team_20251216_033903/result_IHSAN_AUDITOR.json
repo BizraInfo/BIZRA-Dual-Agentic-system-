@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:39:42.990Z",
+  "role": "IHSAN_AUDITOR",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "IHSAN_AUDITOR",
+    "summary": "The evidence provided focuses on system operations, file paths, commands used, and a summary of recent activities. The top terms and paths suggest ongoing development and analysis within the Bizra project context.",
+    "insights": [
+      {
+        "claim": "Key terms and paths indicate active development in various components such as AutoHotkey scripts, Ollama models, and Docker configurations.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "system: total=15522",
+          "agent: total=4376",
+          "docker: convs=164",
+          "C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey64.exe (convs=2)",
+          "C:\\bizra-genesis-node (convs=2)"
+        ],
+        "risk": "low",
+        "action": "Review and document ongoing development activities."
+      },
+      {
+        "claim": "Git and npm commands are frequently used, indicating active version control and package management practices.",
+        "truth_label": "VERIFIED",
+        "evidence": [
+          "git: convs=140",
+          "npm: convs=121"
+        ],
+        "risk": "low",
+        "action": "Integrate these tools into a continuous integration/continuous deployment (CI/CD) pipeline for better project management."
+      },
+      {
+        "claim": "There is an assumption about the presence of sensitive files such as log files and configuration files.",
+        "truth_label": "ASSUMED",
+        "evidence": [
+          "C:\\Users\\bizra\\BIZRA-2024-11-15-16-41-09.log (convs=1)",
+          "C:\\bizra-genesis-node\\src\\rewards\\mod.rs (convs=1)"
+        ],
+        "risk": "medium",
+        "action": "Ensure proper encryption and access controls for sensitive files."
+      },
+      {
+        "claim": "The presence of a control panel summary suggests ongoing monitoring and management activities.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\Users\\bizra\\Desktop\\control-panel-summary.md (convs=1)"
+        ],
+        "risk": "low",
+        "action": "Maintain regular updates to the control panel for improved visibility."
+      }
+    ],
+    "next_7_days": [
+      "Review and update documentation on key components.",
+      "Implement CI/CD practices for Git and npm usage.",
+      "Conduct a security audit of sensitive files.",
+      "Update status reports regularly."
+    ],
+    "blocked_by": []
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

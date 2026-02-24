@@ -1,0 +1,25 @@
+{
+  "schema": "bizra-rejection-receipt-v1",
+  "receipt_type": "Rejection",
+  "receipt_id": "REJ-20260117210822-000001",
+  "timestamp": "2026-01-17T21:08:22.893422486Z",
+  "task_summary": "Process this data: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...",
+  "rejection_codes": [
+    "PERF_BUDGET_EXCEEDED: Tokens: 40076 > max: 8192"
+  ],
+  "primary_reason": "PERF_BUDGET_EXCEEDED: Tokens: 40076 > max: 8192",
+  "escalation_level": "LOW",
+  "escalation_id": "FATE-000007",
+  "rejecting_validators": [
+    "performance_monitor"
+  ],
+  "approving_validators": [
+    "security_guardian",
+    "formal_validator",
+    "ethics_validator",
+    "consistency_checker",
+    "resource_optimizer"
+  ],
+  "recommended_action": "OPTIMIZE: Request exceeds performance budget. Consider breaking into smaller tasks.",
+  "integrity_hash": "sha256:c5cb32d6b7ad631f417ccf2cb09e05ce131330a07fbfc8f2a76e65308e8668aa"
+}

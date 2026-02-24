@@ -1,0 +1,33 @@
+2026-01-08 20:09:54,687 - BIZRAv7 - INFO - 🧬 Reproducibility locked with seed: 42
+2026-01-08 20:09:54,687 - BIZRAv7 - INFO - 🚀 Initializing BIZRA v7.0 with Resonance Mesh...
+2026-01-08 20:09:54,687 - BIZRAv7 - INFO - ✅ Resonance Mesh initialized
+2026-01-08 20:09:54,687 - BIZRAv7 - INFO - 🔄 Starting autonomous resonance optimization...
+2026-01-08 20:09:54,688 - BIZRAv7 - INFO - 🎭 Running Resonance Mesh demonstration...
+Traceback (most recent call last):
+  File "/root/bizra-genesis/bizra_production.py", line 282, in <module>
+    asyncio.run(orchestrator.run_resonance_demo())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/root/bizra-genesis/bizra_production.py", line 273, in run_resonance_demo
+    json.dump(evidence_pack, f, indent=2)
+  File "/usr/lib/python3.12/json/__init__.py", line 179, in dump
+    for chunk in iterable:
+  File "/usr/lib/python3.12/json/encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/usr/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/usr/lib/python3.12/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/usr/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type getset_descriptor is not JSON serializable

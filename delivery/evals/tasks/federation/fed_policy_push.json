@@ -1,0 +1,8 @@
+{
+  "id": "FED_POLICY_PUSH",
+  "suite": "federation",
+  "command": "cargo run --quiet -- federation policy-check",
+  "expected_exit_code": 0,
+  "timeout": 30,
+  "description": "Verifies that the node correctly receives and parses policy updates from Node0."
+}

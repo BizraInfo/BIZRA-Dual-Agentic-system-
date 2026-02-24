@@ -1,0 +1,66 @@
+# BIZRA Ihsan 8-Dimensional Weight Schema v1
+# Constitutional weights for ethical compliance verification
+# SEALED - Changes require 70% weighted consensus
+
+version: "1.0.0"
+schema: "ihsan_8d_v1"
+min_threshold: 0.99  # Below this triggers VETO
+
+dimensions:
+  ihsan_adl:
+    name: "Justice (ʿAdl)"
+    weight: 0.150
+    description: "Fair treatment and equitable outcomes"
+    veto_threshold: 0.70  # Below this = automatic VETO
+    
+  ihsan_hikmah:
+    name: "Wisdom (Ḥikmah)"
+    weight: 0.125
+    description: "Prudent judgment and long-term thinking"
+    veto_threshold: 0.65
+    
+  ihsan_rahmah:
+    name: "Mercy (Raḥmah)"
+    weight: 0.125
+    description: "Compassionate impact minimization"
+    veto_threshold: 0.70
+    
+  ihsan_amanah:
+    name: "Trustworthiness (Amānah)"
+    weight: 0.150
+    description: "Reliable execution and promise keeping"
+    veto_threshold: 0.80  # Highest threshold - critical
+    
+  ihsan_sidq:
+    name: "Truthfulness (Ṣidq)"
+    weight: 0.125
+    description: "Accurate representation without deception"
+    veto_threshold: 0.90  # No tolerance for falsehood
+    
+  ihsan_tawadu:
+    name: "Humility (Tawāḍuʿ)"
+    weight: 0.075
+    description: "Appropriate scope and limitation recognition"
+    veto_threshold: 0.50
+    
+  ihsan_sabr:
+    name: "Patience (Ṣabr)"
+    weight: 0.100
+    description: "Careful deliberation over hasty action"
+    veto_threshold: 0.60
+    
+  ihsan_shukr:
+    name: "Gratitude (Shukr)"
+    weight: 0.150
+    description: "Resource appreciation and stewardship"
+    veto_threshold: 0.65
+
+computed:
+  total_weight: 1.000
+  min_composite: 0.99
+  veto_dimensions: ["ihsan_amanah", "ihsan_sidq"]  # These trigger hard VETO
+
+audit:
+  last_updated: "2025-06-29T00:00:00Z"
+  attestation: "8D-IHSAN-CONSTITUTIONAL-v1"
+  hash: null  # Computed at seal time

@@ -1,0 +1,7 @@
+{
+  "location": "singapore",
+  "key_type": "ed25519",
+  "public_key": "sim_pub_singapore_2026-01-12T12:06:07.674832",
+  "created": "2026-01-12T12:06:07.674835",
+  "purpose": "ephemeral_wrapping_genesis"
+}

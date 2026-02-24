@@ -1,0 +1,67 @@
+2026-01-01 15:54:43 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 15:54:43 - Starting Ihsān Gate verification...
+2026-01-01 15:54:44 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 15:54:44 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 15:54:44 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 15:55:47 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 15:55:47 - Starting Ihsān Gate verification...
+2026-01-01 15:55:48 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 15:55:48 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 15:55:48 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 15:56:32 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 15:56:32 - Starting Ihsān Gate verification...
+2026-01-01 15:56:32 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 15:56:32 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 15:56:32 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 15:57:27 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 15:57:27 - Starting Ihsān Gate verification...
+2026-01-01 15:57:27 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 15:57:27 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 15:57:27 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 15:57:43 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 15:57:43 - Starting Ihsān Gate verification...
+2026-01-01 15:57:43 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 15:57:43 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 15:57:43 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:16:35 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:16:35 - Starting Ihsān Gate verification...
+2026-01-01 16:16:35 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 16:16:35 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:16:35 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:16:43 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:16:43 - Starting Ihsān Gate verification...
+2026-01-01 16:16:43 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 16:16:43 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:16:43 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:16:50 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:16:50 - Starting Ihsān Gate verification...
+2026-01-01 16:16:50 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 16:16:50 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:16:50 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:17:09 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:17:09 - Starting Ihsān Gate verification...
+2026-01-01 16:17:09 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 16:17:09 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:17:09 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:17:58 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:17:58 - Starting Ihsān Gate verification...
+2026-01-01 16:17:58 - ERROR: Ihsān Gate FAILED -  (Score: )
+2026-01-01 16:17:58 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:17:58 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:18:53 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:18:53 - Starting Ihsān Gate verification...
+2026-01-01 16:18:53 - SUCCESS: Ihsan Gate PASSED - Score: 0.976
+2026-01-01 16:18:53 - Requesting Auditor Mufti AI approval...
+2026-01-01 16:18:53 - ERROR: Auditor Mufti REJECTED - Potential ethical concerns detected (Confidence: 0.0)
+2026-01-01 16:18:53 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:18:54 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===
+2026-01-01 16:19:03 - === BIZRA Governance Pipeline Phase 9 Starting ===
+2026-01-01 16:19:03 - Starting Ihsān Gate verification...
+2026-01-01 16:19:03 - SUCCESS: Ihsan Gate PASSED - Score: 0.976
+2026-01-01 16:19:03 - Requesting Auditor Mufti AI approval...
+2026-01-01 16:19:03 - SUCCESS: Auditor Mufti APPROVED - Confidence: 0.97
+2026-01-01 16:19:03 - Running Z3 Logic verification...
+2026-01-01 16:19:04 - WARNING: Z3 Python bindings not found, attempting to install...
+2026-01-01 16:19:04 - ERROR: Failed to install Z3. Please ensure Z3 theorem prover is available.
+2026-01-01 16:19:04 - ERROR: Governance gate failure detected - Deployment BLOCKED
+2026-01-01 16:19:04 - === Governance Pipeline FAILED - DEPLOYMENT BLOCKED ===

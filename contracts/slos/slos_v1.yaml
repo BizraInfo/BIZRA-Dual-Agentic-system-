@@ -1,0 +1,101 @@
+# BIZRA Constitutional SLOs (Service Level Objectives) v1
+# Defines performance and reliability targets
+# SEALED - Changes require stakeholder consensus
+
+version: "1.0.0"
+schema: "slos_v1"
+
+performance:
+  hot_path_propagation:
+    target_ns: 250
+    p50_ns: 100
+    p99_ns: 500
+    max_ns: 1000
+    description: "Lock-free hot path message propagation"
+    
+  consensus_latency:
+    target_ms: 10
+    p50_ms: 5
+    p99_ms: 18
+    max_ms: 50
+    description: "Weighted BFT consensus round-trip"
+    
+  zk_proof_generation:
+    target_ms: 100
+    max_ms: 500
+    description: "Groth16 proof generation time"
+    
+  sense_to_act:
+    target_ms: 50
+    p99_ms: 100
+    max_ms: 5000  # Bounded wait limit
+    description: "Full agent loop latency"
+
+reliability:
+  availability:
+    target: 0.9999  # Four nines
+    measurement_window: rolling_30d
+    
+  fault_tolerance:
+    max_failures: 1  # Out of 3 nodes
+    recovery_time_ms: 10000
+    
+  data_durability:
+    target: 0.999999999  # Nine nines
+    replication: 3
+    
+  consensus_success:
+    target: 0.999
+    measurement: per_round
+
+quality:
+  snr_acceptance:
+    min_ratio: 1.5
+    target_ratio: 2.0
+    
+  ihsan_compliance:
+    min_score: 0.99
+    target_score: 0.995
+    
+  false_positive_rate:
+    max: 0.001
+    target: 0.0001
+    
+  false_negative_rate:
+    max: 0.0001  # More critical
+    target: 0.00001
+
+resource_bounds:
+  cpu_utilization:
+    max: 0.85
+    target: 0.70
+    
+  memory_utilization:
+    max: 0.80
+    target: 0.60
+    
+  network_bandwidth:
+    max_mbps: 1000
+    target_mbps: 500
+    
+  storage_growth:
+    max_mb_per_hour: 100
+    target_mb_per_hour: 50
+
+error_budgets:
+  monthly_downtime_minutes: 4.32  # 99.99% availability
+  monthly_error_rate: 0.001
+  burn_rate_alert_threshold: 2.0
+
+alerting:
+  slo_burn_rate:
+    warning: 1.5
+    critical: 2.0
+    
+  latency_spike:
+    warning_ms: 100
+    critical_ms: 500
+    
+  error_rate:
+    warning: 0.0005
+    critical: 0.001

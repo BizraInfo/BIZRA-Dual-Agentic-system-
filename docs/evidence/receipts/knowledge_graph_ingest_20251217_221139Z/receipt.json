@@ -1,0 +1,42 @@
+{
+  "schema": "bizra_knowledge_graph_ingest_receipt_v1",
+  "generated_at": "2025-12-17T22:11:39.609008+00:00",
+  "truth_label": "MEASURED",
+  "status": "dry_run_ok",
+  "return_code": 0,
+  "tool": {
+    "name": "bizra_synaptic_loader.py",
+    "git_head": "24d743681be2141fe4b73a31159a47e2863a3b55",
+    "sha256": "a21a716c2d450ca8444cf6c6e929bb9b49e8069184131f8707bf0c7aeaf75c6f"
+  },
+  "inputs": {
+    "manifest_file": "BIZRA_KNOWLEDGE_MANIFEST.json",
+    "manifest_sha256": "b248bfd1fa9bde186ee77ebe214125bef12be42a0bb51ead91a642e6550dd53e",
+    "ledger_file": "BIZRA_KNOWLEDGE_LEDGER.jsonl",
+    "ledger_sha256": "b720cbbc4dca2b131078702f1f4b681404b6fa9f2075cce785cc165ad4bed982",
+    "tokenomics_file": "BIZRA_TOKENOMICS_GENESIS.yaml",
+    "tokenomics_sha256": "f72a1e78d8743f9aa4d2d3d008532c1148ec9c35ccc14c11d8d07c368e0351ae"
+  },
+  "anchors": {
+    "genesis_hash": "7253d9f015bcac66e0f996d3cc3ebac021151ec8c75aa8890e4a902447218e8e",
+    "ledger_chain_expected_sha256": "7d07d9bf68ec8443b4f26fa1fce83ed769fd16ba9aa941e3a5c8d30531a57ba6",
+    "ledger_chain_computed_sha256": "7d07d9bf68ec8443b4f26fa1fce83ed769fd16ba9aa941e3a5c8d30531a57ba6",
+    "ledger_line_count": 26922,
+    "total_files_claimed": 26922,
+    "total_value_claimed": 32863.6994,
+    "hash_mode": "metadata",
+    "scan_root_sha256": "f41495a55e64b47f10be60849bc26a105fd1d23bf2eb7c2e142379dde4c85c73"
+  },
+  "neo4j": {
+    "uri": "bolt://localhost:7687",
+    "database": null,
+    "dry_run": true,
+    "constraints_enabled": true,
+    "constraints_attempted": false
+  },
+  "results": {
+    "nodes_written": 0,
+    "bad_lines_skipped": 0,
+    "duration_sec": 0.153
+  }
+}

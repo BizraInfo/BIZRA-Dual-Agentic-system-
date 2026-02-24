@@ -1,0 +1,5 @@
+﻿ChatInputDir=
+SkipChatIngest=False
+StoreFullText=False
+IngestCrashReports=True
+RunLLMTeam=True

@@ -1,0 +1,334 @@
+{
+  "app": {
+    "name": "BIZRA",
+    "tagline": "Sovereign AI for Everyone",
+    "description": "Your Personal AI Team, Running Locally"
+  },
+  "nav": {
+    "home": "Home",
+    "agents": "Agents",
+    "chat": "Chat",
+    "knowledge": "Knowledge",
+    "settings": "Settings",
+    "rewards": "Rewards",
+    "plan": "Plan",
+    "resources": "Resources"
+  },
+  "landing": {
+    "hero": {
+      "title": "Own Your AI",
+      "subtitle": "The First Sovereign AI Platform",
+      "description": "Your data stays yours. Your AI works for you. No cloud. No compromise.",
+      "cta": "Begin Your Genesis",
+      "secondary": "Learn More"
+    },
+    "features": {
+      "sovereignty": {
+        "title": "True Sovereignty",
+        "description": "All data stays on your machine. Zero cloud dependencies."
+      },
+      "agents": {
+        "title": "7 AI Agents",
+        "description": "A complete Personal Agent Team working together for you."
+      },
+      "local": {
+        "title": "100% Local",
+        "description": "Runs entirely on your hardware. No internet required."
+      }
+    }
+  },
+  "invitation": {
+    "title": "Enter Invitation Code",
+    "subtitle": "BIZRA is in private beta. Enter your invitation code to join.",
+    "placeholder": "Enter your invitation code",
+    "validate": "Validate Code",
+    "validating": "Validating...",
+    "success": "Welcome, Pioneer!",
+    "successDesc": "You are user #{{number}} of the first 1,000 sovereigns.",
+    "tier": {
+      "genesis": "Genesis Pioneer",
+      "early": "Early Adopter",
+      "standard": "Sovereign Member"
+    },
+    "noCode": "Don't have a code?",
+    "requestAccess": "Request Access",
+    "requestHint": "Contact @BizraInfo on GitHub or X for early access",
+    "publicPhase": "Public Access Now Available!",
+    "publicPhaseDesc": "BIZRA is now open to everyone. No invitation required.",
+    "errors": {
+      "invalidCode": "Invalid invitation code. Please check and try again.",
+      "codeInactive": "This code is no longer active.",
+      "codeExhausted": "This code has reached its maximum uses.",
+      "required": "Please enter an invitation code"
+    },
+    "stats": {
+      "remaining": "{{count}} spots remaining in Phase 1",
+      "pioneers": "{{count}} pioneers have joined"
+    },
+    "yourPrivileges": "Your Exclusive Privileges",
+    "welcomeTo": "Welcome to BIZRA"
+  },
+  "onboarding": {
+    "language": {
+      "title": "Choose Your Language",
+      "titleAr": "اختر لغتك",
+      "subtitle": "Select the language for your BIZRA experience",
+      "continue": "Continue"
+    },
+    "welcome": {
+      "title": "Welcome to Your Genesis",
+      "subtitle": "You are about to become an Architect of sovereign AI.",
+      "description": "This ritual will align your mind with the network.",
+      "cta": "Begin The Ritual"
+    },
+    "steps": {
+      "covenant": "The Covenant",
+      "covenantDesc": "Accept the Genesis Laws",
+      "seedTest": "Seed Test",
+      "seedTestDesc": "4 questions about your essence",
+      "patSelection": "PAT Selection",
+      "patSelectionDesc": "Choose your primary AI agent",
+      "identity": "Identity",
+      "identityDesc": "Seal your sovereign profile"
+    },
+    "covenant": {
+      "title": "The Genesis Covenant",
+      "description": "These are the sacred laws that govern the BIZRA Network. Read them carefully. They define your relationship with sovereign AI.",
+      "accept": "I Accept The Covenant",
+      "checkbox": "I have read and accept the Genesis Covenant. I understand that these principles guide all interactions within the BIZRA Network, and I commit to upholding them as an Architect of sovereign AI."
+    },
+    "seedTest": {
+      "title": "Seed Test",
+      "description": "Answer these questions to personalize your AI experience.",
+      "questionOf": "Question {{current}} of {{total}}",
+      "previous": "Previous",
+      "questions": {
+        "goal": {
+          "question": "What's your primary goal with AI assistance?",
+          "productivity": "Boost Productivity",
+          "learning": "Learn New Skills",
+          "creative": "Creative Projects",
+          "analysis": "Data Analysis"
+        },
+        "style": {
+          "question": "How do you prefer to receive information?",
+          "detailed": "Detailed Explanations",
+          "concise": "Brief & Direct",
+          "visual": "Visual Examples",
+          "interactive": "Interactive Dialogue"
+        },
+        "pace": {
+          "question": "What pace works best for you?",
+          "fast": "Fast & Efficient",
+          "thorough": "Thorough & Complete",
+          "adaptive": "Adaptive to Context",
+          "patient": "Patient & Supportive"
+        },
+        "domain": {
+          "question": "Which domain interests you most?",
+          "tech": "Technology & Code",
+          "business": "Business & Strategy",
+          "creative": "Arts & Design",
+          "research": "Research & Learning"
+        }
+      }
+    },
+    "patSelection": {
+      "title": "Select Your Primary PAT Agent",
+      "description": "Based on your answers, we recommend {{agent}}. You can always switch later.",
+      "recommended": "Recommended"
+    },
+    "profile": {
+      "title": "Complete Your Profile",
+      "description": "Set up your sovereign identity in the BIZRA network.",
+      "displayName": "Display Name",
+      "displayNamePlaceholder": "Enter your name",
+      "ihsanScore": "Starting Ihsan Score",
+      "ihsanDescription": "Ihsan (إحسان) measures your ethical excellence and contribution quality. Start at 75 and grow through positive impact.",
+      "summary": "Your Selection Summary",
+      "primaryPat": "Primary PAT",
+      "goals": "Goals",
+      "style": "Style",
+      "notSet": "Not set",
+      "completeSetup": "Complete Setup",
+      "creatingProfile": "Creating Profile..."
+    },
+    "complete": {
+      "title": "Genesis Complete!",
+      "description": "Your sovereign AI profile has been created. Preparing your Node installation..."
+    }
+  },
+  "installer": {
+    "header": "SOVEREIGN OS INSTALLER",
+    "welcome": {
+      "title": "Welcome to Sovereignty",
+      "description": "Transform your machine into a sovereign AI node. Your data stays yours. Your AI serves you. Your impact earns value.",
+      "features": {
+        "zeroCloud": "Zero Cloud",
+        "zeroCloudDesc": "Everything runs locally on your hardware",
+        "agents": "7 AI Agents",
+        "agentsDesc": "Your Personal Agentic Team (PAT)",
+        "impact": "Proof of Impact",
+        "impactDesc": "Earn SEED tokens for real work"
+      },
+      "scanButton": "Scan My System"
+    },
+    "scanning": {
+      "title": "Analyzing Your System",
+      "description": "Detecting hardware capabilities...",
+      "progress": "Progress"
+    },
+    "results": {
+      "title": "System Analysis Complete",
+      "description": "Your hardware exceeds requirements for BIZRA Node0",
+      "ready": "Ready for Full Sovereignty",
+      "readyDesc": "Your system can run all 7 PAT agents + DeepSeek R1 + Full HyperGraph RAG",
+      "selectModels": "Select AI Models"
+    },
+    "models": {
+      "title": "Select Your AI Models",
+      "description": "We've recommended the best models based on your hardware power",
+      "recommended": "Recommended",
+      "optional": "Optional",
+      "size": "Size",
+      "vram": "VRAM Required",
+      "selectedModels": "Selected Models",
+      "totalSize": "Total size"
+    },
+    "profile": {
+      "title": "Create Your Profile",
+      "description": "Customize your sovereign AI experience",
+      "identity": "Identity",
+      "yourName": "Your Name",
+      "namePlaceholder": "Enter your name",
+      "nameHint": "Your PAT agents will use this to personalize interactions",
+      "installPath": "Installation Path",
+      "requiresSpace": "Requires {{size}} free space",
+      "privacyLevel": "Privacy Level",
+      "privacyMaximum": "Maximum — All processing on-device",
+      "privacyHigh": "High — Minimal cloud features",
+      "privacyBalanced": "Balanced — Some cloud enhancements",
+      "privacyHint": "Data never leaves without your explicit consent",
+      "patTeam": "Your Personal Agentic Team",
+      "generateInstaller": "Generate Installer"
+    },
+    "installing": {
+      "title": "Generating Unified Installer",
+      "description": "Creating your personalized BIZRA Sovereign OS package",
+      "phases": {
+        "scan": "System Analysis",
+        "scanDesc": "Analyzing hardware capabilities",
+        "core": "Core Runtime",
+        "coreDesc": "Installing BIZRA kernel & Node0",
+        "models": "AI Models",
+        "modelsDesc": "Downloading models & adapters",
+        "tools": "MCP Tools",
+        "toolsDesc": "Installing 87 sovereign tools",
+        "agents": "PAT Agents",
+        "agentsDesc": "Configuring personal AI team",
+        "rag": "Knowledge Base",
+        "ragDesc": "Initializing HyperGraph RAG",
+        "finalize": "Finalization",
+        "finalizeDesc": "Securing & optimizing"
+      }
+    },
+    "complete": {
+      "title": "Installer Ready!",
+      "description": "Your personalized BIZRA Sovereign OS package is complete",
+      "details": "Installer Details",
+      "installerName": "Installer Name",
+      "fileSize": "File Size",
+      "version": "Version",
+      "aiModels": "AI Models",
+      "downloadTime": "Est. Download Time",
+      "privacyLevel": "Privacy Level",
+      "modelsIncluded": "Models included",
+      "whatsIncluded": "What's Included",
+      "startOver": "Start Over",
+      "downloadInstall": "Download & Install",
+      "downloadStarted": "Download Started!",
+      "runScript": "Run the downloaded PowerShell script to complete installation",
+      "goToDashboard": "Go to Dashboard",
+      "preparing": "Preparing...",
+      "howToInstall": "How to Install",
+      "step1": "Click \"Download & Install\" to get the installer script",
+      "step2": "Right-click the downloaded .ps1 file and select \"Run with PowerShell\"",
+      "step3": "Follow the on-screen instructions to complete setup",
+      "adminNote": "You may need to run PowerShell as Administrator for full installation"
+    },
+    "hardware": {
+      "cpu": "CPU",
+      "gpu": "GPU",
+      "ram": "RAM",
+      "storage": "Storage",
+      "network": "Network",
+      "os": "OS",
+      "cores": "cores",
+      "available": "available",
+      "free": "free"
+    }
+  },
+  "agents": {
+    "title": "Your Agent Team",
+    "status": {
+      "active": "Active",
+      "idle": "Idle",
+      "loading": "Loading"
+    },
+    "roles": {
+      "MasterReasoner": {
+        "name": "Master Reasoner",
+        "description": "Deep analytical thinking and complex problem solving"
+      },
+      "MemoryArchitect": {
+        "name": "Memory Architect",
+        "description": "Personal context and knowledge retention"
+      },
+      "CreativeSynthesizer": {
+        "name": "Creative Synthesizer",
+        "description": "Creative ideation and content generation"
+      },
+      "DataAnalyzer": {
+        "name": "Data Analyzer",
+        "description": "Data processing and pattern recognition"
+      },
+      "Communicator": {
+        "name": "Communicator",
+        "description": "Natural conversation and writing"
+      },
+      "ExecutionPlanner": {
+        "name": "Execution Planner",
+        "description": "Task orchestration and scheduling"
+      },
+      "EthicsGuardian": {
+        "name": "Ethics Guardian",
+        "description": "Ethical alignment and value consistency"
+      }
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "categories": {
+      "profile": "Profile",
+      "agents": "PAT Agents",
+      "resources": "Resources",
+      "security": "Security",
+      "backup": "Backup",
+      "language": "Language",
+      "advanced": "Advanced"
+    }
+  },
+  "common": {
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "download": "Download",
+    "install": "Install",
+    "configure": "Configure"
+  }
+}

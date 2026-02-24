@@ -1,0 +1,31 @@
+{
+  "receipt_version": 1,
+  "type": "llm_task",
+  "generated_at": "2025-12-16T03:39:20.510Z",
+  "truth_label": "MEASURED",
+  "role": "SECURITY",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "prompt_sha256": "15b3e133223a29e63fa19ba7bbfa9c7cbc618e7538b3f6365d5a82bdd3c53186",
+  "response_sha256": "89bd28cf785ee591b6ab0665c29fb3a5b58488c2105f442aa87eba602c85d115",
+  "files": {
+    "prompt": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_033903\\prompt_SECURITY.txt",
+      "sha256": "15b3e133223a29e63fa19ba7bbfa9c7cbc618e7538b3f6365d5a82bdd3c53186"
+    },
+    "response": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_033903\\response_SECURITY.json",
+      "sha256": "89bd28cf785ee591b6ab0665c29fb3a5b58488c2105f442aa87eba602c85d115"
+    },
+    "result": {
+      "path": "C:\\BIZRA-Dual-Agentic-system--main\\docs\\evidence\\receipts\\llm_team_20251216_033903\\result_SECURITY.json",
+      "sha256": "1b81a3f45f7f215770c023da6a842d8247dbd3c506290a064f21e85e3c440ae8"
+    }
+  },
+  "inputs": [
+    {
+      "path": "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_073854\\aggregate.json",
+      "sha256": "fb4b723f12955214a1517c28b592f695fae3259fd9623e7d9d2bc267edebab8b"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "build_info": {
+    "git_sha": "2c76cdedfb600f40a267dc09d7676a05f10fff29",
+    "python_version": "3.12.3",
+    "numpy_version": "mock",
+    "timestamp": "2026-01-08T16:09:54Z"
+  },
+  "config_hash": "b22d864d59075b8cda29acd52aca027e05e7a94a75f4af834a6b0cbec17df5e7",
+  "resonance_stats": {
+    "total_nodes": 100,
+    "average_snr": 0.92,
+    "high_resonance_nodes": 45,
+    "mesh_connectivity": 0.15
+  },
+  "optimization_result": {
+    "pruned_nodes": 5,
+    "amplified_nodes": 2,
+    "mesh_size": 100,
+    "average_snr": 0.92,
+    "new_pruning_threshold": 0.3,
+    "__module__": "__main__",
+    "__dict__": 

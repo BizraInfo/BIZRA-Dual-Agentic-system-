@@ -1,0 +1,54 @@
+{
+  "id": "session-2026-01-15-embedding-pipeline",
+  "title": "BIZRA Embedding Pipeline - Vector Search Architecture",
+  "created_at": "2026-01-15T16:00:00Z",
+  "model": "claude-opus-4",
+  "messages": [
+    {
+      "role": "user",
+      "content": "I need to set up an embedding pipeline for the BIZRA knowledge system. What's the best approach?",
+      "timestamp": "2026-01-15T16:05:00Z"
+    },
+    {
+      "role": "assistant",
+      "content": "For BIZRA's embedding pipeline, I recommend a hybrid approach:\n\n1. **Primary Model**: OpenAI's `text-embedding-3-large` (3072 dimensions)\n2. **Fallback**: Local model via Ollama (e.g., `nomic-embed-text`)\n3. **Specialized**: Code embeddings via `codellama` for source files\n\nPipeline architecture:\n\n```python\nclass EmbeddingPipeline:\n    def __init__(self, config: EmbeddingConfig):\n        self.primary = OpenAIEmbedder(config.openai_key)\n        self.fallback = OllamaEmbedder(config.ollama_url)\n        self.code_embedder = CodeEmbedder()\n        \n    async def embed(self, text: str, content_type: str) -> np.ndarray:\n        if content_type == 'code':\n            return await self.code_embedder.embed(text)\n        \n        try:\n            return await self.primary.embed(text)\n        except RateLimitError:\n            return await self.fallback.embed(text)\n```",
+      "timestamp": "2026-01-15T16:06:00Z"
+    },
+    {
+      "role": "user",
+      "content": "How should I store the vectors? PostgreSQL with pgvector or a dedicated vector database?",
+      "timestamp": "2026-01-15T16:20:00Z"
+    },
+    {
+      "role": "assistant",
+      "content": "For BIZRA's scale (15k+ hours of content), I recommend **tiered storage**:\n\n1. **Hot Layer**: Qdrant for real-time search (<100ms latency)\n2. **Warm Layer**: PostgreSQL + pgvector for structured queries\n3. **Cold Layer**: Parquet files for archival/batch processing\n\n```python\nimport asyncpg\nfrom dataclasses import dataclass\nfrom typing import List\nimport numpy as np\n\n@dataclass\nclass SearchResult:\n    id: str\n    score: float\n    content: str\n    metadata: dict\n\nclass VectorStore:\n    def __init__(self):\n        self.qdrant = QdrantClient(url=\"http://localhost:6333\")\n        self.pool: asyncpg.Pool = None  # Initialize via create_pool()\n        \n    async def create_pool(self, dsn: str):\n        self.pool = await asyncpg.create_pool(dsn)\n        \n    async def search(self, query_vector: np.ndarray, top_k: int = 10) -> List[SearchResult]:\n        # Try Qdrant first (fast)\n        results = await self.qdrant.search(\n            collection_name=\"chunks\",\n            query_vector=query_vector,\n            limit=top_k\n        )\n        \n        if len(results) < top_k:\n            # Fallback to pgvector using asyncpg (non-blocking)\n            remaining = top_k - len(results)\n            rows = await self.pool.fetch(\n                \"SELECT id, content, metadata, embedding <-> $1 AS score FROM chunks ORDER BY embedding <-> $1 LIMIT $2\",\n                query_vector.tolist(), remaining\n            )\n            for row in rows:\n                results.append(SearchResult(\n                    id=row['id'],\n                    score=row['score'],\n                    content=row['content'],\n                    metadata=row['metadata']\n                ))\n        \n        return results\n```",
+      "timestamp": "2026-01-15T16:21:00Z"
+    },
+    {
+      "role": "user",
+      "content": "What about hybrid search combining vectors and keywords?",
+      "timestamp": "2026-01-15T16:40:00Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Hybrid search is essential for production RAG. Combine:\n\n1. **Dense Retrieval**: Vector similarity (semantic)\n2. **Sparse Retrieval**: BM25/TF-IDF (lexical)\n3. **Reciprocal Rank Fusion**: Merge results\n\n```python\nfrom typing import List, Callable, Awaitable\nfrom collections import defaultdict\nimport asyncio\n\nclass HybridSearcher:\n    def __init__(self, vector_store, bm25_index, embedder: Callable[[str], Awaitable[List[float]]]):\n        self.vector_store = vector_store\n        self.bm25 = bm25_index\n        self._embedder = embedder  # Inject embedding function\n        \n    async def embed(self, text: str) -> List[float]:\n        \"\"\"Get embedding for text using injected embedder.\"\"\"\n        return await self._embedder(text)\n        \n    async def search(self, query: str, top_k: int = 10) -> List[SearchResult]:\n        # Get query embedding\n        query_vector = await self.embed(query)\n        \n        # Parallel retrieval\n        vector_results, bm25_results = await asyncio.gather(\n            self.vector_store.search(query_vector, top_k * 2),\n            self.bm25.search(query, top_k * 2)\n        )\n        \n        # Reciprocal Rank Fusion\n        fused = self.rrf_merge(vector_results, bm25_results, k=60)\n        \n        return fused[:top_k]\n    \n    def rrf_merge(self, *result_lists, k: int = 60) -> List[SearchResult]:\n        \"\"\"Merge result lists using Reciprocal Rank Fusion, returning SearchResult objects.\"\"\"\n        scores: dict[str, float] = defaultdict(float)\n        doc_map: dict[str, SearchResult] = {}\n        \n        for results in result_lists:\n            for rank, result in enumerate(results):\n                scores[result.id] += 1.0 / (k + rank)\n                # Keep the first occurrence of each result\n                if result.id not in doc_map:\n                    doc_map[result.id] = result\n        \n        # Sort by score descending and return SearchResult objects\n        sorted_ids = sorted(scores.keys(), key=lambda x: -scores[x])\n        return [doc_map[rid] for rid in sorted_ids]\n```\n\nThis gives you best of both worlds: semantic understanding + keyword precision.",
+      "timestamp": "2026-01-15T16:41:00Z"
+    },
+    {
+      "role": "user",
+      "content": "How do I handle updates and incremental indexing?",
+      "timestamp": "2026-01-15T17:00:00Z"
+    },
+    {
+      "role": "assistant",
+      "content": "Incremental indexing requires change detection and efficient updates:\n\n```python\nimport hashlib\nfrom typing import Iterable\n\ndef hash_content(content: str) -> str:\n    \"\"\"Generate a stable SHA-256 hex digest for content hashing.\"\"\"\n    return hashlib.sha256(content.encode('utf-8')).hexdigest()\n\nclass IncrementalIndexer:\n    def __init__(self, vector_store, checkpoint_path: str):\n        self.vector_store = vector_store\n        self.checkpoint = self.load_checkpoint(checkpoint_path)\n        \n    async def sync(self, documents: Iterable[Document]):\n        for doc in documents:\n            doc_hash = hash_content(doc.text)\n            \n            if doc.id in self.checkpoint:\n                if self.checkpoint[doc.id] == doc_hash:\n                    continue  # No change\n                else:\n                    await self.update(doc)  # Changed\n            else:\n                await self.insert(doc)  # New\n            \n            self.checkpoint[doc.id] = doc_hash\n        \n        # Detect deletions\n        current_ids = {doc.id for doc in documents}\n        deleted_ids = set(self.checkpoint.keys()) - current_ids\n        for doc_id in deleted_ids:\n            await self.delete(doc_id)\n            del self.checkpoint[doc_id]\n        \n        self.save_checkpoint()\n```\n\nUse content hashing to detect changes efficiently. The `targets` R pipeline does this automatically.",
+      "timestamp": "2026-01-15T17:01:00Z"
+    }
+  ],
+  "metadata": {
+    "project": "BIZRA-Genesis",
+    "topics": ["embeddings", "vector-search", "qdrant", "pgvector", "rag", "hybrid-search", "bm25"],
+    "tools_used": ["create_file", "read_file"],
+    "outcome": "success"
+  }
+}

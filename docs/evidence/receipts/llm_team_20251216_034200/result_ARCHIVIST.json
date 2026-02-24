@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:42:07.729Z",
+  "role": "ARCHIVIST",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": true,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "ARCHIVIST",
+    "summary": "The action plan focuses on organizing knowledge assets into a vault and index workflow, while proposing durable schemas and retrieval primitives. The insights are derived from the provided evidence context.",
+    "insights": [
+      {
+        "claim": "Top terms and paths indicate frequent interactions with Bizra-related systems and codebases.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "system: total=15522, convs=542",
+          "bizra: total=8999, convs=307",
+          "agent: total=4376, convs=163",
+          "C:\\\\bizra-genesis-node (convs=2)",
+          "C:\\BIZRA-PROJECTS\\synthesis_orchestrator (convs=1)"
+        ],
+        "risk": "low",
+        "action": "Prioritize archiving Bizra-related systems and codebases."
+      },
+      {
+        "claim": "Frequent use of commands such as 'docker' and 'git' suggests active development and deployment activities.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "docker (convs=164)",
+          "git (convs=140)"
+        ],
+        "risk": "low",
+        "action": "Ensure version control practices are documented and archived."
+      },
+      {
+        "claim": "The presence of log files and documentation on the desktop indicates a need for structured knowledge management.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\Users\\bizra\\Desktop\\BIZRA_MEMORY\\sessions\\2025-03-30.md (convs=1)",
+          "C:\\Users\\bizra\\Desktop\\control-panel-summary.md (convs=1)"
+        ],
+        "risk": "low",
+        "action": "Create a centralized repository for log files and documentation."
+      },
+      {
+        "claim": "The 'docker-compose.database.yml' file suggests the presence of containerized database services.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "C:\\bizra-genesis-node\\docker-compose.database.yml (convs=1)"
+        ],
+        "risk": "low",
+        "action": "Document and archive Docker configurations for reproducibility."
+      }
+    ],
+    "next_7_days": [
+      "Develop a schema for archiving knowledge assets.",
+      "Integrate the vault with existing systems for seamless data retrieval.",
+      "Review and document all current paths and commands in use."
+    ],
+    "blocked_by": []
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

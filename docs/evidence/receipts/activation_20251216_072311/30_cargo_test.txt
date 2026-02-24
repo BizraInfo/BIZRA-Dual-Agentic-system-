@@ -1,0 +1,109 @@
+﻿cargo : warning: field `base_url` is never read
+At C:\BIZRA-Dual-Agentic-system--main\tools\activate_team.ps1:81 char:55
++   Save-Text (Join-Path $runDir "30_cargo_test.txt") { cargo test }
++                                                       ~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: field `base_url` is never read:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ --> src\bizra_integration.rs:5:5
+  |
+4 | pub struct NODE0Integration {
+  |            ---------------- field in this struct
+5 |     base_url: String,
+  |     ^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `base_url` is never read
+  --> src\bizra_integration.rs:37:5
+   |
+36 | pub struct TaskMasterIntegration {
+   |            --------------------- field in this struct
+37 |     base_url: String,
+   |     ^^^^^^^^
+
+warning: field `base_url` is never read
+  --> src\bizra_integration.rs:62:5
+   |
+61 | pub struct DeepAgentIntegration {
+   |            -------------------- field in this struct
+62 |     base_url: String,
+   |     ^^^^^^^^
+
+warning: field `base_url` is never read
+  --> src\bizra_integration.rs:82:5
+   |
+81 | pub struct BlockGraphIntegration {
+   |            --------------------- field in this struct
+82 |     base_url: String,
+   |     ^^^^^^^^
+
+warning: fields `url` and `transport` are never read
+  --> src\mcp.rs:15:5
+   |
+14 | struct MCPServer {
+   |        --------- fields in this struct
+15 |     url: String,
+   |     ^^^
+16 |     transport: MCPTransport,
+   |     ^^^^^^^^^
+   |
+   = note: `MCPServer` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored 
+during dead code analysis
+
+warning: field `specialty` is never read
+  --> src\pat.rs:16:5
+   |
+13 | struct PATAgent {
+   |        -------- field in this struct
+...
+16 |     specialty: String,
+   |     ^^^^^^^^^
+   |
+   = note: `PATAgent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during 
+dead code analysis
+
+warning: field `methods` is never read
+ --> src\reasoning.rs:8:5
+  |
+7 | pub struct MultiMethodReasoning {
+  |            -------------------- field in this struct
+8 |     methods: Vec<ReasoningMethod>,
+  |     ^^^^^^^
+
+warning: field `specialty` is never read
+  --> src\sat.rs:16:5
+   |
+13 | struct SATAgent {
+   |        -------- field in this struct
+...
+16 |     specialty: String,
+   |     ^^^^^^^^^
+   |
+   = note: `SATAgent` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during 
+dead code analysis
+
+warning: `meta_alpha_dual_agentic` (lib) generated 8 warnings
+warning: `meta_alpha_dual_agentic` (lib test) generated 8 warnings (8 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running unittests src\lib.rs (target\debug\deps\meta_alpha_dual_agentic-6cbd662613996d3c.exe)
+
+running 3 tests
+test http::tests::extract_presented_token_prefers_bearer_then_fallback_header ... ok
+test http::tests::is_authorized_matches_expected_token ... ok
+test http::tests::loopback_origin_predicate_is_reasonable ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src\main.rs (target\debug\deps\meta_alpha_dual_agentic-6820d89077b2a932.exe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests meta_alpha_dual_agentic
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

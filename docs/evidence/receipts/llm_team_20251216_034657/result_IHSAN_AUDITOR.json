@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:47:30.826Z",
+  "role": "IHSAN_AUDITOR",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "IHSAN_AUDITOR",
+    "summary": "The provided evidence context focuses on system operations and top terms related to the project. The task is to produce a high-SNR (Signal-to-Noise Ratio) action plan with insights, next steps for the coming week, and any blockers.",
+    "insights": [
+      {
+        "claim": "Top terms like 'system', 'self', 'bizra', and 'agent' are frequently used in conversations.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "top terms"
+        ],
+        "risk": "low",
+        "action": "Review the usage context of these terms to ensure they align with project goals."
+      },
+      {
+        "claim": "Top paths indicate active use of tools and applications like AutoHotkey, Ollama, and Docker.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "top paths"
+        ],
+        "risk": "low",
+        "action": "Verify the security and compliance of these tools in project operations."
+      },
+      {
+        "claim": "The `docker` command is heavily used, suggesting active containerization practices.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "top commands"
+        ],
+        "risk": "low",
+        "action": "Ensure Docker images and containers are regularly updated and secured."
+      },
+      {
+        "claim": "Files related to BIZRA projects like frontend, synthesis orchestrator, and memory sessions are frequently accessed.",
+        "truth_label": "DERIVED",
+        "evidence": [
+          "top paths"
+        ],
+        "risk": "low",
+        "action": "Monitor the integrity and access of these files for potential security threats."
+      },
+      {
+        "claim": "There is no evidence of critical or high-risk truth labels (VERIFIED, MEASURED) in terms like 'def', 'code', 'analysis'.",
+        "truth_label": "ASSUMED",
+        "evidence": [
+          "top terms",
+          "extra context"
+        ],
+        "risk": "medium",
+        "action": "Investigate further to ensure that the project's code and analysis are robust and secure."
+      }
+    ],
+    "next_7_days": [
+      "Review security logs for any anomalies related to active tools like AutoHotkey, Ollama.",
+      "Update and verify Docker images and containers.",
+      "Perform a thorough review of BIZRA-2024 project files for integrity.",
+      "Assess the usage context of critical terms for alignment with project goals."
+    ],
+    "blocked_by": [
+      "Lack of verified or measured truth labels in key areas (code, analysis)"
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

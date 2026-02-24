@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:50:28.440Z",
+  "role": "PMO",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": true,
+    "extracted": false,
+    "error": null,
+    "raw_excerpt": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": []
+  },
+  "data": {
+    "role": "PMO",
+    "summary": "This action plan is designed to prioritize execution based on the insights derived from the evidence context provided, ensuring high signal-to-noise ratio (SNR) and alignment with Ihsan principles.",
+    "insights": [
+      {
+        "claim": "The `docker` command is frequently used, indicating active container management and integration activities.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "Top commands",
+          "CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Ensure that the containerized applications are well-managed and integrated with other services."
+      },
+      {
+        "claim": "The `git` command is used extensively, suggesting active code development and version control practices.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "Top commands",
+          "CODEBASE_CONTEXT"
+        ],
+        "risk": "low",
+        "action": "Maintain a robust Git workflow with regular commits and pull requests."
+      },
+      {
+        "claim": "The Rust programming language is heavily used, as evidenced by the `.rs` files in the codebase.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "Top extensions",
+          "LOC (heuristic)",
+          "Rust/Cargo"
+        ],
+        "risk": "medium",
+        "action": "Ensure that Rust projects are properly set up with Cargo and follow best practices."
+      },
+      {
+        "claim": "There is a high frequency of `.json` files in the codebase, indicating configuration or data management.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "Top extensions",
+          "LOC (heuristic)"
+        ],
+        "risk": "low",
+        "action": "Review and standardize JSON file usage to ensure consistency."
+      },
+      {
+        "claim": "There is a need for enhanced security measures, as evidenced by the presence of `ps_invoke_expression` and `rust_expect`.",
+        "truth_label": "MEASURED",
+        "evidence": [
+          "Security signals (heuristic)"
+        ],
+        "risk": "medium",
+        "action": "Implement additional security controls to mitigate potential risks."
+      }
+    ],
+    "next_7_days": [
+      "Review and update documentation for the `meta_alpha_dual_agentic` crate.",
+      "Complete integration testing of containerized services.",
+      "Update the architecture blueprint with current insights."
+    ],
+    "blocked_by": [
+      "Pending resolution of security vulnerabilities identified in recent scans."
+    ]
+  },
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

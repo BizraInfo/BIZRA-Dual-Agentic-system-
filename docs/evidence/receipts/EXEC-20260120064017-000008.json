@@ -1,0 +1,19 @@
+{
+  "schema": "bizra-execution-receipt-v3",
+  "receipt_type": "Execution",
+  "hardware_anchor": "fc095b726fdba80dfdc8ad303f22b3e917aae3bf989b2fbeb3ec35872847c8ab",
+  "receipt_id": "EXEC-20260120064017-000008",
+  "request_id": "aaabba7b5bfb445db4b31cc8dd3d1c41",
+  "timestamp": "2026-01-20T06:40:17.081887733Z",
+  "task_summary": "Perform a system check on the BIZRA node.",
+  "sat_validation_ms": 5,
+  "pat_execution_ms": 1,
+  "total_latency_ms": 7,
+  "synergy_score": 0.9216221345122904,
+  "ihsan_score": 0.9271892034448683,
+  "ihsan_threshold": 0.7999999998137355,
+  "pat_agents_count": 8,
+  "sat_approvers_count": 6,
+  "harberger_tax": 0.00009999983012676239,
+  "integrity_hash": "sha256:9ec4253beb614c6cbf8b9692f13da1c66edc70a78fc9b45ea1b5cbc73b450880"
+}

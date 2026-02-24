@@ -1,0 +1,3 @@
+﻿ingestReceiptPath=C:\BIZRA-Dual-Agentic-system--main\docs\\evidence\\receipts\\activation_20251216_074945\41_chat_ingest_receipt.json
+aggregatePath=C:\BIZRA-DATA-LAKE\03_INDEXED\chat_history\20251216_074947\aggregate.json
+aggregateExists=True

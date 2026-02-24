@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-01-10T17:45:00Z",
+  "merkle_root": "7403ad32a1786f1f99df7d368b9c774508ca7bd3c748f0cbcb965192a7ab31b6",
+  "file_count": 18,
+  "leaves": {
+    "cognitive-plane/agents/AGENTS_MANIFESTO.md": "7ab8c466c10e2537c2921bddf49d93cab475fa727f8efed89e8c6362f17dbad0",
+    "cognitive-plane/agents/melae_harness.py": "631d6c83e13490bbb26cbc2349a3cec7e84cecf8cf957b65ea2a39dbea6be0c9",
+    "cognitive-plane/pat/BIZRA_VALUATION_REPORT.md": "d4531570be71e6e1215ffe534d7ff9fdf2b6a4c84dac5de4adb4123258e8bccb",
+    "cognitive-plane/pat/fate_audit_omega.py": "d372dc3277890df821775d78cc6ab88df7a5443b0f31a0d42bfe8b3bcb1671d4",
+    "cognitive-plane/protocols/MELAE_Ralph_Wiggum.md": "1c177275c3a9aef9c7189a6bcf74aee9afd33171cabd4c5ab41656b36f2d0e52",
+    "cognitive-plane/sat/reflex_engine.py": "e121a91f6c46c3ce708f92bfeda9abbb83dc1c96f88989cc5e15a00b4ef8f785",
+    "control-plane/cockpit/glass_cockpit.py": "8672d9be75441484e2efb2aca55e913a73af272c7b833510408470ee158fd824",
+    "control-plane/ignition/ignition_sequence.py": "d836174974532e54d72dddc448f2fb48436318db4889700834524a71caaabcba",
+    "control-plane/manifests/chat_history.manifest.jsonl": "cde942747f8aa9f8b9b06265af6260fbc65e903a6c86136d50cc93c50b2bc745",
+    "control-plane/manifests/configs.manifest.jsonl": "a1b9fea01247fac9270af182129a997195d2764a309572b5a0f5c3e5fbdabbfa",
+    "control-plane/manifests/documents.manifest.jsonl": "37d147a621e70a2f6a03fdddae7a6a37a4201024c5422b65002969d4a2ce13db",
+    "control-plane/manifests/models.manifest.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "control-plane/manifests/repos.manifest.jsonl": "6dc83d986c157a85504dad987e22d84b9fd894656c8a5d0b7ab87e5321e53fb7",
+    "control-plane/receipts/control_plane/control_plane_state.json": "01be9916485eecb02b1857011bba8d59029e304dc5dff8f73bd490b188dd5d4a",
+    "control-plane/receipts/control_plane/extended_categories.json": "1a74f229287da34830ee31150ca7e88be1b14a66fa3eb955e183dfcebf7210ac",
+    "control-plane/receipts/control_plane/hardware_manifest.json": "3f7f03b399bf0c737a021d0738cf98cb10c2f7f6316d3a1be9b07f08ffef4bfa",
+    "control-plane/receipts/control_plane/model_registry.json": "6756035aa65a0882f8171b7e065f85a69cdf3941f46071e1fddf6beac9ae73ca",
+    "data-plane/vault/processed/KNOWLEDGE_MANIFEST.json": "64e2443305ddda3f2fca9364b609a9850e3802a23302d3c0f9f768029eafebf9"
+  }
+}

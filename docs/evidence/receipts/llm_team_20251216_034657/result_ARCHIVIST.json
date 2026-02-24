@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "truth_label": "DERIVED",
+  "generated_at": "2025-12-16T03:47:03.936Z",
+  "role": "ARCHIVIST",
+  "model_target": "qwen2.5:7b",
+  "ollama_host": "http://127.0.0.1:11434",
+  "parse": {
+    "ok": false,
+    "extracted": false,
+    "error": "json_parse_failed",
+    "raw_excerpt": "{\n  \"role\": \"ARCHIVIST\",\n  \"summary\": \"The task involves organizing knowledge assets into a vault and index workflow, proposing durable schemas and retrieval primitives.\",\n  \"insights\": [\n    {\n      \"claim\": \"Top terms related to system and business operations were identified in the chat history.\",\n      \"truth_label\": \"VERIFIED\",\n      \"evidence\": [\"system: total=15522, convs=542\", \"bizra: total=8999, convs=307\"],\n      \"risk\": \"low\",\n      \"action\": \"Review and prioritize these terms for indexing.\"\n    },\n    {\n      \"claim\": \"Paths related to AutoHotkey, Bizra Genesis Node, and various project directories were frequently mentioned.\",\n      \"truth_label\": \"VERIFIED\",\n      \"evidence\": [\"C:\\\\Program Files\\\\AutoHotkey\\\\v2\\\\AutoHotkey64.exe\", \"C:\\\\bizra-genesis-node\"],\n      \"risk\": \"low\",\n      \"action\": \"Map these paths for specific project retrieval.\"\n    },\n    {\n      \"claim\": \"Commands like docker, git, npm were heavily used in the context of development and automation.\",\n      \"truth_label\": \"VERIFIED\",\n      \"evidence\": [\"docker (convs=164)\", \"git (convs=140)\", \"npm (convs=121)\"],\n      \"risk\": \"low\",\n      \"action\": \"Integrate these commands into the automation scripts for consistent project management.\"\n    },\n    {\n      \"claim\": \"The summary of a recent run was measured with specific details provided.\",\n      \"truth_label\": \"MEASURED\",\n      \"evidence\": [\"run_id\": \"20251216_034656\", \"out_dir\": \"C:\\\\BIZRA-DATA-LAKE\\\\03_INDEXED\\\\windows_crash\\\\20251216_034656\", \"files_indexed\": 187, \"members_extracted\": 19],\n      \"risk\": \"low\",\n      \"action\": \"Use this run summary to refine the indexing process.\"\n    }\n  ],\n  \"next_7_days\": [\n    \"Organize and archive the identified terms and paths into a structured knowledge vault.\",\n    \"Develop durable schemas for efficient data retrieval and analysis.\",\n    \"Propose and implement retrieval primitives that can be used across different projects.\"\n  ],\n  \"blocked_by\": []\n}"
+  },
+  "validation": {
+    "ok": false,
+    "errors": []
+  },
+  "data": null,
+  "raw": {
+    "has_error": false,
+    "error": null
+  }
+}

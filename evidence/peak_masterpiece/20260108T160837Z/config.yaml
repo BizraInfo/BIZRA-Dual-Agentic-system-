@@ -1,0 +1,14 @@
+# config/production.yaml
+resonance:
+  pruning_threshold: 0.3
+  amplification_factor: 1.2
+  autonomous_mode: true
+  optimization_interval_sec: 60
+  max_mesh_nodes: 1000
+
+tpm:
+  enabled: true
+  pcr_selection: [12, 13, 14, 15, 16]
+
+wasm:
+  memory_limit: 1073741824 # 1GiB

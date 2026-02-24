@@ -1,0 +1,94 @@
+﻿{
+    "repo_root":  "C:\\BIZRA-Dual-Agentic-system--main",
+    "generated_at":  "2025-12-16T07:47:30.8701754+04:00",
+    "files":  [
+                  {
+                      "sha256":  "9bd0eb12c9004288d61b18cf859ca32ed21085de76b305ac203de7182f9da730",
+                      "name":  "00_env.txt",
+                      "bytes":  2757
+                  },
+                  {
+                      "sha256":  "d617bc268020914a1b7ff9f2554198dc05ba461106b87f2f9cf41ed1e32a8b6b",
+                      "name":  "01_params.txt",
+                      "bytes":  103
+                  },
+                  {
+                      "sha256":  "c511f307d5b460865b2cbff706140f8bfecabb8717ba55dc26d7258778314d87",
+                      "name":  "10_git_status.txt",
+                      "bytes":  1051
+                  },
+                  {
+                      "sha256":  "73b2e4099cfef2c1686ed722b3ad9085c45761fe2e8996a4a3168649958e6a31",
+                      "name":  "11_git_branch.txt",
+                      "bytes":  9
+                  },
+                  {
+                      "sha256":  "50d38dfbf253b2a8222238c043681830a4e1be70376f23e3a5821278a5d702ae",
+                      "name":  "12_git_head.txt",
+                      "bytes":  45
+                  },
+                  {
+                      "sha256":  "f7e351ea27705765ccd64b3ee35b01ff9bdbc3c6a0da770b4ce0f17945586f9f",
+                      "name":  "20_secret_scan_files.txt",
+                      "bytes":  471
+                  },
+                  {
+                      "sha256":  "4eb2488a158f52017f49153df98b81b0f576830ea747b22a5e878e5dd4c790c0",
+                      "name":  "21_secret_scan_snippet.txt",
+                      "bytes":  7482
+                  },
+                  {
+                      "sha256":  "c66ff84348561b282193d1a4b4210756fe49ce968a589b3e91701686d21d205a",
+                      "name":  "30_cargo_test.txt",
+                      "bytes":  3720
+                  },
+                  {
+                      "sha256":  "8f956a64dc11f140ffc4bb37059b155ec6adcf7a6a0510b16cd5b98e3d3c0280",
+                      "name":  "35_codebase_inventory_run.txt",
+                      "bytes":  2093
+                  },
+                  {
+                      "sha256":  "ecfd560c4734a56cac1959762f6823a1d2eb946655284e576b85171aae5a52df",
+                      "name":  "40_chat_aggregate_path.txt",
+                      "bytes":  78
+                  },
+                  {
+                      "sha256":  "bbfc13a4cf8142d3f771841e641ca3dc84b447d48b81bfe2d70ef4e6a0a47eef",
+                      "name":  "40_chat_ingest_summary.json",
+                      "bytes":  374
+                  },
+                  {
+                      "sha256":  "8777ba29069dd974f12f22e8c6119826aa7c78eb4878b9c110eab9770c125a9d",
+                      "name":  "41_chat_ingest_receipt.json",
+                      "bytes":  2515
+                  },
+                  {
+                      "sha256":  "7bbc5ebedfb9b38bd54380daff88f7fcc4007dbbf7f142619f0aca298fb51988",
+                      "name":  "45_windows_crash_ingest_summary.json",
+                      "bytes":  283
+                  },
+                  {
+                      "sha256":  "8edd057341e2a22e743b07f0c7f34c2d9882104122d39f259aa81c110d6aac1b",
+                      "name":  "46_windows_crash_ingest_receipt.json",
+                      "bytes":  895
+                  },
+                  {
+                      "sha256":  "b58c814fc40d136d1d2dac26b368eb07d9b6633024e8401d648bad7dcd5680df",
+                      "name":  "49_llm_team_preflight.txt",
+                      "bytes":  249
+                  },
+                  {
+                      "sha256":  "eaef5e0a9814e4e1d6455be1f3619e41c813c0c60e20c8c71cf1d0845464a6d2",
+                      "name":  "50_llm_team_out_dir.txt",
+                      "bytes":  87
+                  },
+                  {
+                      "sha256":  "9ce97096b0d93b6517371c32a8229e35df9f035f1548960cb249d5553f36d1aa",
+                      "name":  "51_llm_team_receipt.json",
+                      "bytes":  527
+                  }
+              ],
+    "truth_label":  "MEASURED",
+    "run_dir":  "C:\\BIZRA-Dual-Agentic-system--main\\docs\\\\evidence\\\\receipts\\\\activation_20251216_074647",
+    "run_type":  "activate_team"
+}

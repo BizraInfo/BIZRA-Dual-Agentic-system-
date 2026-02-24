@@ -1,0 +1,7 @@
+{
+    "id": "FED_ENROLL_SIM",
+    "description": "Verifies that a new node can generate an ID and enroll in the Federation.",
+    "command": "python3 /root/bizra-genesis/federation/governance/enrollment_officer.py",
+    "expected_exit_code": 0,
+    "timeout": 5
+}

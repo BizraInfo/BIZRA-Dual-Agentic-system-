@@ -1,0 +1,90 @@
+{
+  "intent": {
+    "domain": "Node-0 Sovereign Integrity",
+    "objective": "Verify the legal-technical binding of Node-0 to the Genesis manifest",
+    "stakes": "High",
+    "constraints": [
+      "Must be verifiable offline"
+    ],
+    "success_criteria": [
+      "Binary commit status reached"
+    ],
+    "forbidden_moves": [
+      "Hallucinate non-existent files"
+    ]
+  },
+  "lenses": [
+    "Systems Architect",
+    "Formal Theorist",
+    "Ethicist (Ihsān)"
+  ],
+  "evidence": [],
+  "paths": {
+    "i_path": [
+      "PATH[I]: Standard BIZRA kernel initialization",
+      "PATH[I]: Routine dependency health check"
+    ],
+    "c_path": [
+      "PATH[C]: Assume total infrastructure failure",
+      "PATH[C]: Root identity compromise simulation",
+      "PATH[C]: Verify truth when all deps are compromised"
+    ],
+    "o_path": [
+      "PATH[O]: Analogical: System integrity as biological immune response",
+      "PATH[O]: Micro-segmentation as cellular encapsulation"
+    ]
+  },
+  "symbolic": {
+    "definitions": {},
+    "invariants": [],
+    "rules": [],
+    "proof_sketch": {
+      "lemmas": [],
+      "theorem": "",
+      "trace": []
+    },
+    "program_sketch": {
+      "signatures": [],
+      "preconditions": [],
+      "postconditions": [],
+      "constraints": []
+    }
+  },
+  "validation": {
+    "correctness": {
+      "passed": true,
+      "notes": []
+    },
+    "consistency": {
+      "passed": true,
+      "notes": []
+    },
+    "completeness": {
+      "passed": true,
+      "notes": []
+    },
+    "causality": {
+      "passed": true,
+      "notes": []
+    },
+    "ethics": {
+      "passed": true,
+      "notes": []
+    },
+    "evidence": {
+      "passed": true,
+      "notes": []
+    },
+    "evidence_coverage": 1.0,
+    "contradiction_pressure": 0.0,
+    "compression_ratio": 0.8541666666666666,
+    "confidence_score": 1.0
+  },
+  "conclusion": {
+    "confidence_score": 1.0,
+    "risks": [],
+    "next_experiments": [
+      "Refine Symbolic Harness with real-world definitions"
+    ]
+  }
+}

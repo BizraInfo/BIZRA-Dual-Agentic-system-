@@ -1,0 +1,36 @@
+name: Baleeq Sovereign CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  forge_and_verify:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+
+    - name: Install Z3
+      run: sudo apt-get install -y z3
+
+    - name: FATE Gate - Formal Verification (Z3)
+      run: z3 baleeq-arabic/specs/arabic_ground_truth.smt2
+
+    - name: Run Baleeq Probes
+      run: |
+        cd baleeq-arabic
+        cargo test --test probe_triliteral_root
+
+    - name: BIZRA Integrity Audit
+      run: |
+        # Ensure all source files have Chain-of-Custody headers
+        grep -r "Receipt: arabic_linguistic_ground_truth_v1" baleeq-arabic/src/

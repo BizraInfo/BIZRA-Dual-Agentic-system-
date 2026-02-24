@@ -1,0 +1,1 @@
+class WasmSandbox: pass

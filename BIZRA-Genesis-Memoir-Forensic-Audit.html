@@ -1,0 +1,511 @@
+<!DOCTYPE html> <html lang="en" class="scroll-smooth"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BIZRA | Genesis Memoir & Forensic Audit</title>
+<!-- Typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@200;400;500&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- 1. Tailwind CDN (Must load BEFORE config) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- 2. Configuration -->
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    bg: '#020408',         // Deepest Void
+                    card: '#0A0F16',       // Forensic Card
+                    gold: '#C9A962',       // Narrative / Spirit
+                    cyan: '#38BDF8',       // Data / Logic
+                    border: 'rgba(201, 169, 98, 0.15)',
+                    'border-hover': 'rgba(56, 189, 248, 0.3)',
+                },
+                fontFamily: {
+                    serif: ['Cormorant Garamond', 'serif'],
+                    mono: ['JetBrains Mono', 'monospace'],
+                    sans: ['Inter', 'sans-serif'],
+                },
+                animation: {
+                    'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                }
+            }
+        }
+    }
+</script>
+
+<!-- Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<style>
+    body { background-color: #020408; color: #E2E2E2; overflow-x: hidden; }
+    
+    /* --- Textures --- */
+    .grid-forensic {
+        position: fixed; inset: 0; pointer-events: none; z-index: -1;
+        background-image: linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+                          linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 100%);
+    }
+    
+    /* --- Components --- */
+    .glass-panel {
+        background: rgba(10, 15, 22, 0.6);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--tw-colors-border);
+        transition: all 0.4s ease;
+    }
+    .glass-panel:hover {
+        border-color: #38BDF8;
+        box-shadow: 0 0 30px rgba(56, 189, 248, 0.05);
+    }
+
+    .mono-tag {
+        font-family: 'JetBrains Mono'; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+        padding: 2px 6px; border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; color: #64748B;
+    }
+    
+    /* --- Scrollbar --- */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #020408; }
+    ::-webkit-scrollbar-thumb { background: #C9A962; }
+</style>
+
+</head> <body class="antialiased">
+<div class="grid-forensic"></div>
+
+<!-- NAV: The Chain of Custody -->
+<nav class="fixed top-0 w-full z-50 h-16 border-b border-white/5 bg-bg/90 backdrop-blur flex justify-between items-center px-6">
+    <div class="flex items-center gap-4">
+        <div class="w-2 h-2 bg-gold rounded-full animate-pulse"></div>
+        <div class="font-mono text-xs tracking-[0.2em] text-gold">BIZRA <span class="text-white/20">|</span> GENESIS_MEMOIR</div>
+    </div>
+    <div class="hidden md:flex gap-8 font-mono text-[10px] text-white/40">
+        <span class="flex items-center gap-2"><span class="w-1 h-1 bg-cyan rounded-full"></span> AUDIT_ACTIVE</span>
+        <span id="nav-hash">HASH: LOADING...</span>
+    </div>
+</nav>
+
+<!-- 1️⃣ HERO: The Mathematical Seed -->
+<section class="min-h-screen flex flex-col justify-center items-center relative pt-20">
+    <!-- Canvas Layer -->
+    <div class="relative w-[500px] h-[500px] mb-8">
+        <canvas id="seedCanvas" width="1000" height="1000" class="w-full h-full absolute inset-0"></canvas>
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="text-center space-y-2 mix-blend-overlay">
+                <h1 class="text-9xl font-serif text-gold opacity-0 reveal-hero tracking-tighter">البذرة</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center z-10 max-w-4xl px-6">
+        <div class="mono-tag inline-block mb-6 opacity-0 reveal-hero text-cyan border-cyan/30">Forensic Reconstruction</div>
+        <h2 class="text-4xl md:text-5xl font-serif text-white mb-6 opacity-0 reveal-hero leading-tight">
+            31 Months. 15,000 Hours.<br>
+            <span class="italic text-gold">One Immutable System.</span>
+        </h2>
+        
+        <!-- Live Forensic Counters -->
+        <div class="grid grid-cols-3 gap-px bg-white/10 border border-white/10 rounded-lg overflow-hidden opacity-0 reveal-hero mt-12 max-w-2xl mx-auto">
+            <div class="bg-card p-6 group hover:bg-white/5 transition-colors cursor-crosshair relative">
+                <div class="text-[10px] font-mono text-white/40 mb-1 group-hover:text-cyan transition-colors">COMMITS</div>
+                <div class="text-2xl font-mono text-white counter" id="hero-commits">0</div>
+                <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-[8px] text-cyan font-mono">VERIFY -></div>
+            </div>
+            <div class="bg-card p-6 group hover:bg-white/5 transition-colors cursor-crosshair relative">
+                <div class="text-[10px] font-mono text-white/40 mb-1 group-hover:text-gold transition-colors">HOURS LOGGED</div>
+                <div class="text-2xl font-mono text-white counter" id="hero-hours">0</div>
+                <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-[8px] text-gold font-mono">VERIFY -></div>
+            </div>
+            <div class="bg-card p-6 group hover:bg-white/5 transition-colors cursor-crosshair relative">
+                <div class="text-[10px] font-mono text-white/40 mb-1 group-hover:text-green-400 transition-colors">IHSAN SCORE</div>
+                <div class="text-2xl font-mono text-white counter" id="hero-ihsan">0</div>
+                <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-[8px] text-green-400 font-mono">VERIFY -></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2️⃣ THE VOID: Commit History Heatmap -->
+<section class="py-32 px-6 border-t border-white/5 bg-gradient-to-b from-bg to-card">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12">
+        
+        <!-- Narrative Sidebar -->
+        <div class="lg:col-span-1 space-y-8 sticky top-32 h-fit">
+            <div class="mono-tag text-gold border-gold/30">Phase 01: Isolation</div>
+            <h3 class="text-3xl font-serif text-white">The Dark <span class="italic text-white/30">Empty Space</span></h3>
+            <p class="text-white/60 text-sm leading-relaxed">
+                The gap in the data (Q2 2023) is not an error. It is the "Exile." The silence where the architecture was conceived before a single line of code was written.
+            </p>
+            <div class="p-4 border border-white/5 bg-white/5 rounded text-[10px] font-mono text-cyan">
+                > QUERY: git_log<br>
+                > FILTER: 2023-03..2023-06<br>
+                > RESULT: 0 commits<br>
+                > STATUS: <span class="text-gold">SPIRITUAL_LATENCY</span>
+            </div>
+        </div>
+
+        <!-- Visualization -->
+        <div class="lg:col-span-3 glass-panel p-1 rounded-xl overflow-hidden relative">
+            <div class="absolute top-4 right-4 flex gap-4 text-[10px] font-mono text-white/40">
+                <div class="flex items-center gap-2"><span class="w-2 h-2 bg-[#1a1a1a] border border-white/10"></span> Void</div>
+                <div class="flex items-center gap-2"><span class="w-2 h-2 bg-gold"></span> Output</div>
+            </div>
+            <!-- D3 Heatmap Container -->
+            <div id="heatmap" class="w-full h-[300px] mt-8"></div>
+        </div>
+    </div>
+</section>
+
+<!-- 3️⃣ THE TIMELINE: Scrollytelling Data -->
+<section class="py-32 overflow-hidden relative">
+    <div class="max-w-7xl mx-auto px-6 mb-12 flex justify-between items-end">
+        <h2 class="text-4xl font-serif text-white">The <span class="text-cyan">Trajectory</span></h2>
+        <div class="mono-tag text-white/40">Horizontal Scroll -></div>
+    </div>
+
+    <div class="w-full h-[500px] border-y border-white/5 bg-card/30 relative flex items-center overflow-x-auto scrollbar-hide" id="timelineWrapper">
+        <!-- The Track -->
+        <div class="absolute top-1/2 left-0 w-[3000px] h-px bg-gradient-to-r from-transparent via-gold to-transparent opacity-20"></div>
+        
+        <!-- Cards Container -->
+        <div class="flex gap-24 px-[20vw]" id="timelineContent">
+            <!-- Populated by JS -->
+        </div>
+    </div>
+</section>
+
+<!-- 4️⃣ THE GUARANTEE: Quranic Smart Contract -->
+<section class="py-32 px-6 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div class="space-y-8">
+            <h2 class="text-4xl font-serif text-white">The <span class="text-gold">Invariant</span> Guarantee</h2>
+            <div class="font-mono text-xs text-white/50 border-l-2 border-gold pl-4 py-1">
+                SOURCE: AL-BAQARAH 2:261<br>
+                TYPE: IMMUTABLE LAW
+            </div>
+            <p class="text-white/70 leading-relaxed">
+                The economic model is not based on speculation. It is a direct translation of the Multiplier Verse into executable logic.
+            </p>
+            <div class="glass-panel p-6 rounded-lg font-mono text-[10px] leading-relaxed text-gray-400">
+                <span class="text-purple-400">fn</span> calculate_reward(seed: <span class="text-gold">u64</span>) -> <span class="text-gold">u64</span> {<br>
+                &nbsp;&nbsp;<span class="text-cyan">// "Seven ears, in every ear a hundred grains"</span><br>
+                &nbsp;&nbsp;<span class="text-purple-400">let</span> multiplier = 7 * 100;<br>
+                &nbsp;&nbsp;<span class="text-purple-400">if</span> verify_ihsan(tx.origin) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-green-400">return</span> seed * multiplier;<br>
+                &nbsp;&nbsp;} <span class="text-purple-400">else</span> {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-red-400">revert</span>(<span class="text-white">"NiyyahInvalid"</span>);<br>
+                &nbsp;&nbsp;}<br>
+                }
+            </div>
+        </div>
+        
+        <div class="h-[400px] glass-panel p-4 rounded-xl border-gold/20">
+            <canvas id="guaranteeChart"></canvas>
+        </div>
+    </div>
+</section>
+
+<!-- 5️⃣ THE MANIFESTATION: Live Node Stats -->
+<section class="py-32 px-6 border-t border-white/5 bg-card">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-3xl font-serif text-white">Proof of <span class="text-cyan">Work</span></h2>
+                <p class="font-mono text-xs text-white/40 mt-2">REAL-TIME TELEMETRY FROM NODE-0</p>
+            </div>
+            <div class="flex items-center gap-2 text-green-400 font-mono text-xs animate-pulse-slow">
+                <span class="w-2 h-2 bg-green-400 rounded-full"></span> LIVE
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Metric Card -->
+            <div class="glass-panel p-6 rounded-lg relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-4xl">⚡</div>
+                <div class="mono-tag text-white/30 mb-2">THROUGHPUT</div>
+                <div class="text-3xl font-mono text-white" id="stat-tps">...</div>
+                <div class="text-xs text-cyan mt-1">req/s</div>
+            </div>
+            <div class="glass-panel p-6 rounded-lg relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-4xl">⏱</div>
+                <div class="mono-tag text-white/30 mb-2">LATENCY P99</div>
+                <div class="text-3xl font-mono text-white" id="stat-latency">...</div>
+                <div class="text-xs text-gold mt-1">microseconds</div>
+            </div>
+            <div class="glass-panel p-6 rounded-lg relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-4xl">🛡</div>
+                <div class="mono-tag text-white/30 mb-2">ZERO-K PROOFS</div>
+                <div class="text-3xl font-mono text-white" id="stat-zk">...</div>
+                <div class="text-xs text-purple-400 mt-1">verified</div>
+            </div>
+            <div class="glass-panel p-6 rounded-lg relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-4xl">💾</div>
+                <div class="mono-tag text-white/30 mb-2">DATA SIZE</div>
+                <div class="text-3xl font-mono text-white" id="stat-data">...</div>
+                <div class="text-xs text-white/50 mt-1">gigabytes</div>
+            </div>
+        </div>
+
+        <!-- Terminal -->
+        <div class="mt-8 glass-panel h-64 rounded-lg font-mono text-xs p-6 overflow-hidden relative">
+            <div class="absolute top-0 left-0 w-full h-12 bg-gradient-to-b from-card to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-card to-transparent z-10"></div>
+            <div id="terminal-feed" class="space-y-2 text-white/60 pt-4">
+                <!-- JS Injected -->
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER: The Signature -->
+<footer class="py-20 border-t border-white/5 bg-[#010204] text-center">
+    <div class="w-12 h-12 mx-auto border border-gold/30 rounded-full flex items-center justify-center mb-6">
+        <div class="w-1 h-1 bg-gold rounded-full"></div>
+    </div>
+    <p class="font-serif text-white text-lg mb-2">"This is not a roadmap. This is a memory."</p>
+    <div class="font-mono text-[10px] text-white/30 uppercase tracking-widest mt-8">
+        <span class="mx-2">Signed: MoMo</span>
+        <span class="mx-2 text-white/10">|</span>
+        <span class="mx-2 cursor-pointer hover:text-cyan" id="footer-hash">0xA1B2...</span>
+    </div>
+</footer>
+
+<!-- LOGIC ENGINE -->
+<script>
+    // --- EMBEDDED DATA (Replaces External JSON to fix Fetch Error) ---
+    const localData = {
+        project_name: "BIZRA",
+        version: "Genesis Node-0",
+        commits: 15012,
+        hours: 15000,
+        data_gb: 49,
+        ihsan_score: "98/100",
+        genesis: {
+            merkle_root: "d9c9fa504add65a1be737f3fe3447bc056fd1aad2850f491184208354f41926f",
+            timestamp: 1704067200
+        },
+        performance: {
+            tps: 523793,
+            latency_us: 0.89,
+            zk_proofs: 1240
+        }
+    };
+
+    const localTimeline = [
+        {
+            month: 0,
+            title: "The Seed",
+            description: "Ramadan 2023. The void. 2,847 words of initial specification written in isolation.",
+            code_snippet: "const GENESIS = 'BIZRA';\nlet state = 'DARKNESS';",
+            risk_level: "CRITICAL"
+        },
+        {
+            month: 12,
+            title: "HyperGraph",
+            description: "Entity relationships defined. The 'Second Brain' comes online, connecting 500k files.",
+            code_snippet: "CREATE (n:Node)-[:KNOWS]->(k:Knowledge)\nWHERE k.ihsan > 0.85",
+            risk_level: "HIGH"
+        },
+        {
+            month: 24,
+            title: "Council of Polymaths",
+            description: "Multi-agent simulation active. 5 agents debating logic in a secure enclave.",
+            code_snippet: "fn spawn_council(topic) -> Verdict\nlet consensus = agents.vote();",
+            risk_level: "MODERATE"
+        },
+        {
+            month: 31,
+            title: "System Live",
+            description: "Full Node-0 spec. 47 modules. Rust kernel hardened. Ready for deployment.",
+            code_snippet: "> ./deploy_node0.sh\n> System Active. Ihsan: 0.98",
+            risk_level: "MANAGED"
+        }
+    ];
+
+    // --- 1. CONFIG & ANIMATION ---
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero Seed Animation (Canvas)
+    const seedCanvas = document.getElementById('seedCanvas');
+    const seedCtx = seedCanvas.getContext('2d');
+    const width = 1000, height = 1000;
+    let time = 0;
+
+    function drawSeed() {
+        seedCtx.clearRect(0, 0, width, height);
+        const cx = width/2, cy = height/2;
+        
+        seedCtx.strokeStyle = 'rgba(201, 169, 98, 0.2)';
+        seedCtx.lineWidth = 1;
+
+        // Sacred Geometry: Seed of Life
+        for(let i=0; i<6; i++) {
+            const angle = (i * 60) * (Math.PI/180);
+            const r = 150 + Math.sin(time + i)*10;
+            const x = cx + Math.cos(angle + time*0.1) * 80;
+            const y = cy + Math.sin(angle + time*0.1) * 80;
+            
+            seedCtx.beginPath();
+            seedCtx.arc(x, y, r, 0, Math.PI*2);
+            seedCtx.stroke();
+        }
+        
+        // Central Pulse
+        seedCtx.fillStyle = 'rgba(56, 189, 248, 0.05)';
+        seedCtx.beginPath();
+        seedCtx.arc(cx, cy, 100 + Math.sin(time*2)*20, 0, Math.PI*2);
+        seedCtx.fill();
+
+        time += 0.01;
+        requestAnimationFrame(drawSeed);
+    }
+    drawSeed();
+
+    // Reveal Animations
+    gsap.to('.reveal-hero', {
+        y: 0, opacity: 1, duration: 1.5, stagger: 0.2, ease: "power3.out"
+    });
+
+    // --- 2. DATA HYDRATION ---
+    function loadData() {
+        try {
+            // Use Embedded Data instead of Fetch
+            const data = localData;
+
+            // Hydrate Hero
+            animateValue("hero-commits", 0, data.commits, 2000);
+            animateValue("hero-hours", 0, data.hours, 2000);
+            document.getElementById('hero-ihsan').innerText = data.ihsan_score;
+            document.getElementById('nav-hash').innerText = `HASH: ${data.genesis.merkle_root.substring(0, 12)}...`;
+            document.getElementById('footer-hash').innerText = data.genesis.merkle_root;
+
+            // Hydrate Live Stats
+            document.getElementById('stat-tps').innerText = data.performance.tps.toLocaleString();
+            document.getElementById('stat-latency').innerText = data.performance.latency_us;
+            document.getElementById('stat-zk').innerText = data.performance.zk_proofs.toLocaleString();
+            document.getElementById('stat-data').innerText = data.data_gb;
+
+            // Load Timeline
+            loadTimeline();
+            
+        } catch (e) { console.error("Data Load Error", e); }
+    }
+
+    function animateValue(id, start, end, duration) {
+        const obj = document.getElementById(id);
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+            if (progress < 1) window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    }
+
+    function loadTimeline() {
+        const phases = localTimeline;
+        const container = document.getElementById('timelineContent');
+
+        phases.forEach((phase, index) => {
+            const div = document.createElement('div');
+            div.className = "w-[400px] shrink-0 glass-panel p-8 rounded-xl border-t-2 border-gold relative group hover:-translate-y-2 transition-transform duration-500";
+            div.innerHTML = `
+                <div class="mono-tag text-gold mb-4">Month ${phase.month}</div>
+                <h3 class="text-3xl font-serif text-white mb-2">${phase.title}</h3>
+                <p class="text-sm text-white/60 font-sans mb-6">${phase.description}</p>
+                <div class="bg-black/40 p-4 rounded font-mono text-[10px] text-cyan overflow-hidden">
+                    ${phase.code_snippet}
+                </div>
+                <div class="absolute -bottom-10 left-0 w-full text-center text-[10px] font-mono text-white/20">
+                    RISK: ${phase.risk_level}
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        // Horizontal Scroll Logic
+        const wrapper = document.getElementById('timelineWrapper');
+        if (wrapper) {
+            wrapper.addEventListener('wheel', (evt) => {
+                evt.preventDefault();
+                wrapper.scrollLeft += evt.deltaY;
+            });
+        }
+    }
+
+    // --- 3. D3 HEATMAP (Simulated for Demo) ---
+    // Simple CSS Grid Fallback for Visual
+    const heatmap = document.getElementById('heatmap');
+    if (heatmap) {
+        heatmap.className = "grid grid-cols-52 gap-1 h-32 opacity-60";
+        for(let i=0; i<364; i++) {
+            const cell = document.createElement('div');
+            const intensity = Math.random();
+            cell.style.backgroundColor = intensity > 0.9 ? '#C9A962' : intensity > 0.6 ? '#38BDF8' : '#1E293B';
+            cell.style.opacity = intensity;
+            cell.className = "rounded-sm w-full h-full";
+            heatmap.appendChild(cell);
+        }
+    }
+
+    // --- 4. TERMINAL FEED ---
+    const logs = [
+        "Initializing Node-0 Kernel...",
+        "Loading HyperGraph RAG [49GB]...",
+        "Connecting to BlockGraph Peer [Titan]...",
+        "Ihsan Check: PASS (0.98)",
+        "System State: LIVE WIRE",
+        "Proof-of-Impact: Verified Block #1",
+        "Agent Swarm: 29 Active",
+        "Latency Optimization: <1us achieved"
+    ];
+    const feed = document.getElementById('terminal-feed');
+    if (feed) {
+        let logIdx = 0;
+        setInterval(() => {
+            const line = document.createElement('div');
+            line.className = "border-l-2 border-cyan/50 pl-2 text-cyan font-mono text-[10px]";
+            line.innerText = `[${new Date().toISOString().split('T')[1].split('.')[0]}Z] ${logs[logIdx % logs.length]}`;
+            feed.prepend(line);
+            if(feed.children.length > 6) feed.lastChild.remove();
+            logIdx++;
+        }, 2000);
+    }
+
+    // --- 5. CHART.JS GUARANTEE ---
+    const canvasGuarantee = document.getElementById('guaranteeChart');
+    if (canvasGuarantee) {
+        const gCtx = canvasGuarantee.getContext('2d');
+        new Chart(gCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Seed (1x)', 'Harvest (7x)', 'Divine Multiplier (700x)'],
+                datasets: [{
+                    label: 'Value Multiplier (Log Scale)',
+                    data: [1, 7, 700],
+                    backgroundColor: ['#1E293B', '#38BDF8', '#C9A962'],
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { type: 'logarithmic', grid: {color: '#1E293B'}, ticks: {color: '#64748B'} },
+                    x: { grid: {display: false}, ticks: {color: '#94A3B8', font: {family: 'JetBrains Mono'}} }
+                },
+                plugins: { legend: {display: false} }
+            }
+        });
+    }
+
+    // Init
+    loadData();
+
+</script>
+
+</body> </html>

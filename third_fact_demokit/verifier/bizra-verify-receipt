@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+DIR="$(dirname "$(realpath "$0")")"
+if [[ -x "$DIR/target/release/bizra-verify-receipt" ]]; then
+    exec "$DIR/target/release/bizra-verify-receipt" "$@"
+else
+    # Fallback to cargo run for dev convenience
+    exec cargo run --quiet --manifest-path "$DIR/Cargo.toml" -- "$@"
+fi

@@ -1,0 +1,82 @@
+# bizra-playernode/manifests/pat_manifest.yaml
+# Personal Agentic Team (PAT) - The Council of Seven
+# Topology: Manifold-Constrained Hyper-Connected Graph (GoT)
+
+meta:
+  version: "1.0.0"
+  topology: "star_mesh"
+  snr_target: 0.99
+  ihsan_floor: 0.95
+
+agents:
+  - name: PRIME
+    role: Orchestrator
+    archetype: Executor
+    budget:
+      cpu_share: 0.20
+      ram_mb: 512
+      token_limit: 4096
+    permissions: ["ROOT_DECISION", "SAT_COMMS"]
+    
+  - name: GNOSTIC
+    role: Memory/Context
+    archetype: Sage
+    budget:
+      cpu_share: 0.15
+      ram_mb: 1024
+      token_limit: 8192
+    permissions: ["MEM_READ_ALL", "MEM_WRITE_FOLD"]
+
+  - name: TEKNE
+    role: Tool User/Engineer
+    archetype: Builder
+    budget:
+      cpu_share: 0.25
+      ram_mb: 1024
+      token_limit: 16384
+    permissions: ["EXEC_SANDBOX", "NETWORK_OUT"]
+
+  - name: LOGOS
+    role: Communicator/Linguist
+    archetype: Messenger
+    budget:
+      cpu_share: 0.10
+      ram_mb: 256
+      token_limit: 2048
+    permissions: ["UI_RENDER", "USER_INPUT"]
+
+  - name: AESTHETE
+    role: Critic/Safety
+    archetype: Guardian
+    budget:
+      cpu_share: 0.10
+      ram_mb: 256
+      token_limit: 2048
+    permissions: ["VETO_POWER", "FATE_QUERY"]
+
+  - name: AXON
+    role: Network/Federation
+    archetype: Diplomat
+    budget:
+      cpu_share: 0.10
+      ram_mb: 512
+      token_limit: 4096
+    permissions: ["P2P_CONNECT", "RESOURCE_BARTER"]
+
+  - name: KAIROS
+    role: Scheduler/Strategist
+    archetype: Seer
+    budget:
+      cpu_share: 0.10
+      ram_mb: 256
+      token_limit: 4096
+    permissions: ["CLOCK_READ", "SCHEDULE_TASK"]
+
+connections:
+  # The Star: PRIME connects to everyone
+  - { from: PRIME, to: [GNOSTIC, TEKNE, LOGOS, AESTHETE, AXON, KAIROS], type: "DIRECT_COMMAND" }
+  # The Mesh: Functional links
+  - { from: TEKNE, to: AESTHETE, type: "SAFETY_CHECK" }
+  - { from: LOGOS, to: GNOSTIC, type: "CONTEXT_RETRIEVAL" }
+  - { from: AXON, to: PRIME, type: "FEDERATION_UPDATE" }
+  - { from: KAIROS, to: PRIME, type: "PRIORITY_INTERRUPT" }

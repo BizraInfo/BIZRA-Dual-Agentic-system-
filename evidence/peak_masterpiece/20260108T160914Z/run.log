@@ -1,0 +1,21 @@
+2026-01-08 20:09:14,522 - BIZRAv7 - INFO - 🧬 Reproducibility locked with seed: 42
+2026-01-08 20:09:14,522 - BIZRAv7 - INFO - 🚀 Initializing BIZRA v7.0 with Resonance Mesh...
+2026-01-08 20:09:14,522 - BIZRAv7 - INFO - ✅ Resonance Mesh initialized
+2026-01-08 20:09:14,522 - BIZRAv7 - INFO - 🔄 Starting autonomous resonance optimization...
+2026-01-08 20:09:14,522 - BIZRAv7 - INFO - 🎭 Running Resonance Mesh demonstration...
+Traceback (most recent call last):
+  File "/root/bizra-genesis/bizra_production.py", line 277, in <module>
+    asyncio.run(orchestrator.run_resonance_demo())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/root/bizra-genesis/bizra_production.py", line 232, in run_resonance_demo
+    embedding=np.random.randn(768).tolist(),
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'tolist'

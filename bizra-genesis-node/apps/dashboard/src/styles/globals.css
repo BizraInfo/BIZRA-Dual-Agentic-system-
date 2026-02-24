@@ -1,0 +1,347 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* BIZRA Genesis Brand Identity - MoMo's Vision (Ramadan 2023) */
+  /* Primary: Gold #C9A962 | Navy #050B14 | Teal #2A9D8F */
+  
+  --bizra-gold: 201 169 98;           /* #C9A962 - The Sacred Gold */
+  --bizra-gold-light: 212 184 117;    /* #D4B875 - Light Gold */
+  --bizra-gold-dark: 176 141 69;      /* #B08D45 - Dark Gold */
+  
+  --bizra-black: 5 11 20;             /* #050B14 - The Darkness (Navy Black) */
+  --bizra-dark: 10 22 40;             /* #0A1628 - Navy Dark */
+  --bizra-surface: 17 31 51;          /* #111F33 - Navy Surface */
+  --bizra-border: 255 255 255;        /* White with opacity */
+  
+  --bizra-teal: 42 157 143;           /* #2A9D8F - The Teal Accent */
+  --bizra-teal-dark: 33 134 122;      /* #21867A - Dark Teal */
+  
+  --bizra-primary: 201 169 98;
+  --bizra-secondary: 42 157 143;
+  --bizra-accent: 212 184 117;
+  
+  /* Status Colors */
+  --status-success: 42 157 143;       /* Teal for success */
+  --status-warning: 245 158 11;
+  --status-error: 239 68 68;
+  --status-info: 59 130 246;
+  
+  /* PAT Agent Colors */
+  --pat-master-reasoner: 201 169 98;  /* Gold - Primary */
+  --pat-memory-architect: 42 157 143; /* Teal */
+  --pat-creative-synthesizer: 168 85 247;
+  --pat-data-analyzer: 42 157 143;
+  --pat-communicator: 59 130 246;
+  --pat-execution-planner: 249 115 22;
+  --pat-ethics-guardian: 201 169 98;
+}
+
+@layer base {
+  * {
+    @apply border-bizra-border;
+  }
+  
+  body {
+    @apply bg-bizra-black text-white antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  ::selection {
+    background-color: rgb(var(--bizra-gold) / 0.3);
+    color: rgb(var(--bizra-gold-light));
+  }
+  :root {
+  
+    --background: 0 0% 100%;
+  
+    --foreground: 0 0% 3.9%;
+  
+    --card: 0 0% 100%;
+  
+    --card-foreground: 0 0% 3.9%;
+  
+    --popover: 0 0% 100%;
+  
+    --popover-foreground: 0 0% 3.9%;
+  
+    --primary: 0 0% 9%;
+  
+    --primary-foreground: 0 0% 98%;
+  
+    --secondary: 0 0% 96.1%;
+  
+    --secondary-foreground: 0 0% 9%;
+  
+    --muted: 0 0% 96.1%;
+  
+    --muted-foreground: 0 0% 45.1%;
+  
+    --accent: 0 0% 96.1%;
+  
+    --accent-foreground: 0 0% 9%;
+  
+    --destructive: 0 84.2% 60.2%;
+  
+    --destructive-foreground: 0 0% 98%;
+  
+    --border: 0 0% 89.8%;
+  
+    --input: 0 0% 89.8%;
+  
+    --ring: 0 0% 3.9%;
+  
+    --chart-1: 12 76% 61%;
+  
+    --chart-2: 173 58% 39%;
+  
+    --chart-3: 197 37% 24%;
+  
+    --chart-4: 43 74% 66%;
+  
+    --chart-5: 27 87% 67%;
+  
+    --radius: 0.5rem;
+  }
+  .dark {
+  
+    --background: 0 0% 3.9%;
+  
+    --foreground: 0 0% 98%;
+  
+    --card: 0 0% 3.9%;
+  
+    --card-foreground: 0 0% 98%;
+  
+    --popover: 0 0% 3.9%;
+  
+    --popover-foreground: 0 0% 98%;
+  
+    --primary: 0 0% 98%;
+  
+    --primary-foreground: 0 0% 9%;
+  
+    --secondary: 0 0% 14.9%;
+  
+    --secondary-foreground: 0 0% 98%;
+  
+    --muted: 0 0% 14.9%;
+  
+    --muted-foreground: 0 0% 63.9%;
+  
+    --accent: 0 0% 14.9%;
+  
+    --accent-foreground: 0 0% 98%;
+  
+    --destructive: 0 62.8% 30.6%;
+  
+    --destructive-foreground: 0 0% 98%;
+  
+    --border: 0 0% 14.9%;
+  
+    --input: 0 0% 14.9%;
+  
+    --ring: 0 0% 83.1%;
+  
+    --chart-1: 220 70% 50%;
+  
+    --chart-2: 160 60% 45%;
+  
+    --chart-3: 30 80% 55%;
+  
+    --chart-4: 280 65% 60%;
+  
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer components {
+  /* Glass morphism panels */
+  .glass-panel {
+    @apply bg-gradient-to-br from-white/5 to-white/0 
+           backdrop-blur-xl border border-white/10 
+           rounded-2xl shadow-2xl;
+  }
+  
+  .glass-panel-gold {
+    @apply backdrop-blur-xl rounded-2xl shadow-2xl;
+    background: linear-gradient(to bottom right, rgb(var(--bizra-gold) / 0.05), transparent);
+    border: 1px solid rgb(var(--bizra-gold) / 0.2);
+    box-shadow: 0 25px 50px -12px rgb(var(--bizra-gold) / 0.05);
+  }
+  
+  /* Sovereign glow effects */
+  .glow-gold {
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3),
+                0 0 40px rgba(212, 175, 55, 0.1);
+  }
+  
+  .glow-gold-intense {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5),
+                0 0 60px rgba(212, 175, 55, 0.2),
+                0 0 90px rgba(212, 175, 55, 0.1);
+  }
+  
+  /* Genesis pulse animation */
+  .genesis-pulse {
+    animation: genesis-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes genesis-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.02);
+    }
+  }
+  
+  /* Synapse connection lines */
+  .synapse-line {
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgb(var(--bizra-gold)) 20%, 
+      rgb(var(--bizra-gold)) 80%, 
+      transparent);
+    height: 1px;
+    animation: synapse-flow 3s linear infinite;
+  }
+  
+  @keyframes synapse-flow {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Text gradients */
+  .text-gradient-gold {
+    background: linear-gradient(to right, rgb(var(--bizra-gold-light)), rgb(var(--bizra-gold)), rgb(var(--bizra-gold-dark)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .text-gradient-sovereign {
+    background: linear-gradient(to right, rgb(var(--bizra-gold)), rgb(var(--bizra-accent)), rgb(var(--bizra-gold)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Button variants */
+  .btn-sovereign {
+    background: linear-gradient(to right, rgb(var(--bizra-gold-dark)), rgb(var(--bizra-gold)), rgb(var(--bizra-gold-dark)));
+    color: rgb(var(--bizra-black));
+    @apply font-semibold px-6 py-3 rounded-xl transition-all duration-300 ease-out active:scale-95;
+  }
+  
+  .btn-sovereign:hover {
+    box-shadow: 0 10px 15px -3px rgb(var(--bizra-gold) / 0.3);
+  }
+  
+  .btn-glass {
+    @apply glass-panel px-6 py-3 text-white transition-all duration-300 ease-out;
+  }
+  
+  .btn-glass:hover {
+    border-color: rgb(var(--bizra-gold) / 0.5);
+    color: rgb(var(--bizra-gold));
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(var(--bizra-gold) / 0.1);
+    border-color: rgb(var(--bizra-gold) / 0.3);
+  }
+  
+  /* Status badges */
+  .badge-success { 
+    background-color: rgb(var(--status-success) / 0.2);
+    color: rgb(var(--status-success));
+    border-color: rgb(var(--status-success) / 0.3);
+  }
+  .badge-warning { 
+    background-color: rgb(var(--status-warning) / 0.2);
+    color: rgb(var(--status-warning));
+    border-color: rgb(var(--status-warning) / 0.3);
+  }
+  .badge-error { 
+    background-color: rgb(var(--status-error) / 0.2);
+    color: rgb(var(--status-error));
+    border-color: rgb(var(--status-error) / 0.3);
+  }
+  .badge-info { 
+    background-color: rgb(var(--status-info) / 0.2);
+    color: rgb(var(--status-info));
+    border-color: rgb(var(--status-info) / 0.3);
+  }
+  
+  /* Scrollbar styling */
+  .scrollbar-sovereign {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--bizra-gold)) transparent;
+  }
+  
+  .scrollbar-sovereign::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-sovereign::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-sovereign::-webkit-scrollbar-thumb {
+    background: rgb(var(--bizra-gold) / 0.6);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-sovereign::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--bizra-gold-light));
+  }
+}
+
+@layer utilities {
+  /* Grid patterns */
+  .grid-pattern {
+    background-image: 
+      linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  /* Animated border */
+  .animated-border {
+    background: linear-gradient(90deg, 
+      rgb(var(--bizra-gold)), 
+      rgb(var(--bizra-gold-light)), 
+      rgb(var(--bizra-gold)), 
+      rgb(var(--bizra-gold-dark)), 
+      rgb(var(--bizra-gold)));
+    background-size: 200% 100%;
+    animation: border-flow 3s linear infinite;
+  }
+  
+  @keyframes border-flow {
+    0% { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

@@ -1,0 +1,45 @@
+{
+	"folders": [
+		{
+                        "name": "🧠 Kernel (WSL)",
+                        "path": "."
+                },
+                {
+                        "name": "🖥️ Node (Windows)",
+                        "path": "/mnt/c/BIZRA-Dual-Agentic-system--main"
+                },
+                {
+                        "name": "💾 Vault (Data Lake)",
+                        "path": "/mnt/c/BIZRA-DATA-LAKE"
+                },
+                {
+                        "name": "🏗️ Scaffold (Specs)",
+                        "path": "/mnt/c/bizra_scaffold"
+                },
+                {
+                        "name": "📋 TaskMaster",
+                        "path": "/mnt/c/BIZRA-TaskMaster"
+                },
+                {
+                        "name": "⚙️ OS (System)",
+                        "path": "/mnt/c/BIZRA-OS"
+                }
+        ],
+        "settings": {
+                "files.exclude": {
+                        "**/.git": true,
+                        "**/.DS_Store": true,
+                        "**/node_modules": true,
+                        "**/__pycache__": true
+                },
+                "search.exclude": {
+                        "**/node_modules": true,
+                        "**/.venv": true
+                }
+        },
+        "extensions": {
+                "recommendations": [
+                        "ms-python.python",
+                        "rust-lang.rust-analyzer",
+                        "ms-vscode-remote.remote-wsl"
+                ]

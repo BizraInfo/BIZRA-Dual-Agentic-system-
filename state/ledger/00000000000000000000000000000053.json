@@ -1,0 +1,22 @@
+{
+  "unsigned": {
+    "schema_version": "1.0",
+    "policy_hash": "2dda61f276fc8aa03b5a8af986c4d4fe57e56a6b20484a92b1137e8e59a0333a",
+    "agent_id": "node0",
+    "session_id": "runtime",
+    "counter": 53,
+    "nonce": "tick-53-1768882386",
+    "timestamp_unix_s": 1768882386,
+    "payload": {
+      "note": "fail-closed heartbeat (no side effects)",
+      "snr": {
+        "noise": 0,
+        "signal": 1
+      },
+      "type": "SAFE_NOOP"
+    },
+    "prev_hash": "c231fee1ca19e71ff3c0de59b7df11850b86d55ea254e490f8cafb6844c3f865"
+  },
+  "hash": "1050794879d0722fdaa96165df634fcc2f505f597d2eb40d40e8167e3089244d",
+  "signature_hex": "f889ee3a26fcd2769086212f64b3c662d89e83486b7426a96d673f878af8327fa84cb8d732ae75122900816dbac4551432a1865780c0a2aab2c58b3ff2229501"
+}

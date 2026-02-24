@@ -1,0 +1,45 @@
+﻿{
+    "out_dir":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314",
+    "input_dir":  "-SkipChatIngest",
+    "type":  "chat_ingest",
+    "run_id":  "20251216_072314",
+    "artifacts":  [
+                      {
+                          "sha256":  "590097090178f890b24057d6bdb15065bd1c75fbb999f0eb11be0818efa6d9ff",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\summary.json"
+                      },
+                      {
+                          "sha256":  "3bc25c81384d66304ea59c4223cdf11ebe19769099cd49d2b3c9bb2b5c9d34eb",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\sources.json"
+                      },
+                      {
+                          "sha256":  "a1ea5641d1337310534226bd6def1e8fbc1604545161b32ac76378ff9e02acf9",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\topics.json"
+                      },
+                      {
+                          "sha256":  "4c573cf8abc8d5c172bf6c5029f73fcaa6cfecc3345d1cb009eec53bd5123cf3",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\graph.json"
+                      },
+                      {
+                          "sha256":  "6b1119a504b502816a531820607ed6cc9fb437e894571ae0feac56e73aaf5110",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\conversations.jsonl"
+                      },
+                      {
+                          "sha256":  "7f0c2197029a2efc5d02a13556d59cf0b600b0ce6732d5fe2d80df6318f51b32",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\messages_index.jsonl"
+                      },
+                      {
+                          "sha256":  "96db53a99c4c9b59c77b4f61843c065386192298da2cfdaf17fb19c877bea0a9",
+                          "path":  "C:\\BIZRA-DATA-LAKE\\03_INDEXED\\chat_history\\20251216_072314\\aggregate.json"
+                      }
+                  ],
+    "receipt_version":  1,
+    "generated_at":  "2025-12-16T07:23:21.2523910+04:00",
+    "truth_label":  "MEASURED",
+    "counts":  {
+                   "zip_files":  5,
+                   "messages_index":  24746,
+                   "messages_full":  0,
+                   "conversations":  1241
+               }
+}

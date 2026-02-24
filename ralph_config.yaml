@@ -1,0 +1,69 @@
+# Ralph Autonomous Orchestrator Configuration
+# Sovereign Ralph for BIZRA Genesis Node
+
+# Core Loop Settings
+max_iterations: 50
+timeout_ms: 300000  # 5 minutes
+require_exit_signal: true
+exit_signal: "EXIT_SIGNAL"
+
+# Convergence Detection (Kalman Filter)
+convergence_threshold: 0.01
+
+# Fault Tolerance (Circuit Breaker)
+failure_trip: 3
+recovery_ms: 30000  # 30 seconds
+
+# Rate Limiting (Token Bucket)
+rate_limit_per_minute: 60
+token_bucket_capacity: 30
+
+# Quality Gates
+ihsan_threshold: 0.95
+snr_threshold: 0.70
+
+# Git Checkpointing (optional)
+git_checkpoint_enabled: true
+git_checkpoint_interval: 5  # Every 5 iterations
+
+# Autonomous Mode Settings
+autonomous_mode: true
+autonomous_tasks:
+  - name: "knowledge_graph_indexing"
+    priority: high
+    cron: "0 */6 * * *"  # Every 6 hours
+
+  - name: "receipt_verification"
+    priority: medium
+    cron: "0 */12 * * *"  # Every 12 hours
+
+  - name: "memory_consolidation"
+    priority: medium
+    cron: "0 2 * * *"  # Daily at 2 AM
+
+# Model Configuration
+models:
+  pat_model: "llama3.1:8b"
+  sat_model: "deepseek-r1:14b"
+  embeddings_model: "nomic-embed-text"
+
+# Logging
+log_level: "info"
+log_file: "/tmp/ralph_orchestrator.log"
+receipt_directory: "docs/evidence/receipts"
+
+# Memory Integration
+memory_server_url: "http://localhost:7999"
+load_persistent_memory: true
+memory_file: "/root/bizra_data_vault/MOMO_GENESIS_ARCHITECT_MEMORY.json"
+
+# Constitutional Compliance
+enforce_ihsan: true
+enforce_snr: true
+enforce_sat_consensus: true
+sat_consensus_threshold: 0.70  # 70% weighted vote
+
+# Performance Targets
+target_p50_latency_ms: 30
+target_p99_latency_ms: 100
+target_throughput_rps: 1000
