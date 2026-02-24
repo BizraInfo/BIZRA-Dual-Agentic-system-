@@ -47,7 +47,7 @@ impl BridgeCoordinator {
         );
         
         // Step 2: PAT executes the task
-        let pat_results = self.pat.execute_parallel(vec![], request.clone()).await?;
+        let pat_results = self.pat.execute_parallel(request.clone()).await?;
         
         info!(
             pat_agents = pat_results.len(),
@@ -95,6 +95,10 @@ impl BridgeCoordinator {
     
     /// Calculate synergy between PAT and SAT
     fn calculate_synergy(&self, pat_results: &[AgentResult], sat_results: &[AgentResult]) -> f64 {
+        if pat_results.is_empty() || sat_results.is_empty() {
+            return 0.0;
+        }
+        
         let pat_avg = pat_results.iter()
             .map(|r| r.confidence)
             .sum::<f64>() / pat_results.len() as f64;
@@ -103,12 +107,21 @@ impl BridgeCoordinator {
             .map(|r| r.confidence)
             .sum::<f64>() / sat_results.len() as f64;
         
+        let denominator = pat_avg + sat_avg;
+        if denominator == 0.0 {
+            return 0.0;
+        }
+        
         // Harmonic mean for synergy
-        2.0 * pat_avg * sat_avg / (pat_avg + sat_avg)
+        2.0 * pat_avg * sat_avg / denominator
     }
     
     /// Calculate إحسان (excellence) score
     fn calculate_ihsan(&self, results: &[AgentResult]) -> f64 {
+        if results.is_empty() {
+            return 0.0;
+        }
+        
         let avg_confidence = results.iter()
             .map(|r| r.confidence)
             .sum::<f64>() / results.len() as f64;

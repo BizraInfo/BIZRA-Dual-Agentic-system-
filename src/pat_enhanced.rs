@@ -109,7 +109,6 @@ impl EnhancedPATOrchestrator {
         
         // Execute base orchestration
         let base_result = self.base.execute_parallel(
-            vec![],
             request.base.clone(),
         ).await?;
         

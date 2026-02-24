@@ -2,6 +2,7 @@
 
 /// Integration with BIZRA-NODE0 (ACE Framework)
 pub struct NODE0Integration {
+    #[allow(dead_code)]
     base_url: String,
 }
 
@@ -40,6 +41,7 @@ impl NODE0Integration {
 
 /// Integration with BIZRA-TaskMaster (Hive-Mind orchestration)
 pub struct TaskMasterIntegration {
+    #[allow(dead_code)]
     base_url: String,
 }
 
@@ -65,6 +67,7 @@ impl TaskMasterIntegration {
 
 /// Integration with deepagent node0 (CUDA acceleration)
 pub struct DeepAgentIntegration {
+    #[allow(dead_code)]
     base_url: String,
 }
 
@@ -86,6 +89,7 @@ impl DeepAgentIntegration {
 
 /// Integration with BlockGraph (Proof-of-Impact)
 pub struct BlockGraphIntegration {
+    #[allow(dead_code)]
     base_url: String,
 }
 

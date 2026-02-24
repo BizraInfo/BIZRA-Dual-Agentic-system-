@@ -12,7 +12,9 @@ pub struct MCPClient {
 
 #[derive(Debug, Clone)]
 struct MCPServer {
+    #[allow(dead_code)]
     url: String,
+    #[allow(dead_code)]
     transport: MCPTransport,
 }
 
@@ -62,7 +64,7 @@ impl MCPClient {
     /// Discover all available tools from registered servers
     #[instrument(skip(self))]
     async fn discover_tools(&mut self) -> anyhow::Result<()> {
-        for (server_name, _server) in &self.servers {
+        for server_name in self.servers.keys() {
             // Simulated tool discovery (in production: actual MCP protocol)
             let tools = vec![
                 ToolDefinition {

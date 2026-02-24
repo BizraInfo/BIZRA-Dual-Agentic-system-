@@ -15,7 +15,7 @@ use tracing::{debug, instrument};
 /// 
 /// This is NOT a metaphor. This is a measurable, quantifiable metric
 /// that determines system quality more than raw capability or model size.
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct SNRCalculator {
     /// Configuration for SNR calculation
     config: SNRConfig,
@@ -54,12 +54,6 @@ impl Default for SNRConfig {
 impl SNRCalculator {
     pub fn new(config: SNRConfig) -> Self {
         Self { config }
-    }
-    
-    pub fn default() -> Self {
-        Self {
-            config: SNRConfig::default(),
-        }
     }
     
     /// Calculate SNR for a piece of text/content
@@ -240,7 +234,7 @@ impl SNRCalculator {
             1.0
         };
         
-        precision.max(0.0).min(1.0)
+        precision.clamp(0.0, 1.0)
     }
     
     /// Prune low-SNR content from text

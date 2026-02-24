@@ -13,6 +13,7 @@ pub struct SATOrchestrator {
 struct SATAgent {
     name: String,
     role: String,
+    #[allow(dead_code)]
     specialty: String,
 }
 
@@ -157,16 +158,20 @@ impl SATOrchestrator {
                 format!("[Ethics] All {} PAT contributions ethically aligned", pat_results.len())
             }
             "performance_monitor" => {
-                let avg_time: Duration = pat_results.iter()
-                    .map(|r| r.execution_time)
-                    .sum::<Duration>() / pat_results.len() as u32;
-                format!("[Performance] Average execution time: {:?}", avg_time)
+                if pat_results.is_empty() {
+                    "[Performance] No PAT contributions to evaluate".to_string()
+                } else {
+                    let avg_time: Duration = pat_results.iter()
+                        .map(|r| r.execution_time)
+                        .sum::<Duration>() / pat_results.len() as u32;
+                    format!("[Performance] Average execution time: {:?}", avg_time)
+                }
             }
             "consistency_checker" => {
                 format!("[Consistency] Logical coherence validated across {} contributions", pat_results.len())
             }
             "resource_optimizer" => {
-                format!("[Resources] Optimal resource utilization: 87% efficiency")
+                "[Resources] Optimal resource utilization: 87% efficiency".to_string()
             }
             _ => format!("[{}] Evaluation complete", agent.role),
         };
