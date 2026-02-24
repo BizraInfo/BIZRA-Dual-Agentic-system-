@@ -7,8 +7,10 @@ use serde::{Deserialize, Serialize};
 use tracing::instrument;
 
 pub struct MultiMethodReasoning {
+    #[allow(dead_code)]
     methods: Vec<ReasoningMethod>,
     snr_calculator: SNRCalculator,
+    #[allow(dead_code)]
     snr_generator: SNRAwareGenerator,
 }
 

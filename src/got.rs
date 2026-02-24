@@ -484,8 +484,10 @@ impl GoTArbitrator {
             }
         }
         
-        // Sort by confidence (highest first)
-        conclusions.sort_by(|a, b| b.confidence.partial_cmp(&a.confidence).unwrap());
+        // Sort by confidence (highest first), treating NaN as less than any value
+        conclusions.sort_by(|a, b| {
+            b.confidence.partial_cmp(&a.confidence).unwrap_or(std::cmp::Ordering::Equal)
+        });
         
         debug!("Synthesized {} conclusions", conclusions.len());
         conclusions

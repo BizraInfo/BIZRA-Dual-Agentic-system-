@@ -13,6 +13,7 @@ pub struct PATOrchestrator {
 struct PATAgent {
     name: String,
     role: String,
+    #[allow(dead_code)]
     specialty: String,
 }
 
@@ -66,7 +67,6 @@ impl PATOrchestrator {
     #[instrument(skip(self))]
     pub async fn execute_parallel(
         &self,
-        prompts: Vec<String>,
         request: DualAgenticRequest,
     ) -> anyhow::Result<Vec<AgentResult>> {
         let start = Instant::now();
